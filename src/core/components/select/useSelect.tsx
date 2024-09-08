@@ -4,12 +4,12 @@ import { ref, watch } from 'vue'
 import { NPagination } from 'naive-ui'
 import { useClient } from '../../hooks'
 
-type value = Array<string | number> | string | number | null
+type value = Array<string | number> | string | number | null | undefined
 
 interface UseSelectProps {
+  value: Ref<value>
   url?: string
   params?: Record<string, any>
-  value?: Ref<value>
   valueField?: string
   pagination?: boolean
 }

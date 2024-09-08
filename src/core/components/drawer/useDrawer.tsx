@@ -8,7 +8,7 @@ export interface UseDrawerResult {
 export interface UseDrawerProps {
   title?: string
   width?: number
-  component: () => Promise<any>
+  component?: () => any
   componentProps?: Record<string, any>
 }
 

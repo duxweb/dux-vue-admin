@@ -30,17 +30,21 @@ export function tableAction({ key, text, rowData, rowIndex, actions, modal, dial
             key={index}
             text={text}
             type={item.color}
-            onClick={() => handleAction({ id: rowData?.[key], item, modal, dialog, drawer })}
-            renderIcon={item?.icon
-              ? () => (
-                  <div class={clsx([
-                    'n-icon',
-                    item.icon,
-                  ])}
-                  >
-                  </div>
-                )
-              : null}
+            onClick={() => handleAction({ id: key ? rowData?.[key] : null, item, modal, dialog, drawer })}
+            renderIcon={
+              () => (
+                item?.icon
+                  ? (
+                      <div class={clsx([
+                        'n-icon',
+                        item.icon,
+                      ])}
+                      >
+                      </div>
+                    )
+                  : undefined
+              )
+            }
           >
             {item.label}
           </NButton>

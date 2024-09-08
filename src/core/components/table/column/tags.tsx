@@ -11,7 +11,7 @@ export function columnTags({ key, type }: ColumnTagsProps): TableColumnRender {
   return (rowData) => {
     return (
       <>
-        {rowData?.[key]?.map((value: any) => {
+        {rowData?.[key || 0]?.map((value: any) => {
           return (
             <NTag round bordered={false} type={type}>
               {value}

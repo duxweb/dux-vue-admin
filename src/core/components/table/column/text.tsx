@@ -5,5 +5,5 @@ export interface ColumnTextProps {
 }
 
 export function columnText(props: ColumnTextProps): TableColumnRender {
-  return rowData => `${rowData?.[props.key]}`
+  return rowData => props.key ? `${rowData?.[props.key]}` : '-'
 }

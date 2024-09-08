@@ -48,7 +48,7 @@ export const DuxRegion = defineComponent({
       street: 4,
     }
 
-    const levelNum = levelEnum[level] || 1
+    const levelNum = levelEnum[level || 'district']
 
     return () => (
       <div class={clsx([

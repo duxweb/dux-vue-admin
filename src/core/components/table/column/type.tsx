@@ -7,15 +7,17 @@ export function columnType({ key, maps }: ColumnStatusProps): TableColumnRender 
   return (rowData) => {
     return (
       <>
-        {rowData?.[key]?.map((value: any) => {
-          const type = _.findKey(maps, v => v.value === value) as ColumnStatusType
-          const info = maps?.[type]
-          return (
-            <NTag round bordered={false} type={type}>
-              {info?.label}
-            </NTag>
-          )
-        })}
+        {key
+          ? rowData?.[key]?.map((value: any) => {
+            const type = _.findKey(maps, v => v.value === value) as ColumnStatusType
+            const info = maps?.[type]
+            return (
+              <NTag round bordered={false} type={type}>
+                {info?.label}
+              </NTag>
+            )
+          })
+          : '-'}
       </>
     )
   }

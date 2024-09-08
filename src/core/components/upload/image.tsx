@@ -75,7 +75,7 @@ export const DuxImageUpload = defineComponent({
         <VueDraggable
           modelValue={files.value}
           onUpdate={(e: SortableEvent) => {
-            [files.value[e.oldIndex], files.value[e.newIndex]] = [files.value[e.newIndex], files.value[e.oldIndex]]
+            [files.value[e.oldIndex as number], files.value[e.newIndex as number]] = [files.value[e.newIndex as number], files.value[e.oldIndex as number]]
             onUpdate()
           }}
           class="flex gap-2"
@@ -97,7 +97,7 @@ export const DuxImageUpload = defineComponent({
                       objectFit="cover"
                       width="100"
                       previewDisabled
-                      src={item.url}
+                      src={item.url as string}
                     >
                       <div class="size-full flex items-center justify-center">
                         <div class="i-tabler:photo size-8"></div>
@@ -111,7 +111,7 @@ export const DuxImageUpload = defineComponent({
                         <div class="absolute left-2 right-2 bottom-2">
                           <NProgress
                             type="line"
-                            percentage={item.percentage}
+                            percentage={item.percentage || 0}
                             height={5}
                             showIndicator={false}
                           />
@@ -127,7 +127,7 @@ export const DuxImageUpload = defineComponent({
                     size="small"
                     renderIcon={() => <div class="n-icon i-tabler:eye"></div>}
                     onClick={() => image.show([
-                      item.url,
+                      item.url || '',
                     ], index)}
                   >
                   </NButton>
@@ -140,7 +140,7 @@ export const DuxImageUpload = defineComponent({
                     renderIcon={() => <div class="n-icon i-tabler:reload"></div>}
                     onClick={() => {
                       item.status = 'pending'
-                      uploadRef.value.submit()
+                      uploadRef.value?.submit()
                     }}
                   >
                   </NButton>

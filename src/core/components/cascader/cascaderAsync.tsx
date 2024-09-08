@@ -17,7 +17,7 @@ export const DuxCascaderAsync = defineComponent({
   extends: NCascader,
   setup({ url, defaultValue, value, params = {}, ...props }: DuxCascaderAsyncProps, { emit }) {
     const useParams = ref({})
-    const useUrl = ref<string>(url)
+    const useUrl = ref(url)
 
     watch(() => useUrl, (val) => {
       useUrl.value = val.value

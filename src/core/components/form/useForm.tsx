@@ -94,7 +94,7 @@ export function useForm({ formRef, url, id, initData, invalidate, success }: Use
       if (errors) {
         errors?.forEach((items) => {
           items.forEach((item) => {
-            message.error(item.message)
+            message.error(item?.message || '数据校验失败')
           })
         })
         message.error('Invalid')

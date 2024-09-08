@@ -16,7 +16,7 @@ export interface ColumnStatusProps {
 
 export function columnStatus({ key, maps }: ColumnStatusProps): TableColumnRender {
   return (rowData) => {
-    const type = _.findKey(maps, v => v.value === rowData?.[key]) as ColumnStatusType
+    const type = _.findKey(maps, v => key ? v.value === rowData?.[key] : 'default') as ColumnStatusType
     const item = maps?.[type]
     return item
       ? (

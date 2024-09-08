@@ -36,8 +36,8 @@ export const DuxTabs = defineComponent({
             class="layout-tabs"
             type="card"
             paneClass="!p-0"
-            onUpdateValue={(v: string) => tab.changeTab(v, (v: DuxRoute) => router.push(v.path))}
-            onClose={(v: string) => tab.delTab(v, (v: DuxRoute) => router.push(v.path))}
+            onUpdateValue={(v: string) => tab.changeTab(v, (v: DuxRoute) => router.push(v.path || ''))}
+            onClose={(v: string) => tab.delTab(v, (v: DuxRoute) => router.push(v.path || ''))}
           >
             {tab.tabs?.map((tag, key) => <NTabPane key={key} name={tag.name} tab={tag.label} closable={key !== 0} />)}
           </NTabs>

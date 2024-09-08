@@ -1,4 +1,4 @@
-import type { DataTableFilterState, DataTableProps, DataTableSortState, PaginationProps } from 'naive-ui'
+import type { DataTableFilterState, DataTableSortState, PaginationProps } from 'naive-ui'
 import { NButton, NCheckbox, NDropdown, NPopover, NTooltip, useMessage } from 'naive-ui'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
@@ -266,7 +266,7 @@ export function useTable({ tableRef, name, url, actions, columns, columnActions,
   }
 
   // 表格扩展参数
-  const tableParams: DataTableProps = {
+  const tableParams = {
     pagination: pagination as any,
     onUpdatePageSize,
     onUpdatePage,
@@ -318,7 +318,7 @@ export function useTable({ tableRef, name, url, actions, columns, columnActions,
 
 export function handleAction({ id, item, modal, dialog, drawer }: HandleAction) {
   if (item.type === 'modal') {
-    modal.show({
+    modal?.show({
       title: item?.title || item?.label,
       component: item.component,
       componentProps: {
@@ -328,7 +328,7 @@ export function handleAction({ id, item, modal, dialog, drawer }: HandleAction) 
     })
   }
   if (item.type === 'drawer') {
-    drawer.show({
+    drawer?.show({
       title: item?.title || item?.label,
       component: item.component,
       componentProps: {
@@ -339,12 +339,12 @@ export function handleAction({ id, item, modal, dialog, drawer }: HandleAction) 
   }
 
   if (item.type === 'confirm') {
-    dialog.confirm({
+    dialog?.confirm({
       title: item?.title,
       content: item?.content,
     })
   }
   if (item.type === 'link') {
-    router.push(item.path)
+    router.push(item.path || '')
   }
 }

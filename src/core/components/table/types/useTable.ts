@@ -62,7 +62,7 @@ export interface TableActionAttrMap {
 export type TableActionAdaptor<T extends keyof TableActionAttrMap> = TableActionAttrMap[T] | Record<string, any>
 
 interface TableColumnExtend {
-  renderType?: 'text' | 'type' | 'tags' | 'status' | 'media' | 'map'
+  renderType: 'text' | 'type' | 'tags' | 'status' | 'media' | 'map'
   renderProps?: TableActionAdaptor<this['renderType']>
   show?: boolean
   key?: any
@@ -73,7 +73,7 @@ export type TableColumn = DataTableColumn & TableColumnExtend
 export interface HandleAction {
   id?: string | number
   item: TableAction
-  modal: UseModalResult
-  dialog: UseDialogResult
-  drawer: UseDrawerResult
+  modal?: UseModalResult
+  dialog?: UseDialogResult
+  drawer?: UseDrawerResult
 }

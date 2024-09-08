@@ -23,7 +23,7 @@ export const DuxSelectAsync = defineComponent({
     multiple: Boolean,
   },
   extends: NSelect,
-  setup({ value, defaultValue, url, params, pagination, imageField, descField, valueField, labelField, multiple, ...props }: DuxSelectAsyncProps, { emit }) {
+  setup({ value, defaultValue, url, params, pagination, imageField = 'image', descField = 'desc', valueField = 'value', labelField = 'label', multiple, ...props }: DuxSelectAsyncProps, { emit }) {
     const select = ref(defaultValue)
 
     watch(() => value, (newValue) => {

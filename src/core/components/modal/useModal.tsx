@@ -7,7 +7,7 @@ export interface UseModalResult {
 
 export interface UseModalProps {
   title?: string
-  component: () => Promise<any>
+  component?: () => any
   componentProps?: Record<string, any>
 }
 

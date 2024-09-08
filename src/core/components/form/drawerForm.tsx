@@ -27,7 +27,7 @@ export const DuxDrawerForm = defineComponent({
           onReset()
         }
         else {
-          onConfirm(res)
+          onConfirm?.(res)
         }
       },
     })

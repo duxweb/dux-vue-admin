@@ -29,7 +29,7 @@ export const DuxPageForm = defineComponent({
       invalidate,
       success: () => {
         if (id) {
-          tab.delTab(tab.current, v => router.push(v.path))
+          tab.delTab(tab.current, v => router.push(v.path || ''))
         }
         else {
           onReset()

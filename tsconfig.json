@@ -14,19 +14,19 @@
     "paths": {
       "dux-vue-admin": ["./src"]
     },
-    "declaration": true,
-    "esModuleInterop": true,
     "allowJs": true,
-    "strict": false,
+    "strict": true,
     "noFallthroughCasesInSwitch": true,
 
     "noImplicitAny": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "declaration": true,
     "noEmit": false,
+    "outDir": "dist",
+    "esModuleInterop": true,
     "isolatedModules": true,
-    "skipLibCheck": true,
-    "outDir": "dist"
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*"

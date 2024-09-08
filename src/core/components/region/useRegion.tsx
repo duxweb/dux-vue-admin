@@ -2,8 +2,8 @@ import { type Ref, ref, watch } from 'vue'
 import { useClient } from '../../hooks'
 
 interface UseRegionProps {
+  value: Ref<string[]>
   url?: string
-  value?: Ref<string[]>
   emit?: (name: string, ...val: any[]) => void
 }
 export function useRegion({ url, value, emit }: UseRegionProps) {

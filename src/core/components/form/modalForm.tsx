@@ -28,7 +28,7 @@ export const DuxModalForm = defineComponent({
           onReset()
         }
         else {
-          onConfirm(res)
+          onConfirm?.(res)
         }
       },
     })
@@ -43,7 +43,7 @@ export const DuxModalForm = defineComponent({
             type="tertiary"
             loading={loading.value}
             onClick={() => {
-              onClose()
+              onClose?.()
             }}
           >
             取消

@@ -56,8 +56,8 @@ export const DuxAiEditor = defineComponent({
                   resolve({
                     errorCode: 0,
                     data: {
-                      src: res.url,
-                      alt: res.name,
+                      src: res?.url,
+                      alt: res?.name,
                     },
                   })
                 },
@@ -83,7 +83,7 @@ export const DuxAiEditor = defineComponent({
                   resolve({
                     errorCode: 0,
                     data: {
-                      src: res.url,
+                      src: res?.url,
                     },
                   })
                 },
@@ -109,8 +109,8 @@ export const DuxAiEditor = defineComponent({
                   resolve({
                     errorCode: 0,
                     data: {
-                      href: res.url,
-                      fileName: res.name,
+                      href: res?.url,
+                      fileName: res?.name,
                     },
                   })
                 },

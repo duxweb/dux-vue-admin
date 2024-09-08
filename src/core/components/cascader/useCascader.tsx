@@ -3,7 +3,7 @@ import type { Ref } from 'vue'
 import { useClient } from '../../hooks'
 
 interface UseCascaderProps {
-  url?: Ref<string>
+  url?: Ref<string | undefined>
   params?: Ref<Record<string, any>>
 }
 export function useCascader({ url, params }: UseCascaderProps) {
@@ -11,8 +11,8 @@ export function useCascader({ url, params }: UseCascaderProps) {
 
   const getList = () => {
     return client.get({
-      url: url.value,
-      params: params.value,
+      url: url?.value,
+      params: params?.value,
     })
   }
 
