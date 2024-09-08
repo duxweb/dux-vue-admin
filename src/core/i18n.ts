@@ -1,13 +1,11 @@
 import { createI18n } from 'vue-i18n'
 import { i18n } from '../Dux'
+import zhCN from '../locales/zh-CN.json'
+import enUS from '../locales/en-US.json'
 
 export const languageMaps = {
   'en-US': 'English',
   'zh-CN': '简体中文',
-  'zh-TW': '繁體中文',
-  'ja-JP': '日本語',
-  'ko_KR': '한국어',
-  'ru_RU': 'русский',
 }
 
 export function getLanguage() {
@@ -43,7 +41,10 @@ export function setupI18n(options) {
     locale: getLanguage(),
     legacy: false,
   })
-  const data = import.meta.glob('../locales/*.json', { eager: true })
+  const data = {
+    'en-US': enUS,
+    'zh-CN': zhCN,
+  }
   importI18ns(app, data)
   return app
 }
