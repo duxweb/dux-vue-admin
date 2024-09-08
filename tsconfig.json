@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "jsx": "preserve",
+    "target": "ESNext",
+    "jsx": "react-jsx",
     "jsxImportSource": "vue",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "moduleDetection": "force",
     "useDefineForClassFields": true,
 
@@ -11,8 +11,11 @@
     "module": "ESNext",
 
     "moduleResolution": "bundler",
+    "paths": {
+      "dux-vue-admin": ["./src"]
+    },
 
-    "allowImportingTsExtensions": true,
+    "esModuleInterop": true,
     "allowJs": true,
     "strict": false,
     "noFallthroughCasesInSwitch": true,
@@ -20,17 +23,13 @@
     "noImplicitAny": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-
-    "declaration": true,
-    "declarationDir": "dist",
-    "noEmit": true,
-    "outDir": "./dist",
+    "noEmit": false,
     "isolatedModules": true,
-    "skipLibCheck": true
-
+    "skipLibCheck": true,
+    "outDir": "dist"
   },
   "include": [
     "src/**/*"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }
