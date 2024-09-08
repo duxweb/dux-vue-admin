@@ -1,5 +1,5 @@
 import { type Ref, ref, watch } from 'vue'
-import { useClient } from '@/core/hooks'
+import { useClient } from '../../hooks'
 
 interface UseRegionProps {
   url?: string

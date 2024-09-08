@@ -15,10 +15,14 @@ export function useResource() {
   const { params, name, path } = useRoute()
   const manage = params.manage as string
 
+  const genUrl = (manage?: string, path?: string) => {
+    return path ? `/${manage ? `${manage}/` : ''}${path || ''}` : ''
+  }
+
   // 注册异步路由
   const registerAsyncRoutes = () => {
     client?.get({
-      url: genUrl(manage, config.apiConfig.menu),
+      url: genUrl(manage, config?.apiConfig?.menu),
     }).then((res) => {
       routeStore.setRoutes(res?.data || [])
     }).catch((err) => {
@@ -28,15 +32,19 @@ export function useResource() {
 
   // 注册本地路由
   const registerRoutes = () => {
-    if (!config.asyncRouter) {
+    if (!config?.router) {
       return
     }
-    routeStore.appendRoutes(config.router)
-    config.router.forEach((item) => {
+    routeStore.appendRoutes(config?.router)
+    config?.router?.forEach((item) => {
+      if (!item.path) {
+        return false
+      }
       router.addRoute({
         path: item.path,
         name: item.name,
         component: item.component,
+        children: [],
         meta: {
           title: item.label,
         },
@@ -51,20 +59,17 @@ export function useResource() {
     name,
     config,
     resUrl: genUrl(manage, path),
-    menuUrl: genUrl(manage, config.apiConfig.menu),
-    uploadUrl: genUrl(manage, config.apiConfig.upload),
-    uploadManageUrl: genUrl(manage, config.apiConfig.uploadManage),
-    loginUrl: genUrl(manage, config.apiConfig.login),
-    checkUrl: genUrl(manage, config.apiConfig.check),
-    captchaUrl: genUrl(manage, config.apiConfig.captcha),
-    registerUrl: genUrl(manage, config.apiConfig.register),
-    forgotPasswordUrl: genUrl(manage, config.apiConfig.forgotPassword),
-    updatePasswordUrl: genUrl(manage, config.apiConfig.updatePassword),
+    menuUrl: genUrl(manage, config?.apiConfig?.menu || '/menu'),
+    uploadUrl: genUrl(manage, config?.apiConfig?.upload || '/upload'),
+    uploadManageUrl: genUrl(manage, config?.apiConfig?.uploadManage || 'uploadManage'),
+    loginUrl: genUrl(manage, config?.apiConfig?.login || '/login'),
+    checkUrl: genUrl(manage, config?.apiConfig?.check || '/check'),
+    captchaUrl: genUrl(manage, config?.apiConfig?.captcha || '/captcha'),
+    registerUrl: genUrl(manage, config?.apiConfig?.register || '/register'),
+    forgotPasswordUrl: genUrl(manage, config?.apiConfig?.forgotPassword || '/forgotPassword'),
+    updatePasswordUrl: genUrl(manage, config?.apiConfig?.updatePassword || '/updatePassword'),
     registerAsyncRoutes,
     registerRoutes,
+    genUrl,
   }
-}
-
-function genUrl(manage?: string, path?: string) {
-  return path ? `/${manage ? `${manage}/` : ''}${path || ''}` : undefined
 }

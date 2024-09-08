@@ -116,7 +116,7 @@ const nodes: JSONSchema[] = [
             attr: {
               'v-for': 'item in carousel',
               ':src': 'item',
-              style: 'width: 100%;height: 240px;object-fit: cover;',
+              'style': 'width: 100%;height: 240px;object-fit: cover;',
             },
           },
           {

@@ -1,5 +1,5 @@
 import { useOverlayInject } from '@overlastic/vue'
-import Drawer from './drawer.tsx'
+import Drawer from './drawer'
 
 export interface UseDrawerResult {
   show: (props: UseDrawerProps) => Promise<any>

@@ -38,9 +38,9 @@ export const DuxPageTable = defineComponent({
       key: props.tableKey,
       url: props.url,
       name: route.name,
-      actions: props.actions,
-      columns: props.columns,
-      columnActions: props.columnActions,
+      actions: props.actions || [],
+      columns: props.columns || [],
+      columnActions: props.columnActions || [],
       tableRef,
     })
 
@@ -60,7 +60,7 @@ export const DuxPageTable = defineComponent({
     }, { immediate: true })
 
     const getFilterHeight = () => {
-      filterHeight.value = filterRef.value.scrollHeight
+      filterHeight.value = filterRef.value?.scrollHeight || 0
     }
 
     // 添加事件监听器
@@ -87,7 +87,7 @@ export const DuxPageTable = defineComponent({
         <NCard class="h-full">
           <div class="flex flex-col h-full gap-4">
             <div class="flex items-center border-b border-gray-2 pb-2 gap-4">
-              {props?.tabs?.length > 0
+              {props?.tabs && props?.tabs?.length > 0
                 ? (
                     <div class=" flex-1 w-1">
                       <NTabs

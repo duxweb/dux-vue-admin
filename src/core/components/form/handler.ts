@@ -115,7 +115,7 @@ export function formToJson(schema: JsonFormItemSchema[]): JSONSchema[] {
       itemJson = slider(item)
     }
     if (item.type === 'space') {
-      itemJson = space(item)
+      itemJson = space(item) as JSONSchema
     }
     if (item.type === 'switch') {
       itemJson = switchAdaptor(item)

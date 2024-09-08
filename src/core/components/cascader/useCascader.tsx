@@ -1,6 +1,6 @@
 import { useWatcher } from 'alova/client'
 import type { Ref } from 'vue'
-import { useClient } from '@/core/hooks'
+import { useClient } from '../../hooks'
 
 interface UseCascaderProps {
   url?: Ref<string>

@@ -4,8 +4,8 @@ import { defineComponent, ref } from 'vue'
 import clsx from 'clsx'
 import type { SortableEvent } from 'vue-draggable-plus'
 import { VueDraggable } from 'vue-draggable-plus'
+import { useImagePreview } from '../../hooks'
 import { useNaiveUpload } from './useUpload'
-import { useImagePreview } from '@/core/hooks'
 
 export interface DuxImageUploadProps {
   value?: string | string[]

@@ -10,8 +10,12 @@ export interface DuxRoute {
   component?: () => any
 }
 
+interface DuxRouteStore {
+  routes: DuxRoute[]
+}
+
 export const useRouteStore = defineStore('routes', {
-  state: () => ({ routes: [] }),
+  state: () => ({ routes: [] } as DuxRouteStore),
   actions: {
     searchRoute(path: string) {
       return this.routes?.find((item) => {

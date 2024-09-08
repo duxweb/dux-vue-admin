@@ -2,9 +2,9 @@ import { Transition, defineComponent, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { NTabPane, NTabs } from 'naive-ui'
 import clsx from 'clsx'
-import { useTabStore } from '@/core/stores/tab.ts'
-import './tabs.css'
-import type { DuxRoute } from '@/core/stores'
+import { useTabStore } from '../../stores/tab'
+import './tabs.module.css'
+import type { DuxRoute } from '../../stores'
 
 export const DuxTabs = defineComponent({
   name: 'DuxTabs',

@@ -3,8 +3,8 @@ import 'aieditor/dist/style.css'
 import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUpload } from '../upload'
-import { useThemeStore } from '@/core/stores/theme'
-import { useResource } from '@/core/hooks'
+import { useThemeStore } from '../../stores/theme'
+import { useResource } from '../../hooks'
 
 export interface DuxAiEditorProps {
   value?: string

@@ -3,7 +3,7 @@ import presetUno from '@unocss/preset-uno'
 import presetIcons from '@unocss/preset-icons/browser'
 import type { UserConfig } from '@unocss/core'
 import { defineConfig, transformerDirectives } from 'unocss'
-import { presetDux } from '@/core/unocss'
+import { presetDux } from './src'
 
 export const config: UserConfig = {
   // ...UnoCSS options

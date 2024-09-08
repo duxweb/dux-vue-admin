@@ -1,7 +1,7 @@
 import { NDrawer } from 'naive-ui'
 import { defineAsyncComponent, defineComponent } from 'vue'
 import { useExtendOverlay } from '@overlastic/vue'
-import WindowHeader from '../window/windowHeader'
+import { DuxWindowHeader } from '../window'
 
 export default defineComponent({
   name: 'DuxDrawer',
@@ -37,7 +37,7 @@ export default defineComponent({
         class=""
       >
         <div class="h-full flex flex-col">
-          <WindowHeader title={props.title} onClose={reject} />
+          <DuxWindowHeader title={props.title} onClose={reject} />
           <Page {...params} onSuccess={resolve} onClose={reject} />
         </div>
       </NDrawer>

@@ -11,9 +11,6 @@
     "module": "ESNext",
 
     "moduleResolution": "bundler",
-    "paths": {
-      "@/*": ["src/*"]
-    },
 
     "allowImportingTsExtensions": true,
     "allowJs": true,
@@ -23,14 +20,17 @@
     "noImplicitAny": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+
+    "declaration": true,
+    "declarationDir": "dist",
     "noEmit": true,
+    "outDir": "./dist",
     "isolatedModules": true,
     "skipLibCheck": true
+
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue"
+    "src/**/*"
   ],
   "exclude": ["node_modules"]
 }

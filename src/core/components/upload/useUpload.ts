@@ -1,7 +1,7 @@
 import type { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui'
 import { useMessage } from 'naive-ui'
 import { reactive } from 'vue'
-import { useClient } from '@/core/hooks/client'
+import { useClient } from '../../hooks/client'
 
 export interface UploadFileInfoExtend extends UploadFileInfo {
   size?: number
@@ -39,7 +39,7 @@ export function useNaiveUpload() {
       headers,
       formData,
       onSuccess: (res) => {
-        file.url = res?.url
+        file.url = res?.url || null
         file.size = res?.size
         file.ext = res?.ext
         onFinish()
@@ -109,7 +109,7 @@ export function useUpload() {
     })
 
     uploadMethod.then((res) => {
-      onSuccess(res?.data[0])
+      onSuccess?.(res?.data[0])
     }).catch((error) => {
       if (error.message?.includes('CanceledError')) {
         return
@@ -118,7 +118,9 @@ export function useUpload() {
       onError?.(error)
     }).finally(() => {
       offUploadEvent()
-      delete uploadRequest[id]
+      if (id) {
+        delete uploadRequest[id]
+      }
     })
   }
 

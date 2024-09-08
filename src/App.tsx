@@ -4,8 +4,7 @@ import { NConfigProvider, NDialogProvider, NMessageProvider, NModalProvider, dat
 import { OverlaysProvider } from '@overlastic/vue'
 import { storeToRefs } from 'pinia'
 import type { Config } from './core/config/type'
-import { DuxMain } from './core'
-import { useThemeStore } from '@/core/stores/theme.ts'
+import { DuxMain, useThemeStore } from './core'
 
 export const DuxApp = defineComponent({
   name: 'DuxApp',

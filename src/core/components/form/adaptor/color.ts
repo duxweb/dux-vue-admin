@@ -1,4 +1,4 @@
-import type { JsonFormItemSchema } from '../jsonForm'
+import type { JsonFormItemSchema } from '../handler'
 import { item } from './item'
 
 export function color({ label, name, itemAttr, attr }: JsonFormItemSchema) {

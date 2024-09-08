@@ -5,12 +5,11 @@ import type { FormInst } from 'naive-ui'
 import { NButton, NForm, NFormItem, NInput, NPopover, useMessage } from 'naive-ui'
 import { useRouter } from 'vue-router'
 import clsx from 'clsx'
-import { DuxDrawApps } from '../components'
-import { DuxLogo } from '../components/common/logo'
+import { DuxDrawApps, DuxLogo } from '../components'
 import { useResource } from '../hooks'
-import { useThemeStore } from '@/core/stores/theme.ts'
-import { useManageStore } from '@/core/stores/manage.ts'
-import { useClient } from '@/core/hooks/client.ts'
+import { useThemeStore } from '../stores/theme'
+import { useManageStore } from '../stores/manage'
+import { useClient } from '../hooks/client'
 
 export const DuxLoginPage = defineComponent({
   name: 'DuxLoginPage',

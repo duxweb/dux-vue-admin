@@ -14,7 +14,7 @@ export const DuxException = defineComponent({
       router.push({ path: route.path, query: { ...route.query, t: Date.now() } })
     }
 
-    const data = ref<Record<string, any>>(null)
+    const data = ref<Record<string, any> | null>(null)
 
     onErrorCaptured((err) => {
       console.error(err)

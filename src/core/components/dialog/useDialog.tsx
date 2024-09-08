@@ -1,5 +1,5 @@
 import { useOverlayInject } from '@overlastic/vue'
-import {DuxDialog} from './dialog.tsx'
+import { DuxDialog } from './dialog'
 
 export interface UseDialogResult {
   confirm: (props: UseDialogProps) => Promise<any>

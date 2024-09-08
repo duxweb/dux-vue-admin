@@ -2,7 +2,7 @@ import { usePagination } from 'alova/client'
 import type { Ref } from 'vue'
 import { ref, watch } from 'vue'
 import { NPagination } from 'naive-ui'
-import { useClient } from '@/core/hooks'
+import { useClient } from '../../hooks'
 
 type value = Array<string | number> | string | number | null
 

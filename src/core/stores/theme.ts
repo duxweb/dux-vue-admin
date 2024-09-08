@@ -2,8 +2,8 @@ import { type BasicColorSchema, useColorMode, useCycleList } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
 import { defineStore } from 'pinia'
 import { darkTheme } from 'naive-ui'
-import { themeColor } from '@/core/theme/color.ts'
-import { getGenerateColors, getThemeOverrides } from '@/core/theme/helper.ts'
+import { themeColor } from '../theme/color'
+import { getGenerateColors, getThemeOverrides } from '../theme/helper'
 
 export const useThemeStore = defineStore('theme', () => {
   const defaultMode = ref<BasicColorSchema>('auto')

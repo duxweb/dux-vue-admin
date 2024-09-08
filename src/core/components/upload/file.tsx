@@ -104,7 +104,7 @@ export const DuxFileUpload = defineComponent({
           <VueDraggable
             modelValue={files.value}
             onUpdate={(e: SortableEvent) => {
-              [files.value[e.oldIndex], files.value[e.newIndex]] = [files.value[e.newIndex], files.value[e.oldIndex]]
+              [files.value[e.oldIndex as number], files.value[e.newIndex as number]] = [files.value[e.newIndex as number], files.value[e.oldIndex as number]]
               onUpdate()
             }}
             class="mt-4 flex flex-col gap-2"
@@ -136,6 +136,9 @@ export const DuxFileUpload = defineComponent({
                       <NButton
                         type="primary"
                         onClick={() => {
+                          if (!item?.url) {
+                            return
+                          }
                           window.open(item.url, '_blank')
                         }}
                         secondary
@@ -152,7 +155,7 @@ export const DuxFileUpload = defineComponent({
                         secondary
                         onClick={() => {
                           item.status = 'pending'
-                          uploadRef.value.submit()
+                          uploadRef.value?.submit()
                         }}
                         class="px-2"
                         renderIcon={() => <div class="i-tabler:reload w-4 h-4"></div>}
@@ -176,7 +179,7 @@ export const DuxFileUpload = defineComponent({
                 {item.status === 'uploading' && (
                   <NProgress
                     type="line"
-                    percentage={item.percentage}
+                    percentage={item.percentage || 0}
                     height={5}
                     style={{
                       '--n-font-size': '12px',

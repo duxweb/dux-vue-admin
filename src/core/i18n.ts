@@ -1,5 +1,5 @@
 import { createI18n } from 'vue-i18n'
-import { i18n } from '@/Dux'
+import { i18n } from '../Dux'
 
 export const languageMaps = {
   'en-US': 'English',

@@ -12,16 +12,6 @@ import { columnMap, columnMedia, columnStatus, columnTags, columnText, columnTyp
 import { tableAction } from './table/action'
 import type { HandleAction, TableColumn, UseTableProps, UseTableResult } from './types'
 
-/**
- * 表格 hook
- * @param tableRef 表格对象
- * @param name 资源名称
- * @param url 请求path
- * @param actions 表格操作
- * @param columns 表格列
- * @param columnActions 表格列操作
- * @returns
- */
 export function useTable({ tableRef, name, url, actions, columns, columnActions, key = 'id' }: UseTableProps): UseTableResult {
   const client = useClient()
   const message = useMessage()
@@ -326,10 +316,6 @@ export function useTable({ tableRef, name, url, actions, columns, columnActions,
   }
 }
 
-/**
- * 操作处理
- * @param item 操作配置
- */
 export function handleAction({ id, item, modal, dialog, drawer }: HandleAction) {
   if (item.type === 'modal') {
     modal.show({

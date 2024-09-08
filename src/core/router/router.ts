@@ -2,8 +2,8 @@ import type { Options, Resource } from 'vue3-sfc-loader'
 import { loadModule } from 'vue3-sfc-loader'
 import * as Vue from 'vue'
 import mime from 'mime'
-import * as Store from '@/core/stores'
-import { useClient } from '@/core/hooks/client.ts'
+import * as Store from '../stores'
+import { useClient } from '../hooks/client'
 
 export function sfcRender(path: string) {
   const client = useClient()

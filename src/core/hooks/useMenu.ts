@@ -4,7 +4,7 @@ import type { MenuOption } from 'naive-ui'
 import { useWindowSize } from '@vueuse/core'
 import { RouterLink, useRoute } from 'vue-router'
 import { useRouteStore } from '../stores/route'
-import { arrayToTree, searchTree } from '@/core/hooks/useTree'
+import { arrayToTree, searchTree } from './useTree'
 
 export function useMenu() {
   const isPad = ref<boolean>(false)

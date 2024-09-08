@@ -1,4 +1,3 @@
-export * from './common'
 export * from './draw'
 export * from './drawer'
 export * from './form'

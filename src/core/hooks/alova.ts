@@ -1,10 +1,8 @@
 import { createAlova } from 'alova'
 import { axiosRequestAdapter } from '@alova/adapter-axios'
 import VueHook from 'alova/vue'
-import { config } from '@/config'
 
 export const alovaInstance = createAlova({
-  baseURL: config.api,
   statesHook: VueHook,
   requestAdapter: axiosRequestAdapter(),
   shareRequest: false,
