@@ -1,0 +1,20 @@
+.tabs {
+  height: 48px;
+  opacity: 1;
+}
+
+.draw-enter-from {
+  height: 0;
+  opacity: 0;
+}
+
+.draw-enter,
+.draw-leave-to {
+  height: 0;
+  opacity: 0;
+}
+
+.draw-enter-active,
+.draw-leave-active {
+  transition: all 0.3s ease;
+}

@@ -1,0 +1,136 @@
+{
+  "common": {
+    "search": "Search",
+    "notMenu": "Not found Menu",
+    "menu": "Menu",
+    "more": "More",
+    "logout":"Logout",
+    "light": "Light",
+    "dark": "Dark",
+    "lang": "Language",
+    "select": "Select",
+    "placeholderKeyword": "Please enter a keyword"
+  },
+  "pages": {
+    "login": {
+      "signin": "Sign in",
+      "signup": "Sign up",
+      "divider": "or",
+      "fields": {
+        "username": "Username",
+        "password": "Password"
+      },
+      "buttons": {
+        "submit": "Login",
+        "forgotPassword": "Forgot password?",
+        "noAccount": "Don’t have an account?"
+      }
+    },
+    "register": {
+      "title": "Sign up for your account",
+      "fields": {
+        "username": "Username",
+        "password": "Password"
+      },
+      "buttons": {
+        "submit": "Register",
+        "haveAccount": "Have an account?"
+      }
+    },
+    "forgotPassword": {
+      "title": "Forgot your password?",
+      "fields": {
+        "username": "Username",
+        "password": "Password",
+        "code": "Verifiy code"
+      },
+      "buttons": {
+        "submit": "Send verifiy code",
+        "rest": "Reset password",
+        "back": "Back to Login",
+        "code": "Have an code?"
+      }
+    },
+    "updatePassword": {
+      "title": "Update password",
+      "fields": {
+        "password": "New Password",
+        "confirmPassword": "Confirm new password"
+      },
+      "errors": {
+        "confirmPasswordNotMatch": "Passwords do not match"
+      },
+      "buttons": {
+        "submit": "Update"
+      }
+    },
+    "error": {
+      "info": "You may have forgotten to add the {{action}} component to {{resource}} resource.",
+      "404": "Not found",
+      "404Desc": "Sorry, the page you visited does not exist."
+    },
+    "unauthorized": {
+      "title": "Unauthorized",
+      "desc": "Sorry, you do not have permission to access this page"
+    },
+    "boundary": {
+      "title": "Ooops, something wrong here",
+      "desc": "The system may have crashed, please open the debugging tool to check the specific exception information"
+    }
+  },
+  "buttons": {
+    "list": "List",
+    "create": "Create",
+    "save": "Save",
+    "logout": "Logout",
+    "delete": "Delete",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "confirm": "Are you sure?",
+    "filter": "Filter",
+    "clear": "Clear",
+    "refresh": "Refresh",
+    "show": "Show",
+    "undo": "Undo",
+    "import": "Import",
+    "clone": "Clone",
+    "back": "Back",
+    "rest": "Rest",
+    "setting": "Setting",
+    "restore": "Restore",
+    "trash": "Trash",
+    "notAccessTitle": "You don't have permission to access",
+    "submit": "Submit",
+    "export": "Export",
+    "query": "Query",
+    "adv": "Advanced"
+  },
+  "warnWhenUnsavedChanges": "Are you sure you want to leave? You have unsaved changes.",
+  "notifications": {
+    "success": "Successful",
+    "error": "Error (status code: {{statusCode}})",
+    "undoable": "You have {{seconds}} seconds to undo",
+    "createSuccess": "Successfully created {{resource}}",
+    "createError": "There was an error creating {{resource}} (status code: {{statusCode}})",
+    "deleteSuccess": "Successfully deleted {{resource}}",
+    "deleteError": "Error when deleting {{resource}} (status code: {{statusCode}})",
+    "editSuccess": "Successfully edited {{resource}}",
+    "editError": "Error when editing {{resource}} (status code: {{statusCode}})",
+    "importProgress": "Importing: {{processed}}/{{total}}"
+  },
+  "loading": "Loading",
+  "tags": {
+    "clone": "Clone"
+  },
+  "table": {
+    "actions": "Actions"
+  },
+  "pagination": {
+    "go": "Go to Page",
+    "show": "Show"
+  },
+  "empty": {
+    "title": "No data",
+    "desc": "No data for now, try refreshing the page"
+  }
+}

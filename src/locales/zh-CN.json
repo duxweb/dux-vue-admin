@@ -1,0 +1,134 @@
+{
+  "common": {
+    "search": "搜索",
+    "notMenu": "没有找到菜单",
+    "menu": "菜单",
+    "more": "更多",
+    "logout": "退出系统",
+    "light": "明亮模式",
+    "dark": "暗色模式",
+    "lang": "切换语言",
+    "select": "选择",
+    "placeholderKeyword": "请输入关键词"
+  },
+  "pages": {
+    "login": {
+      "signin": "登录",
+      "signup": "注册",
+      "divider": "或",
+      "fields": {
+        "username": "用户名",
+        "password": "密码"
+      },
+      "buttons": {
+        "submit": "登录",
+        "forgotPassword": "忘记密码?",
+        "noAccount": "没有账号?"
+      }
+    },
+    "register": {
+      "title": "注册您的账户",
+      "fields": {
+        "username": "用户名",
+        "password": "密码"
+      },
+      "buttons": {
+        "submit": "注册",
+        "haveAccount": "已有账号?"
+      }
+    },
+    "forgotPassword": {
+      "title": "忘记密码了吗?",
+      "fields": {
+        "username": "用户名",
+        "password": "密码",
+        "code": "验证码"
+      },
+      "buttons": {
+        "send": "发送验证码",
+        "rest": "重置密码",
+        "back": "返回登录",
+        "code": "已有验证码？"
+      }
+    },
+
+    "updatePassword": {
+      "title": "更新密码",
+      "fields": {
+        "password": "新密码",
+        "confirmPassword": "确认新密码"
+      },
+      "errors": {
+        "confirmPasswordNotMatch": "密码不匹配"
+      },
+      "buttons": {
+        "submit": "更新"
+      }
+    },
+    "error": {
+      "info": "你忘记添加 {{action}} 组件到 {{resource}}",
+      "404": "页面不存在",
+      "404Desc": "抱歉，您访问的页面不存在"
+    },
+    "unauthorized": {
+      "title": "没有权限",
+      "desc": "抱歉，您没有访问该页面的权限"
+    },
+    "boundary": {
+      "title": "系统出错了",
+      "desc": "系统可能已崩溃，请打开调试工具查看具体异常信息"
+    }
+  },
+  "buttons": {
+    "list": "列表",
+    "create": "创建",
+    "save": "保存",
+    "logout": "退出",
+    "delete": "删除",
+    "edit": "编辑",
+    "cancel": "取消",
+    "confirm": "确认执行操作?",
+    "filter": "筛选",
+    "clear": "清空",
+    "refresh": "刷新",
+    "show": "查看",
+    "undo": "撤销",
+    "import": "导入",
+    "clone": "克隆",
+    "back": "返回",
+    "rest": "重置",
+    "setting": "设置",
+    "restore": "恢复",
+    "trash": "清空",
+    "notAccessTitle": "您无权访问",
+    "submit": "提交",
+    "export": "导出",
+    "query": "查询",
+    "adv": "高级"
+  },
+  "warnWhenUnsavedChanges": "未保存的更改将不会保留。",
+  "notifications": {
+    "success": "成功",
+    "error": "错误(状态码:{{statusCode}})",
+    "undoable": "您有 {{seconds}} 秒时间撤销。",
+    "createSuccess": "{{resource}} 创建成功。",
+    "createError": "创建 {{resource}} 时出错(状态码:{{statusCode}})",
+    "deleteSuccess": "{{resource}} 删除成功。",
+    "deleteError": "删除 {{resource}} 时出错(状态码:{{statusCode}})",
+    "editSuccess": "{{resource}} 编辑成功。",
+    "editError": "编辑 {{resource}} 时出错(状态码:{{statusCode}})",
+    "importProgress": "已导入 {{processed}}/{{total}}"
+  },
+  "loading": "加载中",
+  "table": {
+    "actions": "操作"
+  },
+  "pagination": {
+    "go": "跳至页码",
+    "show": "显示"
+  },
+  "empty": {
+    "title": "暂无数据",
+    "desc": "暂时没有数据，可尝试刷新页面"
+  }
+}

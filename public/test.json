@@ -1,0 +1,11 @@
+{
+  "code": 200,
+  "message": "ok",
+  "data": {
+    "index": "admin/system/index.vue",
+    "path": "admin/system/index",
+    "files": {
+      "admin/system/index": "<script setup lang=\"ts\">\nimport { useCounterStore } from '@/stores'\n// 可以在组件中的任意位置访问 `store` 变量 ✨\nconst store = useCounterStore()\n\nconsole.log('store', store)\n</script>\n\n<template>\n  <n-button>xx</n-button>\n  <div class=\"flex-1 bg-blue-7\">\n    <div class=\"flex-1\" />\n  </div>\n\n  <div class=\"i-tabler:home\" />\n</template>\n\n<style scoped>\n\n</style>\n"
+    }
+  }
+}
