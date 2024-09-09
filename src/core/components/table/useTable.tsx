@@ -1,4 +1,4 @@
-import type { DataTableFilterState, DataTableSortState, PaginationProps } from 'naive-ui'
+import type { DataTableFilterState, DataTableSortState } from 'naive-ui'
 import { NButton, NCheckbox, NDropdown, NPopover, NTooltip, useMessage } from 'naive-ui'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
@@ -101,7 +101,7 @@ export function useTable({ tableRef, name, url, actions, columns, columnActions,
   // 表格数据
   const tableData = ref([])
 
-  const pagination = reactive<PaginationProps>({
+  const pagination = reactive<Record<string, any>>({
     page: 1,
     pageSize: 10,
   })
