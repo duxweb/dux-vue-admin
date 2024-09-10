@@ -2,19 +2,19 @@
   "name": "dux-admin",
   "type": "module",
   "version": "0.0.0",
+  "author": "DuxWeb",
+  "license": "Apache-2.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "LICENSE",
     "README.md",
-    "assets",
     "dist",
     "package.json"
   ],
   "scripts": {
     "clean": "rimraf dist",
     "copy-files": "copyfiles -u 1 src/**/*.{css,scss,js,png,jpg,svg,jsx,d.ts,json} dist/",
-    "build": "bun clean && tsc -b && bun copy-files",
+    "build": "bun clean && vue-tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -69,6 +69,7 @@
     "path": "^0.12.7",
     "typescript": "^5.5.3",
     "vite": "^5.4.3",
+    "vite-plugin-build": "^0.10.0",
     "vite-plugin-dts": "^4.2.1",
     "vitepress": "^1.3.4",
     "vue-tsc": "^2.1.6"

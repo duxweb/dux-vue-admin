@@ -62,11 +62,6 @@ const actions: TableAction[] = [
 
 const columns: TableColumn[] = [
   {
-    title: 'ID',
-    key: 'id',
-    width: 80,
-  },
-  {
     title: '商品',
     key: 'title',
     width: 300,
