@@ -11,7 +11,7 @@ import '@unocss/reset/tailwind-compat.css'
 import 'vfonts/Lato.css'
 import 'animate.css'
 import 'naive-ui-table/dist/style.css'
-import 'virtual:uno.css'
+// import 'virtual:uno.css'
 import './style.css'
 
 export const i18n = setupI18n({})
