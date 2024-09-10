@@ -1,5 +1,5 @@
 import type { ButtonProps, DataTableColumn, DataTableColumns, DataTableInst, DataTableProps, FormInst, PaginationProps } from 'naive-ui'
-import type { Ref, VNodeChild } from 'vue'
+import type { AsyncComponentLoader, Ref, VNodeChild } from 'vue'
 import type { ColumnMapProps, ColumnMediaProps, ColumnStatusProps, ColumnTagsProps, ColumnTextProps } from '../column'
 import type { UseModalResult } from '../../modal'
 import type { UseDialogResult } from '../../dialog'
@@ -13,7 +13,7 @@ export interface TableAction {
   color?: ButtonProps['type']
   icon?: string
   path?: string
-  component?: () => any
+  component?: AsyncComponentLoader<any>
   componentProps?: Record<string, any>
   show?: (rowData?: object, rowIndex?: number) => boolean
 }

@@ -1,4 +1,5 @@
 import { NDrawer } from 'naive-ui'
+import type { AsyncComponentLoader, PropType } from 'vue'
 import { defineAsyncComponent, defineComponent } from 'vue'
 import { useExtendOverlay } from '@overlastic/vue'
 import { DuxWindowHeader } from '../window'
@@ -8,7 +9,10 @@ export default defineComponent({
   props: {
     title: String,
     width: Number,
-    component: Function,
+    component: {
+      type: Object as PropType<AsyncComponentLoader<any>>,
+      required: true,
+    },
     componentProps: Object,
   },
   setup(props) {
@@ -20,7 +24,7 @@ export default defineComponent({
     params.onConfirm = resolve
     params.onClose = reject
 
-    const Page = defineAsyncComponent(props.component as () => Promise<any>)
+    const Page = defineAsyncComponent(props.component)
 
     return () => (
       <NDrawer

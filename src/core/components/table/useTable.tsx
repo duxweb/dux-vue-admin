@@ -327,7 +327,7 @@ export function handleAction({ id, item, modal, dialog, drawer }: HandleAction) 
       },
     })
   }
-  if (item.type === 'drawer') {
+  if (item.type === 'drawer' && item.component) {
     drawer?.show({
       title: item?.title || item?.label,
       component: item.component,

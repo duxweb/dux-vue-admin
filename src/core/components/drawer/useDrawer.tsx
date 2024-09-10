@@ -1,4 +1,5 @@
 import { useOverlayInject } from '@overlastic/vue'
+import type { AsyncComponentLoader } from 'vue'
 import Drawer from './drawer'
 
 export interface UseDrawerResult {
@@ -8,7 +9,7 @@ export interface UseDrawerResult {
 export interface UseDrawerProps {
   title?: string
   width?: number
-  component?: () => any
+  component: AsyncComponentLoader<any>
   componentProps?: Record<string, any>
 }
 
