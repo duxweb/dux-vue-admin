@@ -1,12 +1,13 @@
 import { createI18n } from 'vue-i18n'
 import enUS from '../locales/en-US.json'
 import zhCN from '../locales/zh-CN.json'
-import { i18n } from './dux'
 
 export const languageMaps = {
   'en-US': 'English',
   'zh-CN': '简体中文',
 }
+
+export const i18n = setupI18n({})
 
 export function getLanguage() {
   let storedLang = localStorage.getItem('i18nextLng')
