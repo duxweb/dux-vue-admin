@@ -14,7 +14,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "copy-files": "copyfiles -u 1 src/**/*.{css,scss,js,png,jpg,svg,jsx,d.ts,json} dist/",
-    "build": "bun clean && vue-tsc && vite build",
+    "build": "bun clean && vue-tsc -b",
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
