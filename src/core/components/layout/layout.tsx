@@ -1,14 +1,13 @@
-import { defineComponent, ref } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useRouter } from 'vue-router'
 import { NBreadcrumb, NBreadcrumbItem, NButton, NDrawer, NDrawerContent, NDropdown, NIcon, NInput, NLayout, NLayoutHeader, NLayoutSider, NList, NListItem, NMenu, NPopover, NTabPane, NTabs } from 'naive-ui'
+import { storeToRefs } from 'pinia'
+import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import DuxLogo from '../../assets/images/logo.svg'
+import { useRouter } from 'vue-router'
+import { useResource } from '../../hooks'
 import { useMenu } from '../../hooks/useMenu'
-import { useThemeStore } from '../../stores/theme'
 import { getLanguage, languageMaps, setLanguage } from '../../i18n'
 import { useRouteStore } from '../../stores/route'
-import { useResource } from '../../hooks'
+import { useThemeStore } from '../../stores/theme'
 import { DuxTabs } from './tabs'
 
 export const DuxLayout = defineComponent({
@@ -81,7 +80,7 @@ export const DuxLayout = defineComponent({
               <div class="flex flex-col flex-none w-64px gap-4">
                 <div class="flex-none px-3">
                   <div class="py-6 border-gray-2 border-b">
-                    <DuxLogo />
+                    <dux-logo />
                   </div>
                 </div>
                 <div class="flex-1">
@@ -124,7 +123,7 @@ export const DuxLayout = defineComponent({
             <div class="flex items-center px-4 h-56px">
               <div v-if="isMobile" class="flex-1">
                 <div class="max-w-60px max-h-45px" onClick={() => mobileMenuShow.value = true}>
-                  <DuxLogo />
+                  <dux-logo />
                 </div>
                 <NDrawer show={mobileMenuShow.value} onUpdateShow={v => mobileMenuShow.value = v} width={250} placement="left">
                   <NDrawerContent title="菜单" closable bodyContentStyle={{ padding: '5px' }}>

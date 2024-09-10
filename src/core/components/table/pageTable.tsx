@@ -1,15 +1,15 @@
-import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue'
-import type { DataTableInst } from 'naive-ui'
-import { NButton, NCard, NDataTable, NForm, NTabPane, NTabs } from 'naive-ui'
-import { useI18n } from 'vue-i18n'
-import clsx from 'clsx'
 import { useWindowSize } from '@vueuse/core'
+import clsx from 'clsx'
+import { NButton, NCard, NDataTable, NForm, NTabPane, NTabs } from 'naive-ui'
+import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
+import type { DataTableInst } from 'naive-ui'
 import { DuxJsonForm, type JsonFormItemSchema } from '../form'
 import { DuxException } from '../layout'
 import { useTable } from './useTable'
-import type { TableTab } from './types/table'
 import type { TableAction, TableColumn } from './types'
+import type { TableTab } from './types/table'
 
 export const DuxPageTable = defineComponent({
   name: 'DuxPageTable',

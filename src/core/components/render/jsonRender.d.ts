@@ -1,5 +1,5 @@
-import type { JSX } from 'vue/jsx-runtime'
 import type { DefineComponent } from 'vue'
+import type { JSX } from 'vue/jsx-runtime'
 
 type ComponentType<T extends DefineComponent> = T extends DefineComponent<infer P> ? P : never
 

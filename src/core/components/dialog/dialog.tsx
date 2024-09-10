@@ -1,6 +1,6 @@
+import { useExtendOverlay } from '@overlastic/vue'
 import { NButton, NModal } from 'naive-ui'
 import { defineComponent, reactive } from 'vue'
-import { useExtendOverlay } from '@overlastic/vue'
 
 export const DuxDialog = defineComponent({
   name: 'DuxDialog',

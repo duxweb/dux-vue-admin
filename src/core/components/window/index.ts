@@ -1,2 +1,2 @@
-export * from './windowHeader'
 export * from './windowFooter'
+export * from './windowHeader'

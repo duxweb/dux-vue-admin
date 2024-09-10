@@ -1,6 +1,6 @@
-import type { CascaderProps } from 'naive-ui'
 import { NCascader } from 'naive-ui'
 import { defineComponent, ref, watch } from 'vue'
+import type { CascaderProps } from 'naive-ui'
 import { useCascader } from './useCascader'
 
 export interface DuxCascaderAsyncProps extends CascaderProps {

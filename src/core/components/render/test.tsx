@@ -1,6 +1,6 @@
 import { defineComponent, reactive } from 'vue'
-import type { JSONSchema } from './jsonRender'
 import JsonRender from './jsonRender'
+import type { JSONSchema } from './jsonRender'
 
 const nodes: JSONSchema[] = [
   {

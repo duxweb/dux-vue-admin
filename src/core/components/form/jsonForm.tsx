@@ -1,8 +1,8 @@
-import type { PropType, Ref } from 'vue'
 import { defineComponent } from 'vue'
+import type { PropType, Ref } from 'vue'
 import JsonRender from '../render/jsonRender'
-import type { JsonFormItemSchema } from './handler'
 import { formToJson } from './handler'
+import type { JsonFormItemSchema } from './handler'
 
 export const DuxJsonForm = defineComponent({
   name: 'DuxJsonForm',

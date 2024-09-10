@@ -1,9 +1,9 @@
 import type { ButtonProps, DataTableColumn, DataTableColumns, DataTableInst, DataTableProps, FormInst, PaginationProps } from 'naive-ui'
 import type { AsyncComponentLoader, Ref, VNodeChild } from 'vue'
-import type { ColumnMapProps, ColumnMediaProps, ColumnStatusProps, ColumnTagsProps, ColumnTextProps } from '../column'
-import type { UseModalResult } from '../../modal'
 import type { UseDialogResult } from '../../dialog'
 import type { UseDrawerResult } from '../../drawer'
+import type { UseModalResult } from '../../modal'
+import type { ColumnMapProps, ColumnMediaProps, ColumnStatusProps, ColumnTagsProps, ColumnTextProps } from '../column'
 
 export interface TableAction {
   label: string

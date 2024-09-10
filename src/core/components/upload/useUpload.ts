@@ -1,6 +1,6 @@
-import type { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui'
 import { useMessage } from 'naive-ui'
 import { reactive } from 'vue'
+import type { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui'
 import { useClient } from '../../hooks/client'
 
 export interface UploadFileInfoExtend extends UploadFileInfo {

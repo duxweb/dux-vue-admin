@@ -1,9 +1,9 @@
+import { useMessage } from 'naive-ui'
 import { inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useMessage } from 'naive-ui'
-import type { Config } from '../config/type'
 import { useRouteStore } from '../stores'
 import { useClient } from './client'
+import type { Config } from '../config/type'
 
 export function useResource() {
   const config = inject<Config>('duxConfig')

@@ -1,11 +1,11 @@
-import { NButton } from 'naive-ui'
 import clsx from 'clsx'
+import { NButton } from 'naive-ui'
 import type { VNodeChild } from 'vue'
 import { handleAction } from '../useTable'
-import type { TableAction } from '../types'
-import type { UseModalResult } from '../../modal'
 import type { UseDialogResult } from '../../dialog'
 import type { UseDrawerResult } from '../../drawer'
+import type { UseModalResult } from '../../modal'
+import type { TableAction } from '../types'
 
 export interface TableActionProps {
   key?: string | number

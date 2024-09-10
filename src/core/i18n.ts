@@ -1,7 +1,7 @@
 import { createI18n } from 'vue-i18n'
-import { i18n } from '../Dux'
-import zhCN from '../locales/zh-CN.json'
 import enUS from '../locales/en-US.json'
+import zhCN from '../locales/zh-CN.json'
+import { i18n } from './dux'
 
 export const languageMaps = {
   'en-US': 'English',

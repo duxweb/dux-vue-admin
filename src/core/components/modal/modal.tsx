@@ -1,6 +1,6 @@
+import { useExtendOverlay } from '@overlastic/vue'
 import { NModal } from 'naive-ui'
 import { defineAsyncComponent, defineComponent } from 'vue'
-import { useExtendOverlay } from '@overlastic/vue'
 import { DuxWindowHeader } from '../window'
 
 export const DuxModal = defineComponent({

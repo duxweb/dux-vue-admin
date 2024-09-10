@@ -1,7 +1,7 @@
-import { NDrawer } from 'naive-ui'
-import type { AsyncComponentLoader, PropType } from 'vue'
-import { defineAsyncComponent, defineComponent } from 'vue'
 import { useExtendOverlay } from '@overlastic/vue'
+import { NDrawer } from 'naive-ui'
+import { defineAsyncComponent, defineComponent } from 'vue'
+import type { AsyncComponentLoader, PropType } from 'vue'
 import { DuxWindowHeader } from '../window'
 
 export default defineComponent({

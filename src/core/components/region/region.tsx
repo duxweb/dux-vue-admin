@@ -1,7 +1,7 @@
-import { NSelect } from 'naive-ui'
-import type { PropType } from 'vue'
-import { defineComponent, ref, watch } from 'vue'
 import clsx from 'clsx'
+import { NSelect } from 'naive-ui'
+import { defineComponent, ref, watch } from 'vue'
+import type { PropType } from 'vue'
 import { useRegion } from './useRegion'
 
 export interface DuxRegionProps {

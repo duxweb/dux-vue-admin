@@ -1,8 +1,8 @@
-import { KeepAlive, Suspense, defineComponent } from 'vue'
 import { useLoadingBar } from 'naive-ui'
+import { defineComponent, KeepAlive, Suspense } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
-import { useTabStore } from '../stores'
 import { DuxLayout } from '../components'
+import { useTabStore } from '../stores'
 import { DuxLoading } from './loading'
 
 export const DuxMain = defineComponent({

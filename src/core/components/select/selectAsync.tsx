@@ -1,7 +1,7 @@
-import type { SelectProps } from 'naive-ui'
 import { NAvatar, NSelect, NTag } from 'naive-ui'
-import type { VNodeChild } from 'vue'
 import { defineComponent, ref, watch } from 'vue'
+import type { SelectProps } from 'naive-ui'
+import type { VNodeChild } from 'vue'
 import { useSelect } from './useSelect'
 
 export interface DuxSelectAsyncProps extends SelectProps {

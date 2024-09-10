@@ -1,7 +1,7 @@
-import type { Preset } from '@unocss/core'
 import { toArray } from '@unocss/core'
-import { genCss, generateColorCombinations } from './theme/helper'
+import type { Preset } from '@unocss/core'
 import { themeColor } from './theme/color'
+import { genCss, generateColorCombinations } from './theme/helper'
 
 /** 主题配置 */
 export function presetDux(): Preset<object> {

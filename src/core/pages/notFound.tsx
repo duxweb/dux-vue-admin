@@ -1,8 +1,8 @@
-import { defineComponent } from 'vue'
 import { NButton } from 'naive-ui'
+import { defineComponent } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { DuxPageStatus } from '../components'
 import DuxDrawError from '../assets/draw/error.svg'
+import { DuxPageStatus } from '../components'
 
 export const DuxNotFound = defineComponent({
   name: 'DuxNotFound',

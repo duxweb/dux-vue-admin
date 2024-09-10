@@ -1,7 +1,7 @@
 import { type BasicColorSchema, useColorMode, useCycleList } from '@vueuse/core'
-import { computed, ref, watch } from 'vue'
-import { defineStore } from 'pinia'
 import { darkTheme } from 'naive-ui'
+import { defineStore } from 'pinia'
+import { computed, ref, watch } from 'vue'
 import { themeColor } from '../theme/color'
 import { getGenerateColors, getThemeOverrides } from '../theme/helper'
 

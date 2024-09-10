@@ -1,4 +1,4 @@
-import { type RouteRecordRaw, createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-router'
 
 const routes: Readonly<RouteRecordRaw[]> = [
   // { path: '/admin/system/index', component: () => import('../pages/index.vue'), name: 'index', meta: { title: '首页' } },

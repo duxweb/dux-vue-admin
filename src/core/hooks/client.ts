@@ -1,7 +1,7 @@
 import type { AlovaGenerics, AlovaMethodCreateConfig, Method, RequestBody } from 'alova'
 import { useManageStore } from '../stores/manage'
-import { useResource } from './useResource'
 import { alovaInstance } from './alova'
+import { useResource } from './useResource'
 
 type Config<T> = AlovaMethodCreateConfig<AlovaGenerics, Record<string, any>, T>
 

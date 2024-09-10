@@ -1,15 +1,15 @@
 import type { AutoCompleteProps, CascaderProps, CheckboxProps, ColorPickerProps, DatePickerProps, DynamicInputProps, DynamicTagsProps, FormItemProps, InputNumberProps, InputProps, MentionProps, RadioProps, RateProps, SelectProps, SliderProps, SpaceProps, SwitchProps, TimeProps, TransferProps, TreeSelectProps } from 'naive-ui'
-import type { JSONSchema } from '../render/jsonRender'
-import type { DuxAiEditorProps } from '../editor/editor'
-import type { DuxFileUploadProps, DuxImageUploadProps } from '../upload'
-import type { DuxSelectAsyncProps } from '../select'
-import type { DuxCascaderAsyncProps } from '../cascader'
-import type { DuxRegionProps } from '../region'
-import type { CheckboxGroupAdaptor, GridProps } from './adaptor'
 import { cascader, cascaderAsync, checkbox, checkboxGroup, color, date, dynamicInput, dynamicTags, grid, input, mention, number, radio, radioGroup, rate, region, select, selectAsync, slider, space, switchAdaptor, time, transfer, treeSelect, uploadFile, uploadImage } from './adaptor'
 import { autoComplete } from './adaptor/autoComplete'
-import type { RadioGroupAdaptor } from './adaptor/radioGroup'
 import { editor } from './adaptor/editor'
+import type { DuxCascaderAsyncProps } from '../cascader'
+import type { DuxAiEditorProps } from '../editor/editor'
+import type { DuxRegionProps } from '../region'
+import type { JSONSchema } from '../render/jsonRender'
+import type { DuxSelectAsyncProps } from '../select'
+import type { DuxFileUploadProps, DuxImageUploadProps } from '../upload'
+import type { CheckboxGroupAdaptor, GridProps } from './adaptor'
+import type { RadioGroupAdaptor } from './adaptor/radioGroup'
 
 export interface JsonFormToAttrMap {
   'editor': DuxAiEditorProps

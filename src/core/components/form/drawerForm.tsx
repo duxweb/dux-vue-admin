@@ -1,9 +1,9 @@
 import { NButton, NForm, NScrollbar } from 'naive-ui'
-import type { PropType } from 'vue'
 import { defineComponent } from 'vue'
+import type { PropType } from 'vue'
+import { DuxJsonForm } from './jsonForm'
 import { useForm } from './useForm'
 import type { JsonFormItemSchema } from './handler'
-import { DuxJsonForm } from './jsonForm'
 
 export const DuxDrawerForm = defineComponent({
   name: 'DuxDrawerForm',

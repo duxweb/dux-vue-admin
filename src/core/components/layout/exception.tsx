@@ -1,8 +1,7 @@
+import { NButton } from 'naive-ui'
 import { defineComponent, onErrorCaptured, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { NButton } from 'naive-ui'
 import { DuxPageStatus } from '../status'
-import DuxDrawError from '../../assets/draw/error.svg'
 
 export const DuxException = defineComponent({
   name: 'DuxException',
@@ -38,7 +37,7 @@ export const DuxException = defineComponent({
       ? (
           <DuxPageStatus title={data.value?.title} desc={data.value?.desc}>
             {{
-              default: () => <DuxDrawError />,
+              default: () => <dux-draw-error />,
               action: () => <NButton onClick={refreshRoute} renderIcon={() => <div class="n-icon i-tabler:refresh" />}>刷新</NButton>,
             }}
           </DuxPageStatus>

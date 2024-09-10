@@ -1,10 +1,10 @@
-import type { UploadFileInfo, UploadInst } from 'naive-ui'
 import { NButton, NProgress, NUpload, NUploadDragger } from 'naive-ui'
 import { defineComponent, ref } from 'vue'
-import type { SortableEvent } from 'vue-draggable-plus'
 import { VueDraggable } from 'vue-draggable-plus'
-import type { DuxUploadFile, UploadFileInfoExtend } from './useUpload'
+import type { UploadFileInfo, UploadInst } from 'naive-ui'
+import type { SortableEvent } from 'vue-draggable-plus'
 import { useNaiveUpload } from './useUpload'
+import type { DuxUploadFile, UploadFileInfoExtend } from './useUpload'
 
 export interface DuxFileUploadProps {
   accept?: string

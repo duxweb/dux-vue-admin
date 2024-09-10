@@ -1,10 +1,10 @@
 import { NButton } from 'naive-ui'
-import type { PropType } from 'vue'
 import { defineComponent } from 'vue'
+import type { PropType } from 'vue'
 import { DuxWindowFooter } from '../window'
+import { DuxJsonForm } from './jsonForm'
 import { useForm } from './useForm'
 import type { JsonFormItemSchema } from './handler'
-import { DuxJsonForm } from './jsonForm'
 
 export const DuxModalForm = defineComponent({
   name: 'DuxModalForm',

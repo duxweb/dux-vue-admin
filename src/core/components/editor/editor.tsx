@@ -1,10 +1,10 @@
 import { AiEditor } from 'aieditor'
-import 'aieditor/dist/style.css'
-import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useUpload } from '../upload'
-import { useThemeStore } from '../../stores/theme'
+import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useResource } from '../../hooks'
+import { useThemeStore } from '../../stores/theme'
+import { useUpload } from '../upload'
+import 'aieditor/dist/style.css'
 
 export interface DuxAiEditorProps {
   value?: string

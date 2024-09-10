@@ -1,16 +1,14 @@
-import { defineComponent, onMounted, reactive, ref } from 'vue'
-import { storeToRefs } from 'pinia'
 import { useForm } from 'alova/client'
-import type { FormInst } from 'naive-ui'
-import { NButton, NForm, NFormItem, NInput, NPopover, useMessage } from 'naive-ui'
-import { useRouter } from 'vue-router'
 import clsx from 'clsx'
-import DuxLogo from '../assets/images/logo.svg'
-import DuxDrawApps from '../assets/draw/apps.svg'
+import { NButton, NForm, NFormItem, NInput, NPopover, useMessage } from 'naive-ui'
+import { storeToRefs } from 'pinia'
+import { defineComponent, onMounted, reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import type { FormInst } from 'naive-ui'
 import { useResource } from '../hooks'
-import { useThemeStore } from '../stores/theme'
-import { useManageStore } from '../stores/manage'
 import { useClient } from '../hooks/client'
+import { useManageStore } from '../stores/manage'
+import { useThemeStore } from '../stores/theme'
 
 export const DuxLoginPage = defineComponent({
   name: 'DuxLoginPage',
@@ -158,12 +156,12 @@ export const DuxLoginPage = defineComponent({
           </div>
           <div class="justify-center hidden md:flex flex-row items-center">
             <div class="w-full h-auto">
-              <DuxDrawApps />
+              <dux-draw-apps />
             </div>
           </div>
           <div class="flex flex-col">
             <div class="flex flex-col items-center justify-center mt-4">
-              <DuxLogo />
+              <dux-logo />
               <div class="mt-4 text-lg">
                 开箱即用的 Golang 管理系统
               </div>
