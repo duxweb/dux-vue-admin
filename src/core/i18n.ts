@@ -11,8 +11,8 @@ export const i18n = setupI18n({})
 
 export function getLanguage() {
   let storedLang = localStorage.getItem('i18nextLng')
+  const userLanguage = navigator.language
   if (!storedLang) {
-    const userLanguage = navigator.language
     if (!languageMaps[userLanguage]) {
       storedLang = 'en-US'
     }
@@ -31,15 +31,15 @@ export function importI18ns(i18n, files: Record<string, unknown>) {
     const names = filename.split('.')
     const messages = files[path] as Record<string, any>
     const name = names[0]
-    i18n.global.setLocaleMessage(name, messages.default)
+    i18n.global.setLocaleMessage(name, messages)
   }
 }
 
 export function setupI18n(options) {
   const app = createI18n({
     ...options,
-    fallbackLocale: 'en-US',
     locale: getLanguage(),
+    fallbackLocale: 'en-US',
     legacy: false,
   })
   const data = {

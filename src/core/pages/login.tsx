@@ -10,7 +10,7 @@ import { useClient } from '../hooks/client'
 import { useManageStore } from '../stores/manage'
 import { useThemeStore } from '../stores/theme'
 
-export const DuxLoginPage = defineComponent({
+export default defineComponent({
   name: 'DuxLoginPage',
   setup(_props) {
     // 主题配置
@@ -140,10 +140,11 @@ export const DuxLoginPage = defineComponent({
     })
 
     return () => (
-      <div class={clsx([
-        'h-screen w-screen flex items-start justify-center text-secondary md:items-center',
-        darkMode.value ? 'login-dark-bg' : 'login-bg',
-      ])}
+      <div
+        class={clsx([
+          'h-screen w-screen flex items-start justify-center text-secondary md:items-center',
+          darkMode.value ? 'login-dark-bg' : 'login-bg',
+        ])}
       >
         <div class="relative m-4 max-w-180 w-full grid-cols-2 gap-12 overflow-hidden rounded-lg p-8 shadow bg-gray-1 grid">
           <div

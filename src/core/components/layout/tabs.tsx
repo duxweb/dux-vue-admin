@@ -4,7 +4,7 @@ import { defineComponent, Transition, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useTabStore } from '../../stores/tab'
 import type { DuxRoute } from '../../stores'
-import './tabs.module.css'
+import './tabs.css'
 
 export const DuxTabs = defineComponent({
   name: 'DuxTabs',
@@ -26,7 +26,7 @@ export const DuxTabs = defineComponent({
       <Transition name="draw">
         <div
           class={clsx([
-            'tabs items-end px-2',
+            'dux-tabs items-end px-2',
             tab.tabs.length > 1 ? 'flex' : 'hidden',
           ])}
         >

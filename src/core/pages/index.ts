@@ -1,4 +1,4 @@
 export * from './loading'
 export * from './login'
-export * from './main'
+export * as DuxMain from './main.vue'
 export * from './notFound'

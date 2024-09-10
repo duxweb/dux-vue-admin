@@ -1,10 +1,9 @@
 import { NButton } from 'naive-ui'
 import { defineComponent } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import DuxDrawError from '../assets/draw/error.svg'
 import { DuxPageStatus } from '../components'
 
-export const DuxNotFound = defineComponent({
+export default defineComponent({
   name: 'DuxNotFound',
   setup(_props) {
     const route = useRoute()
@@ -17,7 +16,7 @@ export const DuxNotFound = defineComponent({
     return () => (
       <DuxPageStatus title="页面不存在" desc="系统无法找到该页面，您可以尝试刷新该页面">
         {{
-          default: () => <DuxDrawError />,
+          default: () => <div><dux-draw-error /></div>,
           action: () => (
             <NButton onClick={refreshRoute} renderIcon={() => <div class="n-icon i-tabler:refresh" />}>
               刷新

@@ -7,6 +7,8 @@ export const DuxRender = defineComponent({
   setup(_props) {
     const { path } = useRoute()
 
+    console.log('异步加载器', path)
+
     const AsyncComp = defineAsyncComponent({
       loader: sfcRender(path),
     })

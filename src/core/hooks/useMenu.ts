@@ -1,10 +1,12 @@
 import { useWindowSize } from '@vueuse/core'
 import { cloneDeep } from 'lodash-es'
+import { storeToRefs } from 'pinia'
 import { computed, h, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import type { MenuOption } from 'naive-ui'
 import { useRouteStore } from '../stores/route'
 import { arrayToTree, searchTree } from './useTree'
+import type { DuxRoute } from '../stores/route'
 
 export function useMenu() {
   const isPad = ref<boolean>(false)
@@ -12,10 +14,12 @@ export function useMenu() {
   const appCollapsed = ref<boolean>(true)
   const sideCollapsed = ref<boolean>(false)
 
-  const { routes } = useRouteStore()
+  const routeStore = useRouteStore()
 
-  const getMenu = (): MenuOption[] => {
-    return routes?.map<MenuOption>((item) => {
+  const { routes } = storeToRefs(routeStore)
+
+  const getMenu = (data: DuxRoute[]): MenuOption[] => {
+    return data?.map<MenuOption>((item) => {
       return {
         key: item.name,
         parent: item.parent,
@@ -47,12 +51,14 @@ export function useMenu() {
     })
   }
 
-  const list: MenuOption[] = arrayToTree(getMenu(), {
-    idKey: 'key',
-    parentKey: 'parent',
-    childrenKey: 'children',
-    sortKey: 'sort',
-  }, undefined)
+  const list = computed<MenuOption[]>(() => {
+    return arrayToTree(getMenu(routes.value), {
+      idKey: 'key',
+      parentKey: 'parent',
+      childrenKey: 'children',
+      sortKey: 'sort',
+    }, undefined)
+  })
 
   const route = useRoute()
 
@@ -62,13 +68,13 @@ export function useMenu() {
   // 获取侧栏菜单
   const appMenu = computed<MenuOption[]>(() => {
     if (sideCollapsed.value) {
-      return list
+      return list.value
     }
-    const appList = cloneDeep(list)
-    return appList?.map((item): MenuOption => {
+    const appList = cloneDeep(list.value)
+    return appList?.map((item) => {
       delete item.children
       return item
-    })
+    }) as MenuOption[]
   })
 
   // 获取展开菜单
@@ -76,26 +82,26 @@ export function useMenu() {
     if (sideCollapsed.value) {
       return []
     }
-    const subList = list?.find(item => item.key === appKey.value)?.children
+    const subList = list.value?.find(item => item.key === appKey.value)?.children
     return subList || []
   })
 
   const crumbs = computed(() => {
-    return searchTree(list, (item) => {
+    return searchTree(list.value, (item) => {
       return item?.key === (!subMenu.value.length ? appKey.value : subKey.value)
     })
   })
 
   watch(sideCollapsed, () => {
     if (sideCollapsed.value) {
-      const paths = searchTree(list, (item) => {
+      const paths = searchTree(list.value, (item) => {
         return item?.key === subKey.value
       })
       appKey.value = paths?.[paths.length - 1]?.key
       subKey.value = paths?.[paths.length - 1]?.key
     }
     else {
-      const paths = searchTree(list, (item) => {
+      const paths = searchTree(list.value, (item) => {
         return item?.key === appKey.value
       })
 
@@ -124,7 +130,7 @@ export function useMenu() {
 
   // 根据路由改变高亮
   watch(route, () => {
-    const paths = searchTree(list, (item) => {
+    const paths = searchTree(list.value, (item) => {
       return item.path === route.path
     })
 

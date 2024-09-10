@@ -50,20 +50,11 @@ export const DuxLayout = defineComponent({
         }
         document.title = manage[to.params.manage as string]?.title
       }
-
-      if (!to.name && to.name !== 'notFound') {
-        router.push({ name: 'notFound' })
-        return
-      }
-      else {
-        next()
-      }
-      return true
+      console.log('非管理端 跳转')
+      next()
     })
     // 异步获取菜单路由
     resource.registerAsyncRoutes()
-    // 注册本地路由
-    resource.registerRoutes()
 
     return () => (
       <NLayout
@@ -74,7 +65,7 @@ export const DuxLayout = defineComponent({
           '--n-color': 'transparent',
         }}
       >
-        {!isMobile && (
+        {!isMobile.value && (
           <NLayoutSider collapsed={collapsed.value} showTrigger={showCollapsed.value} collapseMode="width" width={240} collapsedWidth={64} bordered nativeScrollbar={false} onUpdateCollapsed={(v: boolean) => sideCollapsed.value = v}>
             <div class="flex h-screen">
               <div class="flex flex-col flex-none w-64px gap-4">
@@ -121,23 +112,25 @@ export const DuxLayout = defineComponent({
         <NLayout contentClass="flex flex-col">
           <NLayoutHeader bordered class="flex-none">
             <div class="flex items-center px-4 h-56px">
-              <div v-if="isMobile" class="flex-1">
-                <div class="max-w-60px max-h-45px" onClick={() => mobileMenuShow.value = true}>
-                  <dux-logo />
+              {isMobile.value && (
+                <div class="flex-1">
+                  <div class="max-w-60px max-h-45px" onClick={() => mobileMenuShow.value = true}>
+                    <dux-logo />
+                  </div>
+                  <NDrawer show={mobileMenuShow.value} onUpdateShow={v => mobileMenuShow.value = v} width={250} placement="left">
+                    <NDrawerContent title="菜单" closable bodyContentStyle={{ padding: '5px' }}>
+                      <NMenu
+                        rootIndent={20}
+                        indent={15}
+                        options={allMenu.value}
+                        value={appKey.value as string}
+                        onUpdateValue={(key: string) => appKey.value = key}
+                      />
+                    </NDrawerContent>
+                  </NDrawer>
                 </div>
-                <NDrawer show={mobileMenuShow.value} onUpdateShow={v => mobileMenuShow.value = v} width={250} placement="left">
-                  <NDrawerContent title="菜单" closable bodyContentStyle={{ padding: '5px' }}>
-                    <NMenu
-                      rootIndent={20}
-                      indent={15}
-                      options={allMenu}
-                      value={appKey.value as string}
-                      onUpdateValue={(key: string) => appKey.value = key}
-                    />
-                  </NDrawerContent>
-                </NDrawer>
-              </div>
-              {!isMobile && (
+              )}
+              {!isMobile.value && (
                 <div class="flex-1">
                   <NBreadcrumb>
                     {crumbs.value?.map(item => (
@@ -186,13 +179,15 @@ export const DuxLayout = defineComponent({
                           </NTabPane>
                         </NTabs>
                       ),
+                      footer: () => (
+                        <div class="border-gray-4 border-t pt-2">
+                          <NButton quaternary type="primary" block>
+                            清空通知
+                          </NButton>
+                        </div>
+                      ),
                     }}
 
-                    <div class="border-gray-4 border-t pt-2">
-                      <NButton quaternary type="primary" block>
-                        清空通知
-                      </NButton>
-                    </div>
                   </NPopover>
 
                   <NDropdown

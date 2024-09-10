@@ -82,5 +82,6 @@ export function sfcRender(path: string) {
     },
     addStyle: () => {},
   }
+
   return () => loadModule(`${path}.vue`, { ...options })
 }

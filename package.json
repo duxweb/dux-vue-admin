@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "author": "DuxWeb",
   "license": "Apache-2.0",
-  "main": "dist/index.js",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "files": [
     "README.md",
@@ -14,8 +15,9 @@
   "scripts": {
     "clean": "rimraf dist",
     "copy-files": "copyfiles -u 1 src/**/*.{css,scss,js,png,jpg,svg,jsx,d.ts,json} dist/",
-    "build": "bun clean && vue-tsc -b &&  babel dist --out-dir dist  && bun copy-files && rm -rf dist/*.jsx",
-    "local": "yarn build && yalc push",
+    "build": "bun clean && vue-tsc --noEmit && vite build",
+    "local": "bun run build && yalc push",
+    "dev": "vite --config vite.example.config.ts example",
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -54,7 +56,7 @@
     "vfonts": "^0.0.3",
     "vue": "^3.5.3",
     "vue-draggable-plus": "^0.5.3",
-    "vue-i18n": "9",
+    "vue-i18n": "10",
     "vue-router": "^4.4.3",
     "vue3-sfc-loader": "^0.9.5"
   },
@@ -62,17 +64,12 @@
     "@antfu/eslint-config": "^3.5.0",
     "@vitejs/plugin-vue": "^5.1.3",
     "@vitejs/plugin-vue-jsx": "^4.0.1",
-    "@vue/cli-plugin-babel": "^5.0.8",
-    "ajv": "^8.17.1",
     "copyfiles": "^2.4.1",
     "eslint": "^9.9.0",
     "eslint-plugin-format": "^0.1.2",
     "path": "^0.12.7",
     "typescript": "^5.5.3",
     "vite": "^5.4.3",
-    "vite-plugin-build": "^0.10.0",
-    "vite-plugin-dts": "^4.2.1",
-    "vitepress": "^1.3.4",
     "vue-tsc": "^2.1.6"
   }
 }

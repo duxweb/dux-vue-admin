@@ -1,25 +1,30 @@
 html,
 body {
-  background-color: rgba(var(--n-body-color));
-  color: rgba(var(--n-text-color-base));
+  background-color: var(--n-body-color);
+  color: var(--n-text-color-base);
   padding: 0;
   margin: 0;
 }
 
+[v-cloak],
+[un-cloak] {
+  display: none;
+}
+
 .text-color-base {
-  color: rgba(var(--n-text-color-base));
+  color: var(--n-text-color-base);
 }
 .text-color-1 {
-  color: rgba(var(--n-text-color-1));
+  color: var(--n-text-color-1);
 }
 .text-color-2 {
-  color: rgba(var(--n-text-color-2));
+  color: var(--n-text-color-2);
 }
 .text-color-3 {
-  color: rgba(var(--n-text-color-3));
+  color: var(--n-text-color-3);
 }
 .text-color-disabled {
-  color: rgba(var(--n-text-color-disabled));
+  color: var(--n-text-color-disabled);
 }
 
 .login-bg {

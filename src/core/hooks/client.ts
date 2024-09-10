@@ -1,5 +1,4 @@
 import type { AlovaGenerics, AlovaMethodCreateConfig, Method, RequestBody } from 'alova'
-import { useManageStore } from '../stores/manage'
 import { alovaInstance } from './alova'
 import { useResource } from './useResource'
 
@@ -19,10 +18,11 @@ export interface ClientRequestProps<T> {
 }
 
 export function useClient() {
-  const { getUser } = useManageStore()
+  // const { getUser } = useManageStore()
   const res = useResource()
-  const user = getUser(res.manage)
+  // const user = getUser(res.manage)
 
+  const user = {}
   const globalHeaders = (type?: ClientRequestType) => {
     const data = {
       Accept: 'application/json',

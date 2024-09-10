@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2015",
+    "target": "ESNext",
     "jsx": "preserve",
     "jsxImportSource": "vue",
     "lib": ["ESNext", "DOM"],
@@ -12,11 +12,9 @@
 
     "moduleResolution": "bundler",
     "paths": {
-      "dux-vue-admin": ["./src"]
+      "dux-vue-admin": ["src"]
     },
-    "types": [
-      "vite/client"
-    ],
+    "resolveJsonModule": true,
     "allowJs": true,
     "strict": true,
     "noFallthroughCasesInSwitch": true,
@@ -26,13 +24,17 @@
     "noUnusedParameters": true,
     "declaration": true,
     "noEmit": false,
-    "outDir": "dist",
+    "outDir": "./dist",
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*.*",
+    "src/**/*.vue",
+    "example/**/*.*",
+    "example/**/*.vue"
   ],
   "exclude": ["node_modules", "dist"]
 }

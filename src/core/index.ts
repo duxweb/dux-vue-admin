@@ -1,5 +1,6 @@
-export * from './app'
+export * as DuxApp from './App.vue'
 export * from './components'
+export * from './config'
 export * from './dux'
 export * from './hooks'
 export * from './i18n'

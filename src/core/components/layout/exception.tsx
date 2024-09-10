@@ -29,11 +29,12 @@ export const DuxException = defineComponent({
           desc: '系统无法恢复该页面，您可以尝试刷新该页面',
         }
       }
-
       return false
     })
 
-    return () => data
+    console.log(data.value)
+
+    return () => data.value
       ? (
           <DuxPageStatus title={data.value?.title} desc={data.value?.desc}>
             {{
