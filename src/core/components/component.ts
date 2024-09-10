@@ -9,11 +9,9 @@ import { DuxPageStatus } from './status'
 import { DuxDrawerForm, DuxJsonForm, DuxModalForm, DuxPageForm } from './form'
 import { DuxException } from './layout'
 import { DuxPageTable } from './table'
-import { DuxLogo } from './draw'
 
 export default {
   install(app: App) {
-    app.component('DuxLogo', DuxLogo)
     app.component('DuxException', DuxException)
     app.component('DuxPageTable', DuxPageTable)
     app.component('DuxPageForm', DuxPageForm)

@@ -1,5 +1,5 @@
-import { resolve } from 'node:path'
 import vue from '@vitejs/plugin-vue'
+import dts from 'vite-plugin-dts'
 import { defineConfig } from 'vite'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import unoCSS from 'unocss/vite'
@@ -12,25 +12,52 @@ export default defineConfig({
         propsDestructure: true,
       },
     }),
+    dts({
+      outDir: 'dist/es',
+    }),
+    dts({
+      outDir: 'dist/lib',
+    }),
     vueJsx(),
     unoCSS(),
   ],
   build: {
-    lib: {
-      entry: resolve(__dirname, './src/index.ts'),
-      name: 'dux',
-      // 构建好的文件名（不包括文件后缀）
-      fileName: 'index',
-    },
+    target: 'modules',
+    // 打包文件目录
+    outDir: 'es',
+    // 压缩
+    minify: false,
+    // css分离
+    // cssCodeSplit: true,
     rollupOptions: {
-      // 确保外部化处理那些你不想打包进库的依赖
+      // 忽略打包vue文件
       external: ['vue'],
-      output: {
-        // 在 UMD 构建模式下,全局模式下为这些外部化的依赖提供一个全局变量
-        globals: {
-          dux: 'dux',
+      input: ['index.ts'],
+      output: [
+        {
+          format: 'es',
+          // 不用打包成.es.js,这里我们想把它打包成.js
+          entryFileNames: '[name].js',
+          // 让打包目录和我们目录对应
+          preserveModules: true,
+          // 配置打包根目录
+          dir: 'es',
+          preserveModulesRoot: '',
         },
-      },
+        {
+          format: 'cjs',
+          entryFileNames: '[name].js',
+          // 让打包目录和我们目录对应
+          preserveModules: true,
+          // 配置打包根目录
+          dir: 'lib',
+          preserveModulesRoot: '',
+        },
+      ],
+    },
+    lib: {
+      entry: './index.ts',
+      formats: ['es', 'cjs'],
     },
   },
 })
