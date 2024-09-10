@@ -2,7 +2,7 @@ import { defineComponent, onErrorCaptured, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { NButton } from 'naive-ui'
 import { DuxPageStatus } from '../status'
-import { DuxDrawError } from '../draw'
+import DuxDrawError from '../../assets/draw/error.svg'
 
 export const DuxException = defineComponent({
   name: 'DuxException',

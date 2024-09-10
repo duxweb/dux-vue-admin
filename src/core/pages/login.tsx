@@ -5,7 +5,8 @@ import type { FormInst } from 'naive-ui'
 import { NButton, NForm, NFormItem, NInput, NPopover, useMessage } from 'naive-ui'
 import { useRouter } from 'vue-router'
 import clsx from 'clsx'
-import { DuxDrawApps, DuxLogo } from '../components'
+import DuxLogo from '../assets/images/logo.svg'
+import DuxDrawApps from '../assets/draw/apps.svg'
 import { useResource } from '../hooks'
 import { useThemeStore } from '../stores/theme'
 import { useManageStore } from '../stores/manage'
@@ -156,7 +157,9 @@ export const DuxLoginPage = defineComponent({
             {modeState.value === 'dark' && <div class="h-5 w-5 i-tabler:moon" />}
           </div>
           <div class="justify-center hidden md:flex flex-row items-center">
-            <DuxDrawApps class="w-full h-auto" />
+            <div class="w-full h-auto">
+              <DuxDrawApps />
+            </div>
           </div>
           <div class="flex flex-col">
             <div class="flex flex-col items-center justify-center mt-4">
