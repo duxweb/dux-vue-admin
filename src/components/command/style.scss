@@ -1,0 +1,40 @@
+.vercel {
+  [command-dialog-mask] {
+    background-color: rgba(var(--n-gray-color-10), 0.5);
+    backdrop-filter: blur(2px);
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+
+  [command-dialog-wrapper] {
+    position: relative;
+    flex-direction: column;
+    margin: 20vh auto auto;
+    max-width: 560px;
+  }
+
+  [command-group-heading] {
+    color: rgba(var(--n-gray-color-7));
+    margin-bottom: 6px;
+  }
+
+  [command-item] {
+    &[aria-selected='true'],
+    &:active {
+      background-color: rgba(var(--n-success-color-6), 0.15);
+      color: rgba(var(--n-success-color-6));
+    }
+  }
+}
+
+.dark {
+  .vercel {
+    [command-dialog-mask] {
+      background-color: rgba(var(--n-gray-color-3), 0.5);
+    }
+  }
+}
