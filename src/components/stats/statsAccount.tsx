@@ -22,7 +22,7 @@ export const DuxStatsAccount = defineComponent({
     const i18n = useI18n()
 
     return () => (
-      <NCard title={props.title} size="small">
+      <NCard title={props.title} headerClass="!text-base">
         <div class="flex flex-col gap-4">
           <div class="flex gap-2 items-center">
             <div class="text-2xl">

@@ -29,7 +29,7 @@ export const DuxTabs = defineComponent({
       <Transition name="draw">
         <div
           class={clsx([
-            'dux-tabs items-end px-2',
+            'dux-tabs items-end px-2 py-2',
             // 'flex',
             tab.tabs.length > 1 ? 'flex' : 'hidden',
           ])}

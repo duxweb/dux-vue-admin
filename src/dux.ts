@@ -7,7 +7,6 @@ import { type App, ref } from 'vue'
 import { config as unoConfig } from '../uno.config.js'
 import DuxApp from './App.vue'
 import component from './components/component'
-import { echartInit } from './components/echart/echart.jsx'
 import { router } from './core/router'
 import { i18n } from './i18n'
 import type { Config } from './config'
@@ -23,7 +22,6 @@ export function createDux(config: Config) {
   initUnocssRuntime({
     defaults: unoConfig,
   })
-  echartInit()
 
   return {
     install(app: App) {

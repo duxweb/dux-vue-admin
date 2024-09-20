@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useLoadingBar } from 'naive-ui'
 import { useRoute, useRouter } from 'vue-router'
-import { DuxCommand, DuxLayout } from '../components'
+import { DuxLayout } from '../components'
 import { initAsyncRouter } from '../core/manage'
 import { useResource } from '../hooks'
 import { useRouteStore, useTabStore } from '../stores'
@@ -64,24 +64,42 @@ initAsyncRouter()
 </script>
 
 <template>
-  <RouterView v-slot="{ Component }">
-    <Suspense>
-      <DuxLayout
-        v-cloak
-        un-cloak
-      >
-        <keep-alive :include="tabStore.tabs.map(t => t.path || '')">
-          <component :is="wrap(route.path, Component)" :key="route.path" />
-        </keep-alive>
-        <DuxCommand />
-      </DuxLayout>
-      <template #fallback>
-        <DuxLoading />
-      </template>
-    </Suspense>
-  </RouterView>
+  <Suspense>
+    <DuxLayout
+      v-cloak
+      un-cloak
+    >
+      <RouterView v-slot="{ Component }">
+        <transition name="fade" mode="out-in" appear>
+          <keep-alive :include="tabStore.tabs.map(t => t.path || '')">
+            <component :is="wrap(route.path, Component)" :key="route.path" />
+          </keep-alive>
+        </transition>
+      </RouterView>
+    </DuxLayout>
+    <template #fallback>
+      <DuxLoading />
+    </template>
+  </Suspense>
 </template>
 
-<style scoped>
+<style>
+.fade-leave-active,
+.fade-enter-active {
+  transition: all 0.4s;
+}
 
+.fade-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+.fade-enter-to {
+  opacity: 1;
+  transform: translateX(0px);
+}
+
+.fade-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
 </style>

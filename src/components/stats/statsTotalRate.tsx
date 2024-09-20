@@ -1,11 +1,12 @@
 import clsx from 'clsx'
 import { graphic } from 'echarts'
 import { ceil } from 'lodash-es'
+import { NCard } from 'naive-ui'
 import { defineComponent, ref } from 'vue'
 import VChart from 'vue-echarts'
 import type { PropType } from 'vue'
 
-export const DuxStatsRate = defineComponent({
+export const DuxStatsTotalRate = defineComponent({
   name: 'DuxStatsRate',
   props: {
     col: {
@@ -16,7 +17,7 @@ export const DuxStatsRate = defineComponent({
   setup(props, { slots }) {
     return () => (
       <div class={clsx([
-        'grid grid-cols-1 border border-gray-2 bg-gray-1 rounded-md divide-x divide-y divide-gray-2',
+        'grid grid-cols-1 border border-gray-2 bg-gray-1 rounded-md divide-x divide-y divide-gray-2 overflow-hidden',
         `md:grid-cols-${ceil(props.col / 2)}`,
         `xl:grid-cols-${props.col}`,
       ])}
@@ -27,14 +28,14 @@ export const DuxStatsRate = defineComponent({
   },
 })
 
-export const DuxStatsRateItem = defineComponent({
+export const DuxStatsTotalRateItem = defineComponent({
   name: 'DuxStatsRateItem',
   props: {
     title: String,
     desc: String,
     data: Object as PropType<Record<string, any>>,
-    value: Number as PropType<number | string>,
-    rate: Number as PropType<number | string>,
+    value: [Number, String] as PropType<number | string>,
+    rate: [Number, String] as PropType<number | string>,
     type: {
       type: String as PropType<'up' | 'down'>,
       default: 'up',
@@ -92,10 +93,7 @@ export const DuxStatsRateItem = defineComponent({
     })
 
     return () => (
-      <div class="p-4 flex flex-col gap-2">
-        <div class="col-span-2 flex flex-col">
-          {props?.title}
-        </div>
+      <NCard title={props?.title} headerClass="!pb-0 !text-base" bordered={false}>
         <div class="grid grid-cols-3">
           <div class="col-span-2 flex flex-col gap-1 justify-end">
             <div class="flex gap-3 items-center">
@@ -136,7 +134,7 @@ export const DuxStatsRateItem = defineComponent({
             />
           </div>
         </div>
-      </div>
+      </NCard>
     )
   },
 })

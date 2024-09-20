@@ -1,14 +1,22 @@
+import clsx from 'clsx'
+import { NScrollbar } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useTabStore } from '../../stores'
 
 export const DuxPage = defineComponent({
   name: 'DuxPage',
   setup(_props, { slots }) {
+    const tab = useTabStore()
+
     return () => (
-      <div
-        v-cloak
-        un-cloak
-      >
-        {slots.default?.()}
+      <div class="flex-1 h-1">
+        <NScrollbar contentClass={clsx([
+          'p-2',
+          tab.tabs.length > 1 ? 'pt-0' : '',
+        ])}
+        >
+          {slots.default?.()}
+        </NScrollbar>
       </div>
     )
   },

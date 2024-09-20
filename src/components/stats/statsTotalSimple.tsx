@@ -1,10 +1,10 @@
 import clsx from 'clsx'
 import { ceil } from 'lodash-es'
-import { NTooltip } from 'naive-ui'
+import { NCard, NTooltip } from 'naive-ui'
 import { defineComponent } from 'vue'
 import type { PropType } from 'vue'
 
-export const DuxStatsSimple = defineComponent({
+export const DuxStatsTotalSimple = defineComponent({
   name: 'DuxStatsSimple',
   props: {
     col: {
@@ -26,37 +26,47 @@ export const DuxStatsSimple = defineComponent({
   },
 })
 
-export const DuxStatsSimpleItem = defineComponent({
+export const DuxStatsTotalSimpleItem = defineComponent({
   name: 'DuxStatsSimpleItem',
   props: {
     title: String,
     desc: String,
-    value: Number as PropType<number | string>,
-    rate: Number as PropType<number | string>,
+    value: [Number, String] as PropType<number | string>,
+    rate: [Number, String] as PropType<number | string>,
     type: {
       type: String as PropType<'up' | 'down'>,
       default: 'up',
     },
+    icon: String,
   },
   setup(props) {
     return () => (
-      <div class="p-4 flex flex-col gap-3 border border-gray-2 rounded bg-gray-1">
-        <div class="flex justify-between">
-          <div class="flex items-center gap-2">
-            <div class="bg-gray-2 rounded flex items-center justify-center p-1">
-              <div class="i-tabler:eye size-4"></div>
+      <NCard
+        title={() => (
+          <div class="flex justify-between">
+            <div class="flex items-center gap-2 font-medium">
+              <div class="bg-gray-2 rounded flex items-center justify-center p-1">
+                <div class={clsx([
+                  'size-4',
+                  props.icon,
+                ])}
+                >
+                </div>
+              </div>
+              {props?.title}
             </div>
-            {props?.title}
+            <div class="text-gray-7">
+              <NTooltip>
+                {{
+                  trigger: () => <div class="i-tabler:info-circle"></div>,
+                  default: () => props.desc,
+                }}
+              </NTooltip>
+            </div>
           </div>
-          <div class="text-gray-7">
-            <NTooltip>
-              {{
-                trigger: () => <div class="i-tabler:info-circle"></div>,
-                default: () => props.desc,
-              }}
-            </NTooltip>
-          </div>
-        </div>
+        )}
+        headerClass="!pb-3 !text-base"
+      >
         <div class="col-span-2 flex flex-col gap-1 justify-end">
           <div class="flex gap-3 items-center">
             <div class="font-bold text-2xl">
@@ -77,8 +87,7 @@ export const DuxStatsSimpleItem = defineComponent({
             </div>
           </div>
         </div>
-
-      </div>
+      </NCard>
     )
   },
 })

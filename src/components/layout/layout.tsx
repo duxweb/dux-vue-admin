@@ -2,8 +2,10 @@ import { NBreadcrumb, NBreadcrumbItem, NButton, NDrawer, NDrawerContent, NIcon, 
 import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useMenu } from '../../hooks/useMenu'
+import { DuxCommand } from '../command'
 import { DuxTabs } from './tabs'
 import { Avatar } from './tools/avatar'
+import { Color } from './tools/color'
 import { Fullscreen } from './tools/fullscreen'
 import { Lang } from './tools/lang'
 import { Message } from './tools/message'
@@ -113,6 +115,7 @@ export const DuxLayout = defineComponent({
                   <Fullscreen />
                   <Message />
                   <Lang />
+                  <Color />
                   <Theme />
                 </div>
 
@@ -124,9 +127,10 @@ export const DuxLayout = defineComponent({
           </NLayoutHeader>
           <div class="flex-none" />
           <DuxTabs />
-          <div class="flex-1 p-4 h-1">
-            {slots.default?.()}
-          </div>
+
+          {slots.default?.()}
+
+          <DuxCommand />
         </NLayout>
       </NLayout>
     )

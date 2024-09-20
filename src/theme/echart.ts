@@ -1,28 +1,24 @@
-import * as echarts from 'echarts'
-import { themeColor } from '../../theme'
-import 'echarts'
+import { getGenerateColors } from './helper'
 
-export function echartInit() {
+export function getTheme(colors: string[], dark: boolean) {
+  const colorLine = getGenerateColors(colors[0], dark).splice(0, 7).reverse()
+
   const theme = {
-    color: [
-      themeColor.primary,
-      themeColor.info,
-      themeColor.success,
-      themeColor.warning,
-      themeColor.error,
-      themeColor.gray,
-    ],
+    color: colors,
     backgroundColor: 'rgba(255,255,255,0)',
     textStyle: {},
     grid: {
       left: '10',
       right: '10',
-      top: '10',
-      bottom: '10',
+      top: '10%',
+      bottom: '5%',
       containLabel: true,
     },
     title: {
       textStyle: {
+        fontSize: 16,
+        fontWeight: '500',
+        textAlign: 'left',
         color: 'var(--n-text-color-1)',
       },
       subtextStyle: {
@@ -49,22 +45,26 @@ export function echartInit() {
         borderWidth: '2',
       },
       lineStyle: {
-        width: '3',
+        width: '2',
       },
-      symbolSize: '8',
+      symbolSize: '6',
       symbol: 'emptyCircle',
       smooth: false,
     },
     bar: {
       itemStyle: {
+        opacity: 0.7,
         barBorderWidth: 0,
         barBorderColor: 'rgb(var(--n-gray-color-5))',
+        borderRadius: 5,
       },
     },
     pie: {
       itemStyle: {
-        borderWidth: 0,
-        borderColor: 'rgb(var(--n-gray-color-5))',
+        opacity: 0.8,
+        borderWidth: 1.5,
+        borderColor: 'rgb(var(--n-gray-color-1))',
+        borderRadius: 5,
       },
     },
     scatter: {
@@ -93,8 +93,8 @@ export function echartInit() {
     },
     funnel: {
       itemStyle: {
-        borderWidth: 0,
-        borderColor: 'rgb(var(--n-gray-color-5))',
+        borderWidth: 2,
+        borderColor: 'rgb(var(--n-gray-color-1))',
       },
     },
     gauge: {
@@ -133,46 +133,47 @@ export function echartInit() {
         '#96dee8',
       ],
       label: {
-        color: '#ffffff',
+        color: 'rgb(var(--n-gray-color-1))',
       },
     },
     map: {
       itemStyle: {
-        areaColor: 'rgb(var(--n-gray-color-2))',
-        borderColor: '#aaaaaa',
+        areaColor: 'rgb(var(--n-gray-color-1))',
+        borderColor: 'rgb(var(--n-gray-color-7))',
         borderWidth: 0.5,
       },
       label: {
-        color: '#ffffff',
+        show: false,
+        color: 'rgb(var(--n-gray-color-8))',
       },
       emphasis: {
         itemStyle: {
-          areaColor: 'rgba(63,177,227,0.25)',
-          borderColor: '#3fb1e3',
+          areaColor: 'rgba(var(--n-primary-color), 0.25)',
+          borderColor: 'rgb(var(--n-primary-color))',
           borderWidth: 1,
         },
         label: {
-          color: '#3fb1e3',
+          color: 'rgb(var(--n-primary-color))',
         },
       },
     },
     geo: {
       itemStyle: {
-        areaColor: 'rgb(var(--n-gray-color-2))',
-        borderColor: '#aaaaaa',
+        areaColor: 'rgb(var(--n-gray-color-1))',
+        borderColor: 'rgb(var(--n-gray-color-7))',
         borderWidth: 0.5,
       },
       label: {
-        color: '#ffffff',
+        color: 'rgb(var(--n-gray-color-1))',
       },
       emphasis: {
         itemStyle: {
-          areaColor: 'rgba(63,177,227,0.25)',
-          borderColor: '#3fb1e3',
+          areaColor: 'rgba(var(--n-primary-color), 0.25)',
+          borderColor: 'rgb(var(--n-primary-color))',
           borderWidth: 1,
         },
         label: {
-          color: '#3fb1e3',
+          color: 'rgb(var(--n-primary-color))',
         },
       },
     },
@@ -384,10 +385,7 @@ export function echartInit() {
       },
     },
     visualMap: {
-      color: [
-        '#2a99c9',
-        '#afe8ff',
-      ],
+      color: colorLine,
     },
     dataZoom: {
       backgroundColor: 'rgba(255,255,255,0)',
@@ -401,15 +399,15 @@ export function echartInit() {
     },
     markPoint: {
       label: {
-        color: '#ffffff',
+        color: 'rgb(var(--n-gray-color-1))',
       },
       emphasis: {
         label: {
-          color: '#ffffff',
+          color: 'rgb(var(--n-gray-color-1))',
         },
       },
     },
   }
 
-  echarts.registerTheme('default', theme)
+  return theme
 }

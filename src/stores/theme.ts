@@ -1,13 +1,32 @@
+import { TinyColor } from '@ctrl/tinycolor'
 import { type BasicColorSchema, useColorMode, useCycleList } from '@vueuse/core'
+import { registerTheme } from 'echarts'
 import { darkTheme } from 'naive-ui'
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
-import { themeColor } from '../theme/color'
+import type { HSLA } from '@ctrl/tinycolor'
+import { getTheme } from '../theme/echart'
 import { getGenerateColors, getThemeOverrides } from '../theme/helper'
 
 export const useThemeStore = defineStore('theme', () => {
   const defaultMode = ref<BasicColorSchema>('auto')
   const modeList = ref<BasicColorSchema[]>(['dark', 'light', 'auto'])
+  const echartColors = ref<Array<string>>([])
+  const color = ref<string>('#2ba471')
+
+  const colorList = [
+    '#2ba471',
+    '#0052d9',
+    '#d4380d',
+    '#13c2c2',
+    '#722ed1',
+    '#fa8c16',
+    '#eb2f96',
+  ]
+
+  function switchColor(v: string) {
+    color.value = v
+  }
 
   const colorMode = useColorMode({
     initialValue: defaultMode.value,
@@ -16,6 +35,7 @@ export const useThemeStore = defineStore('theme', () => {
   const { state, next } = useCycleList(modeList, {
     initialValue: colorMode,
   })
+
   watch(
     state,
     () => {
@@ -35,7 +55,16 @@ export const useThemeStore = defineStore('theme', () => {
     return store.value === 'dark'
   })
 
-  const themeConfig = ref<Record<string, any>>(themeColor)
+  const themeConfig = computed(() => {
+    return {
+      primary: color.value,
+      info: '#2080f0',
+      success: '#18a058',
+      warning: '#f0a020',
+      error: '#d03050',
+      gray: '#bfbfbf',
+    }
+  })
 
   const theme = computed(() => (darkMode.value ? darkTheme : null))
 
@@ -59,7 +88,29 @@ export const useThemeStore = defineStore('theme', () => {
     next()
   }
 
+  function generateRainbowFromColor(hsl: HSLA, numColors) {
+    const baseHue = (Number(hsl.h) % 360 + 360) % 360
+    const colors: string[] = []
+    const hueStep = 360 / numColors
+    for (let i = 0; i < numColors; i++) {
+      const hue = Math.round((baseHue + i * hueStep) % 360)
+      colors.push(`hsl(${hue}, ${Math.round(Number(hsl.s) * 100)}%, ${45}%)`)
+    }
+    return colors
+  }
+
+  watch([color, darkMode], () => {
+    const hue = new TinyColor(color.value).toHsl()
+    const rainbowColors = generateRainbowFromColor(hue, 10)
+    echartColors.value = rainbowColors
+    registerTheme('default', getTheme(rainbowColors, darkMode.value))
+  }, { immediate: true })
+
   return {
+    color,
+    colorList,
+    switchColor,
+    echartColors,
     darkMode,
     themeConfig,
     theme,
@@ -68,4 +119,8 @@ export const useThemeStore = defineStore('theme', () => {
     modeState: state,
     toggleDarkMode,
   }
+}, {
+  persist: {
+    pick: ['color'],
+  },
 })

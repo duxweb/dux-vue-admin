@@ -1,4 +1,4 @@
-import { NButton } from 'naive-ui'
+import { NButton, NCard } from 'naive-ui'
 import { defineComponent } from 'vue'
 import type { PropType } from 'vue'
 
@@ -17,14 +17,18 @@ export const DuxStatsBankcard = defineComponent({
   },
   setup({ title, info }) {
     return () => (
-      <div class="rounded border border-gray-2 p-4 bg-gray-1 flex flex-col gap-4">
-        <div class="flex justify-between items-center">
-          <div class="font-bold">{title}</div>
-          <div class="flex gap-2">
-            <NButton size="small" circle renderIcon={() => <div class="i-tabler:plus size-4"></div>} />
-            <NButton size="small" circle renderIcon={() => <div class="i-tabler:list size-4"></div>} />
+      <NCard
+        title={() => (
+          <div class="flex justify-between items-center">
+            <div class="font-bold">{title}</div>
+            <div class="flex gap-2">
+              <NButton size="small" circle renderIcon={() => <div class="i-tabler:plus size-4"></div>} />
+              <NButton size="small" circle renderIcon={() => <div class="i-tabler:list size-4"></div>} />
+            </div>
           </div>
-        </div>
+        )}
+        headerClass="!text-base"
+      >
 
         <div class="w-75 h-40">
           <div class="absolute flex items-center">
@@ -46,7 +50,7 @@ export const DuxStatsBankcard = defineComponent({
             <div class="w-65 h-35 bg-primary-4 rounded-lg absolute ml-8"></div>
           </div>
         </div>
-      </div>
+      </NCard>
     )
   },
 })

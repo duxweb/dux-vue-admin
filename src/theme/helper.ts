@@ -1,7 +1,7 @@
 import { generate } from '@ant-design/colors'
 import { TinyColor } from '@ctrl/tinycolor'
 import { entriesToCss } from '@unocss/core'
-import { upperFirst } from 'lodash-es'
+import { kebabCase, upperFirst } from 'lodash-es'
 import { commonDark, commonLight } from 'naive-ui'
 import type { GlobalThemeOverrides } from 'naive-ui'
 
@@ -63,11 +63,18 @@ export function getThemeColors(
   return themeColor
 }
 
+/**
+ * 获取 naive 主题
+ * @param config
+ * @param darkMode
+ * @returns
+ */
 export function getThemeOverrides(
-  config: any,
+  config: Record<string, string>,
   darkMode: boolean,
 ): GlobalThemeOverrides {
   const themeColors = getThemeColors(config, darkMode)
+  addCssVarsToHtml(config, darkMode, themeColors)
   return {
     common: {
       ...themeColors,
@@ -77,7 +84,7 @@ export function getThemeOverrides(
 }
 
 function getOtherColor(
-  config: any,
+  config: Record<string, string>,
   darkMode: boolean,
 ): GlobalThemeOverrides {
   const otherColor: GlobalThemeOverrides = {
@@ -122,20 +129,7 @@ export function getTextColor(darkMode: boolean): string {
   return darkMode ? commonDark.textColor2 : commonLight.baseColor
 }
 
-export function camelToCSSVar(str: string) {
-  let temp = str.replace(/[A-Z]/g, (match) => {
-    return `-${match.toLowerCase()}`
-  })
-  if (temp.startsWith('-')) {
-    temp = temp.slice(1)
-  }
-  temp = temp.replace(/([a-z])(\d)/g, '$1-$2')
-  return `--n-${temp}`
-}
-
-export function genCss(themeColor: Record<string, string>, darkMode: boolean): string {
-  const configEntries = Object.entries(themeColor) as [string, string][]
-
+export function genCss(config: Record<string, string>, themeColor: Record<string, string>, darkMode: boolean): string {
   const configCssObj = {}
 
   /**
@@ -164,23 +158,28 @@ export function genCss(themeColor: Record<string, string>, darkMode: boolean): s
     borderColor: commonDark.borderColor,
   }
 
-  const textColorsEntries = Object.entries(darkMode ? commonDarkColor : commonLightColor) as [string, string][]
-  for (const [key, value] of textColorsEntries) {
-    configCssObj[`${camelToCSSVar(key)}`] = value
+  /**
+   * 生成公共变量
+   */
+  const commonColorsEntries = Object.entries(darkMode ? commonDarkColor : commonLightColor) as [string, string][]
+  for (const [key, value] of commonColorsEntries) {
+    configCssObj[`--n-${kebabCase(key)}`] = value
   }
 
   /**
    * 生成颜色变量
    */
-  const themeColorsEntries = Object.entries(getThemeColors(themeColor, false)) as [string, string][]
+  const themeColorsEntries = Object.entries(themeColor) as [string, string][]
+
   for (const [key, value] of themeColorsEntries) {
     const { r, g, b } = getRGBColor(value)
-    configCssObj[`${camelToCSSVar(key)}`] = `${r},${g},${b}`
+    configCssObj[`--n-${kebabCase(key)}`] = `${r},${g},${b}`
   }
 
   /**
    * 生成颜色组合
    */
+  const configEntries = Object.entries(config) as [string, string][]
   for (const [key, value] of configEntries) {
     const generateColors = getGenerateColors(value, darkMode)
     generateColors.map((color, index) => {
@@ -193,6 +192,7 @@ export function genCss(themeColor: Record<string, string>, darkMode: boolean): s
   return entriesToCss(Object.entries(configCssObj))
 }
 
+// 生成 unocss 颜色组合
 export function generateColorCombinations(): Record<string, string> {
   const colorTypes = ['primary', 'info', 'success', 'warning', 'error', 'gray']
   const colorScenes = ['hover', 'pressed', 'focus', 'disabled']
@@ -207,4 +207,14 @@ export function generateColorCombinations(): Record<string, string> {
     }
   }
   return result
+}
+
+// 添加色彩变量
+export function addCssVarsToHtml(
+  config: ThemeColor,
+  darkMode: boolean,
+  themeColors: ThemeColor,
+): void {
+  const $root: HTMLElement = document.documentElement
+  $root.style.cssText = genCss(config, themeColors, darkMode)
 }
