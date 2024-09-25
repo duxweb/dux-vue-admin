@@ -1,19 +1,22 @@
 import type { App } from 'vue'
 import { DuxCascaderAsync } from './cascader'
+import { DuxCodeEditor } from './code'
 import DuxLogo from './common/logo.vue'
 import DrawApps from './draw/drawApps.vue'
 import DrawError from './draw/drawError.vue'
 import { DuxAiEditor } from './editor/editor'
-import { DuxDrawerForm, DuxJsonForm, DuxModalForm, DuxPageForm } from './form'
-import { DuxException, DuxPage } from './layout'
+import { DuxDrawerForm, DuxFormEditor, DuxJsonForm, DuxModalForm, DuxPageForm } from './form'
+import { DuxIconPicker } from './icon'
+import { DuxException, DuxGrid, DuxPage } from './layout'
 import { DuxList } from './list'
+import { DuxRadio } from './radio'
 import { DuxRegion } from './region'
 import { DuxSelectAsync } from './select'
 import { DuxStatsAccount, DuxStatsBankcard, DuxStatsCard, DuxStatsChartArea, DuxStatsChartGrid, DuxStatsChartMap, DuxStatsChartRadar, DuxStatsConnect, DuxStatsHello, DuxStatsHelloBig, DuxStatsQuick, DuxStatsQuickItem, DuxStatsStore, DuxStatsStoreItem, DuxStatsTodo, DuxStatsTodoItem, DuxStatsTotalCard, DuxStatsTotalCardItem, DuxStatsTotalMulti, DuxStatsTotalMultiItem, DuxStatsTotalRate, DuxStatsTotalRateItem, DuxStatsTotalSimple, DuxStatsTotalSimpleItem, DuxStatsTotalTab, DuxStatsTotalTabItem, DuxStatsUser } from './stats'
 import { DuxPageStatus } from './status'
 import { DuxPageTable } from './table'
 import { DuxFileUpload, DuxImageUpload } from './upload'
-import { DuxCarousel, DuxMedia, DuxWidgetEditor } from './widget'
+import { DuxCarousel, DuxMedia } from './widget'
 import { DuxWindowFooter, DuxWindowHeader } from './window'
 
 export default {
@@ -67,6 +70,10 @@ export default {
     app.component('DuxCarousel', DuxCarousel)
     app.component('DuxList', DuxList)
     app.component('DuxMedia', DuxMedia)
-    app.component('DuxWidgetEditor', DuxWidgetEditor)
+    app.component('DuxFormEditor', DuxFormEditor)
+    app.component('DuxGrid', DuxGrid)
+    app.component('DuxRadio', DuxRadio)
+    app.component('DuxIconPicker', DuxIconPicker)
+    app.component('DuxCodeEditor', DuxCodeEditor)
   },
 }

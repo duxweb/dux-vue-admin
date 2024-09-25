@@ -1,4 +1,5 @@
 export * from './exception'
+export * from './grid'
 export * from './layout'
 export * from './page'
 export * from './tabs'

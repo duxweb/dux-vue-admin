@@ -1,4 +1,5 @@
 export * from './drawerForm'
+export * from './editor'
 export * from './handler'
 export * from './jsonForm'
 export * from './modalForm'

@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <dux-widget-editor />
+  <dux-form-editor />
 </template>
 
 <style scoped>

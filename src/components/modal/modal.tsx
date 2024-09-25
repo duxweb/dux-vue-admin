@@ -31,13 +31,10 @@ export const DuxModal = defineComponent({
         role="dialog"
         aria-modal="true"
         size="huge"
-
       >
-        <div class="p-6">
-          <div class="bg-white dark:bg-gray-2 w-500px rounded shadow">
-            <DuxWindowHeader title={props.title} onClose={reject} />
-            <Page {...params} />
-          </div>
+        <div class="bg-white dark:bg-gray-2 w-500px rounded shadow">
+          <DuxWindowHeader title={props.title} onClose={reject} />
+          <Page {...params} />
         </div>
       </NModal>
     )
