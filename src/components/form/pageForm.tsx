@@ -4,6 +4,7 @@ import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import type { PropType } from 'vue'
 import { useTabStore } from '../../stores'
+import { DuxPageFull } from '../layout'
 import { DuxJsonForm } from './jsonForm'
 import { useForm } from './useForm'
 import type { JsonFormItemSchema } from './handler'
@@ -27,7 +28,7 @@ export const DuxPageForm = defineComponent({
       id,
       invalidate,
       success: () => {
-        if (id) {
+        if (id && tab.current) {
           tab.delTab(tab.current, v => router.push(v.path || ''))
         }
         else {
@@ -39,25 +40,27 @@ export const DuxPageForm = defineComponent({
     const { width } = useWindowSize()
 
     return () => (
-      <NCard title={title} segmented contentClass="p-0! flex-1 h-1" class="h-full flex flex-col" headerClass="px-6! py-4!">
-        {{
-          default: () => (
-            <NForm model={model} labelPlacement={width.value > 768 ? 'left' : 'top'} labelWidth={width.value > 768 ? 100 : 0} class="h-full">
-              <n-scrollbar>
-                <div class="p-6">
-                  <DuxJsonForm model={model} data={data} schema={schema} />
-                </div>
-              </n-scrollbar>
-            </NForm>
-          ),
-          action: () => (
-            <div class="flex justify-end gap-4">
-              <NButton tertiary loading={loading.value} onClick={onReset}>重置</NButton>
-              <NButton type="primary" loading={loading.value} onClick={onSubmit}>提交</NButton>
-            </div>
-          ),
-        }}
-      </NCard>
+      <DuxPageFull>
+        <NCard title={title} segmented contentClass="p-0! flex-1 h-1" class="h-full flex flex-col" headerClass="px-6! py-4!">
+          {{
+            default: () => (
+              <NForm model={model} labelPlacement={width.value > 768 ? 'left' : 'top'} labelWidth={width.value > 768 ? 100 : 0} class="h-full">
+                <n-scrollbar>
+                  <div class="p-6">
+                    <DuxJsonForm model={model} data={data} schema={schema} />
+                  </div>
+                </n-scrollbar>
+              </NForm>
+            ),
+            action: () => (
+              <div class="flex justify-end gap-4">
+                <NButton tertiary loading={loading.value} onClick={onReset}>重置</NButton>
+                <NButton type="primary" loading={loading.value} onClick={onSubmit}>提交</NButton>
+              </div>
+            ),
+          }}
+        </NCard>
+      </DuxPageFull>
     )
   },
 })

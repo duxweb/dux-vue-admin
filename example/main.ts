@@ -8,11 +8,11 @@ import '../src/style.css'
 const app = createApp(App)
 
 const config: Config = {
-  apiUrl: 'http://localhost:8900',
+  apiUrl: 'http://mock.dux.plus',
   manage: {
     admin: {
       title: '中后台管理系统',
-      apiPrefix: 'admin',
+      apiPrefix: 'api',
       routers: route,
     },
   },

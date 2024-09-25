@@ -26,13 +26,13 @@ export function useMenu() {
         sort: item.sort,
         labelName: item.label,
         iconName: item.icon,
-        icon() {
-          return item?.icon
-            ? h('div', {
-              class: item.icon,
-            })
-            : false
-        },
+        icon: item?.icon
+          ? () => {
+              return h('div', {
+                class: item.icon,
+              })
+            }
+          : undefined,
         label() {
           return item.path
             ? h(

@@ -5,10 +5,11 @@ import DuxLogo from './common/logo.vue'
 import DrawApps from './draw/drawApps.vue'
 import DrawError from './draw/drawError.vue'
 import { DuxAiEditor } from './editor/editor'
+import { DuxFilter } from './filter'
 import { DuxDrawerForm, DuxFormEditor, DuxJsonForm, DuxModalForm, DuxPageForm } from './form'
 import { DuxIconPicker } from './icon'
 import { DuxException, DuxGrid, DuxPage } from './layout'
-import { DuxList } from './list'
+import { DuxCardList, DuxList } from './list'
 import { DuxRadio } from './radio'
 import { DuxRegion } from './region'
 import { DuxSelectAsync } from './select'
@@ -31,6 +32,8 @@ export default {
     app.component('DuxJsonForm', DuxJsonForm)
     app.component('DuxDrawerForm', DuxDrawerForm)
     app.component('DuxModalForm', DuxModalForm)
+    app.component('DuxFilter', DuxFilter)
+    app.component('DuxCardList', DuxCardList)
     app.component('DuxWindowHeader', DuxWindowHeader)
     app.component('DuxWindowFooter', DuxWindowFooter)
     app.component('DuxAiEditor', DuxAiEditor)

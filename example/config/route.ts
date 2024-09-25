@@ -5,6 +5,16 @@ export const route = [
     icon: 'i-tabler:dashboard',
   },
   {
+    label: '列表',
+    name: 'list.index',
+    icon: 'i-tabler:table',
+  },
+  {
+    label: '表单',
+    name: 'form.index',
+    icon: 'i-tabler:forms',
+  },
+  {
     label: '首页',
     name: 'index',
     path: 'index',
@@ -30,6 +40,27 @@ export const route = [
     name: 'home.form',
     path: 'home/form',
     icon: 'i-tabler:edit',
-    component: () => import('../pages/home/form.vue'),
+    component: () => import('../pages/example/form.vue'),
+  },
+  {
+    label: '异步表格页',
+    name: 'list.table',
+    path: 'list/table',
+    parent: 'list.index',
+    component: () => import('../pages/list/table.vue'),
+  },
+  {
+    label: '卡片列表页',
+    name: 'list.card',
+    path: 'list/card',
+    parent: 'list.index',
+    component: () => import('../pages/list/card.vue'),
+  },
+  {
+    label: '表单示例',
+    name: 'form.form',
+    path: 'form/form',
+    parent: 'form.index',
+    component: () => import('../pages/form/form.vue'),
   },
 ]

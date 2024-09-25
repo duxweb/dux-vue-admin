@@ -4,15 +4,14 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import type { DataTableFilterState, DataTableSortState } from 'naive-ui'
 import { useClient } from '../../hooks/useClient'
-import { router } from '../../core/router'
 import { useDialog } from '../dialog'
 import { useDrawer } from '../drawer'
+import { listRenderAction } from '../filter'
 import { useModal } from '../modal'
 import { columnMap, columnMedia, columnStatus, columnTags, columnText, columnType } from './column'
-import { tableAction } from './table/action'
-import type { HandleAction, TableColumn, UseTableProps, UseTableResult } from './types'
+import type { TableColumn, UseTableProps, UseTableResult } from './types'
 
-export function useTable({ tableRef, name, url, actions, columns, columnActions, key = 'id' }: UseTableProps): UseTableResult {
+export function useTable({ tableRef, name, url, columns, columnActions, key = 'id' }: UseTableProps): UseTableResult {
   const client = useClient()
   const message = useMessage()
   const modal = useModal()
@@ -89,7 +88,7 @@ export function useTable({ tableRef, name, url, actions, columns, columnActions,
         align: 'center',
         width: columnWidth,
         render: (rowData, rowIndex) => {
-          return <div class="flex gap-2 justify-center">{tableAction({ key, rowData, rowIndex, text: true, actions: columnActions, modal, dialog, drawer })}</div>
+          return <div class="flex gap-2 justify-center">{listRenderAction({ key, rowData, rowIndex, text: true, actions: columnActions, modal, dialog, drawer })}</div>
         },
 
       } as any)
@@ -273,37 +272,8 @@ export function useTable({ tableRef, name, url, actions, columns, columnActions,
     onUpdateSorter,
     onUpdateFilters,
   }
-  const tableActions = tableAction({ actions, modal, drawer })
-
-  // 移动端操作
-  const dropdownActions = (
-    <NDropdown
-      trigger="click"
-      options={actions?.map((item, index) => {
-        return {
-          label: item.label,
-          key: index,
-          icon: item?.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined,
-        }
-      })}
-      onSelect={(key) => {
-        handleAction({
-          item: actions[key],
-          modal,
-          dialog,
-          drawer,
-        })
-      }}
-    >
-      {{
-        default: () => <NButton type="default" secondary renderIcon={() => <div class="i-tabler:grid-dots"></div>}></NButton>,
-      }}
-    </NDropdown>
-  )
 
   return {
-    tableActions,
-    dropdownActions,
     tableColumns: resultColumns,
     toolsColumns,
     toolsBtn,
@@ -313,38 +283,5 @@ export function useTable({ tableRef, name, url, actions, columns, columnActions,
     data: tableData,
     pagination,
     tableParams,
-  }
-}
-
-export function handleAction({ id, item, modal, dialog, drawer }: HandleAction) {
-  if (item.type === 'modal') {
-    modal?.show({
-      title: item?.title || item?.label,
-      component: item.component,
-      componentProps: {
-        ...item.componentProps,
-        id,
-      },
-    })
-  }
-  if (item.type === 'drawer' && item.component) {
-    drawer?.show({
-      title: item?.title || item?.label,
-      component: item.component,
-      componentProps: {
-        ...item.componentProps,
-        id,
-      },
-    })
-  }
-
-  if (item.type === 'confirm') {
-    dialog?.confirm({
-      title: item?.title,
-      content: item?.content,
-    })
-  }
-  if (item.type === 'link') {
-    router.push(item.path || '')
   }
 }

@@ -34,8 +34,6 @@ export type TableColumnRender = (rowData: object, rowIndex: number) => VNodeChil
 export interface UseTableResult {
   data: Ref<any[]>
   pagination?: PaginationProps
-  tableActions: VNodeChild
-  dropdownActions: VNodeChild
   tableColumns: Ref<DataTableColumns>
   toolsColumns: VNodeChild
   toolsBtn: VNodeChild
