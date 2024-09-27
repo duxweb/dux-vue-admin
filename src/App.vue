@@ -8,9 +8,6 @@ import { createManage } from './core/manage'
 import { router, useManageStore, useRouteStore, useThemeStore } from './index'
 import type { Config } from './index'
 
-const props = defineProps({
-})
-
 // 主题处理
 const themeStore = useThemeStore()
 const { theme, themeOverrides } = storeToRefs(themeStore)
@@ -38,7 +35,6 @@ router.beforeEach((to, _from, next) => {
       createManage(key, config?.manage?.[key]?.routers || [])
     }
     routeStore.init = true
-    console.log('注册路由', router.getRoutes())
     return next({ path: to.path, query: to.query, replace: true })
   }
 
@@ -49,7 +45,6 @@ router.beforeEach((to, _from, next) => {
   // 判断是否登录
   const user = manageStore.getUser()
   if (!user && to.name !== `login`) {
-    console.log('跳转到登录')
     return next({ path: `/${manage}/login`, replace: true })
   }
 
@@ -57,7 +52,6 @@ router.beforeEach((to, _from, next) => {
   if (to.path === '/') {
     return next({ path: `/${firstManage}/index`, replace: true })
   }
-  console.log('跳转到页面')
   return next()
 })
 </script>
