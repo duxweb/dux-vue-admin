@@ -1,7 +1,9 @@
 import { NBreadcrumb, NBreadcrumbItem, NButton, NDrawer, NDrawerContent, NIcon, NInput, NLayout, NLayoutHeader, NLayoutSider, NMenu } from 'naive-ui'
 import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import { useMenu } from '../../hooks/useMenu'
+import { useManageStore } from '../../stores'
 import { DuxCommand } from '../command'
 import { DuxTabs } from './tabs'
 import { Avatar } from './tools/avatar'
@@ -18,6 +20,9 @@ export const DuxLayout = defineComponent({
     const { appCollapsed, sideCollapsed, collapsed, appKey, subKey, appMenu, subMenu, crumbs, showCollapsed, isMobile, allMenu } = useMenu()
     const { t } = useI18n()
     const mobileMenuShow = ref(false)
+
+    const { logout } = useManageStore()
+    const router = useRouter()
 
     return () => (
       <NLayout
@@ -48,7 +53,13 @@ export const DuxLayout = defineComponent({
                   />
                 </div>
                 <div class="flex-none flex flex-col p-2 gap-2">
-                  <NButton quaternary>
+                  <NButton
+                    quaternary
+                    onClick={() => {
+                      logout()
+                      router.push('/')
+                    }}
+                  >
                     <div class="h-5 w-5 i-tabler:logout" />
                   </NButton>
                 </div>

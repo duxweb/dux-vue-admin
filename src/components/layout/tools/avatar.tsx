@@ -17,6 +17,7 @@ export const Avatar = defineComponent({
     const haddieSelect = (key: string) => {
       if (key === 'logout') {
         logout()
+        router.push('/')
       }
       else {
         router.push(key)
