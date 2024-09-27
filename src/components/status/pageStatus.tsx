@@ -9,7 +9,7 @@ export const DuxPageStatus = defineComponent({
   },
   setup(props, { slots }) {
     return () => (
-      <NCard class="h-full  min-h-300px" content-class="h-full w-full flex-1 flex items-center justify-center">
+      <NCard class="h-full  min-h-400px" content-class="h-full w-full flex-1 flex items-center justify-center">
         <div class="flex flex-col gap-6 justify-center items-center py-10">
           <div class="w-50">
             {slots.default?.()}

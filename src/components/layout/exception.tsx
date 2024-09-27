@@ -32,8 +32,6 @@ export const DuxException = defineComponent({
       return false
     })
 
-    console.log(data.value)
-
     return () => data.value
       ? (
           <DuxPageStatus title={data.value?.title} desc={data.value?.desc}>

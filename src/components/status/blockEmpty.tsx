@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue'
 
-export const BlockEmpty = defineComponent({
+export const DuxBlockEmpty = defineComponent({
   name: 'Message',
   props: {
     text: {

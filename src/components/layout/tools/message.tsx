@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { NBadge, NButton, NList, NListItem, NPopover, NTabPane, NTabs } from 'naive-ui'
 import { defineComponent, onMounted, reactive } from 'vue'
 import { useClient, useResource } from '../../../hooks'
-import { BlockEmpty } from '../../status/blockEmpty'
+import { DuxBlockEmpty } from '../../status/blockEmpty'
 
 const MessageItem = defineComponent({
   name: 'Message',
@@ -39,7 +39,7 @@ const MessageItem = defineComponent({
               ))}
             </NList>
           )
-        : <BlockEmpty />
+        : <DuxBlockEmpty />
     )
   },
 })

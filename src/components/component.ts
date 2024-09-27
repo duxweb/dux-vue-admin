@@ -2,8 +2,7 @@ import type { App } from 'vue'
 import { DuxCascaderAsync } from './cascader'
 import { DuxCodeEditor } from './code'
 import DuxLogo from './common/logo.vue'
-import DrawApps from './draw/drawApps.vue'
-import DrawError from './draw/drawError.vue'
+import { DrawApps, DuxDrawEmpty, DuxDrawError } from './draw'
 import { DuxAiEditor } from './editor/editor'
 import { DuxFilter } from './filter'
 import { DuxDrawerForm, DuxFormEditor, DuxJsonForm, DuxModalForm, DuxPageForm } from './form'
@@ -14,7 +13,8 @@ import { DuxRadio } from './radio'
 import { DuxRegion } from './region'
 import { DuxSelectAsync } from './select'
 import { DuxStatsAccount, DuxStatsBankcard, DuxStatsCard, DuxStatsChartArea, DuxStatsChartGrid, DuxStatsChartMap, DuxStatsChartRadar, DuxStatsConnect, DuxStatsHello, DuxStatsHelloBig, DuxStatsQuick, DuxStatsQuickItem, DuxStatsStore, DuxStatsStoreItem, DuxStatsTodo, DuxStatsTodoItem, DuxStatsTotalCard, DuxStatsTotalCardItem, DuxStatsTotalMulti, DuxStatsTotalMultiItem, DuxStatsTotalRate, DuxStatsTotalRateItem, DuxStatsTotalSimple, DuxStatsTotalSimpleItem, DuxStatsTotalTab, DuxStatsTotalTabItem, DuxStatsUser } from './stats'
-import { DuxPageStatus } from './status'
+import { DuxBlockEmpty, DuxPageStatus } from './status'
+import { DuxPageEmpty } from './status/pageEmpty'
 import { DuxPageTable } from './table'
 import { DuxFileUpload, DuxImageUpload } from './upload'
 import { DuxCarousel, DuxMedia } from './widget'
@@ -24,7 +24,8 @@ export default {
   install(app: App) {
     app.component('DuxLogo', DuxLogo)
     app.component('DuxDrawApps', DrawApps)
-    app.component('DuxDrawError', DrawError)
+    app.component('DuxDrawError', DuxDrawError)
+    app.component('DuxDrawEmpty', DuxDrawEmpty)
     app.component('DuxException', DuxException)
     app.component('DuxPage', DuxPage)
     app.component('DuxPageTable', DuxPageTable)
@@ -78,5 +79,7 @@ export default {
     app.component('DuxRadio', DuxRadio)
     app.component('DuxIconPicker', DuxIconPicker)
     app.component('DuxCodeEditor', DuxCodeEditor)
+    app.component('DuxBlockEmpty', DuxBlockEmpty)
+    app.component('DuxPageEmpty', DuxPageEmpty)
   },
 }
