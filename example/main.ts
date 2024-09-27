@@ -8,7 +8,7 @@ import '../src/style.css'
 const app = createApp(App)
 
 const config: Config = {
-  apiUrl: 'http://mock.dux.plus',
+  apiUrl: 'https://mock.dux.plus',
   manage: {
     admin: {
       title: '中后台管理系统',
