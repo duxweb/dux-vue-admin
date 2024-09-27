@@ -166,7 +166,7 @@ export default defineComponent({
             <div class="flex flex-col items-center justify-center mt-4">
               <dux-logo />
               <div class="mt-4 text-lg">
-                开箱即用的 Golang 管理系统
+                开箱即用的中后台管理系统
               </div>
             </div>
             <div class="my-6">
