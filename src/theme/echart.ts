@@ -56,7 +56,7 @@ export function getTheme(colors: string[], dark: boolean) {
         opacity: 0.7,
         barBorderWidth: 0,
         barBorderColor: 'rgb(var(--n-gray-color-5))',
-        borderRadius: 5,
+        borderRadius: 0,
       },
     },
     pie: {

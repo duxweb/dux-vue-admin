@@ -16,6 +16,7 @@ export const DuxStep = defineComponent({
     },
     options: Array<DuxStepOption>,
   },
+
   setup(props) {
     return () => (
       <div class="pb-8">

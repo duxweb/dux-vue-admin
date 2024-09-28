@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 import type { AsyncComponentLoader, PropType } from 'vue'
 import { useTabStore } from '../../stores'
 import { DuxPageFull } from '../layout'
-import { DuxStep } from '../step'
+import { DuxStep } from '../step/step'
 import { useForm } from './useForm'
 
 export interface DuxStepFormItem {

@@ -15,6 +15,11 @@ export const route = [
     icon: 'i-tabler:forms',
   },
   {
+    label: '组件',
+    name: 'component.index',
+    icon: 'i-tabler:components',
+  },
+  {
     label: '首页',
     name: 'index',
     path: 'index',
@@ -70,4 +75,26 @@ export const route = [
     parent: 'form.index',
     component: () => import('../pages/form/stepForm.vue'),
   },
+  {
+    label: '统计卡片',
+    name: 'component.stats',
+    path: 'component/stats',
+    parent: 'component.index',
+    component: () => import('../pages/stats/card.vue'),
+  },
+
+  {
+    label: '图表',
+    name: 'component.chart',
+    parent: 'component.index',
+  },
+
+  {
+    label: '网格图表',
+    name: 'component.chartGrid',
+    path: 'component/chartGrid',
+    parent: 'component.chart',
+    component: () => import('../pages/stats/chartGrid.vue'),
+  },
+
 ]

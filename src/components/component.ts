@@ -4,6 +4,7 @@ import { DuxCodeEditor } from './code'
 import DuxLogo from './common/logo.vue'
 import { DrawApps, DuxDrawEmpty, DuxDrawError } from './draw'
 import { DuxAiEditor } from './editor/editor'
+import { DuxExample } from './example'
 import { DuxFilter } from './filter'
 import { DuxDrawerForm, DuxFormEditor, DuxJsonForm, DuxModalForm, DuxPageForm, DuxStepForm } from './form'
 import { DuxIconPicker } from './icon'
@@ -84,5 +85,6 @@ export default {
     app.component('DuxPageEmpty', DuxPageEmpty)
     app.component('DuxStepForm', DuxStepForm)
     app.component('DuxStep', DuxStep)
+    app.component('DuxExample', DuxExample)
   },
 }
