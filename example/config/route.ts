@@ -57,10 +57,17 @@ export const route = [
     component: () => import('../pages/list/card.vue'),
   },
   {
-    label: '表单示例',
+    label: '通用表单页',
     name: 'form.form',
     path: 'form/form',
     parent: 'form.index',
     component: () => import('../pages/form/form.vue'),
+  },
+  {
+    label: '步骤表单页',
+    name: 'form.stepForm',
+    path: 'form/stepForm',
+    parent: 'form.index',
+    component: () => import('../pages/form/stepForm.vue'),
   },
 ]

@@ -1,13 +1,12 @@
 import { usePagination } from 'alova/client'
 import { NPagination } from 'naive-ui'
 import { ref, watch } from 'vue'
-import type { Ref } from 'vue'
 import { useClient } from '../../hooks'
 
 type value = Array<string | number> | string | number | null | undefined
 
 interface UseSelectProps {
-  value: Ref<value>
+  value: value
   url?: string
   params?: Record<string, any>
   valueField?: string
@@ -24,22 +23,21 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
     })
   }
 
+  const list = ref<Record<string, any>[]>([])
+
   const {
     loading,
     data,
     page,
     pageSize,
     pageCount,
-    insert,
   } = usePagination(
     (page, pageSize) => getList(page, pageSize),
     {
-      watchingStates: [keyword],
+      watchingStates: [keyword, () => params],
       debounce: 300,
       // immediate: false,
-      total: (res) => {
-        return res.meta?.total || 0
-      },
+      total: res => res.meta?.total || 0,
       data: res => res.data,
       initialData: {
         total: 0,
@@ -47,25 +45,30 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
       },
       initialPage: 1,
       initialPageSize: pagination ? 10 : 0,
+
     },
   )
 
+  watch(data, (val) => {
+    list.value = val
+  })
+
   const onceStatus = ref(false)
 
-  watch(value, (val) => {
+  watch(() => value, (val) => {
     if (onceStatus.value || !val) {
       return
     }
     client.get({
       url,
       params: {
-        id: val,
+        id: Array.isArray(val) ? val.join(',') : val,
       },
     }).then((res) => {
       onceStatus.value = true
       res?.data?.forEach((item) => {
-        if (data.value?.findIndex(v => v[valueField] === item[valueField]) === -1) {
-          insert(item, 0)
+        if (list.value?.findIndex(v => v[valueField] === item[valueField]) === -1) {
+          list.value?.splice(0, 0, item)
         }
       })
     })
@@ -95,7 +98,7 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
 
   return {
     onSearch,
-    options: data,
+    options: list,
     Pagination,
     loading,
   }

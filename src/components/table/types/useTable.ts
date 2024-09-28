@@ -1,4 +1,5 @@
-import type { ButtonProps, DataTableColumn, DataTableColumns, DataTableInst, DataTableProps, FormInst, PaginationProps } from 'naive-ui'
+import type { Column } from 'exceljs'
+import type { ButtonProps, DataTableColumn, DataTableColumns, DataTableProps, PaginationProps } from 'naive-ui'
 import type { AsyncComponentLoader, Ref, VNodeChild } from 'vue'
 import type { UseDialogResult } from '../../dialog'
 import type { UseDrawerResult } from '../../drawer'
@@ -19,27 +20,28 @@ export interface TableAction {
 }
 
 export interface UseTableProps {
-  tableRef?: Ref<DataTableInst | undefined>
   actions: TableAction[]
   columns: TableColumn[]
   columnActions: TableAction[]
-  formRef?: Ref<FormInst>
+  form: Ref<any>
+  excelColumns?: Column[]
   url?: string
   key?: string | number
   name?: any
+  export?: boolean
+  import?: boolean
 }
 
 export type TableColumnRender = (rowData: object, rowIndex: number) => VNodeChild
 
 export interface UseTableResult {
   data: Ref<any[]>
-  pagination?: PaginationProps
+  pagination: Ref<PaginationProps>
   tableColumns: Ref<DataTableColumns>
   toolsColumns: VNodeChild
   toolsBtn: VNodeChild
-  filterModel: any
   loading: Ref<boolean>
-  tableParams: DataTableProps
+  tableParams: Ref<DataTableProps>
   onFilter: () => void
 }
 

@@ -1,3 +1,4 @@
+import { useVModel } from '@vueuse/core'
 import { NCascader } from 'naive-ui'
 import { defineComponent, ref, watch } from 'vue'
 import type { CascaderProps } from 'naive-ui'
@@ -15,24 +16,21 @@ export const DuxCascaderAsync = defineComponent({
     params: Object,
   },
   extends: NCascader,
-  setup({ url, defaultValue, value, params = {}, ...props }: DuxCascaderAsyncProps, { emit }) {
+  setup(props: DuxCascaderAsyncProps, { emit }) {
     const useParams = ref({})
-    const useUrl = ref(url)
+    const useUrl = ref(props.url)
 
     watch(() => useUrl, (val) => {
       useUrl.value = val.value
     })
 
-    watch(() => useParams, (val) => {
-      params.value = val.value
+    watch(() => props.params, (val) => {
+      useParams.value = val || {}
     })
 
-    const select = ref(defaultValue)
-
-    watch(() => value, (newValue) => {
-      if (newValue !== undefined) {
-        select.value = newValue
-      }
+    const model = useVModel(props, 'value', emit, {
+      passive: true,
+      defaultValue: props.defaultValue,
     })
 
     const { options } = useCascader({
@@ -44,11 +42,7 @@ export const DuxCascaderAsync = defineComponent({
       <NCascader
         {...props}
         options={options.value?.data || []}
-        onUpdateValue={(v) => {
-          select.value = v
-          emit('update:value', v)
-        }}
-        value={select.value}
+        v-model:value={model.value}
       >
       </NCascader>
     )

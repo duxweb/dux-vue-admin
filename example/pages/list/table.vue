@@ -54,7 +54,7 @@ const columns: TableColumn[] = [
   },
   {
     title: '价格',
-    key: 'price',
+    key: 'sell_price',
     width: 150,
     renderType: 'map',
     renderProps: {
@@ -72,7 +72,7 @@ const columns: TableColumn[] = [
   },
   {
     title: '销售',
-    key: 'sale',
+    key: 'sale_num',
     width: 120,
     renderType: 'map',
     renderProps: {
@@ -90,7 +90,7 @@ const columns: TableColumn[] = [
   },
   {
     title: '发布日期',
-    key: 'date',
+    key: 'up_at',
     width: 180,
     renderType: 'map',
     renderProps: {

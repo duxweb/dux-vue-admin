@@ -84,22 +84,4 @@ initAsyncRouter()
 </template>
 
 <style>
-.fade-leave-active,
-.fade-enter-active {
-  transition: all 0.4s;
-}
-
-.fade-enter-from {
-  opacity: 0;
-  transform: translateX(-30px);
-}
-.fade-enter-to {
-  opacity: 1;
-  transform: translateX(0px);
-}
-
-.fade-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
 </style>

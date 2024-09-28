@@ -1,43 +1,41 @@
+import { useVModel } from '@vueuse/core'
 import { NAvatar, NSelect, NTag } from 'naive-ui'
-import { defineComponent, ref, watch } from 'vue'
-import type { SelectProps } from 'naive-ui'
-import type { VNodeChild } from 'vue'
+import { defineComponent } from 'vue'
+import type { PropType, VNodeChild } from 'vue'
 import { useSelect } from './useSelect'
-
-export interface DuxSelectAsyncProps extends SelectProps {
-  url?: string
-  params?: Record<string, any>
-  pagination?: boolean
-  imageField?: string
-  descField?: string
-}
 
 export const DuxSelectAsync = defineComponent({
   name: 'DuxSelectAsync',
   props: {
     url: String,
-    params: Object,
-    pagination: Boolean,
-    imageField: String,
-    descField: String,
+    params: Object as PropType<Record<string, any>>,
+    pagination: {
+      type: Boolean,
+      default: true,
+    },
+    imageField: {
+      type: String,
+      default: 'image',
+    },
+    descField: {
+      type: String,
+      default: 'desc',
+    },
     multiple: Boolean,
   },
   extends: NSelect,
-  setup({ value, defaultValue, url, params, pagination, imageField = 'image', descField = 'desc', valueField = 'value', labelField = 'label', multiple, ...props }: DuxSelectAsyncProps, { emit }) {
-    const select = ref(defaultValue)
-
-    watch(() => value, (newValue) => {
-      if (newValue !== undefined) {
-        select.value = newValue
-      }
+  setup(props, { emit }) {
+    const model = useVModel(props, 'value', emit, {
+      passive: true,
+      defaultValue: props.defaultValue,
     })
 
     const { onSearch, loading, Pagination, options } = useSelect({
-      url,
-      params,
-      value: select,
-      pagination,
-      valueField,
+      url: props.url,
+      params: props.params,
+      value: model.value,
+      pagination: props.pagination,
+      valueField: props.valueField,
     })
 
     return () => (
@@ -45,38 +43,34 @@ export const DuxSelectAsync = defineComponent({
         {...props}
         onSearch={onSearch}
         loading={loading.value}
-        filterable={!!pagination}
+        filterable={!!props.pagination}
         clearable
         remote
         options={options.value}
-        valueField={valueField}
-        labelField={labelField}
-        value={select.value}
-        multiple={multiple}
-        onUpdateValue={(v) => {
-          select.value = v
-          emit('update:value', v)
-        }}
+        valueField={props.valueField}
+        labelField={props.labelField}
+        v-model:value={model.value}
+        multiple={props.multiple}
         renderLabel={(item) => {
-          if (imageField || descField) {
+          if (props.imageField || props.descField) {
             return (
               <div class="flex gap-2 items-center py-2">
-                {imageField && (
-                  <NAvatar round src={item[imageField]} size={32} />
+                {props.imageField && (
+                  <NAvatar round src={item[props.imageField]} size={32} />
                 )}
                 <div class="flex-1 flex flex-col justify-center">
-                  <div>{item[labelField]}</div>
-                  {descField && <div class="text-gray-6">{item[descField]}</div>}
+                  <div>{item[props.labelField]}</div>
+                  {props.descField && <div class="text-gray-6">{item[props.descField]}</div>}
                 </div>
               </div>
             )
           }
           else {
-            return item[labelField]
+            return item[props.labelField]
           }
         }}
         renderTag={({ option, handleClose }): VNodeChild => {
-          return multiple
+          return props.multiple
             ? (
                 <NTag
                   closable
@@ -88,10 +82,10 @@ export const DuxSelectAsync = defineComponent({
                     handleClose()
                   }}
                 >
-                  {renderTag(labelField, imageField, descField, option)}
+                  {renderTag(props.labelField, props.imageField, props.descField, option)}
                 </NTag>
               )
-            : renderTag(labelField, imageField, descField, option)
+            : renderTag(props.labelField, props.imageField, props.descField, option)
         }}
       >
         {{

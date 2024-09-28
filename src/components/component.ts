@@ -5,7 +5,7 @@ import DuxLogo from './common/logo.vue'
 import { DrawApps, DuxDrawEmpty, DuxDrawError } from './draw'
 import { DuxAiEditor } from './editor/editor'
 import { DuxFilter } from './filter'
-import { DuxDrawerForm, DuxFormEditor, DuxJsonForm, DuxModalForm, DuxPageForm } from './form'
+import { DuxDrawerForm, DuxFormEditor, DuxJsonForm, DuxModalForm, DuxPageForm, DuxStepForm } from './form'
 import { DuxIconPicker } from './icon'
 import { DuxException, DuxGrid, DuxPage } from './layout'
 import { DuxCardList, DuxList } from './list'
@@ -15,6 +15,7 @@ import { DuxSelectAsync } from './select'
 import { DuxStatsAccount, DuxStatsBankcard, DuxStatsCard, DuxStatsChartArea, DuxStatsChartGrid, DuxStatsChartMap, DuxStatsChartRadar, DuxStatsConnect, DuxStatsHello, DuxStatsHelloBig, DuxStatsQuick, DuxStatsQuickItem, DuxStatsStore, DuxStatsStoreItem, DuxStatsTodo, DuxStatsTodoItem, DuxStatsTotalCard, DuxStatsTotalCardItem, DuxStatsTotalMulti, DuxStatsTotalMultiItem, DuxStatsTotalRate, DuxStatsTotalRateItem, DuxStatsTotalSimple, DuxStatsTotalSimpleItem, DuxStatsTotalTab, DuxStatsTotalTabItem, DuxStatsUser } from './stats'
 import { DuxBlockEmpty, DuxPageStatus } from './status'
 import { DuxPageEmpty } from './status/pageEmpty'
+import { DuxStep } from './step/step'
 import { DuxPageTable } from './table'
 import { DuxFileUpload, DuxImageUpload } from './upload'
 import { DuxCarousel, DuxMedia } from './widget'
@@ -81,5 +82,7 @@ export default {
     app.component('DuxCodeEditor', DuxCodeEditor)
     app.component('DuxBlockEmpty', DuxBlockEmpty)
     app.component('DuxPageEmpty', DuxPageEmpty)
+    app.component('DuxStepForm', DuxStepForm)
+    app.component('DuxStep', DuxStep)
   },
 }

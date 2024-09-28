@@ -12,6 +12,7 @@ import type { JsonFormItemSchema } from './handler'
 export const DuxPageForm = defineComponent({
   name: 'DuxPageForm',
   props: {
+    model: Object,
     title: String,
     data: Object as PropType<Record<string, any>>,
     schema: Object as PropType<JsonFormItemSchema[]>,
@@ -19,16 +20,16 @@ export const DuxPageForm = defineComponent({
     id: [String, Number],
     invalidate: String,
   },
-  setup({ title, data, schema, invalidate, url, id }) {
+  setup(props, { slots }) {
     const tab = useTabStore()
     const router = useRouter()
 
-    const { loading, model, onSubmit, onReset } = useForm({
-      url,
-      id,
-      invalidate,
+    const { loading, onSubmit, onReset, model } = useForm({
+      url: props.url,
+      id: props.id,
+      invalidate: props.invalidate,
       success: () => {
-        if (id && tab.current) {
+        if (!props.id && tab.current) {
           tab.delTab(tab.current, v => router.push(v.path || ''))
         }
         else {
@@ -41,13 +42,14 @@ export const DuxPageForm = defineComponent({
 
     return () => (
       <DuxPageFull>
-        <NCard title={title} segmented contentClass="p-0! flex-1 h-1" class="h-full flex flex-col" headerClass="px-6! py-4!">
+        <NCard title={props.title} segmented contentClass="p-0! flex-1 h-1" class="h-full flex flex-col" headerClass="px-6! py-4!">
           {{
             default: () => (
               <NForm model={model} labelPlacement={width.value > 768 ? 'left' : 'top'} labelWidth={width.value > 768 ? 100 : 0} class="h-full">
                 <n-scrollbar>
                   <div class="p-6">
-                    <DuxJsonForm model={model} data={data} schema={schema} />
+                    {slots.default?.(model)}
+                    <DuxJsonForm model={model} data={props.data} schema={props.schema} />
                   </div>
                 </n-scrollbar>
               </NForm>

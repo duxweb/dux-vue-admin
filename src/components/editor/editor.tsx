@@ -34,7 +34,7 @@ export const DuxAiEditor = defineComponent({
       aiEditor = new AiEditor({
         theme: darkMode.value ? 'dark' : 'light',
         element: divRef.value as Element,
-        placeholder: 'Click to Input Content...',
+        placeholder: '请输入内容...',
         content: props?.value || props?.defaultValue,
         onChange: (aiEditor) => {
           const value = aiEditor.getHtml()

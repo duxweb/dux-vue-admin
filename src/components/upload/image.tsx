@@ -1,33 +1,31 @@
+import { useVModel } from '@vueuse/core'
 import clsx from 'clsx'
 import { NButton, NImage, NProgress, NUpload } from 'naive-ui'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import type { UploadFileInfo, UploadInst } from 'naive-ui'
-import type { SortableEvent } from 'vue-draggable-plus'
+import type { PropType } from 'vue'
 import { useImagePreview } from '../../hooks'
 import { useNaiveUpload } from './useUpload'
-
-export interface DuxImageUploadProps {
-  value?: string | string[]
-  multiple?: boolean
-  headers?: Record<string, any>
-  data?: Record<string, any>
-  max?: number
-  url?: string
-}
 
 export const DuxImageUpload = defineComponent({
   name: 'DuxImageUpload',
   props: {
-    value: [Array<string>, String],
+    defaultValue: [String, Array<string>],
+    value: [String, Array<string>],
     multiple: Boolean,
     max: Number,
     url: String,
-    headers: Object,
-    data: Object,
+    headers: Object as PropType<Record<string, any>>,
+    data: Object as PropType<Record<string, any>>,
   },
-  setup({ value, max, multiple, url, headers, data }: DuxImageUploadProps, { emit }) {
+  setup(props, { emit }) {
     const uploadRef = ref<UploadInst | null>(null)
+
+    const model = useVModel(props, 'value', emit, {
+      passive: true,
+      defaultValue: props.defaultValue,
+    })
 
     const { customRequest, onAbort } = useNaiveUpload()
 
@@ -44,11 +42,21 @@ export const DuxImageUpload = defineComponent({
       })
     }
 
-    const files = ref<UploadFileInfo[]>(imagesToFileList(value ? (Array.isArray(value) ? value : [value]) : []))
+    const files = ref<UploadFileInfo[]>([])
 
-    const onUpdate = () => {
-      emit('update:value', multiple ? files.value?.filter(item => !!item.url).map(item => item.url) : files.value[0].url)
-    }
+    const once = ref(false)
+
+    watch(() => props.value, (val) => {
+      if (!val || once.value) {
+        return
+      }
+      files.value = imagesToFileList(val ? Array.isArray(val) ? val : [val] : [])
+      once.value = true
+    }, { immediate: true })
+
+    watch(files, (val) => {
+      model.value = props.multiple ? val?.filter(item => !!item.url).map(item => item.url || '') : (val[0]?.url || '')
+    }, { immediate: true })
 
     const image = useImagePreview()
 
@@ -60,13 +68,12 @@ export const DuxImageUpload = defineComponent({
           accept="image/*"
           onUpdateFileList={(fileList) => {
             files.value = fileList
-            onUpdate()
           }}
-          headers={headers}
-          data={data}
-          action={url}
-          multiple={multiple}
-          max={multiple ? max : 1}
+          headers={props.headers}
+          data={props.data}
+          action={props.url}
+          multiple={props.multiple}
+          max={props.multiple ? props.max : 1}
           customRequest={customRequest}
           showFileList={false}
           abstract
@@ -74,10 +81,7 @@ export const DuxImageUpload = defineComponent({
         </NUpload>
         <VueDraggable
           modelValue={files.value}
-          onUpdate={(e: SortableEvent) => {
-            [files.value[e.oldIndex as number], files.value[e.newIndex as number]] = [files.value[e.newIndex as number], files.value[e.oldIndex as number]]
-            onUpdate()
-          }}
+          v-model={files.value}
           class="flex gap-2"
           draggable=".draggable"
         >
@@ -86,8 +90,8 @@ export const DuxImageUpload = defineComponent({
             <div
               key={index}
               class={clsx([
-                'w-100px h-100px rounded border-1 border-[var(--n-border-color)] relative group draggable',
-                item.status === 'error' ? 'border-error text-error' : 'border-[var(--n-border-color)]',
+                'w-100px h-100px rounded border-1 border-gray-3 relative group draggable',
+                item.status === 'error' ? 'border-error text-error' : 'border-gray-3',
               ])}
             >
               {item.status === 'finished'
@@ -160,9 +164,9 @@ export const DuxImageUpload = defineComponent({
             </div>
           ))}
 
-          {(multiple || files.value?.length === 0) && (
+          {(props.multiple || files.value?.length === 0) && (
             <div
-              class="w-100px h-100px rounded border-1 border-dashed border-[var(--n-border-color)] flex justify-center items-center hover:border-primary-7 cursor-pointer"
+              class="w-100px h-100px rounded border-1 border-dashed border-gray-3 flex justify-center items-center hover:border-primary-7 cursor-pointer text-sm"
               style={{
                 backgroundColor: 'var(--n-action-color)',
               }}

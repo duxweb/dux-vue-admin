@@ -1,22 +1,25 @@
-import { useForm } from 'alova/client'
+import { usePagination } from 'alova/client'
 import { NButton, NCheckbox, NDropdown, NPopover, NTooltip, useMessage } from 'naive-ui'
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import type { DataTableFilterState, DataTableSortState } from 'naive-ui'
 import { useClient } from '../../hooks/useClient'
 import { useDialog } from '../dialog'
 import { useDrawer } from '../drawer'
+import { useExportExcel, useImportExcel } from '../excel'
 import { listRenderAction } from '../filter'
 import { useModal } from '../modal'
 import { columnMap, columnMedia, columnStatus, columnTags, columnText, columnType } from './column'
 import type { TableColumn, UseTableProps, UseTableResult } from './types'
 
-export function useTable({ tableRef, name, url, columns, columnActions, key = 'id' }: UseTableProps): UseTableResult {
+export function useTable({ form, url, columns, columnActions, excelColumns, export: exportStatus, import: importStatus, key = 'id' }: UseTableProps): UseTableResult {
   const client = useClient()
   const message = useMessage()
   const modal = useModal()
   const dialog = useDialog()
   const drawer = useDrawer()
+  const excelExport = useExportExcel()
+  const excelImport = useImportExcel()
 
   // 增加默认显示，用于过滤列
   const formatColumns = columns?.map((item: any) => {
@@ -98,39 +101,41 @@ export function useTable({ tableRef, name, url, columns, columnActions, key = 'i
   })
 
   // 表格数据
-  const tableData = ref([])
-
-  const pagination = reactive<Record<string, any>>({
-    page: 1,
-    pageSize: 10,
-  })
   const sorter = reactive<Record<string, any>>({})
   const filters = reactive<Record<string, any>>({})
 
   const {
+    page,
+    pageSize,
+    pageCount,
+    data: tableData,
     loading,
-    form,
     send,
-    onSuccess,
+    // onSuccess,
     onError,
-  } = useForm(
-    (formData: Record<string, any>) => {
+  } = usePagination(
+    (page, pageSize) => {
       return client.get({
         url,
-        params: { ...pagination, ...sorter, ...filters, ...formData },
-        config: {
-          name: name || url,
+        params: {
+          page,
+          pageSize,
+          ...sorter,
+          ...filters,
+          ...form.value,
         },
       })
     },
     {
-      initialForm: {},
+      initialData: {
+        total: 0,
+        data: [],
+      },
+      initialPage: 1,
+      initialPageSize: 20,
+      total: res => res.meta?.total || 0,
     },
   )
-
-  onSuccess((res) => {
-    tableData.value = res.data?.data || []
-  })
 
   onError((res) => {
     message.error(res?.error?.message || '筛选提交异常')
@@ -195,26 +200,69 @@ export function useTable({ tableRef, name, url, columns, columnActions, key = 'i
     </div>
   )
 
+  const toolsOptions = [
+    {
+      label: '刷新数据',
+      key: 'refresh',
+    },
+  ]
+
+  if (exportStatus) {
+    toolsOptions.push({
+      label: '导出 Excel',
+      key: 'export',
+    })
+  }
+
+  if (importStatus) {
+    toolsOptions.push({
+      label: '导入 Excel',
+      key: 'import',
+    })
+  }
+
   // 表格工具
   const toolsBtn = (
     <div>
       <NDropdown
-        options={[
-          {
-            label: '刷新数据',
-            key: 'refresh',
-          },
-          {
-            label: '导出 CSV',
-            key: 'export',
-          },
-        ]}
+        options={toolsOptions}
         onSelect={(key) => {
           if (key === 'refresh') {
             send()
           }
           if (key === 'export') {
-            tableRef?.value?.downloadCsv({ fileName: 'data-table' })
+            excelExport.onSend({
+              url,
+              params: { ...filters.value, ...sorter.value },
+              columns: excelColumns || tableColumns.value.map((item: Record<string, any>) => {
+                return {
+                  header: item.title,
+                  key: item.key,
+
+                }
+              }),
+            })
+          }
+          if (key === 'import') {
+            const input = document.createElement('input')
+            input.type = 'file'
+            input.style.display = 'none'
+            input.click()
+
+            input.addEventListener('change', (event: any) => {
+              const fileSelect = event?.target?.files?.[0] as Blob
+              excelImport.onSend({
+                blob: fileSelect,
+                url: '/import',
+                params: form.value,
+                columns: excelColumns || tableColumns.value.map((item: Record<string, any>) => {
+                  return {
+                    header: item.title,
+                    key: item.key,
+                  }
+                }),
+              })
+            })
           }
         }}
       >
@@ -223,21 +271,6 @@ export function useTable({ tableRef, name, url, columns, columnActions, key = 'i
 
     </div>
   )
-
-  onMounted(() => {
-    send()
-  })
-
-  // 分页处理
-  const onUpdatePageSize = (v) => {
-    pagination.pageSize = v
-    send()
-  }
-
-  const onUpdatePage = (v) => {
-    pagination.page = v
-    send()
-  }
 
   // 排序处理
   const onUpdateSorter = (v: DataTableSortState | DataTableSortState[] | null) => {
@@ -265,23 +298,45 @@ export function useTable({ tableRef, name, url, columns, columnActions, key = 'i
   }
 
   // 表格扩展参数
-  const tableParams = {
-    pagination: pagination as any,
-    onUpdatePageSize,
-    onUpdatePage,
-    onUpdateSorter,
-    onUpdateFilters,
+  const tableParams = computed(() => {
+    return {
+      remote: true,
+      onUpdateSorter,
+      onUpdateFilters,
+    }
+  })
+
+  // 分页处理
+  const onUpdatePageSize = (v) => {
+    pageSize.value = v
+    page.value = 1
   }
+
+  const onUpdatePage = (v) => {
+    page.value = v
+  }
+
+  const pagination = computed(() => {
+    return {
+      page: page.value,
+      pageSize: pageSize.value,
+      pageCount: pageCount.value,
+      pageSizes: [10, 20, 30, 40, 50],
+      onUpdatePageSize,
+      onUpdatePage,
+      showSizePicker: true,
+      showQuickJumper: true,
+    }
+  })
 
   return {
     tableColumns: resultColumns,
     toolsColumns,
     toolsBtn,
     onFilter,
-    filterModel: form,
     loading,
     data: tableData,
-    pagination,
     tableParams,
+    pagination,
   }
 }

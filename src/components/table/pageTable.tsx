@@ -2,7 +2,9 @@ import { useWindowSize } from '@vueuse/core'
 import { NCard, NDataTable } from 'naive-ui'
 import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import type { Column } from 'exceljs'
 import type { DataTableInst } from 'naive-ui'
+import type { PropType, Ref } from 'vue'
 import { DuxFilter } from '../filter'
 import { DuxPageFull } from '../layout'
 import { useTable } from './useTable'
@@ -26,20 +28,34 @@ export const DuxPageTable = defineComponent({
     columnActions: Array<TableAction>,
     filter: Array<JsonFormItemSchema>,
     actions: Array<TableAction>,
+    excelColumns: Array<Column>,
+    export: {
+      type: Boolean,
+      default: true,
+    },
+    import: {
+      type: Boolean,
+      default: true,
+    },
+    form: Object as PropType<Ref<Record<string, any>>>,
   },
-  setup(props) {
+  setup(props, { slots }) {
     const { width } = useWindowSize()
     const route = useRoute()
     const tableRef = ref<DataTableInst>()
+    const form = props.form || ref<Record<string, any>>({})
 
-    const { data, tableColumns, toolsColumns, toolsBtn, onFilter, filterModel, loading, tableParams } = useTable({
+    const { data, tableColumns, toolsColumns, toolsBtn, onFilter, loading, tableParams, pagination } = useTable({
       key: props.tableKey,
       url: props.url,
       name: route.name,
       actions: props.actions || [],
       columns: props.columns || [],
       columnActions: props.columnActions || [],
-      tableRef,
+      form,
+      excelColumns: props.excelColumns,
+      export: props.export,
+      import: props.import,
     })
 
     const filterShow = ref(true)
@@ -81,17 +97,17 @@ export const DuxPageTable = defineComponent({
     })
 
     return () => (
-      <DuxPageFull>
-        <NCard class="h-full">
+      <DuxPageFull class="flex flex-col gap-2">
+        {slots?.header?.(form)}
+        <NCard class="flex-1 h-1">
           <div class="flex flex-col h-full gap-4">
-
             <DuxFilter
               filter={props.filter}
               tabs={props.tabs}
               actions={props.actions}
               title={props.title}
               titleLang={props.titleLang}
-              v-model:value={filterModel.value}
+              v-model:value={form.value}
               onSubmit={() => {
                 onFilter()
               }}
@@ -105,9 +121,18 @@ export const DuxPageTable = defineComponent({
                 ),
               }}
             </DuxFilter>
-
             <div class="flex-1">
-              <NDataTable loading={loading.value} class="h-full" minHeight={200} flexHeight ref={tableRef} data={data.value} columns={tableColumns.value} {...tableParams} />
+              <NDataTable
+                loading={loading.value}
+                class="h-full"
+                minHeight={200}
+                flexHeight
+                ref={tableRef}
+                data={data.value}
+                columns={tableColumns.value}
+                {...tableParams.value}
+                pagination={pagination.value}
+              />
             </div>
           </div>
         </NCard>

@@ -131,18 +131,37 @@ body {
 
 .light {
   .layout-tabs.n-tabs .n-tabs-nav.n-tabs-nav--top.n-tabs-nav--card-type .n-tabs-tab.n-tabs-tab--active {
-    border: 1px solid rgba(var(--n-success-color-2));
-    background-color: rgba(var(--n-success-color), 0.1);
+    border: 1px solid rgba(var(--n-primary-color-2));
+    background-color: rgba(var(--n-primary-color), 0.1);
   }
 }
 
 .dark {
   .layout-tabs.n-tabs .n-tabs-nav.n-tabs-nav--top.n-tabs-nav--card-type .n-tabs-tab.n-tabs-tab--active {
-    border: 1px solid rgba(var(--n-success-color-2));
-    background-color: rgba(var(--n-success-color), 0.15);
+    border: 1px solid rgba(var(--n-primary-color-2));
+    background-color: rgba(var(--n-primary-color), 0.15);
   }
 }
 
 .layout-tabs.n-tabs .n-tabs-nav.n-tabs-nav--top.n-tabs-nav--card-type .n-tabs-pad {
   border: none;
+}
+
+.fade-leave-active,
+.fade-enter-active {
+  transition: all 0.4s;
+}
+
+.fade-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+.fade-enter-to {
+  opacity: 1;
+  transform: translateX(0px);
+}
+
+.fade-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }

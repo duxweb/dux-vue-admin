@@ -34,7 +34,7 @@ const avatars = [
 </script>
 
 <template>
-  <dux-card-list :filter="filter" title="异步卡片列表">
+  <dux-card-list :filter="filter" title="异步卡片列表" url="/mall">
     <template #title="item">
       {{ item.title }}
     </template>

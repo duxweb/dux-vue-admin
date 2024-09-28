@@ -4,9 +4,8 @@ import { useClient } from '../../hooks'
 interface UseRegionProps {
   value: Ref<string[]>
   url?: string
-  emit?: (name: string, ...val: any[]) => void
 }
-export function useRegion({ url, value, emit }: UseRegionProps) {
+export function useRegion({ url, value }: UseRegionProps) {
   const client = useClient()
 
   const provinces = ref([])
@@ -79,7 +78,6 @@ export function useRegion({ url, value, emit }: UseRegionProps) {
 
   const onProvinceChange = (v) => {
     value.value = [v]
-    emit?.('update:value', value.value)
     citys.value = []
     districts.value = []
     streets.value = []
@@ -87,20 +85,17 @@ export function useRegion({ url, value, emit }: UseRegionProps) {
 
   const onCityChange = (v) => {
     value.value = [value.value[0], v]
-    emit?.('update:value', value.value)
     districts.value = []
     streets.value = []
   }
 
   const onDistrictChange = (v) => {
     value.value = [value.value[0], value.value[1], v]
-    emit?.('update:value', value.value)
     streets.value = []
   }
 
   const onStreetChange = (v) => {
     value.value = [value.value[0], value.value[1], value.value[2], v]
-    emit?.('update:value', value.value)
   }
 
   return {

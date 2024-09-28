@@ -18,17 +18,17 @@ export const DuxModalForm = defineComponent({
     id: [String, Number],
     invalidate: String,
   },
-  setup({ schema, data, invalidate, url, id, onConfirm, onClose }) {
+  setup(props) {
     const { loading, model, onSubmit, onReset } = useForm({
-      url,
-      id,
-      invalidate,
+      url: props.url,
+      id: props.id,
+      invalidate: props.invalidate,
       success: (res) => {
-        if (!id) {
+        if (!props.id) {
           onReset()
         }
         else {
-          onConfirm?.(res)
+          props.onConfirm?.(res)
         }
       },
     })
@@ -36,14 +36,14 @@ export const DuxModalForm = defineComponent({
     return () => (
       <>
         <div class="p-4">
-          <DuxJsonForm model={model} schema={schema} data={data} />
+          <DuxJsonForm model={model} schema={props.schema} data={props.data} />
         </div>
         <DuxWindowFooter>
           <NButton
             type="tertiary"
             loading={loading.value}
             onClick={() => {
-              onClose?.()
+              props.onClose?.()
             }}
           >
             取消

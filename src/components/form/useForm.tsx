@@ -1,7 +1,7 @@
 import { invalidateCache } from 'alova'
 import { useForm as useAForm } from 'alova/client'
 import { useMessage } from 'naive-ui'
-import { onMounted, type Ref, ref, watch } from 'vue'
+import { onMounted, type Ref, ref, toRef, watch } from 'vue'
 import type { FormInst } from 'naive-ui'
 import { alovaInstance } from '../../hooks/alova'
 import { useClient } from '../../hooks/useClient'
@@ -13,9 +13,10 @@ interface UseFormProps {
   formRef?: Ref<FormInst>
   invalidate?: string
   success?: (data: Record<string, any>) => void
+  model?: Ref<Record<string, any>>
 }
 
-export function useForm({ formRef, url, id, initData, invalidate, success }: UseFormProps) {
+export function useForm({ formRef, url, id, initData, invalidate, model, success }: UseFormProps) {
   const client = useClient()
   const message = useMessage()
 
@@ -46,8 +47,15 @@ export function useForm({ formRef, url, id, initData, invalidate, success }: Use
     },
     {
       initialForm: initData || {},
+
     },
   )
+
+  const formModel = toRef(model)
+
+  watch(form, (v) => {
+    formModel.value = v
+  }, { immediate: true, deep: true })
 
   watch(loading, (v) => {
     formLoading.value = v
@@ -115,7 +123,7 @@ export function useForm({ formRef, url, id, initData, invalidate, success }: Use
   })
 
   return {
-    model: form,
+    model: formModel,
     loading: formLoading,
     onSubmit,
     onReset,

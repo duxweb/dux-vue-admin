@@ -1,34 +1,31 @@
+import { useVModel } from '@vueuse/core'
 import { NButton, NProgress, NUpload, NUploadDragger } from 'naive-ui'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import type { UploadFileInfo, UploadInst } from 'naive-ui'
-import type { SortableEvent } from 'vue-draggable-plus'
+import type { PropType } from 'vue'
 import { useNaiveUpload } from './useUpload'
 import type { DuxUploadFile, UploadFileInfoExtend } from './useUpload'
-
-export interface DuxFileUploadProps {
-  accept?: string
-  value?: DuxUploadFile[] | DuxUploadFile
-  headers?: Record<string, any>
-  data?: Record<string, any>
-  multiple?: boolean
-  max?: number
-  url?: string
-}
 
 export const DuxFileUpload = defineComponent({
   name: 'DuxFileUpload',
   props: {
     accept: String,
-    value: [Array, Object],
+    defaultValue: [String, Array<string>] as PropType<DuxUploadFile[] | DuxUploadFile>,
+    value: [Array, Object] as PropType<DuxUploadFile[] | DuxUploadFile>,
     multiple: Boolean,
     max: Number,
     url: String,
-    headers: Object,
-    data: Object,
+    headers: Object as PropType<Record<string, any>>,
+    data: Object as PropType<Record<string, any>>,
   },
-  setup({ value, max, multiple, url, headers, accept, data }: DuxFileUploadProps, { emit }) {
+  setup(props, { emit }) {
     const uploadRef = ref<UploadInst | null>(null)
+
+    const model = useVModel(props, 'value', emit, {
+      passive: true,
+      defaultValue: props.defaultValue,
+    })
 
     const { customRequest, onAbort } = useNaiveUpload()
 
@@ -57,28 +54,37 @@ export const DuxFileUpload = defineComponent({
       })
     }
 
-    const files = ref<UploadFileInfo[]>(fileToFileList(value ? (Array.isArray(value) ? value : [value]) : []))
+    const files = ref<UploadFileInfo[]>([])
 
-    const onUpdate = () => {
-      emit('update:value', fileListToFile(multiple ? files.value : [files.value?.[0]]))
-    }
+    const once = ref(false)
+
+    watch(() => props.value, (val) => {
+      if (!val || once.value) {
+        return
+      }
+      files.value = [...files.value, ...fileToFileList(props.value ? (Array.isArray(props.value) ? props.value : [props.value]) : [])]
+      once.value = true
+    }, { immediate: true })
+
+    watch(files, (val) => {
+      model.value = fileListToFile(props.multiple ? val : [val?.[0]])
+    }, { immediate: true })
 
     return () => (
       <div class="w-full lg:max-w-400px">
         <NUpload
           ref={uploadRef}
           fileList={files.value}
-          accept={accept}
+          accept={props.accept}
           onUpdateFileList={(fileList) => {
             files.value = fileList
-            onUpdate()
           }}
-          headers={headers}
-          data={data}
-          action={url}
+          headers={props.headers}
+          data={props.data}
+          action={props.url}
           directoryDnd={true}
-          multiple={multiple}
-          max={multiple ? max : 1}
+          multiple={props.multiple}
+          max={props.multiple ? props.max : 1}
           showFileList={false}
           customRequest={customRequest}
 
@@ -103,10 +109,7 @@ export const DuxFileUpload = defineComponent({
 
           <VueDraggable
             modelValue={files.value}
-            onUpdate={(e: SortableEvent) => {
-              [files.value[e.oldIndex as number], files.value[e.newIndex as number]] = [files.value[e.newIndex as number], files.value[e.oldIndex as number]]
-              onUpdate()
-            }}
+            v-model={files.value}
             class="mt-4 flex flex-col gap-2"
           >
             {files.value?.map((item, index) => (
