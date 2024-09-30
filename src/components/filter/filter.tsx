@@ -39,7 +39,6 @@ export const DuxFilter = defineComponent({
       type: Object as PropType<Record<string, any>>,
       default: {},
     },
-    onUpdateValue: Function,
     onSubmit: Function,
   },
   setup(props, { emit, slots }) {

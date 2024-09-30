@@ -20,10 +20,10 @@ export interface TableAction {
 }
 
 export interface UseTableProps {
-  actions: TableAction[]
+  actions?: TableAction[]
   columns: TableColumn[]
-  columnActions: TableAction[]
-  form?: Ref<any>
+  columnActions?: TableAction[]
+  filter?: Record<string, any>
   excelColumns?: Column[]
   url?: string
   key?: string | number
@@ -42,7 +42,7 @@ export interface UseTableResult {
   toolsBtn: VNodeChild
   loading: Ref<boolean>
   tableParams: Ref<DataTableProps>
-  onFilter: () => void
+  onSend: () => void
 }
 
 export interface TableTabProps {

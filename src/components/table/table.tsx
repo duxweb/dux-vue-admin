@@ -2,6 +2,7 @@ import { NDataTable } from 'naive-ui'
 import { defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import type { DataTableInst } from 'naive-ui'
+import type { PropType } from 'vue'
 import { useTable } from './useTable'
 import type { TableAction, TableColumn } from './types'
 
@@ -13,30 +14,34 @@ export const DuxTable = defineComponent({
     columns: Array<TableColumn>,
     columnActions: Array<TableAction>,
     actions: Array<TableAction>,
+    form: Object as PropType<Record<string, any>>,
   },
   extends: NDataTable,
-  setup(props) {
+  setup(props, { expose }) {
     const route = useRoute()
     const tableRef = ref<DataTableInst>()
 
-    const { data, tableColumns, loading, tableParams, pagination } = useTable({
+    const table = useTable({
       key: props.tableKey,
       url: props.url,
       name: route.name,
       actions: props.actions || [],
       columns: props.columns || [],
       columnActions: props.columnActions || [],
+      filter: props.form,
     })
+
+    expose(table)
 
     return () => (
       <NDataTable
         {...props}
-        loading={loading.value}
+        loading={table.loading.value}
         ref={tableRef}
-        data={data.value}
-        columns={tableColumns.value}
-        pagination={pagination.value}
-        {...tableParams.value}
+        data={table.data.value}
+        columns={table.tableColumns.value}
+        pagination={table.pagination.value}
+        {...table.tableParams.value}
       />
     )
   },

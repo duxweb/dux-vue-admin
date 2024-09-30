@@ -173,30 +173,34 @@ export function listRenderDropdown({ actions }: RenderActionProps): VNodeChild {
   const dialog = useDialog()
   const drawer = useDrawer()
   return (
-    <NDropdown
-      trigger="click"
-      options={actions?.map((item, index) => {
-        return {
-          label: item.label,
-          key: index,
-          icon: item?.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined,
-        }
-      })}
-      onSelect={(key) => {
-        if (!actions?.[key]) {
-          return
-        }
-        listHandleAction({
-          item: actions[key],
-          modal,
-          dialog,
-          drawer,
-        })
-      }}
-    >
-      {{
-        default: () => <NButton type="default" secondary renderIcon={() => <div class="i-tabler:grid-dots"></div>}></NButton>,
-      }}
-    </NDropdown>
+    actions && actions?.length > 0
+      ? (
+          <NDropdown
+            trigger="click"
+            options={actions?.map((item, index) => {
+              return {
+                label: item.label,
+                key: index,
+                icon: item?.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined,
+              }
+            })}
+            onSelect={(key) => {
+              if (!actions?.[key]) {
+                return
+              }
+              listHandleAction({
+                item: actions[key],
+                modal,
+                dialog,
+                drawer,
+              })
+            }}
+          >
+            {{
+              default: () => <NButton type="default" secondary renderIcon={() => <div class="i-tabler:grid-dots"></div>}></NButton>,
+            }}
+          </NDropdown>
+        )
+      : null
   )
 }

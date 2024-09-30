@@ -9,6 +9,7 @@ export const DuxExample = defineComponent({
   props: {
     title: String,
     code: String,
+    lang: String,
   },
   setup(props, { slots }) {
     const themeStore = useThemeStore()
@@ -18,7 +19,7 @@ export const DuxExample = defineComponent({
 
     watch([darkMode, () => props.code], () => {
       codeToHtml(props.code || '', {
-        lang: 'vue-html',
+        lang: props.lang || 'vue-html',
         themes: {
           light: 'one-light',
           dark: 'dracula',

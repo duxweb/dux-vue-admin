@@ -56,7 +56,21 @@ export default [
     name: 'component.baseTable',
     path: 'component/baseTable',
     parent: 'component.table',
-    component: () => import('../../pages/component/total/info.vue'),
+    component: () => import('../../pages/component/table/baseTable.vue'),
+  },
+  {
+    label: '异步表格',
+    name: 'component.dataTable',
+    path: 'component/dataTable',
+    parent: 'component.table',
+    component: () => import('../../pages/component/table/dataTable.vue'),
+  },
+  {
+    label: 'hook 表格',
+    name: 'component.useTable',
+    path: 'component/useTable',
+    parent: 'component.table',
+    component: () => import('../../pages/component/table/useTable.vue'),
   },
 
 ]

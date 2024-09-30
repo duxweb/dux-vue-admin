@@ -1,10 +1,10 @@
 import { useWindowSize } from '@vueuse/core'
 import { NCard, NDataTable } from 'naive-ui'
-import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue'
+import { defineComponent, onMounted, onUnmounted, ref, toRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import type { Column } from 'exceljs'
 import type { DataTableInst } from 'naive-ui'
-import type { PropType, Ref } from 'vue'
+import type { PropType } from 'vue'
 import { DuxFilter } from '../filter'
 import { DuxPageFull } from '../layout'
 import { useTable } from './useTable'
@@ -37,22 +37,22 @@ export const DuxPageTable = defineComponent({
       type: Boolean,
       default: true,
     },
-    form: Object as PropType<Ref<Record<string, any>>>,
+    form: Object as PropType<Record<string, any>>,
   },
   setup(props, { slots }) {
     const { width } = useWindowSize()
     const route = useRoute()
     const tableRef = ref<DataTableInst>()
-    const form = props.form || ref<Record<string, any>>({})
+    const form = toRef<Record<string, any>>(props.form || {})
 
-    const { data, tableColumns, toolsColumns, toolsBtn, onFilter, loading, tableParams, pagination } = useTable({
+    const { data, tableColumns, toolsColumns, toolsBtn, onSend, loading, tableParams, pagination } = useTable({
       key: props.tableKey,
       url: props.url,
       name: route.name,
       actions: props.actions || [],
       columns: props.columns || [],
       columnActions: props.columnActions || [],
-      form,
+      filter: form?.value,
       excelColumns: props.excelColumns,
       export: props.export,
       import: props.import,
@@ -109,7 +109,7 @@ export const DuxPageTable = defineComponent({
               titleLang={props.titleLang}
               v-model:value={form.value}
               onSubmit={() => {
-                onFilter()
+                onSend()
               }}
             >
               {{

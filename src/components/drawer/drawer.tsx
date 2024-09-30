@@ -10,7 +10,7 @@ export default defineComponent({
     title: String,
     width: Number,
     component: {
-      type: Object as PropType<AsyncComponentLoader<any>>,
+      type: Function as PropType<AsyncComponentLoader<any>>,
       required: true,
     },
     componentProps: Object,

@@ -9,7 +9,7 @@ import { listRenderAction } from '../filter'
 import { columnMap, columnMedia, columnStatus, columnTags, columnText, columnType } from './column'
 import type { TableAction, TableColumn, UseTableProps, UseTableResult } from './types'
 
-export function useTable({ form, url, columns, columnActions, excelColumns, export: exportStatus, import: importStatus, key = 'id' }: UseTableProps): UseTableResult {
+export function useTable({ filter, url, columns, columnActions, excelColumns, export: exportStatus, import: importStatus, key = 'id' }: UseTableProps): UseTableResult {
   const client = useClient()
   const message = useMessage()
   const excelExport = useExportExcel()
@@ -50,7 +50,7 @@ export function useTable({ form, url, columns, columnActions, excelColumns, expo
           pageSize,
           ...sorter,
           ...filters,
-          ...form?.value,
+          ...filter,
         },
       })
     },
@@ -70,7 +70,7 @@ export function useTable({ form, url, columns, columnActions, excelColumns, expo
   })
 
   // 筛选提交
-  const onFilter = () => {
+  const onSend = () => {
     send()
   }
 
@@ -161,7 +161,7 @@ export function useTable({ form, url, columns, columnActions, excelColumns, expo
           if (key === 'export') {
             excelExport.onSend({
               url,
-              params: { ...filters.value, ...sorter.value },
+              params: { ...filters.value, ...filter?.value, ...sorter.value },
               columns: excelColumns || tableColumns.value.map((item: Record<string, any>) => {
                 return {
                   header: item.title,
@@ -182,7 +182,10 @@ export function useTable({ form, url, columns, columnActions, excelColumns, expo
               excelImport.onSend({
                 blob: fileSelect,
                 url: '/import',
-                params: form?.value,
+                params: {
+                  ...filter?.value,
+                  ...filters.value,
+                },
                 columns: excelColumns || tableColumns.value.map((item: Record<string, any>) => {
                   return {
                     header: item.title,
@@ -261,7 +264,7 @@ export function useTable({ form, url, columns, columnActions, excelColumns, expo
     tableColumns: resultColumns,
     toolsColumns,
     toolsBtn,
-    onFilter,
+    onSend,
     loading,
     data: tableData,
     tableParams,
