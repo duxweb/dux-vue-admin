@@ -423,6 +423,7 @@ const userData = [
         </dux-stats-store>
 
         <dux-stats-user nickname="张三" desc="湖南长沙" role="运营部经理" />
+
         <dux-stats-account title="店铺余额" desc="元" :value="10000" :options="[{ label: '余额提现', type: 'primary' }, { label: '店铺认证', type: 'tertiary' }]" />
 
         <dux-stats-card title="店铺公告">
@@ -482,8 +483,9 @@ const userData = [
             </DuxMedia>
           </dux-list>
         </dux-stats-card>
-
-        <dux-stats-bankcard title="提现银行卡" :info="{ type: '储蓄卡', title: '中国工商银行', name: '官方自营旗舰店', no: '**** **** **** 1234' }" />
+        <dux-stats-card title="提现银行卡">
+          <dux-stats-bankcard :info="{ type: '储蓄卡', title: '中国工商银行', name: '官方自营旗舰店', no: '**** **** **** 1234' }" />
+        </dux-stats-card>
       </div>
     </div>
   </dux-page>

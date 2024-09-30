@@ -23,7 +23,7 @@ export const DuxPageStatus = defineComponent({
             </div>
           </div>
           <div class="flex justify-center items-center gap-4">
-            <slot name="action" />
+            {slots.action?.()}
           </div>
         </div>
       </NCard>

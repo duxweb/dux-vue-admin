@@ -10,7 +10,7 @@ export const DuxPageEmpty = defineComponent({
   setup(props) {
     return () => (
       <DuxPageStatus title={props.title || '没有内容'} desc={props.desc || '暂时没有更多内容，可以尝试刷新'}>
-        <dux-draw-empty />
+        <dux-draw-empty-form />
       </DuxPageStatus>
     )
   },

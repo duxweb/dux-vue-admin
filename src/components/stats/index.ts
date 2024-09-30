@@ -1,4 +1,5 @@
 export * from './statsAccount'
+export * from './statsAction'
 export * from './statsBankcard'
 export * from './statsCard'
 export * from './statsChartArea'

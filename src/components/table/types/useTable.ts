@@ -23,7 +23,7 @@ export interface UseTableProps {
   actions: TableAction[]
   columns: TableColumn[]
   columnActions: TableAction[]
-  form: Ref<any>
+  form?: Ref<any>
   excelColumns?: Column[]
   url?: string
   key?: string | number
@@ -64,6 +64,7 @@ export type TableActionAdaptor<T extends keyof TableActionAttrMap> = TableAction
 interface TableColumnExtend {
   renderType: 'text' | 'type' | 'tags' | 'status' | 'media' | 'map'
   renderProps?: TableActionAdaptor<this['renderType']>
+  render?: TableColumnRender
   show?: boolean
   key?: any
 }

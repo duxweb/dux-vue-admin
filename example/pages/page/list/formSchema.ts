@@ -41,7 +41,7 @@ const schema: JsonFormItemSchema[] = [
   {
     type: 'select-async',
     label: '异步选择器',
-    name: 'id',
+    name: 'selectAsync',
     attr: {
       url: '/mall',
       valueField: 'id',
@@ -67,10 +67,10 @@ const schema: JsonFormItemSchema[] = [
   {
     type: 'image-upload',
     label: '图片上传',
-    name: 'image',
+    name: 'images',
     attr: {
       url: '/upload',
-      multiple: false,
+      multiple: true,
     },
     itemAttr: {
       required: true,

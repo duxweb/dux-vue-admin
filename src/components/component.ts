@@ -1,23 +1,24 @@
 import type { App } from 'vue'
+import { DuxCardHeader } from './card'
 import { DuxCascaderAsync } from './cascader'
 import { DuxCodeEditor } from './code'
 import DuxLogo from './common/logo.vue'
-import { DrawApps, DuxDrawEmpty, DuxDrawError } from './draw'
+import { DrawApps, DuxDrawAuth, DuxDrawEmpty, DuxDrawEmptyForm, DuxDrawError } from './draw'
 import { DuxAiEditor } from './editor/editor'
 import { DuxExample } from './example'
 import { DuxFilter } from './filter'
 import { DuxDrawerForm, DuxFormEditor, DuxJsonForm, DuxModalForm, DuxPageForm, DuxStepForm } from './form'
 import { DuxIconPicker } from './icon'
-import { DuxException, DuxGrid, DuxPage } from './layout'
+import { DuxException, DuxGrid, DuxPage, DuxPageFull } from './layout'
 import { DuxCardList, DuxList } from './list'
 import { DuxRadio } from './radio'
 import { DuxRegion } from './region'
 import { DuxSelectAsync } from './select'
-import { DuxStatsAccount, DuxStatsBankcard, DuxStatsCard, DuxStatsChartArea, DuxStatsChartGrid, DuxStatsChartMap, DuxStatsChartRadar, DuxStatsConnect, DuxStatsHello, DuxStatsHelloBig, DuxStatsQuick, DuxStatsQuickItem, DuxStatsStore, DuxStatsStoreItem, DuxStatsTodo, DuxStatsTodoItem, DuxStatsTotalCard, DuxStatsTotalCardItem, DuxStatsTotalMulti, DuxStatsTotalMultiItem, DuxStatsTotalRate, DuxStatsTotalRateItem, DuxStatsTotalSimple, DuxStatsTotalSimpleItem, DuxStatsTotalTab, DuxStatsTotalTabItem, DuxStatsUser } from './stats'
-import { DuxBlockEmpty, DuxPageStatus } from './status'
+import { DuxStatsAccount, DuxStatsAction, DuxStatsBankcard, DuxStatsCard, DuxStatsChartArea, DuxStatsChartGrid, DuxStatsChartMap, DuxStatsChartRadar, DuxStatsConnect, DuxStatsHello, DuxStatsHelloBig, DuxStatsQuick, DuxStatsQuickItem, DuxStatsStore, DuxStatsStoreItem, DuxStatsTodo, DuxStatsTodoItem, DuxStatsTotalCard, DuxStatsTotalCardItem, DuxStatsTotalMulti, DuxStatsTotalMultiItem, DuxStatsTotalRate, DuxStatsTotalRateItem, DuxStatsTotalSimple, DuxStatsTotalSimpleItem, DuxStatsTotalTab, DuxStatsTotalTabItem, DuxStatsUser } from './stats'
+import { DuxBlockEmpty, DuxPage403, DuxPage404, DuxPage500, DuxPageStatus } from './status'
 import { DuxPageEmpty } from './status/pageEmpty'
 import { DuxStep } from './step/step'
-import { DuxPageTable } from './table'
+import { DuxBaseTable, DuxPageTable, DuxTable } from './table'
 import { DuxFileUpload, DuxImageUpload } from './upload'
 import { DuxCarousel, DuxMedia } from './widget'
 import { DuxWindowFooter, DuxWindowHeader } from './window'
@@ -28,8 +29,10 @@ export default {
     app.component('DuxDrawApps', DrawApps)
     app.component('DuxDrawError', DuxDrawError)
     app.component('DuxDrawEmpty', DuxDrawEmpty)
+    app.component('DuxDrawAuth', DuxDrawAuth)
     app.component('DuxException', DuxException)
     app.component('DuxPage', DuxPage)
+    app.component('DuxPageFull', DuxPageFull)
     app.component('DuxPageTable', DuxPageTable)
     app.component('DuxPageForm', DuxPageForm)
     app.component('DuxJsonForm', DuxJsonForm)
@@ -86,5 +89,13 @@ export default {
     app.component('DuxStepForm', DuxStepForm)
     app.component('DuxStep', DuxStep)
     app.component('DuxExample', DuxExample)
+    app.component('DuxPage403', DuxPage403)
+    app.component('DuxPage404', DuxPage404)
+    app.component('DuxPage500', DuxPage500)
+    app.component('DuxDrawEmptyForm', DuxDrawEmptyForm)
+    app.component('DuxStatsAction', DuxStatsAction)
+    app.component('DuxCardHeader', DuxCardHeader)
+    app.component('DuxTable', DuxTable)
+    app.component('DuxBaseTable', DuxBaseTable)
   },
 }

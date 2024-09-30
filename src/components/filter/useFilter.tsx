@@ -25,10 +25,6 @@ export interface UseFilterProps {
 }
 
 export function useFilter({ actions }: UseFilterProps) {
-  const modal = useModal()
-  const dialog = useDialog()
-  const drawer = useDrawer()
-
   const filterRef = ref<HTMLDivElement>()
   const filterHeight = ref(0)
   const filterMore = ref(false)
@@ -68,9 +64,9 @@ export function useFilter({ actions }: UseFilterProps) {
     }, 100)
   })
 
-  const actionButton = listRenderAction({ actions, modal, drawer, dialog })
+  const actionButton = listRenderAction({ actions })
 
-  const actionDropdown = listRenderDropdown({ actions, modal, drawer, dialog })
+  const actionDropdown = listRenderDropdown({ actions })
 
   return {
     actionButton,
@@ -131,13 +127,14 @@ export interface RenderActionProps {
   actions?: FilterAction[]
   rowData?: object
   rowIndex?: number
-  modal?: UseModalResult
-  dialog?: UseDialogResult
-  drawer?: UseDrawerResult
 }
 
 // 渲染操作按钮
-export function listRenderAction({ key, text, rowData, rowIndex, actions, modal, dialog, drawer }: RenderActionProps): VNodeChild {
+export function listRenderAction({ key, text, rowData, rowIndex, actions }: RenderActionProps): VNodeChild {
+  const modal = useModal()
+  const dialog = useDialog()
+  const drawer = useDrawer()
+
   return (
     <>
       {actions?.map((item, index) => {
@@ -171,7 +168,10 @@ export function listRenderAction({ key, text, rowData, rowIndex, actions, modal,
   )
 }
 
-export function listRenderDropdown({ actions, modal, dialog, drawer }: RenderActionProps): VNodeChild {
+export function listRenderDropdown({ actions }: RenderActionProps): VNodeChild {
+  const modal = useModal()
+  const dialog = useDialog()
+  const drawer = useDrawer()
   return (
     <NDropdown
       trigger="click"

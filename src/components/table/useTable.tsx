@@ -2,22 +2,16 @@ import { usePagination } from 'alova/client'
 import { NButton, NCheckbox, NDropdown, NPopover, NTooltip, useMessage } from 'naive-ui'
 import { computed, reactive, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
-import type { DataTableFilterState, DataTableSortState } from 'naive-ui'
+import type { DataTableColumn, DataTableFilterState, DataTableSortState } from 'naive-ui'
 import { useClient } from '../../hooks/useClient'
-import { useDialog } from '../dialog'
-import { useDrawer } from '../drawer'
 import { useExportExcel, useImportExcel } from '../excel'
 import { listRenderAction } from '../filter'
-import { useModal } from '../modal'
 import { columnMap, columnMedia, columnStatus, columnTags, columnText, columnType } from './column'
-import type { TableColumn, UseTableProps, UseTableResult } from './types'
+import type { TableAction, TableColumn, UseTableProps, UseTableResult } from './types'
 
 export function useTable({ form, url, columns, columnActions, excelColumns, export: exportStatus, import: importStatus, key = 'id' }: UseTableProps): UseTableResult {
   const client = useClient()
   const message = useMessage()
-  const modal = useModal()
-  const dialog = useDialog()
-  const drawer = useDrawer()
   const excelExport = useExportExcel()
   const excelImport = useImportExcel()
 
@@ -31,73 +25,7 @@ export function useTable({ form, url, columns, columnActions, excelColumns, expo
 
   // 处理自定义列配置
   const resultColumns = computed(() => {
-    const restColumns = tableColumns.value?.filter((item) => {
-      return item.show
-    })?.map((item) => {
-      const { renderType, renderProps, ...itemProps } = item
-
-      // 增加通用 key 配置
-      const params: Record<string, any> = { key: item?.key, ...renderProps }
-
-      // 处理渲染类型
-      if (item.renderType === 'text') {
-        return {
-          ...itemProps,
-          render: columnText(params),
-        }
-      }
-      if (item.renderType === 'media') {
-        return {
-          ...itemProps,
-          render: columnMedia(params),
-        }
-      }
-      if (item.renderType === 'status') {
-        return {
-          ...itemProps,
-          render: columnStatus(params),
-        }
-      }
-      if (item.renderType === 'tags') {
-        return {
-          ...itemProps,
-          render: columnTags(params),
-        }
-      }
-      if (item.renderType === 'type') {
-        return {
-          ...itemProps,
-          render: columnType(params),
-        }
-      }
-      if (item.renderType === 'map') {
-        return {
-          ...itemProps,
-          render: columnMap(params),
-        }
-      }
-      return item
-    })
-
-    // 行操作渲染
-    if (columnActions && columnActions?.length > 0) {
-      const columnWidth = columnActions.reduce((accumulator, currentValue) => {
-        return accumulator + currentValue.label?.length * 22
-      }, 0)
-
-      restColumns.push({
-        title: '操作',
-        fixed: 'right',
-        align: 'center',
-        width: columnWidth,
-        render: (rowData, rowIndex) => {
-          return <div class="flex gap-2 justify-center">{listRenderAction({ key, rowData, rowIndex, text: true, actions: columnActions, modal, dialog, drawer })}</div>
-        },
-
-      } as any)
-    }
-
-    return restColumns
+    return convertTableColumns(key, tableColumns.value, columnActions)
   })
 
   // 表格数据
@@ -122,7 +50,7 @@ export function useTable({ form, url, columns, columnActions, excelColumns, expo
           pageSize,
           ...sorter,
           ...filters,
-          ...form.value,
+          ...form?.value,
         },
       })
     },
@@ -254,7 +182,7 @@ export function useTable({ form, url, columns, columnActions, excelColumns, expo
               excelImport.onSend({
                 blob: fileSelect,
                 url: '/import',
-                params: form.value,
+                params: form?.value,
                 columns: excelColumns || tableColumns.value.map((item: Record<string, any>) => {
                   return {
                     header: item.title,
@@ -339,4 +267,80 @@ export function useTable({ form, url, columns, columnActions, excelColumns, expo
     tableParams,
     pagination,
   }
+}
+
+export function convertTableColumns(key: string | number, columns?: TableColumn[], actions?: TableAction[]): DataTableColumn[] {
+  const restColumns = columns?.filter((item) => {
+    return item.show === undefined || item.show === true
+  })?.map((item) => {
+    const { renderType, renderProps, ...itemProps } = item
+
+    // 增加通用 key 配置
+    const params: Record<string, any> = { key: item?.key, ...renderProps }
+
+    // 处理渲染类型
+    if (item.renderType === 'text') {
+      return {
+        ...itemProps,
+        render: columnText(params),
+      }
+    }
+    if (item.renderType === 'media') {
+      return {
+        ...itemProps,
+        render: columnMedia(params),
+      }
+    }
+    if (item.renderType === 'status') {
+      return {
+        ...itemProps,
+        render: columnStatus(params),
+      }
+    }
+    if (item.renderType === 'tags') {
+      return {
+        ...itemProps,
+        render: columnTags(params),
+      }
+    }
+    if (item.renderType === 'type') {
+      return {
+        ...itemProps,
+        render: columnType(params),
+      }
+    }
+    if (item.renderType === 'map') {
+      return {
+        ...itemProps,
+        render: columnMap(params),
+      }
+    }
+    if (item.render && typeof item.render === 'function') {
+      return {
+        ...itemProps,
+        render: item.render,
+      }
+    }
+    return item
+  }) || []
+
+  // 行操作渲染
+  if (actions && actions?.length > 0) {
+    const columnWidth = actions.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue.label?.length * 22
+    }, 0)
+
+    restColumns.push({
+      title: '操作',
+      fixed: 'right',
+      align: 'center',
+      width: columnWidth,
+      render: (rowData, rowIndex) => {
+        return <div class="flex gap-2 justify-center">{listRenderAction({ key, rowData, rowIndex, text: true, actions })}</div>
+      },
+
+    } as any)
+  }
+
+  return restColumns
 }

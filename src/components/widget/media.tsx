@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { NImage, NImageGroup } from 'naive-ui'
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 
 export const DuxMedia = defineComponent({
   name: 'DuxMedia',
@@ -8,6 +8,7 @@ export const DuxMedia = defineComponent({
     title: String,
     image: [String, Array<string>],
     desc: [String, Array<string>],
+    extend: String,
     onClick: Function,
     imageWidth: {
       type: Number,
@@ -19,16 +20,20 @@ export const DuxMedia = defineComponent({
     },
   },
   setup(props, { slots }) {
-    const images = Array.isArray(props.image) ? props.image : props.image ? [props.image] : []
-    const desc = Array.isArray(props.desc) ? props.desc : props.desc ? [props.desc] : []
+    const images = computed(() => {
+      return Array.isArray(props.image) ? props.image : props.image ? [props.image] : []
+    })
+    const desc = computed(() => {
+      return Array.isArray(props.desc) ? props.desc : props.desc ? [props.desc] : []
+    })
 
     return () => (
       <div class="flex gap-2 items-center">
         {slots?.image && <div class="flex-none flex items-center gap-2">{slots?.image?.()}</div>}
-        {images?.length > 0 && (
+        {images?.value.length > 0 && (
           <div class="flex-none flex items-center gap-2">
             <NImageGroup>
-              { images.map((item, key) => (
+              { images.value.map((item, key) => (
                 <NImage key={key} src={item} class="rounded" objectFit="cover" width={props.imageWidth} height={props.imageHeight} />
               ))}
             </NImageGroup>
@@ -49,14 +54,15 @@ export const DuxMedia = defineComponent({
               </div>
             )}
           </div>
-          {(desc?.length > 0 || slots.desc) && (
+          {(desc?.value.length > 0 || slots.desc) && (
             <div class="text-sm text-gray-6 flex flex-col gap-1">
-              {desc?.map?.((item, key) => <div key={key} class="truncate">{item}</div>)}
+              {desc?.value.map?.((item, key) => <div key={key} class="truncate">{item}</div>)}
               {slots.desc?.() }
             </div>
           )}
         </div>
-        {slots?.extend && <div class="flex-none flex items-center gap-2">{slots?.extend?.()}</div>}
+        {props?.extend && <div class="flex-none flex items-center gap-2 text-gray-7">{props?.extend}</div>}
+        {slots?.extend && <div class="flex-none flex items-center gap-2 text-gray-7">{slots?.extend?.()}</div>}
       </div>
     )
   },
