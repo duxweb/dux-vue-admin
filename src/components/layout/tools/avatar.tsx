@@ -46,7 +46,7 @@ export const Avatar = defineComponent({
         onSelect={haddieSelect}
         options={options}
       >
-        <NAvatar circle src={info?.avatar} class="cursor-pointer">
+        <NAvatar circle src={info?.avatar} class="cursor-pointer bg-primary!">
           {info?.nickname?.charAt(0)}
         </NAvatar>
       </NDropdown>

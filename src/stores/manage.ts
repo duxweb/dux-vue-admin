@@ -28,8 +28,8 @@ export const useManageStore = defineStore('manage', () => {
     data.value[manage.value] = {
       raw: info,
       token: info.token,
-      id: info.userInfo?.id,
-      info: info.userInfo,
+      id: info.info?.id,
+      info: info.info,
       permission: info.permission,
     }
   }
