@@ -15,7 +15,6 @@ export const DuxSelectAsync = defineComponent({
     },
     imageField: {
       type: String,
-      default: 'image',
     },
     descField: {
       type: String,
@@ -82,10 +81,10 @@ export const DuxSelectAsync = defineComponent({
                     handleClose()
                   }}
                 >
-                  {renderTag(props.labelField, props.imageField, props.descField, option)}
+                  {renderTag(option, props.labelField, props?.imageField, props.descField)}
                 </NTag>
               )
-            : renderTag(props.labelField, props.imageField, props.descField, option)
+            : renderTag(option, props.labelField, props?.imageField, props.descField)
         }}
       >
         {{
@@ -96,7 +95,7 @@ export const DuxSelectAsync = defineComponent({
   },
 })
 
-function renderTag(labelField: string, imageField: string, descField: string, option: Record<string, any>) {
+function renderTag(option: Record<string, any>, labelField: string, imageField?: string, descField?: string) {
   return (imageField || descField)
     ? (
         <div class="flex gap-2 items-center py-2">

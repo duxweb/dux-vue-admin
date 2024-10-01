@@ -45,7 +45,7 @@ export const DuxPageTable = defineComponent({
     const tableRef = ref<DataTableInst>()
     const form = toRef<Record<string, any>>(props.form || {})
 
-    const { data, tableColumns, toolsColumns, toolsBtn, onSend, loading, tableParams, pagination } = useTable({
+    const { data, tableColumns, toolsColumns, toolsBtn, send, loading, tableParams, pagination } = useTable({
       key: props.tableKey,
       url: props.url,
       name: route.name,
@@ -109,7 +109,7 @@ export const DuxPageTable = defineComponent({
               titleLang={props.titleLang}
               v-model:value={form.value}
               onSubmit={() => {
-                onSend()
+                send()
               }}
             >
               {{

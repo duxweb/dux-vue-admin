@@ -1,5 +1,6 @@
 import { NCarousel } from 'naive-ui'
 import { defineComponent } from 'vue'
+import type { PropType } from 'vue'
 
 export interface DuxCarouselData {
   src: string
@@ -13,7 +14,7 @@ export const DuxCarousel = defineComponent({
       type: Number,
       default: 200,
     },
-    data: Array<DuxCarouselData>,
+    data: Array as PropType<Array<DuxCarouselData | string>>,
   },
   setup(props) {
     return () => (
@@ -26,8 +27,8 @@ export const DuxCarousel = defineComponent({
             key={key}
             class="w-full object-cover"
             style={{ height: `${props.height}px` }}
-            src={item.src}
-            onClick={item.onClick}
+            src={typeof item === 'string' ? item : item.src}
+            onClick={typeof item === 'string' ? undefined : item?.onClick}
           />
         ))}
       </NCarousel>

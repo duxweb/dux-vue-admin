@@ -1,5 +1,6 @@
 import chart from './route/chart'
 import component from './route/component'
+import fun from './route/fun'
 import home from './route/home'
 import page from './route/page'
 
@@ -7,6 +8,7 @@ export const route = [
   ...home,
   ...page,
   ...component,
+  ...fun,
   ...chart,
 
   {

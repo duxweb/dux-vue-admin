@@ -3,7 +3,7 @@ import { cascader, cascaderAsync, checkbox, checkboxGroup, color, date, dynamicI
 import { autoComplete } from './adaptor/autoComplete'
 import { editor } from './adaptor/editor'
 import type { DuxCascaderAsyncProps } from '../cascader'
-import type { DuxAiEditorProps } from '../editor/editor'
+import type { DuxAiEditorProps } from '../editor/aiEditor'
 import type { DuxRegionProps } from '../region'
 import type { JSONSchema } from '../render/jsonRender'
 import type { DuxSelectAsyncProps } from '../select'

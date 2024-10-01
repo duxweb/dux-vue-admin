@@ -45,10 +45,10 @@ export const DuxRegion = defineComponent({
         `lg:grid-cols-${levelNum}`,
       ])}
       >
-        <NSelect placeholder="请选择省份" options={provinces.value} value={model.value?.[0]} labelField={props.labelField} valueField={props.valueField} onUpdateValue={onProvinceChange}></NSelect>
-        {levelNum > 1 && <NSelect placeholder="请选择城市" options={citys.value} value={model.value?.[1]} labelField={props.labelField} valueField={props.valueField} onUpdateValue={onCityChange}></NSelect>}
-        {levelNum > 2 && <NSelect placeholder="请选择地区" options={districts.value} value={model.value?.[2]} labelField={props.labelField} valueField={props.valueField} onUpdateValue={onDistrictChange}></NSelect>}
-        {levelNum > 3 && <NSelect placeholder="请选择街道" options={streets.value} value={model.value?.[3]} labelField={props.labelField} valueField={props.valueField} onUpdateValue={onStreetChange}></NSelect>}
+        <NSelect placeholder="请选择省份" options={provinces.value} value={model.value?.[0] || null} labelField={props.labelField} valueField={props.valueField} onUpdateValue={onProvinceChange}></NSelect>
+        {levelNum > 1 && <NSelect placeholder="请选择城市" options={citys.value} value={model.value?.[1] || null} labelField={props.labelField} valueField={props.valueField} onUpdateValue={onCityChange}></NSelect>}
+        {levelNum > 2 && <NSelect placeholder="请选择地区" options={districts.value} value={model.value?.[2] || null} labelField={props.labelField} valueField={props.valueField} onUpdateValue={onDistrictChange}></NSelect>}
+        {levelNum > 3 && <NSelect placeholder="请选择街道" options={streets.value} value={model.value?.[3] || null} labelField={props.labelField} valueField={props.valueField} onUpdateValue={onStreetChange}></NSelect>}
       </div>
     )
   },

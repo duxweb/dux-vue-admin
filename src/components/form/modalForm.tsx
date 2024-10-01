@@ -19,17 +19,12 @@ export const DuxModalForm = defineComponent({
     invalidate: String,
   },
   setup(props) {
-    const { loading, model, onSubmit, onReset } = useForm({
+    const { loading, model, onSubmit } = useForm({
       url: props.url,
       id: props.id,
       invalidate: props.invalidate,
       success: (res) => {
-        if (!props.id) {
-          onReset()
-        }
-        else {
-          props.onConfirm?.(res)
-        }
+        props.onConfirm?.(res)
       },
     })
 

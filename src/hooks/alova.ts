@@ -6,8 +6,4 @@ export const alovaInstance = createAlova({
   statesHook: VueHook,
   requestAdapter: axiosRequestAdapter(),
   shareRequest: false,
-  // 请求拦截器
-  beforeRequest() {
-  },
-
 })

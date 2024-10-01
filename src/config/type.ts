@@ -34,6 +34,7 @@ export interface ConfigApiConfig {
   uploadManage?: string
   router?: string
   notice?: string
+  aiChat?: string
 }
 
 export interface Config {

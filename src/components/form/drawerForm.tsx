@@ -1,6 +1,7 @@
-import { NButton, NForm, NScrollbar } from 'naive-ui'
+import { NButton, NForm } from 'naive-ui'
 import { defineComponent } from 'vue'
 import type { PropType } from 'vue'
+import { DuxDrawerPage } from '../drawer'
 import { DuxJsonForm } from './jsonForm'
 import { useForm } from './useForm'
 import type { JsonFormItemSchema } from './handler'
@@ -33,35 +34,37 @@ export const DuxDrawerForm = defineComponent({
     })
 
     return () => (
-      <div class="flex-1 h-1 flex flex-col">
-        <div class="flex-1 h-1">
-          <NScrollbar>
+      <DuxDrawerPage>
+        {{
+          default: () => (
             <NForm model={model} labelPlacement="top" class="p-6">
               <DuxJsonForm model={model} schema={schema} data={data} />
             </NForm>
-          </NScrollbar>
-        </div>
-        <div class="flex-none border-t border-gray-4 p-4 flex justify-end gap-2">
-          <NButton
-            tertiary
-            onClick={() => {
-              onClose?.()
-            }}
-            loading={loading.value}
-          >
-            取消
-          </NButton>
-          <NButton
-            type="primary"
-            onClick={() => {
-              onSubmit()
-            }}
-            loading={loading.value}
-          >
-            确定
-          </NButton>
-        </div>
-      </div>
+          ),
+          action: () => (
+            <>
+              <NButton
+                tertiary
+                onClick={() => {
+                  onClose?.()
+                }}
+                loading={loading.value}
+              >
+                取消
+              </NButton>
+              <NButton
+                type="primary"
+                onClick={() => {
+                  onSubmit()
+                }}
+                loading={loading.value}
+              >
+                确定
+              </NButton>
+            </>
+          ),
+        }}
+      </DuxDrawerPage>
 
     )
   },

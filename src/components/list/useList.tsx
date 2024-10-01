@@ -2,8 +2,7 @@ import { usePagination } from 'alova/client'
 import { NButton, NDropdown } from 'naive-ui'
 import type { Column } from 'exceljs'
 import type { Ref } from 'vue'
-import { useClient } from '../../hooks'
-import { useExportExcel, useImportExcel } from '../excel'
+import { useClient, useExportExcel, useImportExcel } from '../../hooks'
 
 interface UseListProps {
   url?: string
@@ -102,26 +101,17 @@ export function useList({ url, form, cacheTime = Infinity, excelColumns, export:
             send()
           }
           if (key === 'export') {
-            excelExport.onSend({
+            excelExport.send({
               url,
               params: { ...form?.value },
               columns: excelColumns,
             })
           }
           if (key === 'import') {
-            const input = document.createElement('input')
-            input.type = 'file'
-            input.style.display = 'none'
-            input.click()
-
-            input.addEventListener('change', (event: any) => {
-              const fileSelect = event?.target?.files?.[0] as Blob
-              excelImport.onSend({
-                blob: fileSelect,
-                url: '/import',
-                params: form?.value,
-                columns: excelColumns,
-              })
+            excelImport.send({
+              url: '/import',
+              params: form?.value,
+              columns: excelColumns,
             })
           }
         }}

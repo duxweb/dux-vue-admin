@@ -1,5 +1,5 @@
+import { useRouter } from 'vue-router'
 import type { AlovaGenerics, AlovaMethodCreateConfig, Method, RequestBody } from 'alova'
-import { router } from '../core/router'
 import { useManageStore } from '../stores'
 import { alovaInstance } from './alova'
 import { useResource } from './useResource'
@@ -19,22 +19,27 @@ export interface ClientRequestProps<T> {
   config?: Config<T>
 }
 
-export function useClient() {
+export interface useClientProps {
+  raw?: boolean
+}
+
+export function useClient(props?: useClientProps) {
   const { getUser, logout } = useManageStore()
   const res = useResource()
   const user = getUser()
+  const router = useRouter()
 
   // 响应拦截器
   alovaInstance.options.baseURL = res.config?.apiUrl
+
   alovaInstance.options.responded = {
     onSuccess: async (response) => {
       const json = response.data
-
-      if (json.code === 200) {
-        return json
+      if (response.status === 200) {
+        return props?.raw ? response : json
       }
       else {
-        return Promise.reject(json)
+        return Promise.reject(props?.raw ? response : json)
       }
     },
     onError(error) {
@@ -43,7 +48,7 @@ export function useClient() {
         router.push({ path: `/${res.manage}/login` })
         return
       }
-      return Promise.reject(error?.response?.data)
+      return Promise.reject(props?.raw ? error?.response?.data : error)
     },
   }
 
@@ -55,7 +60,6 @@ export function useClient() {
 
     switch (type) {
       case 'file':
-        // data['Content-Type'] = 'multipart/form-data'
         break
       case 'form':
         data['Content-Type'] = 'application/x-www-form-urlencoded'

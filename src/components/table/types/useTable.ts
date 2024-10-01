@@ -42,7 +42,7 @@ export interface UseTableResult {
   toolsBtn: VNodeChild
   loading: Ref<boolean>
   tableParams: Ref<DataTableProps>
-  onSend: () => void
+  send: () => void
 }
 
 export interface TableTabProps {

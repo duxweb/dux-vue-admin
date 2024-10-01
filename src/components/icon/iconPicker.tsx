@@ -61,7 +61,7 @@ const DuxIconPicker = defineComponent({
                 props.onConfirm?.(`i-tabler:${item}`)
               }}
             >
-              <div class="py-2 px-3 hover:bg-primary/10 border border-gray-1 hover:border-primary-4 rounded cursor-pointer transition-all">
+              <div class="py-2 px-3 hover:bg-primary/10 border border-transparent hover:border-primary-4 rounded cursor-pointer transition-all">
                 <div class={`i-tabler:${item} size-6`}></div>
               </div>
             </div>

@@ -26,6 +26,7 @@ export function useResource() {
     resUrl: path,
     routerUrl: config?.apiConfig?.router || '/route',
     noticeUrl: config?.apiConfig?.notice || '/notice',
+    aichatUrl: config?.apiConfig?.aiChat || '/aiChat',
     uploadUrl: config?.apiConfig?.upload || '/upload',
     uploadManageUrl: config?.apiConfig?.uploadManage || '/uploadManage',
     loginUrl: config?.apiConfig?.login || '/login',

@@ -3,8 +3,8 @@ import { NButton, NCheckbox, NDropdown, NPopover, NTooltip, useMessage } from 'n
 import { computed, reactive, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import type { DataTableColumn, DataTableFilterState, DataTableSortState } from 'naive-ui'
+import { useExportExcel, useImportExcel } from '../../hooks'
 import { useClient } from '../../hooks/useClient'
-import { useExportExcel, useImportExcel } from '../excel'
 import { listRenderAction } from '../filter'
 import { columnMap, columnMedia, columnStatus, columnTags, columnText, columnType } from './column'
 import type { TableAction, TableColumn, UseTableProps, UseTableResult } from './types'
@@ -159,7 +159,7 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
             send()
           }
           if (key === 'export') {
-            excelExport.onSend({
+            excelExport.send({
               url,
               params: { ...filters.value, ...filter?.value, ...sorter.value },
               columns: excelColumns || tableColumns.value.map((item: Record<string, any>) => {
@@ -172,27 +172,13 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
             })
           }
           if (key === 'import') {
-            const input = document.createElement('input')
-            input.type = 'file'
-            input.style.display = 'none'
-            input.click()
-
-            input.addEventListener('change', (event: any) => {
-              const fileSelect = event?.target?.files?.[0] as Blob
-              excelImport.onSend({
-                blob: fileSelect,
-                url: '/import',
-                params: {
-                  ...filter?.value,
-                  ...filters.value,
-                },
-                columns: excelColumns || tableColumns.value.map((item: Record<string, any>) => {
-                  return {
-                    header: item.title,
-                    key: item.key,
-                  }
-                }),
-              })
+            excelImport.send({
+              url: '/import',
+              params: {
+                ...filter?.value,
+                ...filters.value,
+              },
+              columns: excelColumns,
             })
           }
         }}
@@ -264,7 +250,7 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
     tableColumns: resultColumns,
     toolsColumns,
     toolsBtn,
-    onSend,
+    send: onSend,
     loading,
     data: tableData,
     tableParams,

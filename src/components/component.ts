@@ -4,13 +4,16 @@ import { DuxCascaderAsync } from './cascader'
 import { DuxCodeEditor } from './code'
 import DuxLogo from './common/logo.vue'
 import { DrawApps, DuxDrawAuth, DuxDrawEmpty, DuxDrawEmptyForm, DuxDrawError } from './draw'
-import { DuxAiEditor } from './editor/editor'
+import { DuxDrawerPage } from './drawer'
+import { DuxAiEditor } from './editor/aiEditor'
 import { DuxExample } from './example'
 import { DuxFilter } from './filter'
 import { DuxDrawerForm, DuxFormEditor, DuxJsonForm, DuxModalForm, DuxPageForm, DuxStepForm } from './form'
 import { DuxIconPicker } from './icon'
 import { DuxException, DuxGrid, DuxPage, DuxPageFull } from './layout'
 import { DuxCardList, DuxList } from './list'
+import { DuxModalPage } from './modal'
+import { DuxPdf } from './pdf'
 import { DuxRadio } from './radio'
 import { DuxRegion } from './region'
 import { DuxSelectAsync } from './select'
@@ -97,5 +100,8 @@ export default {
     app.component('DuxCardHeader', DuxCardHeader)
     app.component('DuxTable', DuxTable)
     app.component('DuxBaseTable', DuxBaseTable)
+    app.component('DuxDrawerPage', DuxDrawerPage)
+    app.component('DuxModalPage', DuxModalPage)
+    app.component('DuxPdf', DuxPdf)
   },
 }

@@ -1,4 +1,4 @@
-import { NImage, NImageGroup, NSpace } from 'naive-ui'
+import { NImage, NImageGroup } from 'naive-ui'
 import { h, render } from 'vue'
 
 export function useImagePreview() {
@@ -11,7 +11,7 @@ export function useImagePreview() {
     existDiv = div
   }
 
-  const show = (list: string[], previewIndex: number) => {
+  const show = (list: string[], previewIndex?: number) => {
     if (!list.length) {
       return
     }
@@ -20,12 +20,14 @@ export function useImagePreview() {
       return h(NImage, { width: 100, src })
     })
     if (imgList.length > 1) {
-      render(h(NImageGroup, {}, [h(NSpace, {}, imgList)]), existDiv)
+      render(h(NImageGroup, {}, {
+        default: () => imgList,
+      }), existDiv)
     }
     else {
       render(imgList[0], existDiv)
     }
-    existDiv?.querySelectorAll('.n-image img')[previewIndex]?.dispatchEvent(e)
+    existDiv?.querySelectorAll('.n-image img')[previewIndex || 0]?.dispatchEvent(e)
   }
 
   return {

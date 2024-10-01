@@ -1,17 +1,12 @@
 import { AiEditor } from 'aieditor'
 import { storeToRefs } from 'pinia'
 import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue'
+import type { PropType } from 'vue'
 import { useResource } from '../../hooks'
+import { useManageStore } from '../../stores'
 import { useThemeStore } from '../../stores/theme'
 import { useUpload } from '../upload'
 import 'aieditor/dist/style.css'
-
-export interface DuxAiEditorProps {
-  value?: string
-  defaultValue?: string
-  uploadUrl?: string
-  uploadHeaders?: Record<string, any>
-}
 
 export const DuxAiEditor = defineComponent({
   name: 'DuxAiEditor',
@@ -19,16 +14,19 @@ export const DuxAiEditor = defineComponent({
     value: String,
     defaultValue: String,
     uploadUrl: String,
-    uploadHeaders: Object,
+    uploadHeaders: Object as PropType<Record<string, any>>,
+    aiUrl: String,
   },
-  setup(props: DuxAiEditorProps, { emit }) {
+  setup(props, { emit }) {
     const divRef = ref()
     let aiEditor: AiEditor | null = null
 
     const themeStore = useThemeStore()
     const { darkMode } = storeToRefs(themeStore)
-    const { uploadUrl } = useResource()
+    const { uploadUrl, aichatUrl } = useResource()
     const { send } = useUpload()
+
+    const { getUser } = useManageStore()
 
     onMounted(() => {
       aiEditor = new AiEditor({
@@ -120,6 +118,34 @@ export const DuxAiEditor = defineComponent({
               })
             })
           },
+        },
+        ai: {
+          models: {
+            custom: {
+              url: props.aiUrl || aichatUrl,
+              headers: () => {
+                const user = getUser()
+                return {
+                  'Content-Type': 'application/json',
+                  'Authorization': user?.token,
+                }
+              },
+              wrapPayload: (message: string) => {
+                return JSON.stringify({ prompt: message })
+              },
+              parseMessage: (message: string) => {
+                const data = JSON.parse(message)
+                return {
+                  role: 'assistant',
+                  content: data.message,
+                  index: data.number,
+                  status: data.status,
+                }
+              },
+              protocol: 'sse',
+            },
+          },
+
         },
       })
     })
