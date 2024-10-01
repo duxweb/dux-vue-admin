@@ -19,4 +19,12 @@ export const route = [
     component: () => import('../pages/example/form.vue'),
   },
 
+  {
+    label: '关于',
+    name: 'about',
+    path: 'about',
+    icon: 'i-tabler:info-circle',
+    component: () => import('../pages/about.vue'),
+  },
+
 ]
