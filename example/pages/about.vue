@@ -2,8 +2,6 @@
 import { usePackage } from 'dux-vue-admin'
 
 const packages = usePackage()
-
-console.log('packages', packages)
 </script>
 
 <template>
