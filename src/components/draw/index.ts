@@ -1,4 +1,4 @@
-export * as DrawApps from './drawApps.vue'
+export * from './drawApps'
 export * from './drawAuth'
 export * from './drawEmpty'
 export * from './drawEmptyForm'

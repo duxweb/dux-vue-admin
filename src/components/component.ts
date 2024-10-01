@@ -3,7 +3,7 @@ import { DuxCardHeader } from './card'
 import { DuxCascaderAsync } from './cascader'
 import { DuxCodeEditor } from './code'
 import DuxLogo from './common/logo.vue'
-import { DrawApps, DuxDrawAuth, DuxDrawEmpty, DuxDrawEmptyForm, DuxDrawError } from './draw'
+import { DuxDrawApps, DuxDrawAuth, DuxDrawEmpty, DuxDrawEmptyForm, DuxDrawError } from './draw'
 import { DuxDrawerPage } from './drawer'
 import { DuxAiEditor } from './editor/aiEditor'
 import { DuxExample } from './example'
@@ -29,7 +29,7 @@ import { DuxWindowFooter, DuxWindowHeader } from './window'
 export default {
   install(app: App) {
     app.component('DuxLogo', DuxLogo)
-    app.component('DuxDrawApps', DrawApps)
+    app.component('DuxDrawApps', DuxDrawApps)
     app.component('DuxDrawError', DuxDrawError)
     app.component('DuxDrawEmpty', DuxDrawEmpty)
     app.component('DuxDrawAuth', DuxDrawAuth)
