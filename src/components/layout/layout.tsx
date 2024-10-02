@@ -1,4 +1,4 @@
-import { NBreadcrumb, NBreadcrumbItem, NButton, NDrawer, NDrawerContent, NIcon, NInput, NLayout, NLayoutHeader, NLayoutSider, NMenu } from 'naive-ui'
+import { NBreadcrumb, NBreadcrumbItem, NButton, NDrawer, NDrawerContent, NIcon, NInput, NLayout, NLayoutHeader, NLayoutSider, NMenu, NScrollbar } from 'naive-ui'
 import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -36,22 +36,25 @@ export const DuxLayout = defineComponent({
       >
         {!isMobile.value && (
           <NLayoutSider collapsed={collapsed.value} showTrigger={showCollapsed.value} collapseMode="width" width={240} collapsedWidth={64} bordered nativeScrollbar={false} onUpdateCollapsed={(v: boolean) => sideCollapsed.value = v}>
-            <div class="flex h-screen">
-              <div class="flex flex-col flex-none w-64px gap-4">
-                <div class="flex-none px-3">
+            <div class="flex  h-screen">
+
+              <div class="flex h-full flex-col flex-none w-64px">
+                <div class="flex-none px-3 mb-2">
                   <div class="py-6 border-gray-2 border-b">
                     <dux-logo />
                   </div>
                 </div>
-                <div class="flex-1">
-                  <NMenu
-                    collapsed={appCollapsed.value}
-                    collapsedWidth={64}
-                    collapsedIconSize={22}
-                    options={appMenu.value}
-                    value={appKey.value as string}
-                    onUpdateValue={(key: string) => appKey.value = key}
-                  />
+                <div class="flex-1 h-1 ">
+                  <NScrollbar>
+                    <NMenu
+                      collapsed={appCollapsed.value}
+                      collapsedWidth={64}
+                      collapsedIconSize={22}
+                      options={appMenu.value}
+                      value={appKey.value as string}
+                      onUpdateValue={(key: string) => appKey.value = key}
+                    />
+                  </NScrollbar>
                 </div>
                 <div class="flex-none flex flex-col p-2 gap-2">
                   <NButton
@@ -65,7 +68,8 @@ export const DuxLayout = defineComponent({
                   </NButton>
                 </div>
               </div>
-              <div class="flex-1 border-gray-2 border-l">
+
+              <div class="flex-1 flex flex-col border-gray-2 border-l h-full">
                 <div class="flex flex-row gap-2 items-center px-3 py-4">
                   <NInput
                     round
@@ -85,13 +89,17 @@ export const DuxLayout = defineComponent({
                     }}
                   </NInput>
                 </div>
-                <NMenu
-                  rootIndent={20}
-                  indent={15}
-                  options={subMenu.value}
-                  value={subKey.value as string}
-                  onUpdateValue={(key: string) => subKey.value = key}
-                />
+                <div class="flex-1 h-1">
+                  <NScrollbar>
+                    <NMenu
+                      rootIndent={20}
+                      indent={15}
+                      options={subMenu.value}
+                      value={subKey.value as string}
+                      onUpdateValue={(key: string) => subKey.value = key}
+                    />
+                  </NScrollbar>
+                </div>
               </div>
             </div>
           </NLayoutSider>
