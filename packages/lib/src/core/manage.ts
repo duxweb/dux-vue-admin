@@ -1,9 +1,9 @@
-import { useMessage } from 'naive-ui'
 import type { RouteRecordRaw } from 'vue-router'
+import type { DuxRoute } from '../stores'
+import { useMessage } from 'naive-ui'
 import { useClient, useResource } from '../hooks'
 import { useRouteStore } from '../stores'
 import { router } from './router'
-import type { DuxRoute } from '../stores'
 
 export function createManage(manage: string, routers: DuxRoute[]) {
   const routeStore = useRouteStore()

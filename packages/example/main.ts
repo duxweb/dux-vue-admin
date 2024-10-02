@@ -1,9 +1,8 @@
+import type { Config } from 'dux-vue-admin'
 import { createDux } from 'dux-vue-admin'
 import { createApp } from 'vue'
-import type { Config } from 'dux-vue-admin'
 import App from './App.vue'
 import { route } from './config/route'
-import '../src/style.css'
 
 const app = createApp(App)
 

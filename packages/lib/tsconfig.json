@@ -32,9 +32,7 @@
   },
   "include": [
     "src/**/*.*",
-    "src/**/*.vue",
-    "example/**/*.*",
-    "example/**/*.vue"
-  ],
+    "src/**/*.vue"
+, "eslint.config.js", "typings.d.ts"  ],
   "exclude": ["node_modules", "dist"]
 }

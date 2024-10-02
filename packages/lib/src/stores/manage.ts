@@ -1,6 +1,6 @@
+import type { Ref } from 'vue'
 import { defineStore } from 'pinia'
 import { inject, ref } from 'vue'
-import type { Ref } from 'vue'
 
 interface UserState {
   raw?: Record<string, any>

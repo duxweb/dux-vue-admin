@@ -8,17 +8,12 @@ export default defineConfig({
     vue(),
     VueJsx(),
   ],
-  resolve: {
-    alias: {
-      'dux-vue-admin': resolve('src'),
-    },
-  },
   build: {
     rollupOptions: {
       input: {
         index: resolve(__dirname, 'index.html'),
       },
     },
-    outDir: resolve(__dirname, 'dist-example'),
+    outDir: resolve(__dirname, '../../dist/lib'),
   },
 })
