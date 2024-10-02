@@ -9,6 +9,10 @@
   "scripts": {
     "dev:example": "bun --filter dux-vue-example dev",
     "build:example": "bun --filter dux-vue-example build",
-    "build:lib": "bun --filter dux-vue-admin build"
+    "build:lib": "bun --filter dux-vue-admin build",
+    "local:lib": "bun --filter dux-vue-admin local",
+    "docs:dev": "bun --filter dux-vue-docs dev",
+    "docs:build": "bun --filter dux-vue-docs build",
+    "docs:preview": "bun --filter dux-vue-docs preview"
   }
 }

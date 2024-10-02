@@ -5,11 +5,6 @@
   "author": "DuxWeb",
   "license": "Apache-2.0",
   "main": "src/index.ts",
-  "files": [
-    "README.md",
-    "dist",
-    "package.json"
-  ],
   "scripts": {
     "clean": "rimraf dist",
     "copy-files": "copyfiles -u 1 src/**/*.{css,scss,js,png,jpg,svg,jsx,d.ts,json} dist/",

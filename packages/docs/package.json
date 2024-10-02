@@ -1,0 +1,13 @@
+{
+  "name": "dux-vue-docs",
+  "author": "DuxWeb",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "vitepress": "^1.3.4"
+  }
+}
