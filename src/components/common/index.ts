@@ -1,1 +1,1 @@
-export * as DuxLogo from './logo.vue'
+export * from './logo'

@@ -4,6 +4,7 @@ import { storeToRefs } from 'pinia'
 import { computed, h, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import type { MenuOption } from 'naive-ui'
+import { useThemeStore } from '../stores'
 import { useRouteStore } from '../stores/route'
 import { arrayToTree, searchTree } from './useTree'
 import type { DuxRoute } from '../stores/route'
@@ -16,6 +17,9 @@ export function useMenu() {
 
   const routeStore = useRouteStore()
   const { routes } = storeToRefs(routeStore)
+
+  const themeStore = useThemeStore()
+  const { layout } = storeToRefs(themeStore)
 
   const getMenu = (data: DuxRoute[]): MenuOption[] => {
     return data?.filter(item => !!item?.name)?.map<MenuOption>((item) => {
@@ -62,6 +66,7 @@ export function useMenu() {
 
   const route = useRoute()
 
+  const allKey = ref(route.name)
   const appKey = ref(route.name)
   const subKey = ref(route.name)
 
@@ -113,11 +118,14 @@ export function useMenu() {
 
   const { width } = useWindowSize()
 
-  watch(width, () => {
+  watch([width, layout], () => {
     isPad.value = width.value < 1024
     isMobile.value = width.value < 768
     if (width.value < 1024) {
       sideCollapsed.value = true
+    }
+    else if (layout.value === 'separate') {
+      sideCollapsed.value = false
     }
   }, { immediate: true })
 
@@ -130,10 +138,12 @@ export function useMenu() {
   })
 
   // 根据路由改变高亮
-  watch([route, list], () => {
+  watch([route, list, sideCollapsed], () => {
     const paths = searchTree(list.value, (item) => {
       return item.path === route.path
     })
+
+    allKey.value = paths?.[paths.length - 1]?.key
 
     if (sideCollapsed.value) {
       appKey.value = paths?.[paths.length - 1]?.key
@@ -151,6 +161,7 @@ export function useMenu() {
     sideCollapsed,
     showCollapsed,
     collapsed,
+    allKey,
     appKey,
     subKey,
     appMenu,

@@ -8,6 +8,8 @@ import type { HSLA } from '@ctrl/tinycolor'
 import { getTheme } from '../theme/echart'
 import { getGenerateColors, getThemeOverrides } from '../theme/helper'
 
+type Layout = 'app' | 'collapse' | 'separate'
+
 export const useThemeStore = defineStore('theme', () => {
   const defaultMode = ref<BasicColorSchema>('auto')
   const modeList = ref<BasicColorSchema[]>(['dark', 'light', 'auto'])
@@ -24,7 +26,7 @@ export const useThemeStore = defineStore('theme', () => {
     '#eb2f96',
   ]
 
-  function switchColor(v: string) {
+  function toggleColor(v: string) {
     color.value = v
   }
 
@@ -106,10 +108,16 @@ export const useThemeStore = defineStore('theme', () => {
     registerTheme('default', getTheme(rainbowColors, darkMode.value))
   }, { immediate: true })
 
+  const layout = ref<Layout>('app')
+
+  const toggleLayout = (value: Layout) => {
+    layout.value = value
+  }
+
   return {
     color,
     colorList,
-    switchColor,
+    toggleColor,
     echartColors,
     darkMode,
     themeConfig,
@@ -118,9 +126,11 @@ export const useThemeStore = defineStore('theme', () => {
     themeColors,
     modeState: state,
     toggleDarkMode,
+    layout,
+    toggleLayout,
   }
 }, {
   persist: {
-    pick: ['color'],
+    pick: ['color', 'layout'],
   },
 })

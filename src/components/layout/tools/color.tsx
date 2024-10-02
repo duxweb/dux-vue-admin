@@ -25,7 +25,7 @@ export const Color = defineComponent({
                     color.value === v ? 'outline' : 'outline-none',
                   ])}
                   onClick={() => {
-                    themeStore.switchColor(v)
+                    themeStore.toggleColor(v)
                   }}
                 >
                 </div>
