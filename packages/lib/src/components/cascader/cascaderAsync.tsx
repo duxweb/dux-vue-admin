@@ -1,22 +1,17 @@
+import type { PropType } from 'vue'
 import { useVModel } from '@vueuse/core'
 import { NCascader } from 'naive-ui'
 import { defineComponent, ref, watch } from 'vue'
-import type { CascaderProps } from 'naive-ui'
 import { useCascader } from './useCascader'
-
-export interface DuxCascaderAsyncProps extends CascaderProps {
-  url?: string
-  params?: Record<string, any>
-}
 
 export const DuxCascaderAsync = defineComponent({
   name: 'DuxCascaderAsync',
   props: {
     url: String,
-    params: Object,
+    params: Object as PropType<Record<string, any>>,
   },
   extends: NCascader,
-  setup(props: DuxCascaderAsyncProps, { emit }) {
+  setup(props, { emit }) {
     const useParams = ref({})
     const useUrl = ref(props.url)
 

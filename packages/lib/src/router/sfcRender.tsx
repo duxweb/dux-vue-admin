@@ -1,12 +1,12 @@
+import type { Options, Resource } from 'vue3-sfc-loader'
 import * as vueUse from '@vueuse/core'
-import * as index from 'dux-vue-admin'
 import mime from 'mime'
 import * as Vue from 'vue'
 import { useI18n } from 'vue-i18n'
 import { loadModule } from 'vue3-sfc-loader'
-import type { Options, Resource } from 'vue3-sfc-loader'
 import JsonRender from '../components/render/jsonRender'
 import { useClient } from '../hooks/useClient'
+import * as index from '../index'
 
 export function sfcRender(path: string) {
   const client = useClient()

@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "dev:example": "bun --filter dux-vue-example dev",
-    "build:example": "bun --filter dux-vue-example build"
+    "build:example": "bun --filter dux-vue-example build",
+    "build:lib": "bun --filter dux-vue-admin build"
   }
 }

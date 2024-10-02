@@ -1,10 +1,10 @@
+import type { UploadFileInfo, UploadInst } from 'naive-ui'
+import type { PropType } from 'vue'
 import { useVModel } from '@vueuse/core'
 import clsx from 'clsx'
 import { NButton, NImage, NProgress, NUpload } from 'naive-ui'
 import { defineComponent, ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
-import type { UploadFileInfo, UploadInst } from 'naive-ui'
-import type { PropType } from 'vue'
 import { useImagePreview } from '../../hooks'
 import { useNaiveUpload } from './useUpload'
 

@@ -11,9 +11,6 @@
     "module": "ESNext",
 
     "moduleResolution": "bundler",
-    "paths": {
-      "dux-vue-admin": ["src"]
-    },
     "resolveJsonModule": true,
     "allowJs": true,
     "strict": true,

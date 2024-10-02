@@ -1,7 +1,7 @@
+import type { PropType, VNodeChild } from 'vue'
 import { useVModel } from '@vueuse/core'
 import { NAvatar, NSelect, NTag } from 'naive-ui'
 import { defineComponent } from 'vue'
-import type { PropType, VNodeChild } from 'vue'
 import { useSelect } from './useSelect'
 
 export const DuxSelectAsync = defineComponent({

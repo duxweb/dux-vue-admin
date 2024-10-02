@@ -1,21 +1,23 @@
 import type { AutoCompleteProps, CascaderProps, CheckboxProps, ColorPickerProps, DatePickerProps, DynamicInputProps, DynamicTagsProps, FormItemProps, InputNumberProps, InputProps, MentionProps, RadioProps, RateProps, SelectProps, SliderProps, SpaceProps, SwitchProps, TimeProps, TransferProps, TreeSelectProps } from 'naive-ui'
+import type { DuxCascaderAsync } from '../cascader'
+import type { DuxAiEditor } from '../editor/aiEditor'
+import type { DuxRegion } from '../region'
+
+import type { JSONSchema } from '../render/jsonRender'
+
+import type { DuxSelectAsync } from '../select'
+import type { DuxFileUpload, DuxImageUpload } from '../upload'
+import type { CheckboxGroupAdaptor, GridProps } from './adaptor'
+import type { RadioGroupAdaptor } from './adaptor/radioGroup'
 import { cascader, cascaderAsync, checkbox, checkboxGroup, color, date, dynamicInput, dynamicTags, grid, input, mention, number, radio, radioGroup, rate, region, select, selectAsync, slider, space, switchAdaptor, time, transfer, treeSelect, uploadFile, uploadImage } from './adaptor'
 import { autoComplete } from './adaptor/autoComplete'
 import { editor } from './adaptor/editor'
-import type { DuxCascaderAsyncProps } from '../cascader'
-import type { DuxAiEditorProps } from '../editor/aiEditor'
-import type { DuxRegionProps } from '../region'
-import type { JSONSchema } from '../render/jsonRender'
-import type { DuxSelectAsyncProps } from '../select'
-import type { DuxFileUploadProps, DuxImageUploadProps } from '../upload'
-import type { CheckboxGroupAdaptor, GridProps } from './adaptor'
-import type { RadioGroupAdaptor } from './adaptor/radioGroup'
 
 export interface JsonFormToAttrMap {
-  'editor': DuxAiEditorProps
+  'editor': typeof DuxAiEditor
   'auto-complete': AutoCompleteProps
   'cascader': CascaderProps
-  'cascader-async': DuxCascaderAsyncProps
+  'cascader-async': typeof DuxCascaderAsync
   'checkbox': CheckboxProps
   'checkbox-group': CheckboxGroupAdaptor
   'color': ColorPickerProps
@@ -30,16 +32,16 @@ export interface JsonFormToAttrMap {
   'radio-group': RadioGroupAdaptor
   'rate': RateProps
   'select': SelectProps
-  'select-async': DuxSelectAsyncProps
+  'select-async': typeof DuxSelectAsync
   'slider': SliderProps
   'space': SpaceProps
   'switch': SwitchProps
   'time': TimeProps
   'transfer': TransferProps
   'tree-select': TreeSelectProps
-  'file-upload': DuxFileUploadProps
-  'image-upload': DuxImageUploadProps
-  'region': DuxRegionProps
+  'file-upload': typeof DuxFileUpload
+  'image-upload': typeof DuxImageUpload
+  'region': typeof DuxRegion
 }
 
 export type JsonFormItemAdaptor<T extends keyof JsonFormToAttrMap> = JsonFormToAttrMap[T] | Record<string, any>

@@ -13,8 +13,8 @@
   "scripts": {
     "clean": "rimraf dist",
     "copy-files": "copyfiles -u 1 src/**/*.{css,scss,js,png,jpg,svg,jsx,d.ts,json} dist/",
-    "build": "pnpm run clean && vue-tsc --noEmit && vite build",
-    "local": "pnpm run build && yalc push",
+    "build": "rimraf dist && vue-tsc  && node script/build.js",
+    "local": "bun run build && yalc push",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
@@ -57,7 +57,6 @@
     "short-unique-id": "^5.2.0",
     "unocss": "^0.62.3",
     "vfonts": "^0.0.3",
-    "vue": "^3.5.3",
     "vue-command-palette": "^0.2.3",
     "vue-draggable-plus": "^0.5.3",
     "vue-echarts": "^7.0.3",
@@ -78,6 +77,8 @@
     "sass-embedded": "^1.78.0",
     "typescript": "^5.5.3",
     "vite": "^5.4.3",
+    "vite-plugin-dts": "^4.2.3",
+    "vue": "^3.5.3",
     "vue-tsc": "^2.1.6"
   }
 }

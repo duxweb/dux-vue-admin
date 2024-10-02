@@ -14,6 +14,6 @@ export default defineConfig({
         index: resolve(__dirname, 'index.html'),
       },
     },
-    outDir: resolve(__dirname, '../../dist/example'),
+    outDir: resolve(__dirname, 'dist'),
   },
 })

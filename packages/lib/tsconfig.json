@@ -8,12 +8,10 @@
     "useDefineForClassFields": true,
 
     "baseUrl": ".",
+    "rootDir": "src",
     "module": "ESNext",
 
     "moduleResolution": "bundler",
-    "paths": {
-      "dux-vue-admin": ["src"]
-    },
     "resolveJsonModule": true,
     "allowJs": true,
     "strict": true,
@@ -24,7 +22,7 @@
     "noUnusedParameters": true,
     "declaration": true,
     "noEmit": false,
-    "outDir": "./dist",
+    "outDir": "dist",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "isolatedModules": true,
@@ -32,7 +30,8 @@
   },
   "include": [
     "src/**/*.*",
-    "src/**/*.vue"
-, "eslint.config.js", "typings.d.ts"  ],
+    "src/**/*.vue",
+    "typings.d.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

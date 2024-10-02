@@ -1,7 +1,7 @@
+import type { PropType } from 'vue'
 import { AiEditor } from 'aieditor'
 import { storeToRefs } from 'pinia'
 import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue'
-import type { PropType } from 'vue'
 import { useResource } from '../../hooks'
 import { useManageStore } from '../../stores'
 import { useThemeStore } from '../../stores/theme'
