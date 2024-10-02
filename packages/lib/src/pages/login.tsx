@@ -1,10 +1,10 @@
+import type { FormInst } from 'naive-ui'
 import { useForm } from 'alova/client'
 import clsx from 'clsx'
 import { NButton, NForm, NFormItem, NInput, NPopover, useMessage } from 'naive-ui'
 import { storeToRefs } from 'pinia'
 import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import type { FormInst } from 'naive-ui'
 import { useResource } from '../hooks'
 import { useClient } from '../hooks/useClient'
 import { useManageStore } from '../stores/manage'
@@ -163,7 +163,7 @@ export default defineComponent({
             </div>
           </div>
           <div class="flex flex-col">
-            <div class="flex flex-col items-center justify-center mt-4">
+            <div class="flex flex-col items-center justify-center mt-4 h-20">
               <dux-logo />
               <div class="mt-4 text-lg">
                 开箱即用的中后台管理系统

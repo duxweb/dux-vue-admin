@@ -8,7 +8,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "copy-files": "copyfiles -u 1 src/**/*.{css,scss,js,png,jpg,svg,jsx,d.ts,json} dist/",
-    "build": "rimraf dist && vue-tsc  && node script/build.js",
+    "build": "bun run clean && vue-tsc && bun run copy-files  && node script/build.js",
     "local": "bun run build && yalc push",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
