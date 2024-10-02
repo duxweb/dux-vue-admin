@@ -1,12 +1,12 @@
 <script setup lang="ts">
+import type { Ref } from 'vue'
+import type { Config } from './index'
 import { OverlaysProvider } from '@overlastic/vue'
 import { dateZhCN, NConfigProvider, NDialogProvider, NMessageProvider, NModalProvider, zhCN } from 'naive-ui'
 import { storeToRefs } from 'pinia'
 import { inject } from 'vue'
-import type { Ref } from 'vue'
 import { createManage } from './core/manage'
 import { router, useManageStore, useRouteStore, useThemeStore } from './index'
-import type { Config } from './index'
 
 // 主题处理
 const themeStore = useThemeStore()
@@ -50,7 +50,9 @@ router.beforeEach((to, _from, next) => {
 
   // 默认跳转到主页
   if (to.path === '/') {
-    return next({ path: `/${firstManage}/index`, replace: true })
+    const indexPath = config?.manage?.[manageRef?.value || 'admin'].indexPath
+    const path = indexPath ? `/${manageRef?.value}/${indexPath}` : `/${manageRef?.value}/index`
+    return next({ path, replace: true })
   }
   return next()
 })

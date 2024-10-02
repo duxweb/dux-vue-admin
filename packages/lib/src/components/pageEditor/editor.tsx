@@ -1,14 +1,14 @@
+import type { PropType } from 'vue'
+import type { PageEditorComponent, PageEditorGroup, PageEditorSettingPage, UseEditorValue } from './editor/hook'
 import clsx from 'clsx'
 import _ from 'lodash'
 import ShortUniqueId from 'short-unique-id'
 import { defineComponent, provide, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
-import type { PropType } from 'vue'
 import { WidgetEditorGrid, WidgetEditorGridSetting } from './components/grid'
 import { useEditor } from './editor/hook'
 import { DuxWidgetEditorPreview } from './editor/preview'
 import { WidgetEditorSetting } from './editor/setting'
-import type { PageEditorComponent, PageEditorGroup, PageEditorSettingPage, UseEditorValue } from './editor/hook'
 
 export const DuxPageEditor = defineComponent({
   name: 'DuxPageEditor',

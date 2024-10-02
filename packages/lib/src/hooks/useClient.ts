@@ -1,5 +1,5 @@
-import { useRouter } from 'vue-router'
 import type { AlovaGenerics, AlovaMethodCreateConfig, Method, RequestBody } from 'alova'
+import { useRouter } from 'vue-router'
 import { useManageStore } from '../stores'
 import { alovaInstance } from './alova'
 import { useResource } from './useResource'
@@ -48,7 +48,7 @@ export function useClient(props?: useClientProps) {
         router.push({ path: `/${res.manage}/login` })
         return
       }
-      return Promise.reject(props?.raw ? error?.response?.data : error)
+      return Promise.reject(props?.raw ? error : error?.response?.data)
     },
   }
 

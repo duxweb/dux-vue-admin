@@ -1,3 +1,5 @@
+import type { EChartsOption } from 'echarts'
+import type { PropType } from 'vue'
 import clsx from 'clsx'
 import {
   add,
@@ -5,8 +7,6 @@ import {
 import { NCard } from 'naive-ui'
 import { computed, defineComponent, ref, watch } from 'vue'
 import VChart from 'vue-echarts'
-import type { EChartsOption } from 'echarts'
-import type { PropType } from 'vue'
 import { useThemeStore } from '../../stores'
 
 export interface DuxStatsChartAreaData {

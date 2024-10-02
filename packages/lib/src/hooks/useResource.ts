@@ -1,7 +1,7 @@
-import { inject } from 'vue'
-import { useRoute } from 'vue-router'
 import type { Ref } from 'vue'
 import type { Config } from '../config/type'
+import { inject } from 'vue'
+import { useRoute } from 'vue-router'
 
 export function useResource() {
   const config = inject<Config>('dux.config')
@@ -15,6 +15,11 @@ export function useResource() {
       prefix = manage?.value
     }
     return path ? `${prefix ? `/${prefix}` : ''}${path || ''}` : ''
+  }
+
+  const getIndexPath = () => {
+    const indexPath = config?.manage?.[manage?.value || 'admin'].indexPath
+    return indexPath ? `/${manage?.value}/${indexPath}` : `/${manage?.value}/index`
   }
 
   return {
@@ -37,5 +42,6 @@ export function useResource() {
     forgotPasswordUrl: config?.apiConfig?.forgotPassword || '/forgotPassword',
     updatePasswordUrl: config?.apiConfig?.updatePassword || '/updatePassword',
     genUrl,
+    getIndexPath,
   }
 }

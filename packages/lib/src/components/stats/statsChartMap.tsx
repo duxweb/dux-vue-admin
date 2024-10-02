@@ -1,10 +1,10 @@
+import type { DataTableColumn } from 'naive-ui'
+import type { PropType } from 'vue'
 import crypto from 'crypto-js'
 import { type EChartsOption, getMap, registerMap } from 'echarts'
 import { NCard, NDataTable } from 'naive-ui'
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import VChart from 'vue-echarts'
-import type { DataTableColumn } from 'naive-ui'
-import type { PropType } from 'vue'
 
 export interface DuxStatsChartMapData {
   name: string

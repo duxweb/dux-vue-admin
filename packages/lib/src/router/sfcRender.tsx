@@ -1,8 +1,18 @@
 import type { Options, Resource } from 'vue3-sfc-loader'
 import * as vueUse from '@vueuse/core'
+import * as alova from 'alova'
+import * as alovaClient from 'alova/client'
+import crypto from 'crypto-js'
+import * as echarts from 'echarts'
 import mime from 'mime'
+import mitt from 'mitt'
+import * as NaiveUI from 'naive-ui'
+import * as pinia from 'pinia'
 import * as Vue from 'vue'
+import * as VueDraggable from 'vue-draggable-plus'
+import VChart from 'vue-echarts'
 import { useI18n } from 'vue-i18n'
+import * as vueRouter from 'vue-router'
 import { loadModule } from 'vue3-sfc-loader'
 import JsonRender from '../components/render/jsonRender'
 import { useClient } from '../hooks/useClient'
@@ -15,7 +25,18 @@ export function sfcRender(path: string) {
     moduleCache: {
       'vue': Vue,
       'dux-vue-admin': index,
+      'naive-ui': NaiveUI,
       '@vueuse/core': vueUse,
+      'echarts': echarts,
+      'alova': alova,
+      'alova/client': alovaClient,
+      'crypto': crypto,
+      'mime': mime,
+      'mitt': mitt,
+      'pinia': pinia,
+      'vue-router': vueRouter,
+      'vue-echarts': VChart,
+      'vue-draggable-plus': VueDraggable,
       'static!': function (content: string, _path: string, type: string) {
         const name = mime.getType(type)
         if (name?.startsWith('image')) {
@@ -33,7 +54,7 @@ export function sfcRender(path: string) {
       }
       if (type === '.json') {
         const contentData = await getContentData()
-        return () => <JsonRender data={contentData?.data || {}} nodes={contentData?.nodes || []} />
+        return () => <div><JsonRender data={contentData?.data || {}} nodes={contentData?.nodes || []} /></div>
       }
       return getContentData()
     },

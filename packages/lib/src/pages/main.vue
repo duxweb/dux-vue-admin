@@ -37,6 +37,7 @@ const cacheMap = new Map()
 function wrap(name, component) {
   let cache
   const cacheName = name
+
   if (cacheMap.has(cacheName)) {
     cache = cacheMap.get(cacheName)
   }

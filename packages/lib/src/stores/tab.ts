@@ -1,7 +1,7 @@
+import type { DuxRoute } from './route'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useResource } from '../hooks'
-import type { DuxRoute } from './route'
 
 export const useTabStore = defineStore('tab', () => {
   const current = ref<string>()
@@ -46,8 +46,7 @@ export const useTabStore = defineStore('tab', () => {
     }
   }
 
-  const indexPath = resource.config?.manage?.[resource.manage].indexPath
-  addTab({ labelLang: 'common.home', path: indexPath || `/${resource.manage}/index`, name: 'index' })
+  addTab({ labelLang: 'common.home', path: resource.getIndexPath(), name: 'index' })
 
   return {
     current,
