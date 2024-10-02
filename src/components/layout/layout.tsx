@@ -2,6 +2,7 @@ import { NBreadcrumb, NBreadcrumbItem, NButton, NDrawer, NDrawerContent, NIcon, 
 import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { emitter } from '../../event'
 import { useMenu } from '../../hooks/useMenu'
 import { useManageStore } from '../../stores'
 import { DuxCommand } from '../command'
@@ -66,9 +67,21 @@ export const DuxLayout = defineComponent({
               </div>
               <div class="flex-1 border-gray-2 border-l">
                 <div class="flex flex-row gap-2 items-center px-3 py-4">
-                  <NInput round placeholder={t('common.search')}>
+                  <NInput
+                    round
+                    placeholder={t('common.search')}
+                    readonly
+                    onClick={() => {
+                      emitter.emit('command')
+                    }}
+                  >
                     {{
                       prefix: () => <div class="i-tabler:search" />,
+                      suffix: () => (
+                        <div class="border border-gray-3 rounded-full px-2 py-0.5 text-xs relative -right-1">
+                          ⌘K
+                        </div>
+                      ),
                     }}
                   </NInput>
                 </div>
@@ -114,6 +127,7 @@ export const DuxLayout = defineComponent({
                             <div class={item.iconName} />
                           </NIcon>
                         )}
+                        {' '}
                         { item.labelName }
                       </NBreadcrumbItem>
                     ))}

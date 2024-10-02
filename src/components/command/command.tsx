@@ -32,11 +32,16 @@ export const DuxCommand = defineComponent({
     }
 
     const onSearch = (value: string) => {
-      const data = _.cloneDeep(routeStore.routes).filter((item) => {
-        const label = item.label || t(item.labelLang || '')
-        return label?.includes(value)
-      })
-      list.value = data
+      if (value) {
+        const data = _.cloneDeep(routeStore.routes).filter((item) => {
+          const label = item.label || t(item.labelLang || '')
+          return label?.includes(value)
+        })
+        list.value = data
+      }
+      else {
+        list.value = routeStore.routes.filter(item => !item.parent)
+      }
     }
 
     const onOpen = () => {
@@ -125,7 +130,7 @@ export const DuxCommand = defineComponent({
               ))}
 
               {current.value && (
-                <div class="bg-gray-1 backdrop-blur rounded shadow px-2 pt-3 border-t border-gray-2 mt-3 flex justify-between">
+                <div class=" rounded  px-2 pt-3 border-t border-gray-2 mt-3 flex justify-between">
                   <div class="text-sm text-gray-6">
 
                   </div>
