@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia'
 import { createHighlighterCore } from 'shiki/core'
 import dracula from 'shiki/themes/dracula.mjs'
 import oneLight from 'shiki/themes/one-light.mjs'
+import getWasm from 'shiki/wasm'
 import { defineComponent, ref, watch } from 'vue'
 import { useThemeStore } from '../../stores'
 
@@ -41,6 +42,7 @@ export const DuxExample = defineComponent({
         import('shiki/langs/rust.mjs'),
         import('shiki/langs/sql.mjs'),
       ],
+      loadWasm: getWasm,
     })
 
     watch([darkMode, () => props.code], () => {

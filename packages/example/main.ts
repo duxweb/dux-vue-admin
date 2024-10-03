@@ -7,11 +7,11 @@ import { route } from './config/route'
 const app = createApp(App)
 
 const config: Config = {
-  apiUrl: 'http://localhost:8900',
+  apiUrl: 'https://mock.dux.plus',
   manage: {
     admin: {
       title: '中后台管理系统',
-      apiPrefix: 'admin',
+      apiPrefix: 'api',
       routers: route,
     },
   },

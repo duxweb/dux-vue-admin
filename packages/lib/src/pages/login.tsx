@@ -137,7 +137,9 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      getCaptcha()
+      if (resource.config?.captcha) {
+        getCaptcha()
+      }
     })
 
     return () => (
@@ -186,42 +188,44 @@ export default defineComponent({
                   </NInput>
                 </NFormItem>
 
-                <div class="mb-4">
-                  <NPopover trigger="click" show={captchaShow.value} contentClass="p-0" raw={true} showArrow={false} onUpdateShow={(v: boolean) => captchaShow.value = v}>
-                    {{
-                      default: () => (
-                        <gocaptcha-click
-                          config={{
-                            title: '请点击图像验证码',
-                          }}
-                          data={captchaData}
-                          events={clickEvents}
-                        />
-                      ),
-                      trigger: () => (
-                        <NButton size="large" secondary type={captchaTheme.value} block loading={captchaLoading.value} class="relative text-left">
-                          {{
-                            default: () => (
-                              <div>
-                                { captchaTheme.value === 'default' ? '点击验证' : '' }
-                                { captchaTheme.value === 'success' ? '验证成功' : '' }
-                                { captchaTheme.value === 'error' ? '验证失败' : '' }
-                              </div>
-                            ),
-                            icon: () => (
-                              <>
-                                <span class="absolute i-tabler:shield-lock animate-ping inline-flex opacity-75 size-4" />
-                                <div class="i-tabler:shield-lock size-4" />
-                              </>
-                            ),
-                          }}
-                        </NButton>
-                      ),
-                    }}
-                  </NPopover>
-                </div>
+                {resource.config?.captcha && (
+                  <div>
+                    <NPopover trigger="click" show={captchaShow.value} contentClass="p-0" raw={true} showArrow={false} onUpdateShow={(v: boolean) => captchaShow.value = v}>
+                      {{
+                        default: () => (
+                          <gocaptcha-click
+                            config={{
+                              title: '请点击图像验证码',
+                            }}
+                            data={captchaData}
+                            events={clickEvents}
+                          />
+                        ),
+                        trigger: () => (
+                          <NButton size="large" secondary type={captchaTheme.value} block loading={captchaLoading.value} class="relative text-left">
+                            {{
+                              default: () => (
+                                <div>
+                                  { captchaTheme.value === 'default' ? '点击验证' : '' }
+                                  { captchaTheme.value === 'success' ? '验证成功' : '' }
+                                  { captchaTheme.value === 'error' ? '验证失败' : '' }
+                                </div>
+                              ),
+                              icon: () => (
+                                <>
+                                  <span class="absolute i-tabler:shield-lock animate-ping inline-flex opacity-75 size-4" />
+                                  <div class="i-tabler:shield-lock size-4" />
+                                </>
+                              ),
+                            }}
+                          </NButton>
+                        ),
+                      }}
+                    </NPopover>
+                  </div>
+                )}
 
-                <div class="mb-2">
+                <div class="mb-2 mt-4">
                   <NButton type="primary" size="large" block loading={submitLoading.value} onClick={handleSubmit}>
                     登录
                   </NButton>
