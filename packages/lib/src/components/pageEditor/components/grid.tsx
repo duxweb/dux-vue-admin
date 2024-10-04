@@ -1,11 +1,11 @@
+import type { PropType } from 'vue'
+import type { PageEditorData } from '../editor/hook'
 import clsx from 'clsx'
 import { NFormItem, NInputNumber } from 'naive-ui'
 import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
 import { DuxGrid } from '../../layout'
 import { DuxWidgetEditorPreview } from '../editor/preview'
 import { WidgetEditorSettingCard } from '../editor/setting'
-import type { PageEditorData } from '../editor/hook'
 
 export const WidgetEditorGrid = defineComponent({
   name: 'WidgetEditorGrid',

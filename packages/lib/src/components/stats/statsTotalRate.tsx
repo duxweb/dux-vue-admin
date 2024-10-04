@@ -1,10 +1,10 @@
+import type { PropType } from 'vue'
 import clsx from 'clsx'
 import { graphic } from 'echarts'
 import { ceil } from 'lodash-es'
 import { NCard } from 'naive-ui'
 import { defineComponent, ref } from 'vue'
 import VChart from 'vue-echarts'
-import type { PropType } from 'vue'
 
 export const DuxStatsTotalRate = defineComponent({
   name: 'DuxStatsRate',

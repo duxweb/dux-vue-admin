@@ -1,7 +1,7 @@
 import type { PropType } from 'vue'
 import type { PageEditorComponent, PageEditorGroup, PageEditorSettingPage, UseEditorValue } from './editor/hook'
 import clsx from 'clsx'
-import _ from 'lodash'
+import _ from 'lodash-es'
 import ShortUniqueId from 'short-unique-id'
 import { defineComponent, provide, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'

@@ -1,6 +1,6 @@
-import _ from 'lodash'
-import { NTag } from 'naive-ui'
 import type { TableColumnRender } from '../..'
+import _ from 'lodash-es'
+import { NTag } from 'naive-ui'
 
 export type ColumnStatusType = 'success' | 'error' | 'warning' | 'info' | 'default'
 

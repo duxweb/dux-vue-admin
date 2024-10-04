@@ -8,8 +8,8 @@
   "scripts": {
     "clean": "rimraf dist",
     "copy-files": "copyfiles -u 1 src/**/*.{css,scss,js,png,jpg,svg,jsx,d.ts,json} dist/",
-    "build": "bun run clean && vue-tsc && bun run copy-files  && node script/build.js",
-    "local": "bun run build && yalc push",
+    "build": "pnpm run clean && vue-tsc && pnpm run copy-files  && node script/build.js",
+    "local": "pnpm run build && yalc push",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
@@ -35,6 +35,7 @@
     "axios": "^1.7.7",
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
+    "date-fns": "^4.1.0",
     "echarts": "^5.5.1",
     "exceljs": "^4.4.0",
     "file-saver": "^2.0.5",
@@ -47,10 +48,12 @@
     "naive-ui": "^2.40.1",
     "pinia": "^2.2.2",
     "pinia-plugin-persistedstate": "^4.0.1",
+    "sass-embedded": "^1.78.0",
     "shiki": "^1.20.0",
     "short-unique-id": "^5.2.0",
     "unocss": "^0.62.3",
     "vfonts": "^0.0.3",
+    "vue": "^3.5.3",
     "vue-command-palette": "^0.2.3",
     "vue-draggable-plus": "^0.5.3",
     "vue-echarts": "^7.0.3",
@@ -68,11 +71,9 @@
     "eslint": "^9.9.0",
     "eslint-plugin-format": "^0.1.2",
     "path": "^0.12.7",
-    "sass-embedded": "^1.78.0",
     "typescript": "^5.5.3",
     "vite": "^5.4.3",
     "vite-plugin-dts": "^4.2.3",
-    "vue": "^3.5.3",
     "vue-tsc": "^2.1.6"
   }
 }

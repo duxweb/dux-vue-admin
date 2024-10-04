@@ -1,12 +1,12 @@
+import type { DuxRoute } from '../../stores'
 import { useMagicKeys } from '@vueuse/core'
-import _ from 'lodash'
+import _ from 'lodash-es'
 import { defineComponent, onBeforeMount, onMounted, ref, watch } from 'vue'
 import { Command } from 'vue-command-palette'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { emitter } from '../../event'
 import { useRouteStore } from '../../stores'
-import type { DuxRoute } from '../../stores'
 import './style.scss'
 
 export const DuxCommand = defineComponent({

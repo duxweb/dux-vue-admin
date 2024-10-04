@@ -1,8 +1,8 @@
+import type { ButtonProps } from 'naive-ui'
+import type { PropType } from 'vue'
 import clsx from 'clsx'
 import { load } from 'jinrishici'
 import { defineComponent, onMounted, ref } from 'vue'
-import type { ButtonProps } from 'naive-ui'
-import type { PropType } from 'vue'
 
 interface DuxStatsHelloBigData {
   label: string

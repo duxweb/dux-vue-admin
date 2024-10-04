@@ -1,8 +1,8 @@
+import type { PropType } from 'vue'
 import clsx from 'clsx'
 import { ceil } from 'lodash-es'
 import { NButton, NCard } from 'naive-ui'
 import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
 
 export const DuxStatsTotalCard = defineComponent({
   name: 'DuxStatsTotalCard',

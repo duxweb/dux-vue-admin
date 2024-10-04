@@ -7,18 +7,19 @@
     "packages/*"
   ],
   "scripts": {
-    "dev:example": "bun --filter dux-vue-example dev",
-    "build:example": "bun --filter dux-vue-example build",
-    "preview:example": "bun --filter dux-vue-example preview",
-    "build:lib": "bun --filter dux-vue-admin build",
-    "local:lib": "bun --filter dux-vue-admin local",
-    "dev:docs": "bun --filter dux-vue-docs dev",
-    "build:docs": "bun --filter dux-vue-docs build",
-    "preview:docs": "bun --filter dux-vue-docs preview"
+    "dev:example": "pnpm --filter dux-vue-example dev",
+    "build:example": "pnpm --filter dux-vue-example build",
+    "preview:example": "pnpm --filter dux-vue-example preview",
+    "build:lib": "pnpm --filter dux-vue-admin build",
+    "local:lib": "pnpm --filter dux-vue-admin local",
+    "dev:docs": "pnpm --filter dux-vue-docs dev",
+    "build:docs": "pnpm --filter dux-vue-docs build",
+    "preview:docs": "pnpm --filter dux-vue-docs preview"
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
   "dependencies": {
-    "sass-embedded": "^1.79.4"
-  }
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "pnpm@9.9.0"
 }
-

@@ -1,3 +1,4 @@
+import type { Column } from 'exceljs'
 import { useFileDialog } from '@vueuse/core'
 import { usePagination, useRequest } from 'alova/client'
 import { format } from 'date-fns'
@@ -5,7 +6,6 @@ import ExcelJS from 'exceljs'
 import FileSaver from 'file-saver'
 import { useMessage } from 'naive-ui'
 import { ref, watch } from 'vue'
-import type { Column } from 'exceljs'
 import { useClient } from '.'
 
 export interface ExportExcelProps {

@@ -1,6 +1,6 @@
+import type { ComputedRef, Ref } from 'vue'
 import ShortUniqueId from 'short-unique-id'
 import { computed, ref, watch } from 'vue'
-import type { ComputedRef, Ref } from 'vue'
 
 export interface PageEditorComponent {
   name: string

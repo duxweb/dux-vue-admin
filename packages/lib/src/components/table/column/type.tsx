@@ -1,7 +1,7 @@
-import _ from 'lodash'
-import { NTag } from 'naive-ui'
 import type { TableColumnRender } from '../../table'
 import type { ColumnStatusProps, ColumnStatusType } from './status'
+import _ from 'lodash-es'
+import { NTag } from 'naive-ui'
 
 export function columnType({ key, maps }: ColumnStatusProps): TableColumnRender {
   return (rowData) => {
