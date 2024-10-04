@@ -8,18 +8,19 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: '首页', link: '/' },
-      { text: '教程', link: '/markdown-examples' },
-      { text: '组件', link: '/markdown-examples' },
+      { text: '教程', link: '/guide/started' },
+      { text: '组件', link: '/components' },
       { text: '示例', link: 'https://vue-admin.dux.plus' },
       { text: '捐助', link: '/markdown-examples' }
     ],
 
     sidebar: [
       {
-        text: 'Examples',
+        text: '教程',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
+          { text: '介绍', link: '/guide/info' },
+          { text: '快速开始', link: '/guide/started' },
+          { text: '目录说明', link: '/guide/catalogs' },
         ]
       }
     ],

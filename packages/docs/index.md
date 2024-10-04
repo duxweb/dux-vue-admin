@@ -11,7 +11,7 @@ hero:
     alt: 'Logo'
   actions:
     - text: 快速上手
-      link: /guide/getting-started
+      link: /guide/started
 
     - theme: alt
       text: 捐助支持
@@ -19,7 +19,7 @@ hero:
 
     - theme: alt
       text: 在线预览
-      link: /guide/project-config
+      link: https://vue-admin.dux.plus
 
 features:
   - icon: 🏗️
