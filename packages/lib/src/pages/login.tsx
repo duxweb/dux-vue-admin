@@ -165,7 +165,7 @@ export default defineComponent({
             </div>
           </div>
           <div class="flex flex-col">
-            <div class="flex flex-col items-center justify-center mt-4 h-20">
+            <div class="flex flex-col items-center justify-center mt-4 h-20 ">
               <dux-logo />
               <div class="mt-4 text-lg">
                 开箱即用的中后台管理系统

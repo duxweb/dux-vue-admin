@@ -13,6 +13,23 @@ export default defineConfig({
       input: {
         index: resolve(__dirname, 'index.html'),
       },
+      output: {
+        manualChunks: {
+          'vendor-vue': ['vue', 'vue-router'],
+          'vendor-naive': ['naive-ui'],
+          'vendor-vueuse': ['@vueuse/core'],
+          'vendor-echarts': ['echarts', 'vue-echarts'],
+          'vendor-ai': ['aieditor'],
+          'vendor-code': ['vue3-ace-editor', 'ace-builds', 'shiki'],
+          'vendor-alova': ['alova'],
+          'vendor-excel': ['exceljs'],
+          'vendor-pinia': ['pinia', 'pinia-plugin-persistedstate'],
+          'vendor-loader': ['vue3-sfc-loader'],
+          'vendor-pdf': ['vue-pdf-embed'],
+          'vendor-lodash': ['lodash-es', 'lodash'],
+          'vendor-icon': ['@iconify-json/tabler'],
+        },
+      },
     },
     outDir: resolve(__dirname, 'dist'),
   },
