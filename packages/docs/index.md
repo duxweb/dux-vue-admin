@@ -7,7 +7,7 @@ hero:
   text: "适用于全栈开发的异步中后台前端解决方案"
   tagline: 免编译、免打包、免依赖、开箱即用
   image:
-    src: '/logo.svg'
+    src: '/public/logo.svg'
     alt: 'Logo'
   actions:
     - text: 快速上手
