@@ -11,7 +11,8 @@
   ],
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build"
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "dux-vue-admin": "workspace:*"
