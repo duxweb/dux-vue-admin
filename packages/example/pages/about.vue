@@ -12,16 +12,16 @@ const packages = usePackage()
       <n-card title="项目信息">
         <n-descriptions label-placement="top" bordered :column="2">
           <n-descriptions-item label="版本号">
-            {{ packages.version }}
+            {{ packages.version }} (预览版)
           </n-descriptions-item>
           <n-descriptions-item label="github (请给于一个 star)">
-            <a href="https://github.com/duxweb/vue-admin" target="_blank" class="text-primary">
-              https://github.com/duxweb/vue-admin
+            <a href="https://github.com/duxweb/dux-vue-admin" target="_blank" class="text-primary">
+              https://github.com/duxweb/dux-vue-admin
             </a>
           </n-descriptions-item>
           <n-descriptions-item label="文档地址">
-            <a href="https://vue-admin.dux.cn" target="_blank" class="text-primary">
-              https://vue-admin.dux.cn
+            <a href="https://vue-docs.dux.plus" target="_blank" class="text-primary">
+              https://vue-docs.dux.plus
             </a>
           </n-descriptions-item>
           <n-descriptions-item label="演示地址">
