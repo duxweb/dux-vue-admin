@@ -1,7 +1,7 @@
 import type { PropType } from 'vue'
 import type { PageEditorComponent, PageEditorGroup, PageEditorSettingPage, UseEditorValue } from './editor/hook'
 import clsx from 'clsx'
-import _ from 'lodash-es'
+import { cloneDeep } from 'lodash-es'
 import ShortUniqueId from 'short-unique-id'
 import { defineComponent, provide, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
@@ -61,7 +61,7 @@ export const DuxPageEditor = defineComponent({
       return {
         key: randomUUID(),
         name: element.name,
-        options: _.cloneDeep(element.settingDefault),
+        options: cloneDeep(element.settingDefault),
       } as any
     }
 

@@ -9,6 +9,10 @@ export const DuxModal = defineComponent({
     title: String,
     component: Function,
     componentProps: Object,
+    width: {
+      type: Number,
+      default: 500,
+    },
   },
   setup(props) {
     const { visible, resolve, reject, vanish } = useExtendOverlay({
@@ -31,10 +35,20 @@ export const DuxModal = defineComponent({
         role="dialog"
         aria-modal="true"
         size="huge"
+        class="p-4 h-screen shadow-none! flex items-center"
       >
-        <div class="bg-white dark:bg-gray-2 w-500px rounded shadow">
-          <DuxWindowHeader title={props.title} onClose={reject} />
-          <Page {...params} />
+        <div>
+          <div
+            class="bg-white dark:bg-gray-2 w-full rounded shadow max-h-full flex flex-col"
+            style={{
+              maxWidth: `${props.width}px`,
+            }}
+          >
+            <div class="flex-none">
+              <DuxWindowHeader title={props.title} onClose={reject} />
+            </div>
+            <Page {...params} />
+          </div>
         </div>
       </NModal>
     )

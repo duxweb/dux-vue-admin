@@ -1,10 +1,10 @@
+import type { PropType } from 'vue'
+import type { JsonFormItemSchema } from './handler'
 import { NButton } from 'naive-ui'
 import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
-import { DuxWindowFooter } from '../window'
+import { DuxModalPage } from '../modal'
 import { DuxJsonForm } from './jsonForm'
 import { useForm } from './useForm'
-import type { JsonFormItemSchema } from './handler'
 
 export const DuxModalForm = defineComponent({
   name: 'DuxModalForm',
@@ -29,31 +29,40 @@ export const DuxModalForm = defineComponent({
     })
 
     return () => (
-      <>
-        <div class="p-4">
-          <DuxJsonForm model={model} schema={props.schema} data={props.data} />
-        </div>
-        <DuxWindowFooter>
-          <NButton
-            type="tertiary"
-            loading={loading.value}
-            onClick={() => {
-              props.onClose?.()
-            }}
-          >
-            取消
-          </NButton>
-          <NButton
-            type="primary"
-            loading={loading.value}
-            onClick={() => {
-              onSubmit()
-            }}
-          >
-            确定
-          </NButton>
-        </DuxWindowFooter>
-      </>
+      <DuxModalPage>
+        {{
+          default: () => (
+            <div class="p-4">
+
+              <DuxJsonForm model={model} schema={props.schema} data={props.data} />
+
+            </div>
+          ),
+          action: () => (
+            <>
+              <NButton
+                type="tertiary"
+                loading={loading.value}
+                onClick={() => {
+                  props.onClose?.()
+                }}
+              >
+                取消
+              </NButton>
+              <NButton
+                type="primary"
+                loading={loading.value}
+                onClick={() => {
+                  onSubmit()
+                }}
+              >
+                确定
+              </NButton>
+            </>
+          ),
+        }}
+      </DuxModalPage>
+
     )
   },
 })

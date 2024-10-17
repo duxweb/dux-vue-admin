@@ -3,6 +3,7 @@ import { DuxCardHeader } from './card'
 import { DuxCascaderAsync } from './cascader'
 import { DuxCodeEditor } from './code'
 import { DuxLogo } from './common'
+import { DuxDynamicData, DuxDynamicSelect } from './data'
 import { DuxDrawApps, DuxDrawAuth, DuxDrawEmpty, DuxDrawEmptyForm, DuxDrawError } from './draw'
 import { DuxDrawerPage } from './drawer'
 import { DuxAiEditor } from './editor/aiEditor'
@@ -103,5 +104,7 @@ export default {
     app.component('DuxDrawerPage', DuxDrawerPage)
     app.component('DuxModalPage', DuxModalPage)
     app.component('DuxPdf', DuxPdf)
+    app.component('DuxDynamicData', DuxDynamicData)
+    app.component('DuxDynamicSelect', DuxDynamicSelect)
   },
 }

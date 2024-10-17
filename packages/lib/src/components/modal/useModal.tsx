@@ -9,6 +9,7 @@ export interface UseModalProps {
   title?: string
   component?: () => any
   componentProps?: Record<string, any>
+  width?: number
 }
 
 export function useModal(): UseModalResult {

@@ -1,16 +1,16 @@
+import type { Column } from 'exceljs'
+import type { DataTableInst } from 'naive-ui'
+import type { PropType } from 'vue'
+import type { JsonFormItemSchema } from '../form'
+import type { TableAction, TableColumn } from './types'
+import type { TableTab } from './types/table'
 import { useWindowSize } from '@vueuse/core'
 import { NCard, NDataTable } from 'naive-ui'
 import { defineComponent, onMounted, onUnmounted, ref, toRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import type { Column } from 'exceljs'
-import type { DataTableInst } from 'naive-ui'
-import type { PropType } from 'vue'
 import { DuxFilter } from '../filter'
 import { DuxPageFull } from '../layout'
 import { useTable } from './useTable'
-import type { JsonFormItemSchema } from '../form'
-import type { TableAction, TableColumn } from './types'
-import type { TableTab } from './types/table'
 
 export const DuxPageTable = defineComponent({
   name: 'DuxPageTable',

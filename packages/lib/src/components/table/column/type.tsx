@@ -1,6 +1,6 @@
 import type { TableColumnRender } from '../../table'
 import type { ColumnStatusProps, ColumnStatusType } from './status'
-import _ from 'lodash-es'
+import { findKey } from 'lodash-es'
 import { NTag } from 'naive-ui'
 
 export function columnType({ key, maps }: ColumnStatusProps): TableColumnRender {
@@ -9,7 +9,7 @@ export function columnType({ key, maps }: ColumnStatusProps): TableColumnRender 
       <>
         {key
           ? rowData?.[key]?.map((value: any) => {
-            const type = _.findKey(maps, v => v.value === value) as ColumnStatusType
+            const type = findKey(maps, v => v.value === value) as ColumnStatusType
             const info = maps?.[type]
             return (
               <NTag round bordered={false} type={type}>

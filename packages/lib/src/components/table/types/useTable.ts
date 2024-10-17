@@ -1,5 +1,5 @@
 import type { Column } from 'exceljs'
-import type { ButtonProps, DataTableColumn, DataTableColumns, DataTableProps, PaginationProps } from 'naive-ui'
+import type { ButtonProps, DataTableBaseColumn, DataTableColumns, DataTableExpandColumn, DataTableProps, PaginationProps } from 'naive-ui'
 import type { AsyncComponentLoader, Ref, VNodeChild } from 'vue'
 import type { UseDialogResult } from '../../dialog'
 import type { UseDrawerResult } from '../../drawer'
@@ -61,7 +61,8 @@ export interface TableActionAttrMap {
 
 export type TableActionAdaptor<T extends keyof TableActionAttrMap> = TableActionAttrMap[T] | Record<string, any>
 
-interface TableColumnExtend {
+type DataTableColumn = DataTableBaseColumn | DataTableExpandColumn
+export interface TableColumnExtend {
   renderType: 'text' | 'type' | 'tags' | 'status' | 'media' | 'map'
   renderProps?: TableActionAdaptor<this['renderType']>
   render?: TableColumnRender
@@ -69,7 +70,7 @@ interface TableColumnExtend {
   key?: any
 }
 
-export type TableColumn = DataTableColumn & TableColumnExtend
+export type TableColumn = TableColumnExtend & DataTableColumn
 
 export interface HandleAction {
   id?: string | number

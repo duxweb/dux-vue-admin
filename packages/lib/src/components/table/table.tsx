@@ -1,15 +1,29 @@
+import type { DataTableInst } from 'naive-ui'
+import type { PropType } from 'vue'
+import type { TableAction, TableColumn } from './types'
 import { NDataTable } from 'naive-ui'
 import { defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import type { DataTableInst } from 'naive-ui'
-import type { PropType } from 'vue'
 import { useTable } from './useTable'
-import type { TableAction, TableColumn } from './types'
+
+type NDataTableT = typeof NDataTable['prototype']
+
+interface DuxTableProps extends NDataTableT {
+  tableKey?: string | number
+  url?: string
+  columns?: TableColumn[]
+  columnActions?: TableAction[]
+  actions?: TableAction[]
+  form?: Record<string, any>
+}
 
 export const DuxTable = defineComponent({
   name: 'DuxTable',
   props: {
-    tableKey: [String, Number],
+    tableKey: {
+      type: [String, Number],
+      default: 'id',
+    },
     url: String,
     columns: Array<TableColumn>,
     columnActions: Array<TableAction>,
@@ -17,7 +31,7 @@ export const DuxTable = defineComponent({
     form: Object as PropType<Record<string, any>>,
   },
   extends: NDataTable,
-  setup(props, { expose }) {
+  setup(props: DuxTableProps, { expose }) {
     const route = useRoute()
     const tableRef = ref<DataTableInst>()
 
@@ -36,6 +50,7 @@ export const DuxTable = defineComponent({
     return () => (
       <NDataTable
         {...props}
+        rowKey={row => row[props.tableKey || 'id']}
         loading={table.loading.value}
         ref={tableRef}
         data={table.data.value}

@@ -1,5 +1,5 @@
 import type { TableColumnRender } from '../..'
-import _ from 'lodash-es'
+import { findKey } from 'lodash-es'
 import { NTag } from 'naive-ui'
 
 export type ColumnStatusType = 'success' | 'error' | 'warning' | 'info' | 'default'
@@ -16,7 +16,7 @@ export interface ColumnStatusProps {
 
 export function columnStatus({ key, maps }: ColumnStatusProps): TableColumnRender {
   return (rowData) => {
-    const type = _.findKey(maps, v => key ? v.value === rowData?.[key] : 'default') as ColumnStatusType
+    const type = findKey(maps, v => key ? v.value === rowData?.[key] : 'default') as ColumnStatusType
     const item = maps?.[type]
     return item
       ? (

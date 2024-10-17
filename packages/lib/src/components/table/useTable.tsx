@@ -1,13 +1,13 @@
+import type { DataTableColumn, DataTableFilterState, DataTableSortState } from 'naive-ui'
+import type { TableAction, TableColumn, UseTableProps, UseTableResult } from './types'
 import { usePagination } from 'alova/client'
 import { NButton, NCheckbox, NDropdown, NPopover, NTooltip, useMessage } from 'naive-ui'
 import { computed, reactive, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
-import type { DataTableColumn, DataTableFilterState, DataTableSortState } from 'naive-ui'
 import { useExportExcel, useImportExcel } from '../../hooks'
 import { useClient } from '../../hooks/useClient'
 import { listRenderAction } from '../filter'
 import { columnMap, columnMedia, columnStatus, columnTags, columnText, columnType } from './column'
-import type { TableAction, TableColumn, UseTableProps, UseTableResult } from './types'
 
 export function useTable({ filter, url, columns, columnActions, excelColumns, export: exportStatus, import: importStatus, key = 'id' }: UseTableProps): UseTableResult {
   const client = useClient()
@@ -314,7 +314,7 @@ export function convertTableColumns(key: string | number, columns?: TableColumn[
   }) || []
 
   // 行操作渲染
-  if (actions && actions?.length > 0) {
+  if (restColumns && actions && actions?.length > 0) {
     const columnWidth = actions.reduce((accumulator, currentValue) => {
       return accumulator + currentValue.label?.length * 22
     }, 0)
@@ -327,8 +327,7 @@ export function convertTableColumns(key: string | number, columns?: TableColumn[
       render: (rowData, rowIndex) => {
         return <div class="flex gap-2 justify-center">{listRenderAction({ key, rowData, rowIndex, text: true, actions })}</div>
       },
-
-    } as any)
+    } as TableColumn)
   }
 
   return restColumns

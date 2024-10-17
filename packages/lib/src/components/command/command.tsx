@@ -1,6 +1,6 @@
 import type { DuxRoute } from '../../stores'
 import { useMagicKeys } from '@vueuse/core'
-import _ from 'lodash-es'
+import { cloneDeep } from 'lodash-es'
 import { defineComponent, onBeforeMount, onMounted, ref, watch } from 'vue'
 import { Command } from 'vue-command-palette'
 import { useI18n } from 'vue-i18n'
@@ -33,7 +33,7 @@ export const DuxCommand = defineComponent({
 
     const onSearch = (value: string) => {
       if (value) {
-        const data = _.cloneDeep(routeStore.routes).filter((item) => {
+        const data = cloneDeep(routeStore.routes).filter((item) => {
           const label = item.label || t(item.labelLang || '')
           return label?.includes(value)
         })

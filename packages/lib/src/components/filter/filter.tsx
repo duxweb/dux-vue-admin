@@ -1,14 +1,14 @@
+import type { ButtonProps } from 'naive-ui'
+import type { AsyncComponentLoader, PropType } from 'vue'
+import type { JsonFormItemSchema } from '../form'
+import type { TableTab } from '../table'
 import { useVModel } from '@vueuse/core'
 import clsx from 'clsx'
 import { NButton, NForm, NTabPane, NTabs } from 'naive-ui'
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { ButtonProps } from 'naive-ui'
-import type { AsyncComponentLoader, PropType } from 'vue'
 import { DuxJsonForm } from '../form'
 import { useFilter } from './useFilter'
-import type { JsonFormItemSchema } from '../form'
-import type { TableTab } from '../table'
 
 export interface ListAction {
   label: string

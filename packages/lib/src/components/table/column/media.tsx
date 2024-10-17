@@ -1,5 +1,5 @@
-import { NImage } from 'naive-ui'
 import type { TableColumnRender } from '../../table'
+import { NImage } from 'naive-ui'
 
 export interface ColumnMediaProps {
   image?: string

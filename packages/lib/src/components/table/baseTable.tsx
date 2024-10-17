@@ -1,7 +1,7 @@
+import type { TableAction, TableColumn } from './types'
 import { NDataTable } from 'naive-ui'
 import { computed, defineComponent } from 'vue'
 import { convertTableColumns } from './useTable'
-import type { TableAction, TableColumn } from './types'
 
 export const DuxBaseTable = defineComponent({
   name: 'DuxBaseTable',

@@ -87,6 +87,18 @@ export default [
   },
 
   {
+    label: '输入组件',
+    name: 'component.input',
+    parent: 'component.index',
+  },
+  {
+    label: '动态输入器',
+    name: 'component.listform',
+    path: 'component/listform',
+    parent: 'component.input',
+    component: () => import('../../pages/component/input/listform.vue'),
+  },
+  {
     label: '窗口组件',
     name: 'component.window',
     parent: 'component.index',
