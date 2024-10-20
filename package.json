@@ -3,9 +3,6 @@
   "private": true,
   "author": "DuxWeb",
   "license": "Apache-2.0",
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
     "dev:example": "pnpm --filter dux-vue-example dev",
     "build:example": "pnpm --filter dux-vue-example build",

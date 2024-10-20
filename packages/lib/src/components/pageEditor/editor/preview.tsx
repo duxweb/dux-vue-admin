@@ -1,8 +1,8 @@
+import type { PropType } from 'vue'
+import type { PageEditorData, UseEditorResult } from './hook'
 import clsx from 'clsx'
 import { defineComponent, inject } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
-import type { PropType } from 'vue'
-import type { PageEditorData, UseEditorResult } from './hook'
 
 export const DuxWidgetEditorPreview = defineComponent({
   name: 'DuxWidgetEditorPreview',

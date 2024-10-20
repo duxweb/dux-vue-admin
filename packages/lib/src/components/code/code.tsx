@@ -29,6 +29,7 @@ export const DuxCodeEditor = defineComponent({
       type: String,
       default: 'json',
     },
+    readonly: Boolean,
   },
   setup(props, { emit }) {
     const data = useVModel(props, 'value', emit, {
@@ -38,7 +39,7 @@ export const DuxCodeEditor = defineComponent({
     const { darkMode } = storeToRefs(themeStore)
     return () => (
       <div class="border border-gray-3">
-        <VAceEditor theme={darkMode.value ? 'tomorrow_night' : 'tomorrow'} v-model:value={data.value} value={data.value} lang={props.lang || 'json'} class="h-100" />
+        <VAceEditor readonly={props.readonly} theme={darkMode.value ? 'tomorrow_night' : 'tomorrow'} v-model:value={data.value} value={data.value} lang={props.lang || 'json'} class="h-100" />
       </div>
     )
   },

@@ -39,9 +39,9 @@ export const DuxModal = defineComponent({
       >
         <div>
           <div
-            class="bg-white dark:bg-gray-2 w-full rounded shadow max-h-full flex flex-col"
+            class="bg-white dark:bg-gray-2 max-w-full rounded shadow max-h-full flex flex-col"
             style={{
-              maxWidth: `${props.width}px`,
+              width: `${props.width}px`,
             }}
           >
             <div class="flex-none">

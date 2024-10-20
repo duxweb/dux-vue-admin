@@ -1,6 +1,6 @@
 import type { ComputedRef, Ref } from 'vue'
 import ShortUniqueId from 'short-unique-id'
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 
 export interface PageEditorComponent {
   name: string
@@ -46,7 +46,6 @@ export interface UseEditorResult {
   selected: Ref<string | undefined>
   value: Ref<UseEditorValue>
   settingPage: PageEditorSettingPage | undefined
-
 }
 
 export interface UseEditorValue {
@@ -62,10 +61,6 @@ export function useEditor({ settingPage }: { settingPage?: PageEditorSettingPage
     config: settingPage?.default || {},
     data: [],
   })
-
-  watch(value, (val) => {
-    console.log('value', val)
-  }, { deep: true, immediate: true })
 
   // 添加组件
   const addComponent = (data: PageEditorComponent) => {
@@ -208,8 +203,6 @@ export function useEditor({ settingPage }: { settingPage?: PageEditorSettingPage
   const deleteData = (key: string, index: number) => {
     const parent = findParent(value.value.data, key)
 
-    console.log('parent', parent)
-    console.log('index', index)
     if (parent) {
       if (Array.isArray(parent)) {
         parent.splice(index, 1)

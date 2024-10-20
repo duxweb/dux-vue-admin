@@ -1,27 +1,25 @@
 import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 import { useVModel } from '@vueuse/core'
-import { NButton, NFormItem, NSelect, NSwitch } from 'naive-ui'
+import { NFormItem, NInput, NSwitch } from 'naive-ui'
 import { defineComponent } from 'vue'
-import { useModal } from '../../modal'
+import { DuxCascaderAsync } from '../../cascader'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
 import { DuxFormEditorItem, DuxFormEditorRule } from './common'
 
-const FormSelect = defineComponent({
-  name: 'FormSelect',
+const Comp = defineComponent({
   props: {
     options: Object,
   },
   setup(props) {
     return () => (
       <NFormItem label={props.options?.label}>
-        <NSelect {...props.options?.attr} />
+        <DuxCascaderAsync {...props.options?.attr} />
       </NFormItem>
     )
   },
 })
 
-const FormSelectSetting = defineComponent({
-  name: 'FormSelectSetting',
+const Setting = defineComponent({
   props: {
     value: {
       type: Object,
@@ -30,7 +28,6 @@ const FormSelectSetting = defineComponent({
   },
   setup(props, { emit }) {
     const data = useVModel(props, 'value', emit)
-    const modal = useModal()
 
     return () => (
       <div class="">
@@ -42,6 +39,17 @@ const FormSelectSetting = defineComponent({
           <NFormItem label="多选" labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.multiple} />
+            </div>
+          </NFormItem>
+          <NFormItem label="关联选择" labelPlacement="left" showFeedback={false}>
+            <div class="flex flex-1 justify-end">
+              <NSwitch v-model:value={data.value.attr.cascade} />
+            </div>
+          </NFormItem>
+
+          <NFormItem label="显示路径" labelPlacement="left" showFeedback={false}>
+            <div class="flex flex-1 justify-end">
+              <NSwitch v-model:value={data.value.attr.showPath} />
             </div>
           </NFormItem>
 
@@ -61,37 +69,17 @@ const FormSelectSetting = defineComponent({
 
         <WidgetEditorSettingCard title="组件选项">
 
-          <NButton
-            block
-            dashed
-            renderIcon={() => <div class="i-tabler:edit"></div>}
-            onClick={() => {
-              modal.show({
-                title: '编辑数据',
-                component: () => import('./options'),
-                componentProps: {
-                  desc: '您可以使用 "label"、"value" 来定义 json 数组选项',
-                  value: data.value.attr.options,
-                  onChange: (value) => {
-                    data.value.attr.options = value
-                  },
-                  options: [
-                    {
-                      label: '选项名',
-                      value: 'label',
-                    },
-                    {
-                      label: '选型值',
-                      value: 'value',
-                    },
-                  ],
-                },
+          <NFormItem label="Url">
+            <NInput v-model:value={data.value.attr.url} />
+          </NFormItem>
 
-              })
-            }}
-          >
-            编辑数据
-          </NButton>
+          <NFormItem label="标签字段">
+            <NInput v-model:value={data.value.attr.labelField} />
+          </NFormItem>
+
+          <NFormItem label="值字段">
+            <NInput v-model:value={data.value.attr.valueField} />
+          </NFormItem>
 
         </WidgetEditorSettingCard>
 
@@ -101,20 +89,23 @@ const FormSelectSetting = defineComponent({
   },
 })
 
-export function duxFormEditorSelect(): PageEditorComponent {
+export function duxFormEditorCascaderAsync(): PageEditorComponent {
   return {
-    name: 'select',
-    icon: 'i-tabler:select',
-    label: '选择器',
-    group: 'select',
-    component: props => <FormSelect {...props} />,
-    setting: props => <FormSelectSetting {...props} />,
+    name: 'cascaderAsync',
+    icon: 'i-tabler:list-tree',
+    label: '异步级联器',
+    group: 'async',
+    component: props => <Comp {...props} />,
+    setting: props => <Setting {...props} />,
     settingDefault: {
-      label: '选择器',
-      name: 'select',
+      label: '异步级联器',
+      name: 'cascaderAsync',
       attr: {
-        options: [],
+        url: '',
+        valueField: 'id',
+        labelField: 'title',
         clearable: true,
+        pagination: true,
       },
       rule: [],
     },

@@ -1,16 +1,16 @@
 import type { PropType } from 'vue'
 import { useVModel } from '@vueuse/core'
-import { NCascader } from 'naive-ui'
+import { NTreeSelect } from 'naive-ui'
 import { defineComponent, ref, watch } from 'vue'
-import { useCascader } from './useCascader'
+import { useCascader } from '../cascader'
 
-export const DuxCascaderAsync = defineComponent({
-  name: 'DuxCascaderAsync',
+export const DuxTreeSelectAsync = defineComponent({
+  name: 'DuxTreeSelectAsync',
   props: {
     url: String,
     params: Object as PropType<Record<string, any>>,
   },
-  extends: NCascader,
+  extends: NTreeSelect,
   setup(props, { emit }) {
     const useParams = ref({})
     const useUrl = ref(props.url)
@@ -28,18 +28,19 @@ export const DuxCascaderAsync = defineComponent({
       defaultValue: props.defaultValue,
     })
 
-    const { options } = useCascader({
+    const { options, loading } = useCascader({
       url: useUrl,
       params: useParams,
     })
 
     return () => (
-      <NCascader
+      <NTreeSelect
         {...props}
+        loading={loading.value}
         options={options.value?.data || []}
         v-model:value={model.value}
       >
-      </NCascader>
+      </NTreeSelect>
     )
   },
 })

@@ -1,10 +1,10 @@
+import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 import { useVModel } from '@vueuse/core'
 import { NCheckbox, NFormItem, NInput, NInputNumber } from 'naive-ui'
 import { defineComponent } from 'vue'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
 import { DuxRadio } from '../../radio'
 import { DuxFormEditorItem, DuxFormEditorRule } from './common'
-import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 
 const FormEditorInput = defineComponent({
   name: 'FormEditorInput',

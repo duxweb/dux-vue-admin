@@ -1,9 +1,10 @@
-import type { PropType } from 'vue'
-import type { PageEditorComponent, PageEditorGroup, PageEditorSettingPage, UseEditorValue } from './editor/hook'
+import type { PropType, VNode } from 'vue'
+import type { PageEditorComponent, PageEditorGroup, PageEditorSettingPage, UseEditorResult, UseEditorValue } from './editor/hook'
 import clsx from 'clsx'
 import { cloneDeep } from 'lodash-es'
+import { NScrollbar } from 'naive-ui'
 import ShortUniqueId from 'short-unique-id'
-import { defineComponent, provide, ref } from 'vue'
+import { defineComponent, provide, ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { WidgetEditorGrid, WidgetEditorGridSetting } from './components/grid'
 import { useEditor } from './editor/hook'
@@ -13,13 +14,14 @@ import { WidgetEditorSetting } from './editor/setting'
 export const DuxPageEditor = defineComponent({
   name: 'DuxPageEditor',
   props: {
-    modelValue: Object as PropType<UseEditorValue | undefined>,
+    value: Object as PropType<UseEditorValue | undefined>,
     onUpdateValue: Function,
     groups: Array as PropType<PageEditorGroup[]>,
     components: Array as PropType<PageEditorComponent[]>,
     settingPage: Object as PropType<PageEditorSettingPage>,
+    actionRender: Function as PropType<(editor?: UseEditorResult) => VNode>,
   },
-  setup(props) {
+  setup(props, { emit }) {
     const editor = useEditor({ settingPage: props.settingPage })
     provide('editor.use', editor)
 
@@ -65,17 +67,17 @@ export const DuxPageEditor = defineComponent({
       } as any
     }
 
-    // watch(editor.value, (v) => {
-    //   props.onUpdateValue?.(v)
-    //   emit('update:modelValue', v)
-    // })
+    watch(editor.value, (v) => {
+      props.onUpdateValue?.(v)
+      emit('update:modelValue', v)
+    }, { deep: true, immediate: true })
 
-    // watch(() => props.modelValue, (v) => {
-    //   editor.value.value = v || {
-    //     config: {},
-    //     data: [],
-    //   }
-    // })
+    watch(() => props.value, (v) => {
+      editor.value.value = v || {
+        config: {},
+        data: [],
+      }
+    })
 
     return () => (
       <div class="flex-1 h-1 px-2 flex flex-row pb-2 text-sm">
@@ -100,46 +102,49 @@ export const DuxPageEditor = defineComponent({
             />
           ))}
         </div>
-        <div class="flex-none flex flex-col gap-4 bg-gray-1 rounded-sm p-2 text-xs shadow-sm w-180px" id="comp-list">
-          {editor.tree.value?.filter((group) => {
-            if (groupSelect.value) {
-              return group.name === groupSelect.value
-            }
-            return true
-          }).map(group => (
-            <div key={group.name} class="flex flex-col gap-2">
-              <div class="bg-gray/10 border border-gray/15 rounded p-2 flex justify-center">
-                {group.label}
-              </div>
-              <VueDraggable
-                modelValue={group.children || []}
-                animation={150}
-                group={
-                  {
-                    name: 'widget',
-                    pull: 'clone',
-                    put: false,
-                  }
+        <div class="flex-none bg-gray-1 rounded-sm text-xs shadow-sm w-180px" id="comp-list">
+          <NScrollbar>
+            <div class="flex flex-col gap-4 p-2">
+              {editor.tree.value?.filter((group) => {
+                if (groupSelect.value) {
+                  return group.name === groupSelect.value
                 }
-                sort={false}
-                clone={compDragClone}
-                class="grid grid-cols-2 items-start gap-2 "
-              >
-                {group.children?.map(item => (
-                  <div key={item.name} class="border border-gray-2 rounded-sm p-2 flex flex-col items-center gap-2 cursor-pointer hover:bg-gray-2  edit-drag">
-                    <div class={clsx([
-                      'size-6',
-                      item.icon,
-                    ])}
-                    >
-                    </div>
-                    <div>{item.label}</div>
+                return true
+              }).map(group => (
+                <div key={group.name} class="flex flex-col gap-2">
+                  <div class="bg-gray/10 border border-gray/15 rounded p-2 flex justify-center">
+                    {group.label}
                   </div>
-                ))}
-              </VueDraggable>
+                  <VueDraggable
+                    modelValue={group.children || []}
+                    animation={150}
+                    group={
+                      {
+                        name: 'widget',
+                        pull: 'clone',
+                        put: false,
+                      }
+                    }
+                    sort={false}
+                    clone={compDragClone}
+                    class="grid grid-cols-2 items-start gap-2 "
+                  >
+                    {group.children?.map(item => (
+                      <div key={item.name} class="border border-gray-2 rounded-sm p-2 flex flex-col items-center gap-2 cursor-pointer hover:bg-gray-2  edit-drag">
+                        <div class={clsx([
+                          'size-6',
+                          item.icon,
+                        ])}
+                        >
+                        </div>
+                        <div>{item.label}</div>
+                      </div>
+                    ))}
+                  </VueDraggable>
+                </div>
+              ))}
             </div>
-          ))}
-
+          </NScrollbar>
         </div>
         <div
           class="flex-1 bg-gray-1 mx-2 shadow-sm flex flex-col items-center p-6 overflow-auto"
@@ -158,7 +163,7 @@ export const DuxPageEditor = defineComponent({
             <DuxWidgetEditorPreview modelValue={editor.value.value?.data} onUpdate={v => editor.value.value.data = v} />
           </div>
         </div>
-        <WidgetEditorSetting />
+        <WidgetEditorSetting actionRender={props.actionRender} />
 
       </div>
     )

@@ -1,9 +1,9 @@
+import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 import { useVModel } from '@vueuse/core'
 import { NDatePicker, NFormItem, NSelect, NSwitch } from 'naive-ui'
 import { defineComponent } from 'vue'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
 import { DuxFormEditorItem, DuxFormEditorRule } from './common'
-import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 
 const FormDate = defineComponent({
   name: 'FormDate',

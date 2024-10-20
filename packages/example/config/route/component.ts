@@ -99,6 +99,20 @@ export default [
     component: () => import('../../pages/component/input/listform.vue'),
   },
   {
+    label: '输入提及',
+    name: 'component.mention',
+    path: 'component/mention',
+    parent: 'component.input',
+    component: () => import('../../pages/component/input/mention.vue'),
+  },
+  {
+    label: '穿梭框',
+    name: 'component.transfer',
+    path: 'component/transfer',
+    parent: 'component.input',
+    component: () => import('../../pages/component/input/transfer.vue'),
+  },
+  {
     label: '窗口组件',
     name: 'component.window',
     parent: 'component.index',
@@ -143,6 +157,13 @@ export default [
     path: 'component/cascader',
     parent: 'component.picker',
     component: () => import('../../pages/component/picker/cascader.vue'),
+  },
+  {
+    label: '树形选择器',
+    name: 'component.treeSelect',
+    path: 'component/treeSelect',
+    parent: 'component.picker',
+    component: () => import('../../pages/component/picker/treeSelect.vue'),
   },
   {
     label: '地区选择器',

@@ -13,6 +13,7 @@ import { DuxDrawerForm, DuxFormEditor, DuxJsonForm, DuxModalForm, DuxPageForm, D
 import { DuxIconPicker } from './icon'
 import { DuxException, DuxGrid, DuxPage, DuxPageFull } from './layout'
 import { DuxCardList, DuxList } from './list'
+import { DuxMentionAsync } from './mention'
 import { DuxModalPage } from './modal'
 import { DuxPdf } from './pdf'
 import { DuxRadio } from './radio'
@@ -23,6 +24,8 @@ import { DuxBlockEmpty, DuxPage403, DuxPage404, DuxPage500, DuxPageStatus } from
 import { DuxPageEmpty } from './status/pageEmpty'
 import { DuxStep } from './step/step'
 import { DuxBaseTable, DuxPageTable, DuxTable } from './table'
+import { DuxTransferAsync } from './transfer'
+import { DuxTreeSelectAsync } from './treeSelect'
 import { DuxFileUpload, DuxImageUpload } from './upload'
 import { DuxCarousel, DuxMedia } from './widget'
 import { DuxWindowFooter, DuxWindowHeader } from './window'
@@ -106,5 +109,8 @@ export default {
     app.component('DuxPdf', DuxPdf)
     app.component('DuxDynamicData', DuxDynamicData)
     app.component('DuxDynamicSelect', DuxDynamicSelect)
+    app.component('DuxMentionAsync', DuxMentionAsync)
+    app.component('DuxTransferAsync', DuxTransferAsync)
+    app.component('DuxTreeSelectAsync', DuxTreeSelectAsync)
   },
 }

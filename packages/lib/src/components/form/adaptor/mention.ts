@@ -1,5 +1,5 @@
-import { item } from './item'
 import type { JsonFormItemSchema } from '../handler'
+import { item } from './item'
 
 export function mention({ label, name, itemAttr, attr }: JsonFormItemSchema) {
   return item({

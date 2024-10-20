@@ -1,11 +1,13 @@
-import { computed, defineComponent, inject } from 'vue'
+import type { PropType, VNode } from 'vue'
 import type { UseEditorResult } from './hook'
+import { computed, defineComponent, inject } from 'vue'
 
 export const WidgetEditorSetting = defineComponent({
   name: 'WidgetEditorSetting',
   props: {
+    actionRender: Function as PropType<(editor?: UseEditorResult) => VNode>,
   },
-  setup() {
+  setup(props) {
     const editor = inject<UseEditorResult>('editor.use')
 
     const curData = computed(() => {
@@ -17,6 +19,7 @@ export const WidgetEditorSetting = defineComponent({
 
     return () => (
       <div class="flex-none px-2 bg-gray-1 rounded-sm p-2 shadow-sm max-w-full w-220px overflow-y-auto" key={curData.value?.key}>
+        {props?.actionRender?.(editor)}
         {curComponent.value?.setting?.({
           'value': curData.value?.options,
           'update:modelValue': (v) => {

@@ -18,7 +18,6 @@ export const DuxSelectAsync = defineComponent({
     },
     descField: {
       type: String,
-      default: 'desc',
     },
     multiple: Boolean,
   },

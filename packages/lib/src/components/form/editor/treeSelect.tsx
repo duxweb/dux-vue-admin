@@ -1,27 +1,25 @@
 import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 import { useVModel } from '@vueuse/core'
-import { NButton, NFormItem, NSelect, NSwitch } from 'naive-ui'
+import { NButton, NFormItem, NSwitch, NTreeSelect } from 'naive-ui'
 import { defineComponent } from 'vue'
 import { useModal } from '../../modal'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
 import { DuxFormEditorItem, DuxFormEditorRule } from './common'
 
-const FormSelect = defineComponent({
-  name: 'FormSelect',
+const Comp = defineComponent({
   props: {
     options: Object,
   },
   setup(props) {
     return () => (
       <NFormItem label={props.options?.label}>
-        <NSelect {...props.options?.attr} />
+        <NTreeSelect {...props.options?.attr} />
       </NFormItem>
     )
   },
 })
 
-const FormSelectSetting = defineComponent({
-  name: 'FormSelectSetting',
+const Setting = defineComponent({
   props: {
     value: {
       type: Object,
@@ -42,6 +40,11 @@ const FormSelectSetting = defineComponent({
           <NFormItem label="多选" labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.multiple} />
+            </div>
+          </NFormItem>
+          <NFormItem label="关联选择" labelPlacement="left" showFeedback={false}>
+            <div class="flex flex-1 justify-end">
+              <NSwitch v-model:value={data.value.attr.cascade} />
             </div>
           </NFormItem>
 
@@ -68,25 +71,17 @@ const FormSelectSetting = defineComponent({
             onClick={() => {
               modal.show({
                 title: '编辑数据',
-                component: () => import('./options'),
+                component: () => import('./json'),
                 componentProps: {
-                  desc: '您可以使用 "label"、"value" 来定义 json 数组选项',
-                  value: data.value.attr.options,
+                  desc: '您可以使用 "label"、"value" 和 "children" 来定义 json 数组选项',
+                  value: JSON.stringify(data.value.attr.options, null, 2),
                   onChange: (value) => {
-                    data.value.attr.options = value
+                    try {
+                      data.value.attr.options = JSON.parse(value)
+                    }
+                    catch {}
                   },
-                  options: [
-                    {
-                      label: '选项名',
-                      value: 'label',
-                    },
-                    {
-                      label: '选型值',
-                      value: 'value',
-                    },
-                  ],
                 },
-
               })
             }}
           >
@@ -101,17 +96,17 @@ const FormSelectSetting = defineComponent({
   },
 })
 
-export function duxFormEditorSelect(): PageEditorComponent {
+export function duxFormEditorTreeSelect(): PageEditorComponent {
   return {
-    name: 'select',
-    icon: 'i-tabler:select',
-    label: '选择器',
+    name: 'treeSelect',
+    icon: 'i-tabler:binary-tree',
+    label: '树形选择器',
     group: 'select',
-    component: props => <FormSelect {...props} />,
-    setting: props => <FormSelectSetting {...props} />,
+    component: props => <Comp {...props} />,
+    setting: props => <Setting {...props} />,
     settingDefault: {
-      label: '选择器',
-      name: 'select',
+      label: '树形选择器',
+      name: 'treeSelect',
       attr: {
         options: [],
         clearable: true,

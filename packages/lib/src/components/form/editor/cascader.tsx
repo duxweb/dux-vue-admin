@@ -1,10 +1,10 @@
+import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 import { useVModel } from '@vueuse/core'
 import { NButton, NCascader, NFormItem, NSwitch } from 'naive-ui'
 import { defineComponent } from 'vue'
 import { useModal } from '../../modal'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
 import { DuxFormEditorItem, DuxFormEditorRule } from './common'
-import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 
 const FormCascader = defineComponent({
   name: 'FormCascader',
@@ -53,12 +53,6 @@ const FormCascaderSetting = defineComponent({
           <NFormItem label="显示路径" labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.showPath} />
-            </div>
-          </NFormItem>
-
-          <NFormItem label="只读" labelPlacement="left" showFeedback={false}>
-            <div class="flex flex-1 justify-end">
-              <NSwitch v-model:value={data.value.attr.readonly} />
             </div>
           </NFormItem>
 

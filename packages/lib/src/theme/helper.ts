@@ -1,9 +1,9 @@
+import type { GlobalThemeOverrides } from 'naive-ui'
 import { generate } from '@ant-design/colors'
 import { TinyColor } from '@ctrl/tinycolor'
 import { entriesToCss } from '@unocss/core'
 import { kebabCase, upperFirst } from 'lodash-es'
 import { commonDark, commonLight } from 'naive-ui'
-import type { GlobalThemeOverrides } from 'naive-ui'
 
 type ThemeColor = Record<string, string>
 

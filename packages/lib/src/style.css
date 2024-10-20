@@ -115,6 +115,10 @@ body {
   transform: translate(-50%, -50%);
 }
 
+.n-tree-select-menu {
+  font-size: 14px;
+}
+
 .light {
   .layout-tabs.n-tabs .n-tabs-nav.n-tabs-nav--card-type .n-tabs-tab {
     --n-tab-color: #fff;
