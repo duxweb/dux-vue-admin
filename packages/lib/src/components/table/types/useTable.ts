@@ -70,7 +70,7 @@ export interface TableColumnExtend {
   key?: any
 }
 
-export type TableColumn = TableColumnExtend & DataTableColumn
+export type TableColumn = DataTableColumn & TableColumnExtend
 
 export interface HandleAction {
   id?: string | number

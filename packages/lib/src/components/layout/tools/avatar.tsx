@@ -1,8 +1,8 @@
+import type { DropdownMixedOption } from 'naive-ui/es/dropdown/src/interface'
 import clsx from 'clsx'
 import { NAvatar, NDropdown } from 'naive-ui'
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
-import type { DropdownMixedOption } from 'naive-ui/es/dropdown/src/interface'
 import { useResource } from '../../../hooks'
 import { useManageStore } from '../../../stores'
 
@@ -46,9 +46,12 @@ export const Avatar = defineComponent({
         onSelect={haddieSelect}
         options={options}
       >
-        <NAvatar circle src={info?.avatar} class="cursor-pointer bg-primary!">
-          {info?.nickname?.charAt(0)}
-        </NAvatar>
+        <div class="p-1 flex items-center bg-gray-2 rounded-full gap-2 cursor-pointer hover:bg-gray-2/60 transition-all">
+          <NAvatar circle src={info?.avatar} size="small" class="bg-primary!">
+            {info?.nickname?.charAt(0)}
+          </NAvatar>
+          <div class="text-sm pr-2">超级管理员</div>
+        </div>
       </NDropdown>
     )
   },

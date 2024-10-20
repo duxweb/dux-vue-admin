@@ -1,13 +1,13 @@
+import type { MenuOption } from 'naive-ui'
+import type { DuxRoute } from '../stores/route'
 import { useWindowSize } from '@vueuse/core'
 import { cloneDeep } from 'lodash-es'
 import { storeToRefs } from 'pinia'
 import { computed, h, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
-import type { MenuOption } from 'naive-ui'
 import { useThemeStore } from '../stores'
 import { useRouteStore } from '../stores/route'
 import { arrayToTree, searchTree } from './useTree'
-import type { DuxRoute } from '../stores/route'
 
 export function useMenu() {
   const isPad = ref<boolean>(false)
@@ -22,7 +22,7 @@ export function useMenu() {
   const { layout } = storeToRefs(themeStore)
 
   const getMenu = (data: DuxRoute[]): MenuOption[] => {
-    return data?.filter(item => !!item?.name)?.map<MenuOption>((item) => {
+    return data?.filter(item => !!item?.name && (item.hidden === undefined || item.hidden === false))?.map<MenuOption>((item) => {
       return {
         key: item.name,
         parent: item.parent,

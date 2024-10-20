@@ -13,9 +13,15 @@ const config: Config = {
       title: '中后台管理系统',
       apiPrefix: 'api',
       routers: route,
+      userMenu: [
+        {
+          label: '个人资料',
+          path: 'setting',
+          icon: 'i-tabler:settings',
+        },
+      ],
     },
   },
-
 }
 
 app.use(createDux(config))

@@ -1,13 +1,13 @@
+import type { PropType } from 'vue'
+import type { JsonFormItemSchema } from './handler'
 import { useWindowSize } from '@vueuse/core'
 import { NButton, NCard, NForm } from 'naive-ui'
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
-import type { PropType } from 'vue'
 import { useTabStore } from '../../stores'
 import { DuxPageFull } from '../layout'
 import { DuxJsonForm } from './jsonForm'
 import { useForm } from './useForm'
-import type { JsonFormItemSchema } from './handler'
 
 export const DuxPageForm = defineComponent({
   name: 'DuxPageForm',

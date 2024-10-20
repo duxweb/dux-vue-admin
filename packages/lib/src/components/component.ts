@@ -9,9 +9,10 @@ import { DuxDrawerPage } from './drawer'
 import { DuxAiEditor } from './editor/aiEditor'
 import { DuxExample } from './example'
 import { DuxFilter } from './filter'
-import { DuxDrawerForm, DuxFormEditor, DuxJsonForm, DuxModalForm, DuxPageForm, DuxStepForm } from './form'
+import { DuxDrawerForm, DuxFormEditor, DuxJsonForm, DuxModalForm, DuxPageForm, DuxPageFormItem, DuxStepForm } from './form'
 import { DuxIconPicker } from './icon'
-import { DuxException, DuxGrid, DuxPage, DuxPageFull } from './layout'
+import { DuxException, DuxGrid, DuxPage, DuxPageFull, DuxPageTabItem } from './layout'
+import { DuxPageTab } from './layout/pageTab'
 import { DuxCardList, DuxList } from './list'
 import { DuxMentionAsync } from './mention'
 import { DuxModalPage } from './modal'
@@ -112,5 +113,8 @@ export default {
     app.component('DuxMentionAsync', DuxMentionAsync)
     app.component('DuxTransferAsync', DuxTransferAsync)
     app.component('DuxTreeSelectAsync', DuxTreeSelectAsync)
+    app.component('DuxPageFormItem', DuxPageFormItem)
+    app.component('DuxPageTab', DuxPageTab)
+    app.component('DuxPageTabItem', DuxPageTabItem)
   },
 }

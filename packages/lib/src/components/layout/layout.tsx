@@ -1,7 +1,7 @@
 import { NBreadcrumb, NBreadcrumbItem, NButton, NDrawer, NDrawerContent, NIcon, NLayout, NLayoutHeader, NLayoutSider, NMenu, NScrollbar } from 'naive-ui'
 import { storeToRefs } from 'pinia'
 import { defineComponent, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useMenu } from '../../hooks/useMenu'
 import { useManageStore, useThemeStore } from '../../stores'
 import { DuxCommand } from '../command'
@@ -24,6 +24,7 @@ export const DuxLayout = defineComponent({
 
     const { logout } = useManageStore()
     const router = useRouter()
+    const route = useRoute()
 
     const themeStore = useThemeStore()
     const { layout } = storeToRefs(themeStore)
@@ -162,17 +163,29 @@ export const DuxLayout = defineComponent({
               {!isMobile.value && layout.value !== 'separate' && (
                 <div class="flex-1">
                   <NBreadcrumb>
-                    {crumbs.value?.map(item => (
-                      <NBreadcrumbItem key={item}>
-                        {item.iconName && (
-                          <NIcon>
-                            <div class={item.iconName} />
-                          </NIcon>
+                    {crumbs.value && crumbs.value.length > 0
+                      ? crumbs.value?.map(item => (
+                        <NBreadcrumbItem key={item}>
+                          {item.iconName && (
+                            <NIcon>
+                              <div class={item.iconName} />
+                            </NIcon>
+                          )}
+                          {' '}
+                          { item.labelName }
+                        </NBreadcrumbItem>
+                      ))
+                      : (
+                          <div class="flex gap-2 text-sm">
+                            {route.meta.icon && (
+                              <NIcon>
+                                <div class={route.meta.icon} />
+                              </NIcon>
+                            )}
+                            {route.meta?.title}
+                          </div>
                         )}
-                        {' '}
-                        { item.labelName }
-                      </NBreadcrumbItem>
-                    ))}
+
                   </NBreadcrumb>
                 </div>
               )}

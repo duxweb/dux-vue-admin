@@ -9,6 +9,7 @@ export interface DuxRoute {
   icon?: string
   sort?: number
   parent?: string
+  hidden?: boolean
   component?: () => any
 }
 
