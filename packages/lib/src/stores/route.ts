@@ -11,6 +11,7 @@ export interface DuxRoute {
   parent?: string
   hidden?: boolean
   component?: () => any
+  meta?: Record<string, any>
 }
 
 export const useRouteStore = defineStore('routes', () => {

@@ -1,10 +1,10 @@
+import type { HSLA } from '@ctrl/tinycolor'
 import { TinyColor } from '@ctrl/tinycolor'
 import { type BasicColorSchema, useColorMode, useCycleList } from '@vueuse/core'
 import { registerTheme } from 'echarts'
 import { darkTheme } from 'naive-ui'
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
-import type { HSLA } from '@ctrl/tinycolor'
 import { getTheme } from '../theme/echart'
 import { getGenerateColors, getThemeOverrides } from '../theme/helper'
 

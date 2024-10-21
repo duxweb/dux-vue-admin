@@ -41,6 +41,7 @@ export function createManage(manage: string, routers: DuxRoute[]) {
       children: [],
       meta: {
         title: item.label,
+        ...item.meta,
       },
     }
     children.push(itemRoute)

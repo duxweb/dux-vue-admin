@@ -20,6 +20,17 @@ export const route = [
   },
 
   {
+    label: '文档',
+    name: 'docs',
+    path: 'docs',
+    icon: 'i-tabler:book',
+    component: () => import('dux-vue-admin/src/pages/iframe'),
+    meta: {
+      src: 'https://vue-docs.dux.plus/',
+    },
+  },
+
+  {
     label: '关于',
     name: 'about',
     path: 'about',
