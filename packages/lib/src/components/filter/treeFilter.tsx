@@ -159,7 +159,7 @@ export const DuxTreeFilter = defineComponent({
         </div>
         <NScrollbar class="flex-1 h-1" xScrollable>
           <div class="p-2">
-            <NSpin show={loading.value}>
+            <NSpin show={loading.value} class="h-full">
               <NTree
                 {...props}
                 data={data.value || []}

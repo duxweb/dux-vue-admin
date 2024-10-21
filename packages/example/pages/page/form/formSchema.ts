@@ -97,59 +97,6 @@ const schema: JsonFormItemSchema[] = [
     },
   },
   {
-    type: 'input',
-    label: '邮箱',
-    name: 'input',
-    itemAttr: {
-      required: true,
-    },
-  },
-
-  {
-    type: 'input',
-    label: '邮箱',
-    name: 'input',
-    itemAttr: {
-      required: true,
-    },
-  },
-
-  {
-    type: 'input',
-    label: '邮箱',
-    name: 'input',
-    itemAttr: {
-      required: true,
-    },
-  },
-
-  {
-    type: 'input',
-    label: '邮箱',
-    name: 'input',
-    itemAttr: {
-      required: true,
-    },
-  },
-
-  {
-    type: 'input',
-    label: '邮箱',
-    name: 'input',
-    itemAttr: {
-      required: true,
-    },
-  },
-
-  {
-    type: 'input',
-    label: '邮箱',
-    name: 'input',
-    itemAttr: {
-      required: true,
-    },
-  },
-  {
     type: 'select',
     label: '性别',
     name: 'sex',
