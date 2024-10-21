@@ -8,7 +8,7 @@ import { DuxDrawApps, DuxDrawAuth, DuxDrawEmpty, DuxDrawEmptyForm, DuxDrawError 
 import { DuxDrawerPage } from './drawer'
 import { DuxAiEditor } from './editor/aiEditor'
 import { DuxExample } from './example'
-import { DuxFilter } from './filter'
+import { DuxFilter, DuxTreeFilter } from './filter'
 import { DuxDrawerForm, DuxFormEditor, DuxJsonForm, DuxModalForm, DuxPageForm, DuxPageFormItem, DuxStepForm, DuxTabForm } from './form'
 import { DuxIconPicker } from './icon'
 import { DuxException, DuxFullPage, DuxGrid, DuxPage, DuxTabPageItem } from './layout'
@@ -117,5 +117,6 @@ export default {
     app.component('DuxTabPage', DuxTabPage)
     app.component('DuxTabPageItem', DuxTabPageItem)
     app.component('DuxTabForm', DuxTabForm)
+    app.component('DuxTreeFilter', DuxTreeFilter)
   },
 }

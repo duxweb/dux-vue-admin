@@ -61,7 +61,9 @@ const schema: JsonFormItemSchema[] = [
 </script>
 
 <template>
-  <dux-json-form :model="props.model" :schema="schema" />
+  <div>
+    <dux-json-form :model="props.model" :schema="schema" />
+  </div>
 </template>
 
 <style scoped>

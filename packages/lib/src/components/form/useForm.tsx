@@ -1,9 +1,7 @@
 import type { FormInst } from 'naive-ui'
-import { invalidateCache } from 'alova'
 import { useForm as useAForm } from 'alova/client'
 import { useMessage } from 'naive-ui'
 import { onMounted, type Ref, ref, toRef, watch } from 'vue'
-import { alovaInstance } from '../../hooks/alova'
 import { useClient } from '../../hooks/useClient'
 
 interface UseFormProps {
@@ -79,13 +77,7 @@ export function useForm({ formRef, url, id, initData, invalidate, model, success
 
     success?.(res)
 
-    const matchedMethods = alovaInstance.snapshots.match({
-      name: invalidate,
-    })
-    invalidateCache(matchedMethods)
-    matchedMethods.forEach((item) => {
-      item.send()
-    })
+    client.invalidate(invalidate)
   })
 
   onError((res) => {

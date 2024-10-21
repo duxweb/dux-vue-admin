@@ -45,6 +45,7 @@ export const DuxFilter = defineComponent({
     const { t } = useI18n()
     const filterModel = useVModel(props, 'value', emit, {
       passive: true,
+      deep: true,
       defaultValue: {},
     })
 

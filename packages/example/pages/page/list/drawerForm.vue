@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import formSchema from './formSchema'
+import formSchema from '../form/formSchema'
 </script>
 
 <template>

@@ -25,6 +25,7 @@ export const DuxTreeSelectAsync = defineComponent({
 
     const model = useVModel(props, 'value', emit, {
       passive: true,
+      deep: true,
       defaultValue: props.defaultValue,
     })
 

@@ -1,4 +1,4 @@
-import type { AlovaGenerics, AlovaMethodCreateConfig, Method, RequestBody } from 'alova'
+import { type AlovaGenerics, type AlovaMethodCreateConfig, invalidateCache, type Method, type RequestBody } from 'alova'
 import { useRouter } from 'vue-router'
 import { useManageStore } from '../stores'
 import { alovaInstance } from './alova'
@@ -78,6 +78,7 @@ export function useClient(props?: useClientProps) {
         ...globalHeaders(),
         ...headers,
       },
+      name: url,
       params,
       timeout,
       ...config,
@@ -132,11 +133,22 @@ export function useClient(props?: useClientProps) {
     })
   }
 
+  const invalidate = (name?: string | RegExp) => {
+    const matchedMethods = alovaInstance.snapshots.match({
+      name,
+    })
+    invalidateCache(matchedMethods)
+    // matchedMethods.forEach((item) => {
+    //   item.send()
+    // })
+  }
+
   return {
     get: Get,
     post: Post,
     put: Put,
     patch: Patch,
     delete: Delete,
+    invalidate,
   }
 }

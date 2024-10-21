@@ -30,13 +30,19 @@ export default [
     name: 'page.other',
     parent: 'page.index',
   },
-
   {
     label: '异步表格',
     name: 'list.table',
     path: 'list/table',
     parent: 'page.list',
     component: () => import('../../pages/page/list/table.vue'),
+  },
+  {
+    label: '边栏表格',
+    name: 'list.sideTable',
+    path: 'list/sideTable',
+    parent: 'page.list',
+    component: () => import('../../pages/page/list/sideTable.vue'),
   },
   {
     label: '卡片列表',

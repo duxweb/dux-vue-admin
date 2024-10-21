@@ -19,16 +19,14 @@ export const DuxJsonForm = defineComponent({
     const nodeJson = formToJson(props.schema || [], props.layout)
 
     return () => (
-      <div>
-        <JsonRender
-          debug={false}
-          nodes={nodeJson}
-          data={{
-            ...props.data,
-            model: props.model,
-          }}
-        />
-      </div>
+      <JsonRender
+        debug={false}
+        nodes={nodeJson}
+        data={{
+          ...props.data,
+          model: props.model,
+        }}
+      />
     )
   },
 })
