@@ -8,6 +8,22 @@ import { router } from './router'
 export function createManage(manage: string, routers: DuxRoute[]) {
   const routeStore = useRouteStore()
 
+  routers.push({
+    path: `403`,
+    component: () => import('../pages/notPermission'),
+    name: '403',
+    label: '没有权限',
+    hidden: true,
+  })
+
+  routers.push({
+    path: `404`,
+    component: () => import('../pages/notFound'),
+    name: '404',
+    label: '页面不存在',
+    hidden: true,
+  })
+
   const children: RouteRecordRaw[] = []
   routers?.forEach((item) => {
     routeStore.appendRoute({

@@ -5,7 +5,7 @@ import { NButton, NCard, NForm, NTabs } from 'naive-ui'
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTabStore } from '../../stores'
-import { DuxFullPage } from '../layout'
+import { DuxFullPage } from '../page'
 import { useForm } from './useForm'
 
 export const DuxTabForm = defineComponent({

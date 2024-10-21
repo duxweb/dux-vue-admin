@@ -28,18 +28,19 @@ export const DuxTabPage = defineComponent({
               {slots?.header?.()}
               <div class="flex-1 h-1">
                 <NScrollbar>
-                  <div class="flex flex-col gap-1">
+                  <div class="flex flex-col gap-1 p-2">
                     { slots?.default?.()?.map((item, key) => (
                       <div
                         key={key}
                         class={clsx([
-                          'px-4 py-2 border-r-2  cursor-pointer',
-                          item.props?.value === value.value ? 'bg-primary/10 text-primary border-primary' : 'border-transparent',
+                          'px-4 py-2  cursor-pointer flex gap-2 rounded  items-center',
+                          item.props?.value === value.value ? 'bg-primary/10 text-primary' : 'border-transparent',
                         ])}
                         onClick={() => {
                           value.value = item.props?.value
                         }}
                       >
+                        {item.props?.icon && <div class={item.props.icon}></div>}
                         {item.props?.label}
                       </div>
                     ))}

@@ -1,7 +1,7 @@
-import { usePagination } from 'alova/client'
-import { NButton, NDropdown } from 'naive-ui'
 import type { Column } from 'exceljs'
 import type { Ref } from 'vue'
+import { usePagination } from 'alova/client'
+import { NButton, NDropdown } from 'naive-ui'
 import { useClient, useExportExcel, useImportExcel } from '../../hooks'
 
 interface UseListProps {
@@ -12,9 +12,10 @@ interface UseListProps {
   export?: boolean
   import?: boolean
   excelColumns?: Column[]
+  append?: boolean
 }
 
-export function useList({ url, form, cacheTime = Infinity, excelColumns, export: exportStatus, import: importStatus, defaultPageSize = 20 }: UseListProps) {
+export function useList({ url, form, cacheTime = Infinity, excelColumns, export: exportStatus, import: importStatus, defaultPageSize = 20, append = false }: UseListProps) {
   const client = useClient()
   const excelExport = useExportExcel()
   const excelImport = useImportExcel()
@@ -27,6 +28,7 @@ export function useList({ url, form, cacheTime = Infinity, excelColumns, export:
     pageCount,
     total,
     send,
+    reload,
   } = usePagination(
     (page, pageSize) => {
       return client.get({
@@ -48,16 +50,23 @@ export function useList({ url, form, cacheTime = Infinity, excelColumns, export:
       },
       initialPage: 1,
       initialPageSize: defaultPageSize,
+      append,
       total: res => res.meta?.total || 0,
       data: res => res.data || [],
     },
   )
 
   const onPrevPage = () => {
+    if (page.value <= 1) {
+      return
+    }
     page.value--
   }
 
   const onNextPage = () => {
+    if (page.value >= pageCount.value) {
+      return
+    }
     page.value++
   }
 
@@ -125,6 +134,10 @@ export function useList({ url, form, cacheTime = Infinity, excelColumns, export:
     send()
   }
 
+  const onReload = () => {
+    reload()
+  }
+
   return {
     loading,
     data,
@@ -137,6 +150,7 @@ export function useList({ url, form, cacheTime = Infinity, excelColumns, export:
     onPageSize,
     onPage,
     onFilter,
+    onReload,
     toolsBtn,
   }
 }

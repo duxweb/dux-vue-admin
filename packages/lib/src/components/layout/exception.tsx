@@ -1,6 +1,7 @@
 import { NButton } from 'naive-ui'
 import { defineComponent, onErrorCaptured, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { DuxFullPage } from '../page'
 import { DuxPageStatus } from '../status'
 
 export const DuxException = defineComponent({
@@ -34,12 +35,14 @@ export const DuxException = defineComponent({
 
     return () => data.value
       ? (
-          <DuxPageStatus title={data.value?.title} desc={data.value?.desc}>
-            {{
-              default: () => <dux-draw-error />,
-              action: () => <NButton onClick={refreshRoute} renderIcon={() => <div class="n-icon i-tabler:refresh" />}>刷新</NButton>,
-            }}
-          </DuxPageStatus>
+          <DuxFullPage>
+            <DuxPageStatus title={data.value?.title} desc={data.value?.desc}>
+              {{
+                default: () => <dux-draw-error />,
+                action: () => <NButton onClick={refreshRoute} renderIcon={() => <div class="n-icon i-tabler:refresh" />}>刷新</NButton>,
+              }}
+            </DuxPageStatus>
+          </DuxFullPage>
         )
       : slots.default?.()
   },

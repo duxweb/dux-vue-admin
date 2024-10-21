@@ -138,9 +138,9 @@ export function useClient(props?: useClientProps) {
       name,
     })
     invalidateCache(matchedMethods)
-    // matchedMethods.forEach((item) => {
-    //   item.send()
-    // })
+    matchedMethods.forEach((item) => {
+      item.send()
+    })
   }
 
   return {

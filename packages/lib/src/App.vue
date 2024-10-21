@@ -38,10 +38,6 @@ router.beforeEach((to, _from, next) => {
     return next({ path: to.path, query: to.query, replace: true })
   }
 
-  // if (to.name === '404') {
-  //   return next()
-  // }
-
   // 判断是否登录
   const user = manageStore.getUser()
   if (!user && to.name !== `login`) {

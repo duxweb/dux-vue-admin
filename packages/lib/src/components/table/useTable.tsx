@@ -41,6 +41,7 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
     send,
     // onSuccess,
     onError,
+    refresh,
   } = usePagination(
     (page, pageSize) => {
       return client.get({
@@ -156,7 +157,7 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
         options={toolsOptions}
         onSelect={(key) => {
           if (key === 'refresh') {
-            send()
+            refresh()
           }
           if (key === 'export') {
             excelExport.send({

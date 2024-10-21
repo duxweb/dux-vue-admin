@@ -122,4 +122,11 @@ export default [
     parent: 'page.other',
     component: () => import('../../pages/page/other/setting.vue'),
   },
+  {
+    label: '消息页',
+    name: 'message',
+    path: 'message',
+    parent: 'page.other',
+    component: () => import('../../pages/page/other/message.vue'),
+  },
 ]

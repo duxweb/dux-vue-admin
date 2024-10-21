@@ -110,7 +110,7 @@ export const DuxCommand = defineComponent({
           ),
           body: () => (
             <Command.List class="bg-gray-1 rounded shadow p-3">
-              {list.value?.map((item, key: number) => (
+              {list.value?.filter(item => item.hidden === undefined || item.hidden === false)?.map((item, key: number) => (
                 <Command.Item
                   key={key}
                   onSelect={() => {

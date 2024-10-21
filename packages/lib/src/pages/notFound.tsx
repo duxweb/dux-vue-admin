@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue'
-import { DuxPage404 } from '../components'
+import { DuxFullPage, DuxPage404 } from '../components'
 
 export default defineComponent({
   name: 'DuxNotFound',
   setup(_props) {
     return () => (
-      <DuxPage404 />
+      <DuxFullPage><DuxPage404 /></DuxFullPage>
     )
   },
 })

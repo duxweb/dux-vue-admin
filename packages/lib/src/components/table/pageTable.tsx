@@ -9,7 +9,7 @@ import { NCard, NDataTable } from 'naive-ui'
 import { defineComponent, onMounted, onUnmounted, provide, ref, toRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { DuxFilter } from '../filter'
-import { DuxFullPage } from '../layout'
+import { DuxFullPage } from '../page'
 import { useTable } from './useTable'
 
 export const DuxPageTable = defineComponent({

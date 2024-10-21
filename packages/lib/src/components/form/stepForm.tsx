@@ -1,10 +1,10 @@
+import type { AsyncComponentLoader, PropType } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { NButton, NCard, NForm } from 'naive-ui'
 import { computed, defineAsyncComponent, defineComponent, ref, Transition } from 'vue'
 import { useRouter } from 'vue-router'
-import type { AsyncComponentLoader, PropType } from 'vue'
 import { useTabStore } from '../../stores'
-import { DuxFullPage } from '../layout'
+import { DuxFullPage } from '../page'
 import { DuxStep } from '../step/step'
 import { useForm } from './useForm'
 

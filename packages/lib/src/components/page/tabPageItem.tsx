@@ -6,6 +6,7 @@ export const DuxTabPageItem = defineComponent({
   props: {
     value: String,
     label: String,
+    icon: String,
   },
   setup(props, { slots }) {
     const value = inject<Ref<string>>('value')

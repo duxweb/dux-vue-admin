@@ -7,7 +7,7 @@ interface UserState {
   token?: string
   id?: number
   info?: Record<string, any>
-  permission?: Record<string, string>
+  permission?: Record<string, boolean>
 }
 
 export const useManageStore = defineStore('manage', () => {

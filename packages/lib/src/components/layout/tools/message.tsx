@@ -2,6 +2,7 @@ import { useIntervalFn } from '@vueuse/core'
 import clsx from 'clsx'
 import { NBadge, NButton, NList, NListItem, NPopover, NTabPane, NTabs } from 'naive-ui'
 import { defineComponent, onMounted, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 import { useClient, useResource } from '../../../hooks'
 import { DuxBlockEmpty } from '../../status/blockEmpty'
 
@@ -61,6 +62,7 @@ export const Message = defineComponent({
   setup(_props) {
     const resource = useResource()
     const client = useClient()
+    const router = useRouter()
 
     const data = reactive<Messages>({
       all: [],
@@ -96,6 +98,14 @@ export const Message = defineComponent({
       onLoad()
     })
 
+    const handleRead = () => {
+      client.patch({
+        url: resource.noticeUrl,
+      }).then(() => {
+        onLoad()
+      })
+    }
+
     return () => (
       <NPopover trigger="click" width={300} contentClass="!p-0" class="!p-0">
         {{
@@ -109,13 +119,76 @@ export const Message = defineComponent({
           default: () => (
             <NTabs justifyContent="space-evenly" type="line" animated paneClass="!px-4 !py-2" defaultValue="all">
               <NTabPane name="all" tab="全部">
-                <div><MessageItem data={data.all} /></div>
-              </NTabPane>
-              <NTabPane name="read" tab="已读">
-                <div><MessageItem data={data.read} /></div>
+                <div>
+                  <MessageItem data={data.all} />
+
+                  <div class="mt-2 flex gap-2 border-t border-gray-2 pt-2">
+                    <NButton
+                      block
+                      tertiary
+                      class="flex-1"
+                      onClick={() => {
+                        handleRead()
+                      }}
+                    >
+                      一键已读
+                    </NButton>
+                    <NButton
+                      block
+                      tertiary
+                      class="flex-1"
+                      onClick={() => {
+                        router.push(`/${resource.manage}/message`)
+                      }}
+                    >
+                      全部消息
+                    </NButton>
+                  </div>
+                </div>
               </NTabPane>
               <NTabPane name="unread" tab="未读">
-                <div><MessageItem data={data.unread} /></div>
+                <div>
+                  <MessageItem data={data.unread} />
+
+                  <div class="mt-2 grid grid-cols-2 gap-2 border-t border-gray-2 pt-2">
+                    <NButton
+                      block
+                      tertiary
+                      class="flex-1"
+                      onClick={() => {
+                        handleRead()
+                      }}
+                    >
+                      一键已读
+                    </NButton>
+                    <NButton
+                      block
+                      tertiary
+                      class="flex-1"
+                      onClick={() => {
+                        router.push(`/${resource.manage}/message`)
+                      }}
+                    >
+                      全部消息
+                    </NButton>
+                  </div>
+                </div>
+              </NTabPane>
+              <NTabPane name="read" tab="已读">
+                <div>
+                  <MessageItem data={data.read} />
+                  <div class="mt-2 border-t border-gray-2 pt-2">
+                    <NButton
+                      block
+                      tertiary
+                      onClick={() => {
+                        router.push(`/${resource.manage}/message`)
+                      }}
+                    >
+                      全部消息
+                    </NButton>
+                  </div>
+                </div>
               </NTabPane>
             </NTabs>
           ),

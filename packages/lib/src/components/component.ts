@@ -11,11 +11,13 @@ import { DuxExample } from './example'
 import { DuxFilter, DuxTreeFilter } from './filter'
 import { DuxDrawerForm, DuxFormEditor, DuxJsonForm, DuxModalForm, DuxPageForm, DuxPageFormItem, DuxStepForm, DuxTabForm } from './form'
 import { DuxIconPicker } from './icon'
-import { DuxException, DuxFullPage, DuxGrid, DuxPage, DuxTabPageItem } from './layout'
-import { DuxTabPage } from './layout/tabPage'
+import { DuxException, DuxGrid } from './layout'
 import { DuxCardList, DuxList } from './list'
 import { DuxMentionAsync } from './mention'
+import { DuxMessagePage } from './message'
 import { DuxModalPage } from './modal'
+import { DuxFullPage, DuxPage, DuxTabPageItem } from './page'
+import { DuxTabPage } from './page/tabPage'
 import { DuxPdf } from './pdf'
 import { DuxRadio } from './radio'
 import { DuxRegion } from './region'
@@ -118,5 +120,6 @@ export default {
     app.component('DuxTabPageItem', DuxTabPageItem)
     app.component('DuxTabForm', DuxTabForm)
     app.component('DuxTreeFilter', DuxTreeFilter)
+    app.component('DuxMessagePage', DuxMessagePage)
   },
 }
