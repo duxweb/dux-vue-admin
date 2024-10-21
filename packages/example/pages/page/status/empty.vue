@@ -2,9 +2,9 @@
 </script>
 
 <template>
-  <dux-page-full>
+  <dux-full-page>
     <dux-page-empty />
-  </dux-page-full>
+  </dux-full-page>
 </template>
 
 <style scoped>

@@ -1,8 +1,8 @@
 import type { Ref } from 'vue'
 import { defineComponent, inject } from 'vue'
 
-export const DuxPageTabItem = defineComponent({
-  name: 'DuxPageTabItem',
+export const DuxTabPageItem = defineComponent({
+  name: 'DuxTabPageItem',
   props: {
     value: String,
     label: String,

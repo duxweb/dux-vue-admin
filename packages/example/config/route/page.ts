@@ -59,7 +59,13 @@ export default [
     parent: 'page.form',
     component: () => import('../../pages/page/form/stepForm.vue'),
   },
-
+  {
+    label: 'Tab表单',
+    name: 'form.tabForm',
+    path: 'form/tabForm',
+    parent: 'page.form',
+    component: () => import('../../pages/page/form/tabForm.vue'),
+  },
   {
     label: '普通详情页',
     name: 'info.base',
@@ -104,7 +110,7 @@ export default [
     component: () => import('../../pages/page/status/diy.vue'),
   },
   {
-    label: '个人资料',
+    label: '设置页',
     name: 'setting',
     path: 'setting',
     parent: 'page.other',

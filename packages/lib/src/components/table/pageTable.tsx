@@ -9,7 +9,7 @@ import { NCard, NDataTable } from 'naive-ui'
 import { defineComponent, onMounted, onUnmounted, ref, toRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { DuxFilter } from '../filter'
-import { DuxPageFull } from '../layout'
+import { DuxFullPage } from '../layout'
 import { useTable } from './useTable'
 
 export const DuxPageTable = defineComponent({
@@ -97,7 +97,7 @@ export const DuxPageTable = defineComponent({
     })
 
     return () => (
-      <DuxPageFull class="flex flex-col gap-2">
+      <DuxFullPage class="flex flex-col gap-2">
         {slots?.header?.(form)}
         <NCard class="flex-1 h-1">
           <div class="flex flex-col h-full gap-4">
@@ -136,7 +136,7 @@ export const DuxPageTable = defineComponent({
             </div>
           </div>
         </NCard>
-      </DuxPageFull>
+      </DuxFullPage>
     )
   },
 })

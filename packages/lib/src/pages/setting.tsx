@@ -1,13 +1,13 @@
 import { NForm, NInput } from 'naive-ui'
 import { defineComponent } from 'vue'
-import { DuxImageUpload, DuxPageFormItem, DuxPageTab, DuxPageTabItem } from '../components'
+import { DuxImageUpload, DuxPageFormItem, DuxTabPage, DuxTabPageItem } from '../components'
 
 export default defineComponent({
   name: 'DuxSetting',
   setup(_props) {
     return () => (
-      <DuxPageTab defaultValue="0">
-        <DuxPageTabItem
+      <DuxTabPage defaultValue="0">
+        <DuxTabPageItem
           label="个人资料"
           value="0"
         >
@@ -28,8 +28,8 @@ export default defineComponent({
             </div>
             <div></div>
           </NForm>
-        </DuxPageTabItem>
-      </DuxPageTab>
+        </DuxTabPageItem>
+      </DuxTabPage>
     )
   },
 })

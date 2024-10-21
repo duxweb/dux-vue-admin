@@ -1,16 +1,15 @@
 import type { PropType, Ref } from 'vue'
 import type { JsonFormItemSchema } from './handler'
 import { useWindowSize } from '@vueuse/core'
-import { NButton, NCard, NForm } from 'naive-ui'
+import { NButton, NCard, NForm, NTabs } from 'naive-ui'
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTabStore } from '../../stores'
 import { DuxFullPage } from '../layout'
-import { DuxJsonForm } from './jsonForm'
 import { useForm } from './useForm'
 
-export const DuxPageForm = defineComponent({
-  name: 'DuxPageForm',
+export const DuxTabForm = defineComponent({
+  name: 'DuxTabForm',
   props: {
     model: Object as PropType<Ref<Record<string, any>>>,
     title: String,
@@ -19,6 +18,7 @@ export const DuxPageForm = defineComponent({
     url: String,
     id: [String, Number],
     invalidate: String,
+    tab: String,
   },
   setup(props, { slots }) {
     const tab = useTabStore()
@@ -38,31 +38,24 @@ export const DuxPageForm = defineComponent({
         }
       },
     })
-
     const { width } = useWindowSize()
 
     return () => (
       <DuxFullPage>
-        <NCard title={props.title} segmented contentClass="p-0! flex-1 h-1" class="h-full flex flex-col" headerClass="px-6! py-4!">
-          {{
-            default: () => (
-              <NForm model={model} labelPlacement={width.value > 768 ? 'left' : 'top'} labelWidth={width.value > 768 ? 100 : 0} class="h-full">
-                <n-scrollbar>
-                  <div class="p-6">
-                    {slots.default?.(model)}
-                    <DuxJsonForm model={model} data={props.data} schema={props.schema} />
-                  </div>
-                </n-scrollbar>
-              </NForm>
-            ),
-            action: () => (
-              <div class="flex justify-end gap-4">
-                <NButton tertiary loading={loading.value} onClick={onReset}>重置</NButton>
-                <NButton type="primary" loading={loading.value} onClick={onSubmit}>提交</NButton>
-              </div>
-            ),
-          }}
-        </NCard>
+        <NForm model={model} labelPlacement={width.value > 768 ? 'left' : 'top'} labelWidth={width.value > 768 ? 100 : 0} class="h-full">
+          <NCard
+            class="h-full"
+            contentClass="p-0! h-1 flex flex-col"
+          >
+            <NTabs type="line" class="flex-1 h-1" tabClass="p-4!" paneClass="flex-1 h-1 overflow-auto p-4!" defaultValue={props.tab}>
+              {slots.default?.()}
+            </NTabs>
+            <div class="border-t border-gray-2 p-4 flex justify-end gap-4">
+              <NButton tertiary loading={loading.value} onClick={onReset}>重置</NButton>
+              <NButton type="primary" loading={loading.value} onClick={onSubmit}>提交</NButton>
+            </div>
+          </NCard>
+        </NForm>
       </DuxFullPage>
     )
   },

@@ -50,17 +50,26 @@ export type JsonFormType = 'editor' | 'auto-complete' | 'cascader' | 'checkbox' 
   'dynamic-tags' | 'grid' | 'input' | 'mention' | 'number' | 'radio' | 'radio-group' | 'rate' | 'select' | 'slider' | 'space' | 'switch' | 'time' | 'transfer' | 'tree-select' |
   'file-upload' | 'image-upload' | 'cascader-async' | 'select-async' | 'region'
 
+export type FormLayoutType = 'page' | 'form'
+
+export interface JsonFormItemProps extends FormItemProps {
+  layout?: FormLayoutType
+  desc?: string
+}
+
 export interface JsonFormItemSchema {
   type: JsonFormType
   label?: string
   name?: string
   attr?: JsonFormItemAdaptor<this['type']>
-  itemAttr?: FormItemProps
+  itemAttr?: JsonFormItemProps
   child?: JsonFormItemSchema | JsonFormItemSchema[]
 }
 
-export function formToJson(schema: JsonFormItemSchema[]): JSONSchema[] {
+export function formToJson(schema: JsonFormItemSchema[], layout: FormLayoutType = 'form'): JSONSchema[] {
   return schema?.map((item: JsonFormItemSchema) => {
+    item.itemAttr = item.itemAttr || {}
+    item.itemAttr.layout = layout
     let itemJson: JSONSchema = {}
     if (item.type === 'editor') {
       itemJson = editor(item)

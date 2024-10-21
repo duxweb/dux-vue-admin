@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import type { JsonFormItemSchema } from 'dux-vue-admin'
+import { ref } from 'vue'
 
 const baseCode = ref(`<script setup>
   const schema = [
@@ -9,7 +9,7 @@ const baseCode = ref(`<script setup>
       label: '标题',
       name: 'title',
       itemAttr: {
-        required: true,
+        required: true
       },
     },
     {
@@ -17,7 +17,7 @@ const baseCode = ref(`<script setup>
       label: '内容',
       name: 'content',
       itemAttr: {
-        required: true,
+        required: true
       },
     },
   ]

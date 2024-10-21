@@ -97,20 +97,20 @@ const columns = [
 </script>
 
 <template>
-  <dux-page-tab default-value="0">
+  <dux-tab-page default-value="0">
     <template #header>
       <div class="p-4">
         <dux-media title="Admin" desc="超级管理员" image="https://picsum.photos/100/100" :image-width="40" :image-height="40" />
       </div>
     </template>
-    <dux-page-tab-item value="0" label="个人资料">
+    <dux-tab-page-item value="0" label="个人资料">
       <n-alert type="info">
         该页面为示例页面，您可以接入右上角的用户菜单，实现个人资料修改功能。
       </n-alert>
       <n-form>
         <div class="divide-y divide-gray-2">
-          <dux-page-form-item label="头像" desc="请上传 1M 以内的头像" path="username">
-            <dux-image-upload />
+          <dux-page-form-item label="头像" desc="请上传 1M 以内的头像" path="avatar">
+            <dux-image-upload v-model:value="form.avatar" />
           </dux-page-form-item>
           <dux-page-form-item label="用户名" desc="登录系统使用的用户名" path="username">
             <n-input v-model:value="form.username" />
@@ -131,9 +131,9 @@ const columns = [
           提交
         </NButton>
       </template>
-    </dux-page-tab-item>
+    </dux-tab-page-item>
 
-    <dux-page-tab-item value="1" label="登录日志">
+    <dux-tab-page-item value="1" label="登录日志">
       <div class="h-full">
         <dux-table
           class="h-full"
@@ -142,17 +142,17 @@ const columns = [
           :columns="columns"
         />
       </div>
-    </dux-page-tab-item>
+    </dux-tab-page-item>
 
-    <dux-page-tab-item value="2" label="操作日志">
+    <dux-tab-page-item value="2" label="操作日志">
       <dux-table
         class="h-full"
         url="/mall"
         flex-height
         :columns="columns"
       />
-    </dux-page-tab-item>
-  </dux-page-tab>
+    </dux-tab-page-item>
+  </dux-tab-page>
 </template>
 
 <style scoped>

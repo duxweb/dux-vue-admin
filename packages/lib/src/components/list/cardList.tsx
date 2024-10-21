@@ -3,7 +3,7 @@ import { defineComponent, ref } from 'vue'
 import type { Column } from 'exceljs'
 import type { PropType, Ref } from 'vue'
 import { DuxFilter, type ListAction } from '../filter'
-import { DuxPageFull } from '../layout'
+import { DuxFullPage } from '../layout'
 import { DuxPageEmpty } from '../status/pageEmpty'
 import { useList } from './useList'
 import type { JsonFormItemSchema } from '../form'
@@ -46,7 +46,7 @@ export const DuxCardList = defineComponent({
     })
 
     return () => (
-      <DuxPageFull>
+      <DuxFullPage>
         <div class="h-full flex flex-col gap-2">
           {slots?.header?.(form)}
           <NCard class="flex-none">
@@ -115,7 +115,7 @@ export const DuxCardList = defineComponent({
             />
           </div>
         </div>
-      </DuxPageFull>
+      </DuxFullPage>
     )
   },
 })

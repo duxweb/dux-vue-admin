@@ -2,8 +2,8 @@ import clsx from 'clsx'
 import { defineComponent } from 'vue'
 import { useTabStore } from '../../stores'
 
-export const DuxPageFull = defineComponent({
-  name: 'DuxPageFull',
+export const DuxFullPage = defineComponent({
+  name: 'DuxFullPage',
   props: {
     class: String,
   },

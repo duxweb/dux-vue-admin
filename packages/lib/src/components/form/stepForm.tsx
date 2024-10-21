@@ -4,7 +4,7 @@ import { computed, defineAsyncComponent, defineComponent, ref, Transition } from
 import { useRouter } from 'vue-router'
 import type { AsyncComponentLoader, PropType } from 'vue'
 import { useTabStore } from '../../stores'
-import { DuxPageFull } from '../layout'
+import { DuxFullPage } from '../layout'
 import { DuxStep } from '../step/step'
 import { useForm } from './useForm'
 
@@ -69,7 +69,7 @@ export const DuxStepForm = defineComponent({
     })
 
     return () => (
-      <DuxPageFull>
+      <DuxFullPage>
         <NCard segmented contentClass="p-0! flex-1 h-1" class="h-full flex flex-col" headerClass="px-6! py-4!">
           {{
             header: () => (
@@ -95,7 +95,7 @@ export const DuxStepForm = defineComponent({
             ),
           }}
         </NCard>
-      </DuxPageFull>
+      </DuxFullPage>
     )
   },
 })

@@ -2,10 +2,10 @@ import { useVModel } from '@vueuse/core'
 import clsx from 'clsx'
 import { NCard, NScrollbar } from 'naive-ui'
 import { defineComponent, provide } from 'vue'
-import { DuxPageFull } from './pageFull'
+import { DuxFullPage } from './fullPage'
 
-export const DuxPageTab = defineComponent({
-  name: 'DuxPageTab',
+export const DuxTabPage = defineComponent({
+  name: 'DuxTabPage',
   props: {
     value: String,
     defaultValue: String,
@@ -18,7 +18,7 @@ export const DuxPageTab = defineComponent({
     provide('value', value)
 
     return () => (
-      <DuxPageFull>
+      <DuxFullPage>
         <NCard
           class="h-full"
           contentClass="p-0! h-1"
@@ -53,7 +53,7 @@ export const DuxPageTab = defineComponent({
             </div>
           </div>
         </NCard>
-      </DuxPageFull>
+      </DuxFullPage>
     )
   },
 })
