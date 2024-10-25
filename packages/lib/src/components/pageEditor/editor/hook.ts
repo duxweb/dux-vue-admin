@@ -35,7 +35,9 @@ export interface PageEditorSettingPage {
 }
 
 export interface UseEditorResult {
+  clearComponent: () => void
   addComponent: (data: PageEditorComponent) => void
+  clearGroup: () => void
   addGroup: (data: PageEditorGroup) => void
   getData: (key?: string) => PageEditorData | undefined
   copyData: (key: string, index: number) => void
@@ -61,6 +63,14 @@ export function useEditor({ settingPage }: { settingPage?: PageEditorSettingPage
     config: settingPage?.default || {},
     data: [],
   })
+
+  const clearComponent = () => {
+    components.value = []
+  }
+
+  const clearGroup = () => {
+    group.value = []
+  }
 
   // 添加组件
   const addComponent = (data: PageEditorComponent) => {
@@ -219,6 +229,8 @@ export function useEditor({ settingPage }: { settingPage?: PageEditorSettingPage
   }
 
   return {
+    clearGroup,
+    clearComponent,
     addComponent,
     addGroup,
     tree,

@@ -28,9 +28,6 @@ export interface ConfigApiConfig {
   check?: string
   captcha?: string
   verify?: string
-  register?: string
-  forgotPassword?: string
-  updatePassword?: string
   upload?: string
   uploadManage?: string
   uploadType?: DuxUploadType
@@ -44,8 +41,8 @@ export interface Config {
   apiConfig?: ConfigApiConfig
   logo?: string
   darkLogo?: string
-  logoBanner?: string
-  logoCopyright?: string
+  loginBanner?: string
+  copyright?: string
   lang?: ConfigLang
   captcha?: boolean
   amapMapKey?: string

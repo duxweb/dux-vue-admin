@@ -4,6 +4,7 @@ import type { TableColumn } from '../table'
 import type { DuxDynamicDataColumn } from './dynamicData'
 import { useVModel } from '@vueuse/core'
 import { defineComponent, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useClient } from '../../hooks'
 import { useModal } from '../modal'
 import { DuxDynamicData } from './dynamicData'
@@ -39,6 +40,7 @@ export const DuxDynamicSelect = defineComponent({
 
     const modal = useModal()
     const client = useClient()
+    const { t } = useI18n()
 
     const once = ref(true)
 
@@ -78,7 +80,7 @@ export const DuxDynamicSelect = defineComponent({
               filter: props.filter,
             },
             width: 1000,
-            title: '选择',
+            title: t('buttons.select'),
           }).then((rows: Record<string, any>[]) => {
             once.value = false
             rows?.forEach((row) => {

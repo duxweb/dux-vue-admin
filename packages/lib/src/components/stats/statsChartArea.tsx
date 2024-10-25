@@ -21,6 +21,7 @@ export const DuxStatsChartArea = defineComponent({
     title: String,
     labels: Array as PropType<Array<string>>,
     data: Array as PropType<Array<DuxStatsChartAreaData>>,
+    ringLabel: String,
     type: {
       type: String as PropType<'pie' | 'ring' | 'rose' | 'funnel'>,
       default: 'pie',
@@ -74,7 +75,7 @@ export const DuxStatsChartArea = defineComponent({
                 left: 'center',
                 top: '40%',
                 style: {
-                  text: '总计',
+                  text: props.ringLabel || 'Total',
                   textAlign: 'center',
                   fill: 'rgba(var(--n-gray-color-7))',
                   fontSize: 14,

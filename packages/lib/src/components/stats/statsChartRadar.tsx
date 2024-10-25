@@ -1,9 +1,10 @@
-import { NCard, NDataTable } from 'naive-ui'
-import { computed, defineComponent } from 'vue'
-import VChart from 'vue-echarts'
 import type { EChartsOption } from 'echarts'
 import type { DataTableColumn } from 'naive-ui'
 import type { PropType } from 'vue'
+import { NCard, NDataTable } from 'naive-ui'
+import { computed, defineComponent } from 'vue'
+import VChart from 'vue-echarts'
+import { useI18n } from 'vue-i18n'
 
 export interface DuxStatsChartRadarData {
   name: string
@@ -61,6 +62,8 @@ export const DuxStatsChartRadar = defineComponent({
       } as EChartsOption
     })
 
+    const { t } = useI18n()
+
     return () => (
       <NCard
         headerClass="!text-base"
@@ -106,7 +109,7 @@ export const DuxStatsChartRadar = defineComponent({
                     flexHeight
                     columns={[
                       {
-                        title: '数据项',
+                        title: t('components.stats.data'),
                         key: 'name',
                         fixed: 'left',
                         width: 130,

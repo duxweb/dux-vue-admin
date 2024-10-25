@@ -7,8 +7,6 @@ export const languageMaps = {
   'zh-CN': '简体中文',
 }
 
-export const i18n = setupI18n({})
-
 export function getLanguage() {
   let storedLang = localStorage.getItem('i18nextLng')
   const userLanguage = navigator.language
@@ -35,6 +33,15 @@ export function importI18ns(i18n, files: Record<string, unknown>) {
   }
 }
 
+/**
+ * 设置国际化配置
+ * @param options - 国际化配置选项
+ * @returns 返回一个配置好的国际化实例
+ *
+ * 该函数用于创建并配置国际化实例，支持英语（美国）和中文（中国）两种语言。
+ * 默认语言为系统获取的语言，如果获取失败则默认为英语（美国）。
+ * 提供了货币和数字格式化的配置。
+ */
 export function setupI18n(options) {
   const app = createI18n({
     ...options,
@@ -73,6 +80,8 @@ export function setupI18n(options) {
   importI18ns(app, data)
   return app
 }
+
+export const i18n = setupI18n({})
 
 export function setLanguage(locale) {
   if (i18n.mode === 'legacy') {

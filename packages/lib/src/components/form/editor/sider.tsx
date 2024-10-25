@@ -1,9 +1,11 @@
+import type { ComposerTranslation } from 'vue-i18n'
 import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 import { useVModel } from '@vueuse/core'
 import { NFormItem, NInputNumber, NSlider, NSwitch } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
-import { DuxFormEditorItem, DuxFormEditorRule } from './common'
+import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const Comp = defineComponent({
   props: {
@@ -27,15 +29,16 @@ const Setting = defineComponent({
   },
   setup(props, { emit }) {
     const data = useVModel(props, 'value', emit)
+    const { t } = useI18n()
 
     return () => (
       <div class="">
 
         <DuxFormEditorItem v-model:value={props.value} />
 
-        <WidgetEditorSettingCard title="组件配置">
+        <WidgetEditorSettingCard title={t('components.formEditor.config')}>
 
-          <NFormItem label="禁用" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.common.disabled')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.disabled} />
             </div>
@@ -43,17 +46,17 @@ const Setting = defineComponent({
 
         </WidgetEditorSettingCard>
 
-        <WidgetEditorSettingCard title="组件选项">
+        <WidgetEditorSettingCard title={t('components.formEditor.options')}>
 
-          <NFormItem label="步长">
+          <NFormItem label={t('components.formEditor.sider.step')}>
             <NInputNumber v-model:value={data.value.attr.step} />
           </NFormItem>
 
-          <NFormItem label="最小值">
+          <NFormItem label={t('components.formEditor.sider.min')}>
             <NInputNumber v-model:value={data.value.attr.min} />
           </NFormItem>
 
-          <NFormItem label="最大值">
+          <NFormItem label={t('components.formEditor.sider.max')}>
             <NInputNumber v-model:value={data.value.attr.max} />
           </NFormItem>
 
@@ -65,16 +68,16 @@ const Setting = defineComponent({
   },
 })
 
-export function duxFormEditorSider(): PageEditorComponent {
+export function duxFormEditorSider(t: ComposerTranslation): PageEditorComponent {
   return {
     name: 'sider',
     icon: 'i-tabler:separator',
-    label: '滑块',
+    label: t('components.formEditor.sider.name'),
     group: 'form',
     component: props => <Comp {...props} />,
     setting: props => <Setting {...props} />,
     settingDefault: {
-      label: '滑块',
+      label: t('components.formEditor.sider.name'),
       name: 'sider',
       attr: {
         step: 1,

@@ -4,6 +4,7 @@ import { usePagination } from 'alova/client'
 import { NButton, NCheckbox, NDropdown, NPopover, NTooltip, useMessage } from 'naive-ui'
 import { computed, reactive, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
+import { useI18n } from 'vue-i18n'
 import { useExportExcel, useImportExcel } from '../../hooks'
 import { useClient } from '../../hooks/useClient'
 import { listRenderAction } from '../filter'
@@ -14,6 +15,7 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
   const message = useMessage()
   const excelExport = useExportExcel()
   const excelImport = useImportExcel()
+  const { t } = useI18n()
 
   // 增加默认显示，用于过滤列
   const formatColumns = columns?.map((item: any) => {
@@ -67,12 +69,12 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
   )
 
   onError((res) => {
-    message.error(res?.error?.message || '筛选提交异常')
+    message.error(res?.error?.message || t('components.list.getError'))
   })
 
   // 筛选提交
   const onSend = () => {
-    send()
+    send(1, pageSize.value)
   }
 
   // 表格列设置
@@ -119,7 +121,7 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
           trigger: () => (
             <NTooltip>
               {{
-                default: () => '列设置',
+                default: () => t('components.list.columnSetting'),
                 trigger: () => <NButton secondary renderIcon={() => <div class="i-tabler:columns" />} />,
               }}
             </NTooltip>
@@ -131,21 +133,21 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
 
   const toolsOptions = [
     {
-      label: '刷新数据',
+      label: t('components.list.refresh'),
       key: 'refresh',
     },
   ]
 
   if (exportStatus) {
     toolsOptions.push({
-      label: '导出 Excel',
+      label: t('components.list.excelExport'),
       key: 'export',
     })
   }
 
   if (importStatus) {
     toolsOptions.push({
-      label: '导入 Excel',
+      label: t('components.list.excelImport'),
       key: 'import',
     })
   }
@@ -204,7 +206,7 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
         delete sorter[`${item.columnKey}_sort`]
       }
     })
-    send()
+    send(1, pageSize.value)
   }
 
   // 筛选处理
@@ -212,7 +214,7 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
     Object.entries(v).forEach(([key, value]) => {
       filters[key] = value
     })
-    send()
+    send(1, pageSize.value)
   }
 
   // 表格扩展参数

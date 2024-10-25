@@ -6,6 +6,7 @@ import clsx from 'clsx'
 import { NButton, NImage, NProgress, NUpload } from 'naive-ui'
 import { defineComponent, ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
+import { useI18n } from 'vue-i18n'
 import { useImagePreview, useResource } from '../../hooks'
 import { useModal } from '../modal'
 import { useNaiveUpload } from './useUpload'
@@ -39,6 +40,7 @@ export const DuxImageUpload = defineComponent({
 
     const { uploadUrl, uploadType } = useResource()
     const { customRequest, onAbort } = useNaiveUpload(props.uploadType || uploadType)
+    const { t } = useI18n()
 
     const imagesToFileList = (images: string[]): UploadFileInfo[] => {
       return images.map((url, index) => {
@@ -202,7 +204,7 @@ export const DuxImageUpload = defineComponent({
                   class="flex-none border-b border-gray-4 border-dashed text-center py-1 bg-gray-2 hover:bg-gray-3 flex items-center justify-center gap-1"
                   onClick={() => {
                     modal.show({
-                      title: '文件管理',
+                      title: t('components.upload.manage'),
                       component: () => import('./fileManage'),
                       width: 800,
                       componentProps: {
@@ -233,7 +235,7 @@ export const DuxImageUpload = defineComponent({
                 }}
               >
                 <div class="i-tabler:plus size-5"></div>
-                上传图片
+                {t('components.upload.image')}
               </div>
             </div>
           )}

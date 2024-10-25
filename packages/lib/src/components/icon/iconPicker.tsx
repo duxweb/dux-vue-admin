@@ -1,9 +1,10 @@
+import type { PropType } from 'vue'
 import { icons } from '@iconify-json/tabler/icons.json'
 import { useOffsetPagination } from '@vueuse/core'
-import { NInput, NPagination } from 'naive-ui'
 
+import { NInput, NPagination } from 'naive-ui'
 import { defineComponent, onMounted, ref, watch } from 'vue'
-import type { PropType } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const DuxIconPicker = defineComponent({
   name: 'DuxIconPicker',
@@ -49,9 +50,11 @@ const DuxIconPicker = defineComponent({
       fetchData({ currentPage: currentPage.value, currentPageSize: currentPageSize.value })
     }, { immediate: true })
 
+    const { t } = useI18n()
+
     return () => (
       <div class="p-4 flex flex-col gap-4">
-        <NInput placeholder="请输入关键词搜索" v-model:value={keyword.value} clearable />
+        <NInput placeholder={t('placeholder.keyword')} v-model:value={keyword.value} clearable />
         <div class="grid grid-cols-6">
           {data.value?.map((item, index) => (
             <div

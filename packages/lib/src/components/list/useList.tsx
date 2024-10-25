@@ -2,6 +2,7 @@ import type { Column } from 'exceljs'
 import type { Ref } from 'vue'
 import { usePagination } from 'alova/client'
 import { NButton, NDropdown } from 'naive-ui'
+import { useI18n } from 'vue-i18n'
 import { useClient, useExportExcel, useImportExcel } from '../../hooks'
 
 interface UseListProps {
@@ -19,6 +20,7 @@ export function useList({ url, form, cacheTime = Infinity, excelColumns, export:
   const client = useClient()
   const excelExport = useExportExcel()
   const excelImport = useImportExcel()
+  const { t } = useI18n()
 
   const {
     loading,
@@ -81,21 +83,21 @@ export function useList({ url, form, cacheTime = Infinity, excelColumns, export:
 
   const toolsOptions = [
     {
-      label: '刷新数据',
+      label: t('components.list.refresh'),
       key: 'refresh',
     },
   ]
 
   if (exportStatus) {
     toolsOptions.push({
-      label: '导出 Excel',
+      label: t('components.list.excelExport'),
       key: 'export',
     })
   }
 
   if (importStatus) {
     toolsOptions.push({
-      label: '导入 Excel',
+      label: t('components.list.excelImport'),
       key: 'import',
     })
   }
@@ -107,7 +109,7 @@ export function useList({ url, form, cacheTime = Infinity, excelColumns, export:
         options={toolsOptions}
         onSelect={(key) => {
           if (key === 'refresh') {
-            send()
+            reload()
           }
           if (key === 'export') {
             excelExport.send({
@@ -131,7 +133,7 @@ export function useList({ url, form, cacheTime = Infinity, excelColumns, export:
   )
 
   const onFilter = () => {
-    send()
+    send(1, pageSize)
   }
 
   const onReload = () => {

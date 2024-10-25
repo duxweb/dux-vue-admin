@@ -4,6 +4,7 @@ import { useWindowSize } from '@vueuse/core'
 import { cloneDeep } from 'lodash-es'
 import { NButton, NForm } from 'naive-ui'
 import { computed, defineComponent, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { DuxJsonForm, DuxModalPage, DuxTable } from '..'
 
 const Select = defineComponent({
@@ -36,6 +37,7 @@ const Select = defineComponent({
     const table = ref<UseTableResult>()
 
     const { width } = useWindowSize()
+    const { t } = useI18n()
 
     return () => (
       <DuxModalPage>
@@ -49,7 +51,7 @@ const Select = defineComponent({
                     table.value?.send()
                   }}
                   >
-                    筛选
+                    {t('buttons.filter')}
                   </NButton>
                 </div>
               </NForm>
@@ -74,7 +76,7 @@ const Select = defineComponent({
                 props.onClose?.()
               }}
               >
-                取消
+                {t('buttons.cancel')}
               </NButton>
               <NButton
                 type="primary"
@@ -82,7 +84,7 @@ const Select = defineComponent({
                   props.onConfirm?.(checkedRowData.value)
                 }}
               >
-                选择
+                {t('buttons.select')}
               </NButton>
             </>
           ),

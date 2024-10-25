@@ -2,6 +2,7 @@ import type { AsyncComponentLoader, PropType } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { NButton, NCard, NForm } from 'naive-ui'
 import { computed, defineAsyncComponent, defineComponent, ref, Transition } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useTabStore } from '../../stores'
 import { DuxFullPage } from '../page'
@@ -68,6 +69,8 @@ export const DuxStepForm = defineComponent({
       return step.value === 0
     })
 
+    const { t } = useI18n()
+
     return () => (
       <DuxFullPage>
         <NCard segmented contentClass="p-0! flex-1 h-1" class="h-full flex flex-col" headerClass="px-6! py-4!">
@@ -88,9 +91,21 @@ export const DuxStepForm = defineComponent({
             ),
             action: () => (
               <div class="flex justify-end gap-4">
-                {!isFirst.value && <NButton tertiary loading={loading.value} onClick={onPrev}>上一步</NButton>}
-                {!isLast.value && <NButton type="primary" loading={loading.value} onClick={onNext}>下一步</NButton>}
-                {isLast.value && <NButton type="primary" loading={loading.value} onClick={onSubmit}>提交</NButton>}
+                {!isFirst.value && (
+                  <NButton tertiary loading={loading.value} onClick={onPrev}>
+                    {t('buttons.prev')}
+                  </NButton>
+                )}
+                {!isLast.value && (
+                  <NButton type="primary" loading={loading.value} onClick={onNext}>
+                    {t('buttons.next')}
+                  </NButton>
+                )}
+                {isLast.value && (
+                  <NButton type="primary" loading={loading.value} onClick={onSubmit}>
+                    {t('buttons.submit')}
+                  </NButton>
+                )}
               </div>
             ),
           }}

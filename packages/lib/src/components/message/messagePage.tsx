@@ -2,6 +2,7 @@ import type { PropType } from 'vue'
 import clsx from 'clsx'
 import { NButton, NCard, NInfiniteScroll, NScrollbar, NSpin } from 'naive-ui'
 import { defineComponent, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { DuxBlockEmpty } from '../'
 import { useClient } from '../../hooks'
 import { useList } from '../list/useList'
@@ -18,6 +19,7 @@ export const DuxMessagePage = defineComponent({
   props: {
     tabs: Array as PropType<MessagePageTab[]>,
     url: String,
+    title: String,
     valueField: {
       type: String,
       default: 'id',
@@ -69,6 +71,7 @@ export const DuxMessagePage = defineComponent({
     }
 
     const client = useClient()
+    const { t } = useI18n()
 
     const handleDelete = (id?: any) => {
       client.delete({
@@ -100,7 +103,7 @@ export const DuxMessagePage = defineComponent({
         >
           <div class="h-full flex flex-col lg:flex-row">
             <div class="flex-none bg-gray-2/30 lg:w-30 border-r border-gray-2 py-2 transition-all flex flex-col">
-              <div class="px-4 py-2 text-base font-medium lg:block hidden">用户消息</div>
+              <div class="px-4 py-2 text-base font-medium lg:block hidden">{props.title || t('components.message.title')}</div>
               <div class="flex-1 lg:h-1">
                 <NScrollbar>
                   <div class="flex flex-row lg:flex-col gap-1 px-2 lg:py-2">
@@ -126,7 +129,7 @@ export const DuxMessagePage = defineComponent({
             </div>
             <div class="lg:flex-none flex-1 h-1 lg:h-full border-r border-gray-2 lg:w-60 flex flex-col">
               <div class="flex-none p-4 font-bold text-base hidden lg:flex border-b border-gray-2  gap-2 items-center">
-                <div>消息列表</div>
+                <div>{t('components.message.list')}</div>
               </div>
               <div class="flex-1 h-1 relative">
                 <NInfiniteScroll distance={10} onLoad={handleLoad}>
@@ -171,7 +174,7 @@ export const DuxMessagePage = defineComponent({
                         handleRead()
                       }}
                     >
-                      一键已读
+                      {t('components.message.readAll')}
                     </NButton>
                   )}
                   {props.delete && (
@@ -183,7 +186,7 @@ export const DuxMessagePage = defineComponent({
                         handleDelete()
                       }}
                     >
-                      删除已读
+                      {t('components.message.deleteAll')}
                     </NButton>
                   )}
                 </div>
@@ -237,7 +240,7 @@ export const DuxMessagePage = defineComponent({
                             handleDelete(currentMessage.value?.[props.valueField])
                           }}
                         >
-                          删除
+                          {t('buttons.delete')}
                         </NButton>
                       )}
                       <NButton
@@ -248,14 +251,14 @@ export const DuxMessagePage = defineComponent({
                           currentMessage.value = undefined
                         }}
                       >
-                        关闭
+                        {t('buttons.close')}
                       </NButton>
                     </div>
                   </div>
                 )
               : (
                   <div class="hidden lg:flex flex-1 items-center justify-center">
-                    <DuxBlockEmpty text="暂无消息" desc="当前暂无打开消息" />
+                    <DuxBlockEmpty text={t('components.message.notFound')} desc={t('components.message.notFoundDesc')} />
                   </div>
                 )}
           </div>

@@ -3,6 +3,7 @@ import type { JsonFormItemSchema } from '../form'
 import { useExtendOverlay } from '@overlastic/vue'
 import { NButton, NForm, NModal } from 'naive-ui'
 import { defineComponent, reactive, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { DuxJsonForm } from '../form'
 
 export const DuxDialog = defineComponent({
@@ -22,6 +23,8 @@ export const DuxDialog = defineComponent({
 
     const form = ref(props.defaultValue || {})
 
+    const { t } = useI18n()
+
     const data = reactive({
       title: props?.title,
       content: props?.content,
@@ -29,25 +32,25 @@ export const DuxDialog = defineComponent({
     })
 
     if (props.type === 'confirm') {
-      data.title = data.title || '确认提醒'
-      data.content = data.content || '请确认执行该操作？'
+      data.title = data.title || t('dialog.confirm.title')
+      data.content = data.content || t('dialog.confirm.content')
       data.button = 'primary'
     }
 
     if (props.type === 'success') {
-      data.title = data.title || '成功提醒'
-      data.content = data.content || '您已成功执行该操作'
+      data.title = data.title || t('dialog.success.title')
+      data.content = data.content || t('dialog.success.title')
       data.button = 'success'
     }
 
     if (props.type === 'error') {
-      data.title = data.title || '错误提醒'
-      data.content = data.content || '该操作执行失败'
+      data.title = data.title || t('dialog.error.title')
+      data.content = data.content || t('dialog.error.title')
       data.button = 'error'
     }
 
     if (props.type === 'prompt') {
-      data.title = data.title || '请输入内容'
+      data.title = data.title || t('dialog.prompt.title')
       data.button = 'primary'
     }
 
@@ -115,7 +118,7 @@ export const DuxDialog = defineComponent({
                     reject()
                   }}
                 >
-                  取消
+                  {t('buttons.cancel')}
                 </NButton>
               )}
               <NButton
@@ -124,7 +127,7 @@ export const DuxDialog = defineComponent({
                   resolve(form.value)
                 }}
               >
-                确定
+                {t('buttons.confirm')}
               </NButton>
             </div>
 

@@ -3,6 +3,7 @@ import type { PageEditorData } from '../editor/hook'
 import clsx from 'clsx'
 import { NFormItem, NInputNumber } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { DuxGrid } from '../../layout'
 import { DuxWidgetEditorPreview } from '../editor/preview'
 import { WidgetEditorSettingCard } from '../editor/setting'
@@ -51,26 +52,20 @@ export const WidgetEditorGridSetting = defineComponent({
       default: {},
     },
   },
-  setup({ modelValue }, { emit }) {
+  setup({ modelValue }) {
+    const { t } = useI18n()
+
     return () => (
       <div class="">
-        <WidgetEditorSettingCard title="布局配置" icon="i-tabler:grid-4x4">
-          <NFormItem label="网格数" path="col">
+        <WidgetEditorSettingCard title={t('components.pageEditor.grid.title')} icon="i-tabler:grid-4x4">
+          <NFormItem label={t('components.pageEditor.grid.col')} path="col">
             <NInputNumber
-              value={modelValue.col}
-              onUpdateValue={(v) => {
-                modelValue.col = v
-                emit('update:modelValue', v)
-              }}
+              v-model:value={modelValue.col}
             />
           </NFormItem>
-          <NFormItem label="间隔值" path="spac">
+          <NFormItem label={t('components.pageEditor.grid.spac')} path="spac">
             <NInputNumber
-              value={modelValue.spac}
-              onUpdateValue={(v) => {
-                modelValue.spac = v
-                emit('update:modelValue', v)
-              }}
+              v-model:value={modelValue.spac}
             />
           </NFormItem>
         </WidgetEditorSettingCard>

@@ -1,11 +1,13 @@
+import type { PropType } from 'vue'
+import type { ComposerTranslation } from 'vue-i18n'
+import type { PageEditorComponent, PageEditorData } from '../../pageEditor/editor/hook'
 import { useVModel } from '@vueuse/core'
 import { NDynamicInput, NFormItem, NInputNumber, NSwitch } from 'naive-ui'
 import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { DuxWidgetEditorPreview } from '../../pageEditor/editor/preview'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
-import { DuxFormEditorItem, DuxFormEditorRule } from './common'
-import type { PageEditorComponent, PageEditorData } from '../../pageEditor/editor/hook'
+import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const FormDynamicInput = defineComponent({
   name: 'DynamicInput',
@@ -19,6 +21,7 @@ const FormDynamicInput = defineComponent({
   },
   setup(props) {
     const attr = props.options?.attr
+
     return () => (
       <NFormItem label={props.options?.label}>
         <div class="flex-1 w-full">
@@ -52,26 +55,27 @@ const FormDynamicInputSetting = defineComponent({
   },
   setup(props, { emit }) {
     const data = useVModel(props, 'value', emit)
+    const { t } = useI18n()
 
     return () => (
       <div class="">
 
         <DuxFormEditorItem v-model:value={props.value} />
 
-        <WidgetEditorSettingCard title="组件配置">
-          <NFormItem label="最小项">
+        <WidgetEditorSettingCard title={t('components.formEditor.config')}>
+          <NFormItem label={t('components.formEditor.dynamicInput.min')}>
             <NInputNumber
               v-model:value={data.value.attr.min}
             />
           </NFormItem>
 
-          <NFormItem label="最大项">
+          <NFormItem label={t('components.formEditor.dynamicInput.max')}>
             <NInputNumber
               v-model:value={data.value.attr.max}
             />
           </NFormItem>
 
-          <NFormItem label="禁用" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.common.disabled')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.disabled} />
             </div>
@@ -84,17 +88,17 @@ const FormDynamicInputSetting = defineComponent({
   },
 })
 
-export function duxFormEditorDynamicInput(): PageEditorComponent {
+export function duxFormEditorDynamicInput(t: ComposerTranslation): PageEditorComponent {
   return {
     name: 'dynamicInput',
     icon: 'i-tabler:calendar-due',
-    label: '动态输入',
+    label: t('components.formEditor.dynamicInput.name'),
     group: 'form',
     component: props => <FormDynamicInput {...props} />,
     setting: props => <FormDynamicInputSetting {...props} />,
     nested: true,
     settingDefault: {
-      label: '动态输入',
+      label: t('components.formEditor.dynamicInput.name'),
       name: 'dynamicInput',
       attr: {
       },

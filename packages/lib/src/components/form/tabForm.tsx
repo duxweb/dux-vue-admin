@@ -3,6 +3,7 @@ import type { JsonFormItemSchema } from './handler'
 import { useWindowSize } from '@vueuse/core'
 import { NButton, NCard, NForm, NTabs } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useTabStore } from '../../stores'
 import { DuxFullPage } from '../page'
@@ -23,6 +24,7 @@ export const DuxTabForm = defineComponent({
   setup(props, { slots }) {
     const tab = useTabStore()
     const router = useRouter()
+    const { t } = useI18n()
 
     const { loading, onSubmit, onReset, model } = useForm({
       url: props.url,
@@ -51,8 +53,12 @@ export const DuxTabForm = defineComponent({
               {slots.default?.()}
             </NTabs>
             <div class="border-t border-gray-2 p-4 flex justify-end gap-4">
-              <NButton tertiary loading={loading.value} onClick={onReset}>重置</NButton>
-              <NButton type="primary" loading={loading.value} onClick={onSubmit}>提交</NButton>
+              <NButton tertiary loading={loading.value} onClick={onReset}>
+                {t('buttons.rest')}
+              </NButton>
+              <NButton type="primary" loading={loading.value} onClick={onSubmit}>
+                {t('buttons.submit')}
+              </NButton>
             </div>
           </NCard>
         </NForm>

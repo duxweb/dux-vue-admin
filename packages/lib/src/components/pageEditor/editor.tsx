@@ -6,6 +6,7 @@ import { NScrollbar } from 'naive-ui'
 import ShortUniqueId from 'short-unique-id'
 import { defineComponent, provide, ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
+import { useI18n } from 'vue-i18n'
 import { WidgetEditorGrid, WidgetEditorGridSetting } from './components/grid'
 import { useEditor } from './editor/hook'
 import { DuxWidgetEditorPreview } from './editor/preview'
@@ -23,36 +24,43 @@ export const DuxPageEditor = defineComponent({
   },
   setup(props, { emit }) {
     const editor = useEditor({ settingPage: props.settingPage })
+    const { t } = useI18n()
     provide('editor.use', editor)
 
-    // 注册默认分组
-    editor.addGroup({
-      name: 'layout',
-      label: '布局',
-      icon: 'i-tabler:layout',
-    })
-
-    editor.addComponent({
-      name: 'grid',
-      icon: 'i-tabler:grid-4x4',
-      label: '格子布局',
-      group: 'layout',
-      nested: true,
-      component: props => <WidgetEditorGrid {...props} />,
-      setting: props => <WidgetEditorGridSetting {...props} />,
-      settingDefault: {
-        col: 2,
-        spac: 2,
-      },
-    })
-
     // 注册分组与组件
-    props.groups?.forEach((group) => {
-      editor.addGroup(group)
-    })
-    props.components?.forEach((component) => {
-      editor.addComponent(component)
-    })
+    watch([() => props.components, () => props.groups], () => {
+      editor.clearGroup()
+      editor.clearComponent()
+
+      // 注册默认分组
+      editor.addGroup({
+        name: 'layout',
+        label: t('components.pageEditor.group.layout'),
+        icon: 'i-tabler:layout',
+      })
+
+      props.groups?.forEach((group) => {
+        editor.addGroup(group)
+      })
+
+      editor.addComponent({
+        name: 'grid',
+        icon: 'i-tabler:grid-4x4',
+        label: t('components.pageEditor.grid.name'),
+        group: 'layout',
+        nested: true,
+        component: props => <WidgetEditorGrid {...props} />,
+        setting: props => <WidgetEditorGridSetting {...props} />,
+        settingDefault: {
+          col: 2,
+          spac: 2,
+        },
+      })
+
+      props.components?.forEach((component) => {
+        editor.addComponent(component)
+      })
+    }, { immediate: true, deep: true })
 
     // 选中分组
     const groupSelect = ref<string>()
@@ -83,7 +91,7 @@ export const DuxPageEditor = defineComponent({
       <div class="flex-1 h-1 px-2 flex flex-row pb-2 text-sm">
         <div class="flex-none flex flex-col gap-2 bg-gray-1/50 rounded-sm p-2 shadow-sm">
           <MainMenuItem
-            title="全部"
+            title={t('components.pageEditor.group.all')}
             icon="i-tabler:hexagons"
             active={!groupSelect.value}
             onClick={() => {
@@ -137,7 +145,7 @@ export const DuxPageEditor = defineComponent({
                         ])}
                         >
                         </div>
-                        <div>{item.label}</div>
+                        <div class="truncate whitespace-nowrap px-2 overflow-hidden">{item.label}</div>
                       </div>
                     ))}
                   </VueDraggable>
@@ -192,7 +200,7 @@ function MainMenuItem({ title, icon, active, onClick }: MainMenuItemProps) {
       ])}
       >
       </div>
-      <div>{title}</div>
+      <div class="truncate whitespace-nowrap">{title}</div>
     </div>
   )
 }

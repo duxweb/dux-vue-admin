@@ -1,9 +1,11 @@
+import type { ComposerTranslation } from 'vue-i18n'
 import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 import { useVModel } from '@vueuse/core'
 import { NFormItem, NInput, NSwitch, NTimePicker } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
-import { DuxFormEditorItem, DuxFormEditorRule } from './common'
+import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const Comp = defineComponent({
   props: {
@@ -30,33 +32,34 @@ const Setting = defineComponent({
   },
   setup(props, { emit }) {
     const data = useVModel(props, 'value', emit)
+    const { t } = useI18n()
 
     return () => (
-      <div class="">
+      <div>
 
         <DuxFormEditorItem v-model:value={props.value} />
 
-        <WidgetEditorSettingCard title="组件配置">
+        <WidgetEditorSettingCard title={t('components.formEditor.config')}>
 
-          <NFormItem label="格式">
+          <NFormItem label={t('components.formEditor.time.format')}>
 
             <NInput v-model:value={data.value.attr.format} />
 
           </NFormItem>
 
-          <NFormItem label="12小时制" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.time.use12Hours')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.use12Hours} />
             </div>
           </NFormItem>
 
-          <NFormItem label="禁用" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.common.disabled')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.disabled} />
             </div>
           </NFormItem>
 
-          <NFormItem label="可清除" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.time.clearable')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.clearable} />
             </div>
@@ -69,16 +72,16 @@ const Setting = defineComponent({
   },
 })
 
-export function duxFormEditorTime(): PageEditorComponent {
+export function duxFormEditorTime(t: ComposerTranslation): PageEditorComponent {
   return {
     name: 'time',
     icon: 'i-tabler:calendar-due',
-    label: '时间选择',
+    label: t('components.formEditor.time.name'),
     group: 'form',
     component: props => <Comp {...props} />,
     setting: props => <Setting {...props} />,
     settingDefault: {
-      label: '时间选择',
+      label: t('components.formEditor.time.name'),
       name: 'time',
       attr: {
         use12Hours: false,

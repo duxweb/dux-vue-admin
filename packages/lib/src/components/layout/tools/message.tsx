@@ -2,6 +2,7 @@ import { useIntervalFn } from '@vueuse/core'
 import clsx from 'clsx'
 import { NBadge, NButton, NList, NListItem, NPopover, NTabPane, NTabs } from 'naive-ui'
 import { defineComponent, onMounted, reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useClient, useResource } from '../../../hooks'
 import { DuxBlockEmpty } from '../../status/blockEmpty'
@@ -63,6 +64,7 @@ export const Message = defineComponent({
     const resource = useResource()
     const client = useClient()
     const router = useRouter()
+    const { t } = useI18n()
 
     const data = reactive<Messages>({
       all: [],
@@ -118,7 +120,7 @@ export const Message = defineComponent({
           ),
           default: () => (
             <NTabs justifyContent="space-evenly" type="line" animated paneClass="!px-4 !py-2" defaultValue="all">
-              <NTabPane name="all" tab="全部">
+              <NTabPane name="all" tab={t('components.message.all')}>
                 <div>
                   <MessageItem data={data.all} />
 
@@ -146,7 +148,7 @@ export const Message = defineComponent({
                   </div>
                 </div>
               </NTabPane>
-              <NTabPane name="unread" tab="未读">
+              <NTabPane name="unread" tab={t('components.message.unread')}>
                 <div>
                   <MessageItem data={data.unread} />
 
@@ -159,7 +161,7 @@ export const Message = defineComponent({
                         handleRead()
                       }}
                     >
-                      一键已读
+                      {t('components.message.readAll')}
                     </NButton>
                     <NButton
                       block
@@ -169,12 +171,12 @@ export const Message = defineComponent({
                         router.push(`/${resource.manage}/message`)
                       }}
                     >
-                      全部消息
+                      {t('components.message.allMessage')}
                     </NButton>
                   </div>
                 </div>
               </NTabPane>
-              <NTabPane name="read" tab="已读">
+              <NTabPane name="read" tab={t('components.message.read')}>
                 <div>
                   <MessageItem data={data.read} />
                   <div class="mt-2 border-t border-gray-2 pt-2">
@@ -185,7 +187,7 @@ export const Message = defineComponent({
                         router.push(`/${resource.manage}/message`)
                       }}
                     >
-                      全部消息
+                      {t('components.message.allMessage')}
                     </NButton>
                   </div>
                 </div>
@@ -203,7 +205,7 @@ export const Message = defineComponent({
                       onClear()
                     }}
                   >
-                    清空通知
+                    {t('components.message.deleteAll')}
                   </NButton>
                 )
               : null

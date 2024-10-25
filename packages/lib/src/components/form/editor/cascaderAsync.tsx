@@ -1,10 +1,12 @@
+import type { ComposerTranslation } from 'vue-i18n'
 import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 import { useVModel } from '@vueuse/core'
 import { NFormItem, NInput, NSwitch } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { DuxCascaderAsync } from '../../cascader'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
-import { DuxFormEditorItem, DuxFormEditorRule } from './common'
+import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const Comp = defineComponent({
   props: {
@@ -28,38 +30,39 @@ const Setting = defineComponent({
   },
   setup(props, { emit }) {
     const data = useVModel(props, 'value', emit)
+    const { t } = useI18n()
 
     return () => (
       <div class="">
 
         <DuxFormEditorItem v-model:value={props.value} />
 
-        <WidgetEditorSettingCard title="组件配置">
+        <WidgetEditorSettingCard title={t('components.formEditor.config')}>
 
-          <NFormItem label="多选" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.cascader.multiple')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.multiple} />
             </div>
           </NFormItem>
-          <NFormItem label="关联选择" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.cascader.cascade')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.cascade} />
             </div>
           </NFormItem>
 
-          <NFormItem label="显示路径" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.cascader.showPath')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.showPath} />
             </div>
           </NFormItem>
 
-          <NFormItem label="禁用" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.cascader.disabled')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.disabled} />
             </div>
           </NFormItem>
 
-          <NFormItem label="可清除" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.cascader.clearable')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.clearable} />
             </div>
@@ -67,17 +70,17 @@ const Setting = defineComponent({
 
         </WidgetEditorSettingCard>
 
-        <WidgetEditorSettingCard title="组件选项">
+        <WidgetEditorSettingCard title={t('components.formEditor.options')}>
 
-          <NFormItem label="Url">
+          <NFormItem label={t('components.formEditor.cascaderAsync.url')}>
             <NInput v-model:value={data.value.attr.url} />
           </NFormItem>
 
-          <NFormItem label="标签字段">
+          <NFormItem label={t('components.formEditor.cascaderAsync.labelField')}>
             <NInput v-model:value={data.value.attr.labelField} />
           </NFormItem>
 
-          <NFormItem label="值字段">
+          <NFormItem label={t('components.formEditor.cascaderAsync.valueField')}>
             <NInput v-model:value={data.value.attr.valueField} />
           </NFormItem>
 
@@ -89,16 +92,16 @@ const Setting = defineComponent({
   },
 })
 
-export function duxFormEditorCascaderAsync(): PageEditorComponent {
+export function duxFormEditorCascaderAsync(t: ComposerTranslation): PageEditorComponent {
   return {
     name: 'cascaderAsync',
     icon: 'i-tabler:list-tree',
-    label: '异步级联器',
+    label: t('components.formEditor.cascaderAsync.name'),
     group: 'async',
     component: props => <Comp {...props} />,
     setting: props => <Setting {...props} />,
     settingDefault: {
-      label: '异步级联器',
+      label: t('components.formEditor.cascaderAsync.name'),
       name: 'cascaderAsync',
       attr: {
         url: '',

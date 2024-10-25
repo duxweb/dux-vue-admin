@@ -5,6 +5,7 @@ import { type EChartsOption, getMap, registerMap } from 'echarts'
 import { NCard, NDataTable } from 'naive-ui'
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import VChart from 'vue-echarts'
+import { useI18n } from 'vue-i18n'
 
 export interface DuxStatsChartMapData {
   name: string
@@ -98,6 +99,8 @@ export const DuxStatsChartMap = defineComponent({
       }
     }
 
+    const { t } = useI18n()
+
     onMounted(() => {
       getMapData()
     })
@@ -136,7 +139,7 @@ export const DuxStatsChartMap = defineComponent({
                     flexHeight
                     columns={[
                       {
-                        title: '地区',
+                        title: t('components.stats.area'),
                         key: 'name',
                         fixed: 'left',
                         width: 130,

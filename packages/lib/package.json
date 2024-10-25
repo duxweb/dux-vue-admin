@@ -8,8 +8,8 @@
   "scripts": {
     "clean": "rimraf dist",
     "copy-files": "copyfiles -u 1 src/**/*.{css,scss,js,png,jpg,svg,jsx,d.ts,json} dist/",
-    "build": "pnpm run clean && vue-tsc && pnpm run copy-files  && node script/build.js",
-    "local": "pnpm run build && yalc push",
+    "build": "bun run clean && vue-tsc && bun run copy-files  && bun run script/build.js",
+    "local": "bun run build && yalc push",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },

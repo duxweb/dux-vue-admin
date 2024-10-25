@@ -1,5 +1,5 @@
-import { defineComponent } from 'vue'
 import type { PropType } from 'vue'
+import { defineComponent } from 'vue'
 
 interface DuxStatsHelloData {
   label: string

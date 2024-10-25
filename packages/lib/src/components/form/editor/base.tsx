@@ -1,6 +1,7 @@
 import { useVModel } from '@vueuse/core'
 import { NButton, NDynamicInput, NFormItem, NInput, NSelect } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
 
 export const DuxFormEditorItem = defineComponent({
@@ -13,14 +14,16 @@ export const DuxFormEditorItem = defineComponent({
   },
   setup(props, { emit }) {
     const data = useVModel(props, 'value', emit)
+    const { t } = useI18n()
+
     return () => (
-      <WidgetEditorSettingCard title="基本配置">
-        <NFormItem label="标签" path="label">
+      <WidgetEditorSettingCard title={t('components.formEditor.config')}>
+        <NFormItem label={t('components.formEditor.base.label')} path="label">
           <NInput
             v-model:value={data.value.label}
           />
         </NFormItem>
-        <NFormItem label="字段名">
+        <NFormItem label={t('components.formEditor.base.field')}>
           <NInput
             v-model:value={data.value.name}
           />
@@ -40,9 +43,10 @@ export const DuxFormEditorRule = defineComponent({
   },
   setup(props, { emit }) {
     const data = useVModel(props, 'value', emit)
+    const { t } = useI18n()
 
     return () => (
-      <WidgetEditorSettingCard title="验证规则">
+      <WidgetEditorSettingCard title={t('components.formEditor.base.rule')}>
         <NDynamicInput
           class="flex flex-col gap-4"
           itemClass="flex-col gap-2"
@@ -60,15 +64,15 @@ export const DuxFormEditorRule = defineComponent({
               <div class="flex flex-col gap-2">
                 <div>
                   <NSelect
-                    placeholder="请选择验证规则"
+                    placeholder={t('components.formEditor.base.rulePlaceholder')}
                     v-model:value={value.type}
                     options={[
                       {
-                        label: '必填',
+                        label: t('components.formEditor.base.required'),
                         value: 'required',
                       },
                       {
-                        label: '正则',
+                        label: t('components.formEditor.base.regexp'),
                         value: 'regexp',
                       },
                     ]}
@@ -77,25 +81,25 @@ export const DuxFormEditorRule = defineComponent({
                 {value.type === 'regexp' && (
                   <div>
                     <NInput
-                      placeholder="请输入正则表达式"
+                      placeholder={t('components.formEditor.base.regexpPlaceholder')}
                       v-model:value={value.regexp}
                     />
                   </div>
                 )}
                 <div>
                   <NInput
-                    placeholder="验证提醒消息"
+                    placeholder={t('components.formEditor.base.messagePlaceholder')}
                     v-model:value={value.message}
                   />
                 </div>
               </div>
             ),
-            'create-button-default': () => '添加验证规则',
+            'create-button-default': () => t('components.formEditor.base.addRule'),
             'action': ({ index, create, remove }) => {
               return (
                 <div class="grid grid-cols-2 gap-2">
-                  <NButton block secondary type="primary" onClick={() => create(index)}>添加</NButton>
-                  <NButton block secondary onClick={() => remove(index)}>删除</NButton>
+                  <NButton block secondary type="primary" onClick={() => create(index)}>{t('components.buttons.add')}</NButton>
+                  <NButton block secondary onClick={() => remove(index)}>{t('components.buttons.delete')}</NButton>
                 </div>
               )
             },

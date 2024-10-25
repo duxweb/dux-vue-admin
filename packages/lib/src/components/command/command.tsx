@@ -96,7 +96,7 @@ export const DuxCommand = defineComponent({
               </div>
               <Command.Input
                 class="flex-1 text-lg outline-none bg-transparent"
-                placeholder="请输入菜单名称..."
+                placeholder={t('command.placeholder')}
                 onUpdate:value={(value) => {
                   onSearch(value)
                 }}

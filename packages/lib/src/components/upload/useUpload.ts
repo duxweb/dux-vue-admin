@@ -250,8 +250,8 @@ export function useS3Upload() {
       },
     }).then((res) => {
       if (!res?.data?.signUrl || !res?.data?.url) {
-        message.error('获取签名失败')
-        props.onError?.(new Error('获取签名失败'))
+        message.error('get sign error')
+        props.onError?.(new Error('get sign error'))
         return
       }
       // 请求上传

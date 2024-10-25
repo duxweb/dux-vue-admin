@@ -2,6 +2,7 @@ import type { FormInst } from 'naive-ui'
 import { useForm as useAForm } from 'alova/client'
 import { useMessage } from 'naive-ui'
 import { onMounted, type Ref, ref, toRef, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useClient } from '../../hooks/useClient'
 
 interface UseFormProps {
@@ -17,6 +18,7 @@ interface UseFormProps {
 export function useForm({ formRef, url, id, initData, invalidate, model, success }: UseFormProps) {
   const client = useClient()
   const message = useMessage()
+  const { t } = useI18n()
 
   const formLoading = ref(false)
 
@@ -66,14 +68,14 @@ export function useForm({ formRef, url, id, initData, invalidate, model, success
     }).then((res) => {
       updateForm(res?.data)
     }).catch((res) => {
-      message.success(res.data?.message || '数据请求失败')
+      message.success(res.data?.message || t('message.requestError'))
     }).finally(() => {
       formLoading.value = false
     })
   }
 
   onSuccess((res) => {
-    message.success(res.data?.message || '数据提交成功')
+    message.success(res.data?.message || t('message.requestSuccess'))
 
     success?.(res)
 
@@ -81,7 +83,7 @@ export function useForm({ formRef, url, id, initData, invalidate, model, success
   })
 
   onError((res) => {
-    message.error(res?.error?.message || '数据提交异常')
+    message.error(res?.error?.message || t('message.requestError'))
   })
 
   const onSubmit = () => {
@@ -94,7 +96,7 @@ export function useForm({ formRef, url, id, initData, invalidate, model, success
       if (errors) {
         errors?.forEach((items) => {
           items.forEach((item) => {
-            message.error(item?.message || '数据校验失败')
+            message.error(item?.message || t('message.validateError'))
           })
         })
         message.error('Invalid')

@@ -4,6 +4,7 @@ import type { UseTableResult } from '../table'
 import { useVModel } from '@vueuse/core'
 import { NCard, NDropdown, NInput, NScrollbar, NSpin, NTree } from 'naive-ui'
 import { computed, defineComponent, inject, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useClient } from '../../hooks'
 import { useCascader } from '../cascader'
 
@@ -98,7 +99,6 @@ export const DuxTreeFilter = defineComponent({
     }
 
     const handleDrop = ({ node, dragNode, dropPosition }: TreeDropInfo) => {
-      // 查找拖动节点所在父节点
       const oldParent = findParentNode(data.value, dragNode.id)
       const oldIndex = oldParent?.children?.indexOf(dragNode) || 0
 
@@ -146,6 +146,8 @@ export const DuxTreeFilter = defineComponent({
       table?.send()
     })
 
+    const { t } = useI18n()
+
     return () => (
 
       <NCard class="h-full" contentClass="p-0! h-full flex flex-col">
@@ -155,7 +157,7 @@ export const DuxTreeFilter = defineComponent({
           </div>
         )}
         <div class="p-2">
-          <NInput v-model:value={keyword.value} placeholder="输入关键词搜索" />
+          <NInput v-model:value={keyword.value} placeholder={t('components.tree.placeholder')} />
         </div>
         <NScrollbar class="flex-1 h-1" xScrollable>
           <div class="p-2">

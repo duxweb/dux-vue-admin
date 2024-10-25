@@ -1,82 +1,70 @@
 {
   "common": {
     "home": "Home",
-    "search": "Search",
-    "notMenu": "Not found Menu",
     "menu": "Menu",
-    "more": "More",
+    "search": "Search",
     "logout": "Logout",
-    "light": "Light",
-    "dark": "Dark",
-    "lang": "Language",
-    "select": "Select",
-    "placeholderKeyword": "Please enter a keyword"
+    "admin": "Admin",
+    "list": "List",
+    "form": "Form",
+    "layout": {
+      "app": "Dual Layout",
+      "collapse": "Single Layout",
+      "separate": "Separate Layout"
+    }
   },
   "pages": {
     "login": {
-      "signin": "Sign in",
-      "signup": "Sign up",
-      "divider": "or",
-      "fields": {
-        "username": "Username",
-        "password": "Password"
-      },
-      "buttons": {
-        "submit": "Login",
-        "forgotPassword": "Forgot password?",
-        "noAccount": "Don’t have an account?"
-      }
-    },
-    "register": {
-      "title": "Sign up for your account",
-      "fields": {
-        "username": "Username",
-        "password": "Password"
-      },
-      "buttons": {
-        "submit": "Register",
-        "haveAccount": "Have an account?"
-      }
-    },
-    "forgotPassword": {
-      "title": "Forgot your password?",
-      "fields": {
+      "placeholder": {
         "username": "Username",
         "password": "Password",
-        "code": "Verifiy code"
+        "captcha": "Captcha"
+      },
+      "fields": {
+        "username": "Username",
+        "password": "Password"
+      },
+      "captcha": {
+        "default": "Verify",
+        "success": "Success",
+        "error": "Error"
       },
       "buttons": {
-        "submit": "Send verifiy code",
-        "rest": "Reset password",
-        "back": "Back to Login",
-        "code": "Have an code?"
+        "login": "Login"
       }
     },
-    "updatePassword": {
-      "title": "Update password",
-      "fields": {
-        "password": "New Password",
-        "confirmPassword": "Confirm new password"
-      },
-      "errors": {
-        "confirmPasswordNotMatch": "Passwords do not match"
-      },
-      "buttons": {
-        "submit": "Update"
-      }
+    "empty": {
+      "title": "No Data",
+      "desc": "No Data, Refresh"
+    },
+    "404": {
+      "title": "Page Not Found",
+      "desc": "Page Not Found"
+    },
+    "403": {
+      "title": "No Permission",
+      "desc": "No Access"
+    },
+    "500": {
+      "title": "System Error",
+      "desc": "Contact Admin"
+    }
+  },
+  "dialog": {
+    "confirm": {
+      "title": "Confirm",
+      "content": "Confirm Action?"
+    },
+    "success": {
+      "title": "Success",
+      "content": "Action Successful"
     },
     "error": {
-      "info": "You may have forgotten to add the {{action}} component to {{resource}} resource.",
-      "404": "Not found",
-      "404Desc": "Sorry, the page you visited does not exist."
+      "title": "Error",
+      "content": "Action Failed"
     },
-    "unauthorized": {
-      "title": "Unauthorized",
-      "desc": "Sorry, you do not have permission to access this page"
-    },
-    "boundary": {
-      "title": "Ooops, something wrong here",
-      "desc": "The system may have crashed, please open the debugging tool to check the specific exception information"
+    "prompt": {
+      "title": "Input"
     }
   },
   "buttons": {
@@ -87,7 +75,9 @@
     "delete": "Delete",
     "edit": "Edit",
     "cancel": "Cancel",
-    "confirm": "Are you sure?",
+    "close": "Close",
+    "add": "Add",
+    "confirm": "Confirm",
     "filter": "Filter",
     "clear": "Clear",
     "refresh": "Refresh",
@@ -96,42 +86,301 @@
     "import": "Import",
     "clone": "Clone",
     "back": "Back",
-    "rest": "Rest",
-    "setting": "Setting",
+    "rest": "Reset",
+    "setting": "Settings",
     "restore": "Restore",
     "trash": "Trash",
-    "notAccessTitle": "You don't have permission to access",
+    "select": "Select",
     "submit": "Submit",
     "export": "Export",
     "query": "Query",
-    "adv": "Advanced"
+    "adv": "Advanced",
+    "preview": "Preview",
+    "download": "Download",
+    "rename": "Rename",
+    "more": "More",
+    "next": "Next",
+    "prev": "Previous"
   },
-  "warnWhenUnsavedChanges": "Are you sure you want to leave? You have unsaved changes.",
-  "notifications": {
-    "success": "Successful",
-    "error": "Error (status code: {{statusCode}})",
-    "undoable": "You have {{seconds}} seconds to undo",
-    "createSuccess": "Successfully created {{resource}}",
-    "createError": "There was an error creating {{resource}} (status code: {{statusCode}})",
-    "deleteSuccess": "Successfully deleted {{resource}}",
-    "deleteError": "Error when deleting {{resource}} (status code: {{statusCode}})",
-    "editSuccess": "Successfully edited {{resource}}",
-    "editError": "Error when editing {{resource}} (status code: {{statusCode}})",
-    "importProgress": "Importing: {{processed}}/{{total}}"
+  "message": {
+    "success": "Success",
+    "error": "Failed: {content}",
+    "requestSuccess": "Submitted",
+    "requestError": "Request Failed",
+    "validateError": "Validation Failed"
   },
-  "loading": "Loading",
-  "tags": {
-    "clone": "Clone"
+  "placeholder": {
+    "keyword": "Enter Keyword"
   },
-  "table": {
-    "actions": "Actions"
+  "components": {
+    "message": {
+      "title": "Messages",
+      "list": "Message List",
+      "all": "All",
+      "read": "Read",
+      "unread": "Unread",
+      "readAll": "Mark All Read",
+      "deleteAll": "Delete Read",
+      "allMessage": "All Messages",
+      "notFound": "No Messages",
+      "notFoundDesc": "No Open Messages"
+    },
+    "list": {
+      "actions": "Actions",
+      "refresh": "Refresh Data",
+      "excelImport": "Import Excel",
+      "excelExport": "Export Excel",
+      "getError": "Data Error",
+      "columnSetting": "Column Settings"
+    },
+    "editor": {
+      "placeholder": "Enter Content..."
+    },
+    "tree": {
+      "placeholder": "Search Keywords"
+    },
+    "pageEditor": {
+      "grid": {
+        "name": "Grid Layout",
+        "title": "Layout Config",
+        "col": "Grid Count",
+        "spac": "Spacing"
+      },
+      "group": {
+        "all": "All",
+        "layout": "Layout"
+      }
+    },
+    "formEditor": {
+      "config": "Config",
+      "options": "Options",
+      "group": {
+        "form": "Inputs",
+        "select": "Select",
+        "async": "Async"
+      },
+      "common": {
+        "defaultValue": "Default",
+        "disabled": "Disabled",
+        "optionLabel": "Label",
+        "optionValue": "Value",
+        "data": "Data",
+        "status": "Status",
+        "jsonOut": "Json Out",
+        "json": "Json Form"
+      },
+      "base": {
+        "label": "Label",
+        "field": "Field",
+        "rule": "Rule",
+        "rulePlaceholder": "Select Rule",
+        "required": "Required",
+        "regexp": "Regex",
+        "regexpPlaceholder": "Regex",
+        "messagePlaceholder": "Message",
+        "addRule": "Add Rule"
+      },
+      "page": {
+        "name": "Form Config",
+        "placement": "Placement",
+        "left": "Left",
+        "right": "Right",
+        "center": "Center"
+      },
+      "cascader": {
+        "name": "Cascader",
+        "multiple": "Multi",
+        "cascade": "Cascade",
+        "showPath": "Show Path",
+        "disabled": "Disabled",
+        "clearable": "Clearable",
+        "optionsDescription": "Define with label, value, children"
+      },
+      "cascaderAsync": {
+        "name": "Cascader",
+        "url": "Url",
+        "labelField": "Label",
+        "valueField": "Value"
+      },
+      "checkbox": {
+        "name": "Checkbox",
+        "optionsDescription": "Define with label, value"
+      },
+      "color": {
+        "name": "Color",
+        "showAlpha": "Alpha"
+      },
+      "date": {
+        "name": "Date",
+        "inputType": "Type",
+        "date": "Date",
+        "dateRange": "Date Range",
+        "dateTime": "DateTime",
+        "dateTimeRange": "DateTime Range",
+        "month": "Month",
+        "monthRange": "Month Range",
+        "year": "Year",
+        "yearRange": "Year Range",
+        "quarter": "Quarter",
+        "quarterRange": "Quarter Range",
+        "week": "Week",
+        "disabled": "Disabled",
+        "clearable": "Clearable"
+      },
+      "dynamicInput": {
+        "name": "Dynamic",
+        "min": "Min",
+        "max": "Max",
+        "disabled": "Disabled"
+      },
+      "dynamicTags": {
+        "name": "Tags",
+        "max": "Max"
+      },
+      "editor": {
+        "name": "Editor",
+        "componentOptions": "Options",
+        "uploadUrl": "Upload Url",
+        "uploadFeedback": "Auto Process"
+      },
+      "input": {
+        "name": "Input",
+        "type": "Type",
+        "text": "Text",
+        "textarea": "Textarea",
+        "password": "Password",
+        "placeholder": "Placeholder",
+        "minLength": "Min Length",
+        "maxLength": "Max Length",
+        "prefix": "Prefix",
+        "suffix": "Suffix",
+        "readonly": "Readonly",
+        "clearable": "Clearable",
+        "showCount": "Count"
+      },
+      "inputNumber": {
+        "name": "Number",
+        "placeholder": "Placeholder",
+        "min": "Min",
+        "max": "Max",
+        "prefix": "Prefix",
+        "suffix": "Suffix",
+        "componentState": "State",
+        "readonly": "Readonly",
+        "clearable": "Clearable"
+      },
+      "mentionAsync": {
+        "name": "Mention",
+        "clearable": "Clearable",
+        "url": "Url",
+        "labelField": "Label",
+        "valueField": "Value"
+      },
+      "radio": {
+        "name": "Radio",
+        "labelField": "Label",
+        "valueField": "Value",
+        "optionsDescription": "Define with label, value"
+      },
+      "region": {
+        "name": "Region",
+        "url": "Url",
+        "labelField": "Label",
+        "valueField": "Value",
+        "disabled": "Disabled"
+      },
+      "select": {
+        "name": "Select",
+        "multiple": "Multi",
+        "clearable": "Clearable",
+        "labelField": "Label",
+        "valueField": "Value",
+        "optionsDescription": "Define with label, value"
+      },
+      "selectAsync": {
+        "name": "Select",
+        "pagination": "Pagination",
+        "url": "Url",
+        "labelField": "Label",
+        "valueField": "Value",
+        "imageField": "Image",
+        "descField": "Desc"
+      },
+      "sider": {
+        "name": "Slider",
+        "step": "Step",
+        "min": "Min",
+        "max": "Max"
+      },
+      "switch": {
+        "name": "Switch"
+      },
+      "time": {
+        "name": "Time",
+        "format": "Format",
+        "use12Hours": "12-Hour",
+        "clearable": "Clearable"
+      },
+      "transferAsync": {
+        "name": "Transfer"
+      },
+      "treeSelect": {
+        "name": "Tree"
+      },
+      "treeSelectAsync": {
+        "name": "Tree",
+        "url": "Url",
+        "labelField": "Label",
+        "keyField": "Key"
+      }
+    },
+    "iconPicker": {
+      "title": "Icon Picker"
+    },
+    "region": {
+      "title": "Region Picker",
+      "province": "Province",
+      "city": "City",
+      "district": "District",
+      "street": "Street"
+    },
+    "stats": {
+      "area": "Area",
+      "dataItem": "Data"
+    },
+    "upload": {
+      "drag": "Drag Files",
+      "file": "Upload File",
+      "manage": "Manage Files",
+      "image": "Upload Image"
+    },
+    "uploadManage": {
+      "namePlaceholder": "Name",
+      "createError": "Create Failed",
+      "editError": "Edit Failed",
+      "delError": "Delete Failed",
+      "all": "All",
+      "image": "Images",
+      "media": "Media",
+      "docs": "Docs",
+      "upload": "Upload",
+      "success": "Success",
+      "error": "Error",
+      "empty": "Empty",
+      "delTitle": "Delete Confirm",
+      "delDesc": "Delete File/Dir?"
+    }
   },
-  "pagination": {
-    "go": "Go to Page",
-    "show": "Show"
+  "hooks": {
+    "excel": {
+      "importError": "Import Error",
+      "importSuccess": "Import Success"
+    },
+    "pdf": {
+      "title": "PDF Preview"
+    }
   },
-  "empty": {
-    "title": "No data",
-    "desc": "No data for now, try refreshing the page"
+  "command": {
+    "placeholder": "Menu Name..."
   }
 }

@@ -168,7 +168,7 @@ export const DuxDynamicData = defineComponent({
                 : (
                     <tr>
                       <td colspan={colNum.value}>
-                        <DuxBlockEmpty text="暂无数据" desc="请先添加动态数据" />
+                        <DuxBlockEmpty />
                       </td>
                     </tr>
                   )}

@@ -6,6 +6,7 @@ import ExcelJS from 'exceljs'
 import FileSaver from 'file-saver'
 import { useMessage } from 'naive-ui'
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useClient } from '.'
 
 export interface ExportExcelProps {
@@ -64,7 +65,7 @@ export function useExportExcel() {
     })
 
     pagination.onError((error) => {
-      message.error(`导出失败: ${error.error?.message}`)
+      message.error(error.error?.message || 'Error')
     })
 
     watch(dataStatus, (status) => {
@@ -122,6 +123,8 @@ export function useImportExcel() {
   const params = ref<Record<string, any>>()
   const columns = ref<Partial<Column>[]>()
 
+  const { t } = useI18n()
+
   const { open, reset, onChange } = useFileDialog({
     accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     directory: false,
@@ -137,7 +140,7 @@ export function useImportExcel() {
   })
 
   fileReader.onerror = (error) => {
-    message.error(`导入失败: ${error || '无法处理'}`)
+    message.error(`${t('hooks.excel.importError')}: ${error}`)
   }
 
   fileReader.onload = (ev) => {
@@ -170,11 +173,11 @@ export function useImportExcel() {
       }))
 
       req.onSuccess((res) => {
-        message.success(res.data?.message || '导入成功')
+        message.success(res.data?.message || t('hooks.excel.importSuccess'))
       })
 
       req.onError((error) => {
-        message.error(`导入失败: ${error.error?.message || '请求失败'}`)
+        message.error(`${t('hooks.excel.importError')}: ${error.error?.message}`)
       })
 
       watch(req.loading, (v) => {

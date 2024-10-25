@@ -1,7 +1,9 @@
 import { NBreadcrumb, NBreadcrumbItem, NButton, NDrawer, NDrawerContent, NIcon, NLayout, NLayoutHeader, NLayoutSider, NMenu, NScrollbar } from 'naive-ui'
 import { storeToRefs } from 'pinia'
 import { defineComponent, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import { useResource } from '../../hooks'
 import { useMenu } from '../../hooks/useMenu'
 import { useManageStore, useThemeStore } from '../../stores'
 import { DuxCommand } from '../command'
@@ -21,6 +23,7 @@ export const DuxLayout = defineComponent({
   setup(_props, { slots }) {
     const { appCollapsed, sideCollapsed, collapsed, allKey, appKey, subKey, appMenu, subMenu, crumbs, showCollapsed, isMobile, allMenu } = useMenu()
     const mobileMenuShow = ref(false)
+    const { t } = useI18n()
 
     const { logout } = useManageStore()
     const router = useRouter()
@@ -28,6 +31,7 @@ export const DuxLayout = defineComponent({
 
     const themeStore = useThemeStore()
     const { layout } = storeToRefs(themeStore)
+    const resource = useResource()
 
     return () => (
       <NLayout
@@ -128,7 +132,7 @@ export const DuxLayout = defineComponent({
                     <dux-logo />
                   </div>
                   <NDrawer show={mobileMenuShow.value} onUpdateShow={v => mobileMenuShow.value = v} width={250} placement="left">
-                    <NDrawerContent title="菜单" closable bodyContentStyle={{ padding: '5px' }}>
+                    <NDrawerContent title={t('common.menu')} closable bodyContentStyle={{ padding: '5px' }}>
                       <NMenu
                         rootIndent={20}
                         indent={15}
@@ -195,7 +199,7 @@ export const DuxLayout = defineComponent({
                   {!isMobile.value && <Search />}
                   {!isMobile.value && <Fullscreen />}
                   <Message />
-                  <Lang />
+                  {!resource.config?.lang && <Lang />}
                   {!isMobile.value && <Layout />}
                   {!isMobile.value && <Color />}
                   <Theme />

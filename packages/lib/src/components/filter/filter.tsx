@@ -110,7 +110,7 @@ export const DuxFilter = defineComponent({
                   filterShow.value = !filterShow.value
                 }}
               >
-                筛选
+                {t('buttons.filter')}
               </NButton>
 
               <div class="flex gap-2">
@@ -122,7 +122,7 @@ export const DuxFilter = defineComponent({
                       filterMore.value = !filterMore.value
                     }}
                   >
-                    更多
+                    {t('buttons.more')}
                     <div class={clsx(['i-tabler:chevron-down transition-all', filterMore.value ? 'rotate-180' : 'rotate-0'])}></div>
                   </NButton>
                 )}
@@ -133,7 +133,7 @@ export const DuxFilter = defineComponent({
                   renderIcon={() => <div class="i-tabler:search"></div>}
                   onClick={() => props.onSubmit?.()}
                 >
-                  查询
+                  {t('buttons.query')}
                 </NButton>
 
                 {slots?.tools?.()}

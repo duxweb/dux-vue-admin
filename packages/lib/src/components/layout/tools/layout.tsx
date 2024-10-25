@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { NButton, NPopover } from 'naive-ui'
 import { storeToRefs } from 'pinia'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useThemeStore } from '../../../stores'
 
 export const Layout = defineComponent({
@@ -9,6 +10,7 @@ export const Layout = defineComponent({
   setup() {
     const themeStore = useThemeStore()
     const { layout } = storeToRefs(themeStore)
+    const { t } = useI18n()
 
     return () => (
       <NPopover
@@ -29,7 +31,7 @@ export const Layout = defineComponent({
                   <div class="rounded bg-primary/50 w-8"></div>
                   <div class="flex-1 rounded bg-primary/20"></div>
                 </div>
-                <div class="text-center">双栏布局</div>
+                <div class="text-center">{t('common.layout.app')}</div>
               </div>
 
               <div
@@ -43,7 +45,7 @@ export const Layout = defineComponent({
                   <div class="rounded bg-primary w-8"></div>
                   <div class="flex-1 rounded bg-primary/20"></div>
                 </div>
-                <div class="text-center">单栏布局</div>
+                <div class="text-center">{t('common.layout.app')}</div>
               </div>
 
               <div
@@ -60,7 +62,7 @@ export const Layout = defineComponent({
                     <div class="flex-1 rounded bg-primary/20"></div>
                   </div>
                 </div>
-                <div class="text-center">上下布局</div>
+                <div class="text-center">{t('common.layout.app')}</div>
               </div>
             </div>
           ),

@@ -12,7 +12,7 @@ export function createManage(manage: string, routers: DuxRoute[]) {
     path: `403`,
     component: () => import('../pages/notPermission'),
     name: '403',
-    label: '没有权限',
+    labelLang: 'pages.403.title',
     hidden: true,
   })
 
@@ -20,7 +20,7 @@ export function createManage(manage: string, routers: DuxRoute[]) {
     path: `404`,
     component: () => import('../pages/notFound'),
     name: '404',
-    label: '页面不存在',
+    labelLang: 'pages.404.title',
     hidden: true,
   })
 
@@ -90,6 +90,6 @@ export function initAsyncRouter() {
     routeStore.appendRoutes(list)
     routeStore.asyncInit = true
   }).catch((err) => {
-    message.error(err?.message || '获取路由失败')
+    message.error(err?.message || 'get router error')
   })
 }

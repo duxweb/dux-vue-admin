@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { ceil } from 'lodash-es'
 import { NButton, NCard } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export const DuxStatsTotalCard = defineComponent({
   name: 'DuxStatsTotalCard',
@@ -41,6 +42,8 @@ export const DuxStatsTotalCardItem = defineComponent({
     onClick: Function,
   },
   setup(props) {
+    const { t } = useI18n()
+
     return () => (
       <NCard
         segmented={{
@@ -89,7 +92,7 @@ export const DuxStatsTotalCardItem = defineComponent({
 
               {props?.onClick && (
                 <div>
-                  <NButton text onClick={() => props.onClick?.()}>更多</NButton>
+                  <NButton text onClick={() => props.onClick?.()}>{t('buttons.more')}</NButton>
                 </div>
               )}
             </div>

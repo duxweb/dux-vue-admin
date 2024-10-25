@@ -1,5 +1,6 @@
 import { NFormItem } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
 import { DuxRadio } from '../../radio'
 
@@ -13,20 +14,22 @@ export const DuxFormEditorSettingPage = defineComponent({
     'update:modelValue': Function,
   },
   setup({ value }) {
+    const { t } = useI18n()
+
     return () => (
       <>
 
         <div class="flex flex-col gap-2">
 
-          <WidgetEditorSettingCard title="表单配置">
-            <NFormItem label="标签位置" path="labelPlacement">
+          <WidgetEditorSettingCard title={t('components.formEditor.page.name')}>
+            <NFormItem label={t('components.formEditor.page.placement')} path="labelPlacement">
 
               <DuxRadio
                 v-model:value={value.labelPlacement}
                 options={[
-                  { label: '左', value: 'left' },
-                  { label: '中', value: 'center' },
-                  { label: '右', value: 'right' },
+                  { label: t('components.formEditor.page.left'), value: 'left' },
+                  { label: t('components.formEditor.page.center'), value: 'center' },
+                  { label: t('components.formEditor.page.right'), value: 'right' },
                 ]}
               />
             </NFormItem>

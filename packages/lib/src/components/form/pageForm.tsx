@@ -3,6 +3,7 @@ import type { JsonFormItemSchema } from './handler'
 import { useWindowSize } from '@vueuse/core'
 import { NButton, NCard, NForm } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useTabStore } from '../../stores'
 import { DuxFullPage } from '../page'
@@ -40,6 +41,7 @@ export const DuxPageForm = defineComponent({
     })
 
     const { width } = useWindowSize()
+    const { t } = useI18n()
 
     return () => (
       <DuxFullPage>
@@ -57,8 +59,12 @@ export const DuxPageForm = defineComponent({
             ),
             action: () => (
               <div class="flex justify-end gap-4">
-                <NButton tertiary loading={loading.value} onClick={onReset}>重置</NButton>
-                <NButton type="primary" loading={loading.value} onClick={onSubmit}>提交</NButton>
+                <NButton tertiary loading={loading.value} onClick={onReset}>
+                  {t('buttons.rest')}
+                </NButton>
+                <NButton type="primary" loading={loading.value} onClick={onSubmit}>
+                  {t('buttons.submit')}
+                </NButton>
               </div>
             ),
           }}

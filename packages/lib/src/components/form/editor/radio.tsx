@@ -1,10 +1,12 @@
+import type { ComposerTranslation } from 'vue-i18n'
+import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 import { useVModel } from '@vueuse/core'
 import { NButton, NFormItem, NInput, NRadio, NRadioGroup, NSwitch } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useModal } from '../../modal'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
-import { DuxFormEditorItem, DuxFormEditorRule } from './common'
-import type { PageEditorComponent } from '../../pageEditor/editor/hook'
+import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const FormRadio = defineComponent({
   name: 'FormRadio',
@@ -34,21 +36,22 @@ const FormRadioSetting = defineComponent({
   setup(props, { emit }) {
     const data = useVModel(props, 'value', emit)
     const modal = useModal()
+    const { t } = useI18n()
 
     return () => (
       <div class="">
 
         <DuxFormEditorItem v-model:value={props.value} />
 
-        <WidgetEditorSettingCard title="组件配置">
+        <WidgetEditorSettingCard title={t('components.formEditor.config')}>
 
-          <NFormItem label="默认值" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.common.defaultValue')} showFeedback={false}>
             <NInput
               v-model:value={data.value.attr.defaultValue}
             />
           </NFormItem>
 
-          <NFormItem label="禁用" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.common.disabled')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.disabled} />
             </div>
@@ -56,7 +59,7 @@ const FormRadioSetting = defineComponent({
 
         </WidgetEditorSettingCard>
 
-        <WidgetEditorSettingCard title="组件选项">
+        <WidgetEditorSettingCard title={t('components.formEditor.options')}>
 
           <NButton
             block
@@ -64,21 +67,21 @@ const FormRadioSetting = defineComponent({
             renderIcon={() => <div class="i-tabler:edit"></div>}
             onClick={() => {
               modal.show({
-                title: '编辑数据',
+                title: t('components.formEditor.common.data'),
                 component: () => import('./options'),
                 componentProps: {
-                  desc: '您可以使用 "label"、"value" 来定义 json 数组选项',
+                  desc: t('components.formEditor.radio.optionsDescription'),
                   value: data.value.attr.options,
                   onChange: (value) => {
                     data.value.attr.options = value
                   },
                   options: [
                     {
-                      label: '选项名',
+                      label: t('components.formEditor.radio.labelField'),
                       value: 'label',
                     },
                     {
-                      label: '选型值',
+                      label: t('components.formEditor.radio.valueField'),
                       value: 'value',
                     },
                   ],
@@ -87,7 +90,7 @@ const FormRadioSetting = defineComponent({
               })
             }}
           >
-            编辑数据
+            {t('components.formEditor.common.data')}
           </NButton>
 
         </WidgetEditorSettingCard>
@@ -98,25 +101,25 @@ const FormRadioSetting = defineComponent({
   },
 })
 
-export function duxFormEditorRadio(): PageEditorComponent {
+export function duxFormEditorRadio(t: ComposerTranslation): PageEditorComponent {
   return {
     name: 'radio',
     icon: 'i-tabler:circle-dot',
-    label: '单选',
+    label: t('components.formEditor.radio.name'),
     group: 'select',
     component: props => <FormRadio {...props} />,
     setting: props => <FormRadioSetting {...props} />,
     settingDefault: {
-      label: '单选',
+      label: t('components.formEditor.radio.name'),
       name: 'radio',
       attr: {
         options: [
           {
-            label: '选项一',
+            label: 'option 1',
             value: '1',
           },
           {
-            label: '选项二',
+            label: 'option 2',
             value: '2',
           },
         ],

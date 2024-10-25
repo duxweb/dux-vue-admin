@@ -1,6 +1,6 @@
 import type { CheckboxGroupProps, CheckboxProps } from 'naive-ui'
-import { item } from './item'
 import type { JsonFormItemSchema } from '../handler'
+import { item } from './item'
 
 export interface CheckboxGroupAdaptor extends CheckboxGroupProps {
   options?: CheckboxProps[]

@@ -1,6 +1,7 @@
 import { useVModel } from '@vueuse/core'
 import { NButton } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useModal } from '../modal'
 
 export const DuxIconPicker = defineComponent({
@@ -15,13 +16,14 @@ export const DuxIconPicker = defineComponent({
       passive: true,
     })
     const modal = useModal()
+    const { t } = useI18n()
 
     return () => (
       <NButton
         dashed={!model.value}
         onClick={() => {
           modal.show({
-            title: '图标选择',
+            title: t('components.iconPicker.title'),
             component: () => import('./iconPicker'),
           }).then((res) => {
             model.value = res
@@ -33,7 +35,7 @@ export const DuxIconPicker = defineComponent({
           default: () => (
             <div class="flex gap-2 items-center">
               {model.value ? <div class={`size-4 ${model.value || ''}`}></div> : undefined}
-              选择图标
+              {t('components.iconPicker.title')}
             </div>
           ),
           icon: () => model.value && (

@@ -17,7 +17,6 @@ export const DuxCardList = defineComponent({
     actions: Array<ListAction>,
     title: {
       type: String,
-      default: '列表',
     },
     titleLang: {
       type: String,

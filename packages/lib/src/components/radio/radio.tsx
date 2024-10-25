@@ -1,8 +1,8 @@
+import type { PropType } from 'vue'
 import { useVModel } from '@vueuse/core'
 import clsx from 'clsx'
 import { NTooltip } from 'naive-ui'
 import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
 
 interface DuxRadioOption {
   label?: string

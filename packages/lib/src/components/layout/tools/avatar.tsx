@@ -2,6 +2,7 @@ import type { DropdownMixedOption } from 'naive-ui/es/dropdown/src/interface'
 import clsx from 'clsx'
 import { NAvatar, NDropdown } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useResource } from '../../../hooks'
 import { useManageStore } from '../../../stores'
@@ -11,6 +12,7 @@ export const Avatar = defineComponent({
   setup() {
     const router = useRouter()
     const res = useResource()
+    const { t } = useI18n()
     const { getUser, logout } = useManageStore()
     const info = getUser().info
 
@@ -34,7 +36,7 @@ export const Avatar = defineComponent({
 
     options = [...options, ...[
       {
-        label: '退出登录',
+        label: t('common.logout'),
         key: 'logout',
         icon: () => <div class="i-tabler:logout w-4 h-4"></div>,
       },
@@ -50,7 +52,7 @@ export const Avatar = defineComponent({
           <NAvatar circle src={info?.avatar} size="small" class="bg-primary!">
             {info?.nickname?.charAt(0)}
           </NAvatar>
-          <div class="text-sm pr-2">超级管理员</div>
+          <div class="text-sm pr-2">{info?.rolename || t('common.admin')}</div>
         </div>
       </NDropdown>
     )

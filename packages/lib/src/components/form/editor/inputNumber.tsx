@@ -1,9 +1,11 @@
+import type { ComposerTranslation } from 'vue-i18n'
+import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 import { useVModel } from '@vueuse/core'
 import { NCheckbox, NFormItem, NInput, NInputNumber } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
-import { DuxFormEditorItem, DuxFormEditorRule } from './common'
-import type { PageEditorComponent } from '../../pageEditor/editor/hook'
+import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const FormEditorInputNumber = defineComponent({
   name: 'FormEditorInputNumber',
@@ -37,54 +39,54 @@ const FormEditorInputNumberSetting = defineComponent({
   },
   setup(props, { emit }) {
     const data = useVModel(props, 'value', emit)
+    const { t } = useI18n()
 
     return () => (
-      <div class="">
-
+      <div>
         <DuxFormEditorItem v-model:value={props.value} />
 
-        <WidgetEditorSettingCard title="组件配置">
+        <WidgetEditorSettingCard title={t('components.formEditor.config')}>
 
-          <NFormItem label="占位文本" path="文本">
+          <NFormItem label={t('components.formEditor.inputNumber.placeholder')}>
             <NInput
               v-model:value={data.value.attr.placeholder}
             />
           </NFormItem>
-          <NFormItem label="最小值">
+          <NFormItem label={t('components.formEditor.inputNumber.min')}>
             <NInputNumber
               v-model:value={data.value.attr.min}
             />
           </NFormItem>
 
-          <NFormItem label="最大值">
+          <NFormItem label={t('components.formEditor.inputNumber.max')}>
             <NInputNumber
               v-model:value={data.value.attr.max}
             />
           </NFormItem>
 
-          <NFormItem label="前缀文本">
+          <NFormItem label={t('components.formEditor.inputNumber.prefix')}>
             <NInput
               v-model:value={data.value.attr['v-slot:prefix']}
             />
           </NFormItem>
-          <NFormItem label="后缀文本">
+          <NFormItem label={t('components.formEditor.inputNumber.suffix')}>
             <NInput
               v-model:value={data.value.attr['v-slot:suffix']}
             />
           </NFormItem>
 
-          <NFormItem label="组件状态">
+          <NFormItem label={t('components.formEditor.common.status')}>
             <div class="w-full grid grid-cols-2">
               <NCheckbox
-                label="只读"
+                label={t('components.formEditor.inputNumber.readonly')}
                 v-model:checked={data.value.attr.readonly}
               />
               <NCheckbox
-                label="禁用"
+                label={t('components.formEditor.common.disabled')}
                 v-model:checked={data.value.attr.disabled}
               />
               <NCheckbox
-                label="可清除"
+                label={t('components.formEditor.inputNumber.clearable')}
                 v-model:checked={data.value.attr.clearable}
               />
             </div>
@@ -98,16 +100,16 @@ const FormEditorInputNumberSetting = defineComponent({
   },
 })
 
-export function duxFormEditorInputNumber(): PageEditorComponent {
+export function duxFormEditorInputNumber(t: ComposerTranslation): PageEditorComponent {
   return {
     name: 'inputNumber',
     icon: 'i-tabler:number',
-    label: '数字框',
+    label: t('components.formEditor.inputNumber.name'),
     group: 'form',
     component: props => <FormEditorInputNumber {...props} />,
     setting: props => <FormEditorInputNumberSetting {...props} />,
     settingDefault: {
-      label: '数字框',
+      label: t('components.formEditor.inputNumber.name'),
       name: 'number',
       attr: {
       },

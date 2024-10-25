@@ -1,9 +1,11 @@
+import type { ComposerTranslation } from 'vue-i18n'
 import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 import { useVModel } from '@vueuse/core'
 import { NDatePicker, NFormItem, NSelect, NSwitch } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
-import { DuxFormEditorItem, DuxFormEditorRule } from './common'
+import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const FormDate = defineComponent({
   name: 'FormDate',
@@ -32,61 +34,62 @@ const FormDateSetting = defineComponent({
   },
   setup(props, { emit }) {
     const data = useVModel(props, 'value', emit)
+    const { t } = useI18n()
 
     return () => (
       <div class="">
 
         <DuxFormEditorItem v-model:value={props.value} />
 
-        <WidgetEditorSettingCard title="组件配置">
+        <WidgetEditorSettingCard title={t('components.formEditor.config')}>
 
-          <NFormItem label="输入类型">
+          <NFormItem label={t('components.formEditor.config')}>
 
             <NSelect
               v-model:value={data.value.attr.type}
               options={[
                 {
-                  label: '日期',
+                  label: t('components.formEditor.date.date'),
                   value: 'date',
                 },
                 {
-                  label: '日期范围',
+                  label: t('components.formEditor.date.dateRange'),
                   value: 'daterange',
                 },
                 {
-                  label: '日期时间',
+                  label: t('components.formEditor.date.dateTime'),
                   value: 'datetime',
                 },
                 {
-                  label: '日期时间范围',
+                  label: t('components.formEditor.date.dateTimeRange'),
                   value: 'datetimerange',
                 },
                 {
-                  label: '月',
+                  label: t('components.formEditor.date.month'),
                   value: 'month',
                 },
                 {
-                  label: '月范围',
+                  label: t('components.formEditor.date.monthRange'),
                   value: 'monthrange',
                 },
                 {
-                  label: '年',
+                  label: t('components.formEditor.date.year'),
                   value: 'year',
                 },
                 {
-                  label: '年范围',
+                  label: t('components.formEditor.date.yearRange'),
                   value: 'yearrange',
                 },
                 {
-                  label: '季度',
+                  label: t('components.formEditor.date.quarter'),
                   value: 'quarter',
                 },
                 {
-                  label: '季度范围',
+                  label: t('components.formEditor.date.quarterRange'),
                   value: 'quarterrange',
                 },
                 {
-                  label: '周',
+                  label: t('components.formEditor.date.week'),
                   value: 'week',
                 },
               ]}
@@ -94,13 +97,13 @@ const FormDateSetting = defineComponent({
 
           </NFormItem>
 
-          <NFormItem label="禁用" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.common.disabled')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.disabled} />
             </div>
           </NFormItem>
 
-          <NFormItem label="可清除" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.date.clearable')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.clearable} />
             </div>
@@ -113,16 +116,16 @@ const FormDateSetting = defineComponent({
   },
 })
 
-export function duxFormEditorDate(): PageEditorComponent {
+export function duxFormEditorDate(t: ComposerTranslation): PageEditorComponent {
   return {
     name: 'date',
     icon: 'i-tabler:calendar-due',
-    label: '日期选择',
+    label: t('components.formEditor.date.name'),
     group: 'form',
     component: props => <FormDate {...props} />,
     setting: props => <FormDateSetting {...props} />,
     settingDefault: {
-      label: '日期选择',
+      label: t('components.formEditor.date.name'),
       name: 'date',
       attr: {
         type: 'date',

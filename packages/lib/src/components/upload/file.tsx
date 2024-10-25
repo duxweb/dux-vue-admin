@@ -5,6 +5,7 @@ import { useVModel } from '@vueuse/core'
 import { NButton, NProgress, NUpload, NUploadDragger } from 'naive-ui'
 import { defineComponent, ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
+import { useI18n } from 'vue-i18n'
 import { useResource } from '../../hooks'
 import { useModal } from '../modal'
 import { useNaiveUpload } from './useUpload'
@@ -39,6 +40,7 @@ export const DuxFileUpload = defineComponent({
 
     const { uploadUrl, uploadType } = useResource()
     const { customRequest, onAbort } = useNaiveUpload(props.uploadType || uploadType)
+    const { t } = useI18n()
 
     const fileToFileList = (list: DuxUploadFile[]): UploadFileInfo[] => {
       return list.map((item, index) => {
@@ -109,12 +111,12 @@ export const DuxFileUpload = defineComponent({
               <div class="flex justify-center items-center flex-col gap-2">
                 <div class="i-tabler:cloud-upload w-10 h-10 text-gray-9"></div>
                 <div>
-                  拖动文件、文件夹到此处上传
+                  {t('components.upload.drag')}
                 </div>
                 <div
                   class="text-gray-8 flex justify-center items-center gap-2"
                 >
-                  <NButton class="inline-block" type="primary" text>点击上传</NButton>
+                  <NButton class="inline-block" type="primary" text>{t('components.upload.file')}</NButton>
                   {props.manage && (
                     <NButton
                       class="inline-block"
@@ -124,7 +126,7 @@ export const DuxFileUpload = defineComponent({
                         e.stopPropagation()
 
                         modal.show({
-                          title: '文件管理',
+                          title: t('components.upload.manage'),
                           component: () => import('./fileManage'),
                           width: 800,
                           componentProps: {
@@ -143,7 +145,7 @@ export const DuxFileUpload = defineComponent({
                         })
                       }}
                     >
-                      选择文件
+                      {t('components.upload.manage')}
                     </NButton>
                   )}
                 </div>

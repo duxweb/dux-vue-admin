@@ -1,10 +1,12 @@
+import type { ComposerTranslation } from 'vue-i18n'
 import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 import { useVModel } from '@vueuse/core'
 import { NButton, NFormItem, NSwitch, NTreeSelect } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useModal } from '../../modal'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
-import { DuxFormEditorItem, DuxFormEditorRule } from './common'
+import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const Comp = defineComponent({
   props: {
@@ -29,32 +31,33 @@ const Setting = defineComponent({
   setup(props, { emit }) {
     const data = useVModel(props, 'value', emit)
     const modal = useModal()
+    const { t } = useI18n()
 
     return () => (
       <div class="">
 
         <DuxFormEditorItem v-model:value={props.value} />
 
-        <WidgetEditorSettingCard title="组件配置">
+        <WidgetEditorSettingCard title={t('components.formEditor.config')}>
 
-          <NFormItem label="多选" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.cascader.multiple')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.multiple} />
             </div>
           </NFormItem>
-          <NFormItem label="关联选择" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.cascader.cascade')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.cascade} />
             </div>
           </NFormItem>
 
-          <NFormItem label="禁用" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.common.disabled')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.disabled} />
             </div>
           </NFormItem>
 
-          <NFormItem label="可清除" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.cascader.clearable')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.clearable} />
             </div>
@@ -62,18 +65,17 @@ const Setting = defineComponent({
 
         </WidgetEditorSettingCard>
 
-        <WidgetEditorSettingCard title="组件选项">
-
+        <WidgetEditorSettingCard title={t('components.formEditor.options')}>
           <NButton
             block
             dashed
             renderIcon={() => <div class="i-tabler:edit"></div>}
             onClick={() => {
               modal.show({
-                title: '编辑数据',
+                title: t('components.formEditor.common.data'),
                 component: () => import('./json'),
                 componentProps: {
-                  desc: '您可以使用 "label"、"value" 和 "children" 来定义 json 数组选项',
+                  desc: t('components.formEditor.cascader.optionsDescription'),
                   value: JSON.stringify(data.value.attr.options, null, 2),
                   onChange: (value) => {
                     try {
@@ -85,9 +87,8 @@ const Setting = defineComponent({
               })
             }}
           >
-            编辑数据
+            {t('components.formEditor.common.data')}
           </NButton>
-
         </WidgetEditorSettingCard>
 
         <DuxFormEditorRule v-model:value={data.value.rule} />
@@ -96,16 +97,16 @@ const Setting = defineComponent({
   },
 })
 
-export function duxFormEditorTreeSelect(): PageEditorComponent {
+export function duxFormEditorTreeSelect(t: ComposerTranslation): PageEditorComponent {
   return {
     name: 'treeSelect',
     icon: 'i-tabler:binary-tree',
-    label: '树形选择器',
+    label: t('components.formEditor.treeSelect.name'),
     group: 'select',
     component: props => <Comp {...props} />,
     setting: props => <Setting {...props} />,
     settingDefault: {
-      label: '树形选择器',
+      label: t('components.formEditor.treeSelect.name'),
       name: 'treeSelect',
       attr: {
         options: [],

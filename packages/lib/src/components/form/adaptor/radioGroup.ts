@@ -1,6 +1,6 @@
 import type { CheckboxProps, RadioGroupProps } from 'naive-ui'
-import { item } from './item'
 import type { JsonFormItemSchema } from '../handler'
+import { item } from './item'
 
 export interface RadioGroupAdaptor extends RadioGroupProps {
   options?: CheckboxProps[]

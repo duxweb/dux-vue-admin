@@ -1,5 +1,5 @@
-import { useOverlayInject } from '@overlastic/vue'
 import type { AsyncComponentLoader } from 'vue'
+import { useOverlayInject } from '@overlastic/vue'
 import Drawer from './drawer'
 
 export interface UseDrawerResult {

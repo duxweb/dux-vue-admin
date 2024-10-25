@@ -2,6 +2,7 @@ import type { PropType } from 'vue'
 import type { JsonFormItemSchema } from './handler'
 import { NButton } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { DuxModalPage } from '../modal'
 import { DuxJsonForm } from './jsonForm'
 import { useForm } from './useForm'
@@ -27,6 +28,7 @@ export const DuxModalForm = defineComponent({
         props.onConfirm?.(res)
       },
     })
+    const { t } = useI18n()
 
     return () => (
       <DuxModalPage>
@@ -47,7 +49,7 @@ export const DuxModalForm = defineComponent({
                   props.onClose?.()
                 }}
               >
-                取消
+                {t('components.formEditor.buttons.cancel')}
               </NButton>
               <NButton
                 type="primary"
@@ -56,7 +58,7 @@ export const DuxModalForm = defineComponent({
                   onSubmit()
                 }}
               >
-                确定
+                {t('components.formEditor.buttons.confirm')}
               </NButton>
             </>
           ),

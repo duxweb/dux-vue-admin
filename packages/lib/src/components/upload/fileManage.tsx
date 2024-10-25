@@ -2,6 +2,7 @@ import type { PropType } from 'vue'
 import type { DuxUploadType } from './useUpload'
 import { NButton, NDropdown, NInfiniteScroll, NSpin, NTab, NTabs, NTooltip, useMessage } from 'naive-ui'
 import { computed, defineComponent, nextTick, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { DuxDrawEmpty } from '../'
 import { useClient, useDownload, useResource } from '../../hooks'
 import { useDialog } from '../dialog'
@@ -29,6 +30,7 @@ const DuxFileManage = defineComponent({
     const showDropdown = ref(false)
     const xRef = ref(0)
     const yRef = ref(0)
+    const { t } = useI18n()
 
     const selectValues = ref<Record<string, any>[]>([])
 
@@ -53,7 +55,7 @@ const DuxFileManage = defineComponent({
 
     const createFolder = (name?: string) => {
       if (!name) {
-        message.error('请输入名称')
+        message.error(t('components.uploadManage.namePlaceholder'))
         return
       }
       client.post({
@@ -65,13 +67,13 @@ const DuxFileManage = defineComponent({
         onReload()
         selectValues.value = []
       }).catch(() => {
-        message.error('创建文件夹失败')
+        message.error(t('components.uploadManage.createError'))
       })
     }
 
     const renameFile = (name?: string, id?: string | number) => {
       if (!name) {
-        message.error('请输入名称')
+        message.error(t('components.uploadManage.namePlaceholder'))
         return
       }
       client.put({
@@ -84,7 +86,7 @@ const DuxFileManage = defineComponent({
         onReload()
         selectValues.value = []
       }).catch(() => {
-        message.error('修改名称失败')
+        message.error(t('components.uploadManage.editError'))
       })
     }
 
@@ -99,7 +101,7 @@ const DuxFileManage = defineComponent({
         onReload()
         selectValues.value = []
       }).catch(() => {
-        message.error('删除失败')
+        message.error(t('components.uploadManage.delError'))
       })
     }
 
@@ -120,52 +122,7 @@ const DuxFileManage = defineComponent({
         size: '100kb',
         time: '2021-12-12 12:12:12',
       },
-      {
-        id: 3,
-        type: 'file',
-        name: '1.mp4',
-        mime: 'video/mp4',
-        url: 'https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel2.jpeg',
-        size: '100kb',
-        time: '2021-12-12 12:12:12',
-      },
-      {
-        id: 4,
-        type: 'file',
-        name: '1.mp3',
-        mime: 'audio/mp3',
-        url: 'https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel2.jpeg',
-        size: '100kb',
-        time: '2021-12-12 12:12:12',
-      },
-      {
-        id: 4,
-        type: 'file',
-        name: '1.docx',
-        mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        url: 'http://static.shanhuxueyuan.com/test6.docx',
-        size: '100kb',
-        time: '2021-12-12 12:12:12',
-      },
-      {
-        id: 5,
-        type: 'file',
-        name: '1.xlsx',
-        mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        url: 'http://static.shanhuxueyuan.com/demo/excel.xlsx',
-        size: '100kb',
-        time: '2021-12-12 12:12:12',
-      },
 
-      {
-        id: 6,
-        type: 'file',
-        name: '1.pdf',
-        mime: 'application/pdf',
-        url: 'http://static.shanhuxueyuan.com/test.pdf',
-        size: '100kb',
-        time: '2021-12-12 12:12:12',
-      },
     ])
 
     const typeDisable = computed<boolean>(() => {
@@ -197,10 +154,10 @@ const DuxFileManage = defineComponent({
                       onReload()
                     }}
                   >
-                    <NTab tab="全部" name="all" disabled={typeDisable.value} />
-                    <NTab tab="图片" name="image" disabled={typeDisable.value} />
-                    <NTab tab="媒体" name="media" disabled={typeDisable.value} />
-                    <NTab tab="文档" name="docs" disabled={typeDisable.value} />
+                    <NTab tab={t('components.uploadManage.all')} name="all" disabled={typeDisable.value} />
+                    <NTab tab={t('components.uploadManage.image')} name="image" disabled={typeDisable.value} />
+                    <NTab tab={t('components.uploadManage.media')} name="media" disabled={typeDisable.value} />
+                    <NTab tab={t('components.uploadManage.docs')} name="docs" disabled={typeDisable.value} />
                   </NTabs>
                 </div>
                 <div class="flex gap-2">
@@ -209,7 +166,7 @@ const DuxFileManage = defineComponent({
                     ghost
                     onClick={() => {
                       dialog.prompt({
-                        title: '请输入名称',
+                        title: t('components.uploadManage.namePlaceholder'),
                         formSchema: [
                           {
                             type: 'input',
@@ -222,7 +179,7 @@ const DuxFileManage = defineComponent({
                     }}
                     renderIcon={() => <div class="i-tabler:plus"></div>}
                   >
-                    创建
+                    {t('buttons.create')}
                   </NButton>
                   <NButton
                     type="primary"
@@ -249,7 +206,7 @@ const DuxFileManage = defineComponent({
                             url: props.uploadUrl || uploadUrl,
                             formData,
                             onSuccess() {
-                              message.success('上传成功')
+                              message.success(t('components.uploadManage.success'))
                               selectValues.value = []
                               onReload()
                               fileInput.remove()
@@ -275,7 +232,7 @@ const DuxFileManage = defineComponent({
                               folder: form.value.folder,
                             },
                             onSuccess() {
-                              message.success('上传成功')
+                              message.success(t('components.uploadManage.success'))
                               selectValues.value = []
                               onReload()
                               fileInput.remove()
@@ -301,7 +258,7 @@ const DuxFileManage = defineComponent({
                     renderIcon={() => <div class="i-tabler:upload"></div>}
                   >
                     <div class="flex gap-2">
-                      上传
+                      {t('components.uploadManage.upload')}
                       {uploadRate.value > 0 && `(${uploadRate.value}%)`}
                     </div>
                   </NButton>
@@ -375,7 +332,7 @@ const DuxFileManage = defineComponent({
                             <div class="w-26">
                               <DuxDrawEmpty />
                             </div>
-                            <div>暂无文件</div>
+                            <div>{t('components.uploadManage.empty')}</div>
                           </div>
                         </div>
                       )}
@@ -403,7 +360,7 @@ const DuxFileManage = defineComponent({
                       break
                     case 'rename':
                       dialog.prompt({
-                        title: '请输入名称',
+                        title: t('components.uploadManage.namePlaceholder'),
                         formSchema: [
                           {
                             type: 'input',
@@ -419,8 +376,8 @@ const DuxFileManage = defineComponent({
                       break
                     case 'delete':
                       dialog.confirm({
-                        title: '确认删除',
-                        content: '确认删除该文件或目录？',
+                        title: t('components.uploadManage.delTitle'),
+                        content: t('components.uploadManage.delDesc'),
                       }).then(() => {
                         deleteFile(currentData.value?.id)
                       })
@@ -429,17 +386,17 @@ const DuxFileManage = defineComponent({
                 }}
                 options={[
                   currentData.value?.url && {
-                    label: '下载',
+                    label: t('buttons.download'),
                     key: 'download',
                     icon: () => <div class="i-tabler:download"></div>,
                   },
                   {
-                    label: '重命名',
+                    label: t('buttons.rename'),
                     key: 'rename',
                     icon: () => <div class="i-tabler:cursor-text"></div>,
                   },
                   {
-                    label: '删除',
+                    label: t('buttons.delete'),
                     key: 'delete',
                     icon: () => <div class="i-tabler:trash"></div>,
                   },
@@ -456,14 +413,14 @@ const DuxFileManage = defineComponent({
                     secondary
                     onClick={() => {
                       dialog.confirm({
-                        title: '确认删除',
-                        content: '确认删除该文件或目录？',
+                        title: t('components.uploadManage.delTitle'),
+                        content: t('components.uploadManage.delDesc'),
                       }).then(() => {
                         deleteFile(selectValues.value?.map(v => v.id))
                       })
                     }}
                   >
-                    删除
+                    {t('buttons.delete')}
                   </NButton>
                 )}
               </div>
@@ -475,7 +432,8 @@ const DuxFileManage = defineComponent({
                     props.onConfirm?.(selectValues.value)
                   }}
                 >
-                  使用选中 (
+                  {t('buttons.select')}
+                  (
                   {selectValues.value?.length || 0}
                   )
                 </NButton>

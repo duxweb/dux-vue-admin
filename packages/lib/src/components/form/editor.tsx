@@ -1,6 +1,7 @@
 import type { PageEditorComponent, PageEditorGroup, UseEditorResult } from '../pageEditor/editor/hook'
 import { NButton } from 'naive-ui'
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useModal } from '../modal'
 import { DuxPageEditor } from '../pageEditor/editor'
 import { duxFormEditorCascader } from './editor/cascader'
@@ -33,55 +34,60 @@ export const DuxFormEditor = defineComponent({
   },
   extends: DuxPageEditor,
   setup(props) {
-    const groups: PageEditorGroup[] = [
-      {
-        name: 'form',
-        label: '输入',
-        icon: 'i-tabler:forms',
-      },
-      {
-        name: 'select',
-        label: '选择',
-        icon: 'i-tabler:select',
-      },
-      {
-        name: 'async',
-        label: '异步',
-        icon: 'i-tabler:loader',
-      },
-    ]
+    const { t } = useI18n()
+    const groups = computed<PageEditorGroup[]>(() => {
+      return [
+        {
+          name: 'form',
+          label: t('components.formEditor.group.form'),
+          icon: 'i-tabler:forms',
+        },
+        {
+          name: 'select',
+          label: t('components.formEditor.group.select'),
+          icon: 'i-tabler:select',
+        },
+        {
+          name: 'async',
+          label: t('components.formEditor.group.async'),
+          icon: 'i-tabler:loader',
+        },
+      ]
+    })
 
-    const components: PageEditorComponent[] = [
-      duxFormEditorInput(),
-      duxFormEditorInputNumber(),
-      duxFormEditorCascader(),
-      duxFormEditorSelect(),
-      duxFormEditorColor(),
-      duxFormEditorCheckbox(),
-      duxFormEditorRadio(),
-      duxFormEditorDate(),
-      duxFormEditorDynamicInput(),
-      duxFormEditorRegion(),
-      duxFormEditorSelectAsync(),
-      duxFormEditorCascaderAsync(),
-      duxFormEditorSider(),
-      duxFormEditorSwitch(),
-      duxFormEditorTime(),
-      duxFormEditorTreeSelect(),
-      duxFormEditorDynamicTags(),
-      duxFormEditorAIEditor(),
-      duxFormEditorMentionAsync(),
-      duxFormEditorTreeSelectAsync(),
-      duxFormEditorTransferAsync(),
-    ]
+    const components = computed<PageEditorComponent[]>(() => {
+      return [
+        duxFormEditorInput(t),
+        duxFormEditorInputNumber(t),
+        duxFormEditorCascader(t),
+        duxFormEditorCascaderAsync(t),
+        duxFormEditorCheckbox(t),
+        duxFormEditorSelect(t),
+        duxFormEditorColor(t),
+        duxFormEditorRadio(t),
+        duxFormEditorDate(t),
+        duxFormEditorDynamicInput(t),
+        duxFormEditorRegion(t),
+        duxFormEditorSelectAsync(t),
+        duxFormEditorSider(t),
+        duxFormEditorSwitch(t),
+        duxFormEditorTime(t),
+        duxFormEditorTreeSelect(t),
+        duxFormEditorDynamicTags(t),
+        duxFormEditorAIEditor(t),
+        duxFormEditorMentionAsync(t),
+        duxFormEditorTreeSelectAsync(t),
+        duxFormEditorTransferAsync(t),
+      ]
+    })
 
     const modal = useModal()
 
     return () => (
       <DuxPageEditor
         {...props}
-        groups={groups}
-        components={components}
+        groups={groups.value}
+        components={components.value}
         settingPage={{
           component: params => <DuxFormEditorSettingPage {...params} />,
           default: {
@@ -106,13 +112,13 @@ export const DuxFormEditor = defineComponent({
                   })
                 }}
               >
-                Json 输出
+                {t('components.formEditor.common.jsonOut')}
               </NButton>
             </div>
             {props.onSave && (
               <div class="flex-1">
                 <NButton type="primary" block onClick={() => props.onSave?.(edit)}>
-                  保存
+                  {t('buttons.save')}
                 </NButton>
               </div>
             )}

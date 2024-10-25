@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { NTabPane, NTabs } from 'naive-ui'
+import { NTab, NTabs } from 'naive-ui'
 import { defineComponent, Transition, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -39,11 +39,10 @@ export const DuxTabs = defineComponent({
             size="small"
             class="layout-tabs"
             type="card"
-            paneClass="!p-0"
             onUpdateValue={(v: string) => tab.changeTab(v, (v: DuxRoute) => router.push(v.path || ''))}
             onClose={(v: string) => tab.delTab(v, (v: DuxRoute) => router.push(v.path || ''))}
           >
-            {tab.tabs?.map((tag, key) => <NTabPane key={key} name={tag.name} tab={tag.labelLang ? t(tag.labelLang) : tag.label} closable={key !== 0} />)}
+            {tab.tabs?.map((tag, key) => <NTab key={key} name={tag.name} tab={tag.labelLang ? t(tag.labelLang) : tag.label} closable={key !== 0} />)}
           </NTabs>
         </div>
       </Transition>

@@ -1,18 +1,18 @@
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export const DuxBlockEmpty = defineComponent({
   name: 'Message',
   props: {
     text: {
       type: String,
-      default: '暂无数据',
     },
     desc: {
       type: String,
-      default: '暂无更多可查看数据',
     },
   },
   setup(props) {
+    const { t } = useI18n()
     return () => (
       <div class="flex justify-center p-2">
         <div class="flex flex-row items-center gap-4">
@@ -22,8 +22,8 @@ export const DuxBlockEmpty = defineComponent({
             </svg>
           </div>
           <div class="flex flex-col gap-0">
-            <div>{props.text}</div>
-            <div class="text-gray-6">{props.desc}</div>
+            <div>{props.text || t('page.empty.title')}</div>
+            <div class="text-gray-6">{props.desc || t('page.empty.desc')}</div>
           </div>
         </div>
       </div>

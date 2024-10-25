@@ -1,19 +1,10 @@
 import type { AutoCompleteProps, CascaderProps, CheckboxProps, ColorPickerProps, DatePickerProps, DynamicInputProps, DynamicTagsProps, FormItemProps, InputNumberProps, InputProps, MentionProps, RadioProps, RateProps, SelectProps, SliderProps, SpaceProps, SwitchProps, TimeProps, TransferProps, TreeSelectProps } from 'naive-ui'
-import type { DuxCascaderAsync } from '../cascader'
-import type { DuxAiEditor } from '../editor/aiEditor'
-import type { DuxRegion } from '../region'
+import type { DuxAiEditor, DuxCascaderAsync, DuxFileUpload, DuxImageUpload, DuxMentionAsync, DuxRegion, DuxSelectAsync, DuxTransferAsync, DuxTreeSelectAsync } from '../'
 
 import type { JSONSchema } from '../render/jsonRender'
-
-import type { DuxSelectAsync } from '../select'
-import type { DuxTreeSelectAsync } from '../treeSelect'
-import type { DuxFileUpload, DuxImageUpload } from '../upload'
 import type { CheckboxGroupAdaptor, GridProps } from './adaptor'
 import type { RadioGroupAdaptor } from './adaptor/radioGroup'
-import { cascader, cascaderAsync, checkbox, checkboxGroup, color, date, dynamicInput, dynamicTags, grid, input, mention, number, radio, radioGroup, rate, region, select, selectAsync, slider, space, switchAdaptor, time, transfer, treeSelect, uploadFile, uploadImage } from './adaptor'
-import { autoComplete } from './adaptor/autoComplete'
-import { editor } from './adaptor/editor'
-import { treeSelectAsync } from './adaptor/treeSelectAsync'
+import { autoComplete, cascader, cascaderAsync, checkbox, checkboxGroup, color, date, dynamicInput, dynamicTags, editor, grid, input, mention, mentionAsync, number, radio, radioGroup, rate, region, select, selectAsync, slider, space, switchAdaptor, time, transfer, transferAsync, treeSelect, treeSelectAsync, uploadFile, uploadImage } from './adaptor'
 
 export interface JsonFormToAttrMap {
   'editor': typeof DuxAiEditor
@@ -29,6 +20,7 @@ export interface JsonFormToAttrMap {
   'grid': GridProps
   'input': InputProps
   'mention': MentionProps
+  'mention-async': typeof DuxMentionAsync
   'number': InputNumberProps
   'radio': RadioProps
   'radio-group': RadioGroupAdaptor
@@ -45,13 +37,14 @@ export interface JsonFormToAttrMap {
   'image-upload': typeof DuxImageUpload
   'region': typeof DuxRegion
   'tree-select-async': typeof DuxTreeSelectAsync
+  'transfer-async': typeof DuxTransferAsync
 }
 
 export type JsonFormItemAdaptor<T extends keyof JsonFormToAttrMap> = JsonFormToAttrMap[T] | Record<string, any>
 
 export type JsonFormType = 'editor' | 'auto-complete' | 'cascader' | 'checkbox' | 'checkbox-group' | 'color' | 'date' | 'dynamic-input' |
   'dynamic-tags' | 'grid' | 'input' | 'mention' | 'number' | 'radio' | 'radio-group' | 'rate' | 'select' | 'slider' | 'space' | 'switch' | 'time' | 'transfer' | 'tree-select' |
-  'file-upload' | 'image-upload' | 'cascader-async' | 'select-async' | 'region' | 'tree-select-async'
+  'file-upload' | 'image-upload' | 'cascader-async' | 'select-async' | 'region' | 'tree-select-async' | 'transfer-async' | 'mention-async'
 
 export type FormLayoutType = 'page' | 'form'
 
@@ -144,6 +137,9 @@ export function formToJson(schema: JsonFormItemSchema[], layout: FormLayoutType 
     if (item.type === 'tree-select') {
       itemJson = treeSelect(item)
     }
+    if (item.type === 'tree-select-async') {
+      itemJson = treeSelectAsync(item)
+    }
     if (item.type === 'image-upload') {
       itemJson = uploadImage(item)
     }
@@ -156,11 +152,14 @@ export function formToJson(schema: JsonFormItemSchema[], layout: FormLayoutType 
     if (item.type === 'select-async') {
       itemJson = selectAsync(item)
     }
+    if (item.type === 'transfer-async') {
+      itemJson = transferAsync(item)
+    }
+    if (item.type === 'mention-async') {
+      itemJson = mentionAsync(item)
+    }
     if (item.type === 'region') {
       itemJson = region(item)
-    }
-    if (item.type === 'tree-select-async') {
-      itemJson = treeSelectAsync(item)
     }
     if (item.child) {
       const child = Array.isArray(item.child) ? item.child : [item.child]

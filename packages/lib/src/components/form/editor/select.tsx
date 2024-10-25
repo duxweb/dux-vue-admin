@@ -1,10 +1,12 @@
+import type { ComposerTranslation } from 'vue-i18n'
 import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 import { useVModel } from '@vueuse/core'
 import { NButton, NFormItem, NSelect, NSwitch } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useModal } from '../../modal'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
-import { DuxFormEditorItem, DuxFormEditorRule } from './common'
+import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const FormSelect = defineComponent({
   name: 'FormSelect',
@@ -31,27 +33,28 @@ const FormSelectSetting = defineComponent({
   setup(props, { emit }) {
     const data = useVModel(props, 'value', emit)
     const modal = useModal()
+    const { t } = useI18n()
 
     return () => (
       <div class="">
 
         <DuxFormEditorItem v-model:value={props.value} />
 
-        <WidgetEditorSettingCard title="组件配置">
+        <WidgetEditorSettingCard title={t('components.formEditor.config')}>
 
-          <NFormItem label="多选" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.select.multiple')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.multiple} />
             </div>
           </NFormItem>
 
-          <NFormItem label="禁用" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.common.disabled')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.disabled} />
             </div>
           </NFormItem>
 
-          <NFormItem label="可清除" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.select.clearable')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.clearable} />
             </div>
@@ -59,7 +62,7 @@ const FormSelectSetting = defineComponent({
 
         </WidgetEditorSettingCard>
 
-        <WidgetEditorSettingCard title="组件选项">
+        <WidgetEditorSettingCard title={t('components.formEditor.options')}>
 
           <NButton
             block
@@ -67,21 +70,21 @@ const FormSelectSetting = defineComponent({
             renderIcon={() => <div class="i-tabler:edit"></div>}
             onClick={() => {
               modal.show({
-                title: '编辑数据',
+                title: t('components.formEditor.common.data'),
                 component: () => import('./options'),
                 componentProps: {
-                  desc: '您可以使用 "label"、"value" 来定义 json 数组选项',
+                  desc: t('components.formEditor.common.optionsDescription'),
                   value: data.value.attr.options,
                   onChange: (value) => {
                     data.value.attr.options = value
                   },
                   options: [
                     {
-                      label: '选项名',
+                      label: t('components.formEditor.common.labelField'),
                       value: 'label',
                     },
                     {
-                      label: '选型值',
+                      label: t('components.formEditor.common.valueField'),
                       value: 'value',
                     },
                   ],
@@ -90,7 +93,7 @@ const FormSelectSetting = defineComponent({
               })
             }}
           >
-            编辑数据
+            {t('components.formEditor.common.data')}
           </NButton>
 
         </WidgetEditorSettingCard>
@@ -101,16 +104,16 @@ const FormSelectSetting = defineComponent({
   },
 })
 
-export function duxFormEditorSelect(): PageEditorComponent {
+export function duxFormEditorSelect(t: ComposerTranslation): PageEditorComponent {
   return {
     name: 'select',
     icon: 'i-tabler:select',
-    label: '选择器',
+    label: t('components.formEditor.select.name'),
     group: 'select',
     component: props => <FormSelect {...props} />,
     setting: props => <FormSelectSetting {...props} />,
     settingDefault: {
-      label: '选择器',
+      label: t('components.formEditor.select.name'),
       name: 'select',
       attr: {
         options: [],

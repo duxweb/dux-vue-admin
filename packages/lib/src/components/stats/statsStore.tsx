@@ -1,6 +1,6 @@
+import type { PropType } from 'vue'
 import clsx from 'clsx'
 import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
 
 export const DuxStatsStore = defineComponent({
   name: 'DuxStatsStore',

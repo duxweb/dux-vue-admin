@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import { NButton, NForm, NFormItem, NInput, NPopover, useMessage } from 'naive-ui'
 import { storeToRefs } from 'pinia'
 import { defineComponent, onMounted, reactive, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useResource } from '../hooks'
 import { useClient } from '../hooks/useClient'
@@ -35,6 +36,7 @@ export default defineComponent({
     const manage = useManageStore()
     const router = useRouter()
     const client = useClient()
+    const { t } = useI18n()
 
     const {
       loading: submitLoading,
@@ -68,7 +70,7 @@ export default defineComponent({
     onError((res) => {
       getCaptcha()
       captchaTheme.value = 'default'
-      message.error(res?.error?.message || '服务器提交错误')
+      message.error(res?.error?.message || t('message.requestError'))
     })
 
     function handleSubmit() {
@@ -87,7 +89,7 @@ export default defineComponent({
         captchaData.thumb = res?.data?.thumb
         captchaData.code = res?.data?.code
       }).catch((res) => {
-        message.error(res?.message || '服务器提交错误')
+        message.error(res?.message || t('message.requestError'))
       }).finally(() => {
         captchaLoading.value = false
       })
@@ -160,28 +162,26 @@ export default defineComponent({
             {modeState.value === 'dark' && <div class="h-5 w-5 i-tabler:moon" />}
           </div>
           <div class="justify-center hidden md:flex flex-row items-center">
-            <div class="w-full h-auto">
-              <dux-draw-apps />
-            </div>
+            {resource.config?.loginBanner ? <img class="w-full h-auto" src={resource.config?.loginBanner} /> : <div class="w-full h-auto"><dux-draw-apps /></div>}
           </div>
           <div class="flex flex-col">
             <div class="flex flex-col items-center justify-center mt-4 h-20 ">
               <dux-logo />
               <div class="mt-4 text-lg">
-                开箱即用的中后台管理系统
+                {resource.manageConfig?.title || 'Dux Admin Manage'}
               </div>
             </div>
             <div class="my-6">
               <NForm ref={formRef} model={form}>
                 <NFormItem showLabel={false} path="username">
-                  <NInput value={form.value.username} onUpdateValue={v => form.value.username = v} type="text" placeholder="请输入账号" size="large">
+                  <NInput value={form.value.username} onUpdateValue={v => form.value.username = v} type="text" placeholder={t('pages.login.placeholder.username')} size="large">
                     {{
                       default: () => <div class="text-lg i-tabler:user" />,
                     }}
                   </NInput>
                 </NFormItem>
                 <NFormItem showLabel={false} path="password">
-                  <NInput value={form.value.password} onUpdateValue={v => form.value.password = v} type="password" showPasswordOn="mousedown" placeholder="请输入密码" size="large" inputProps={{ autocomplete: 'new-password' }}>
+                  <NInput value={form.value.password} onUpdateValue={v => form.value.password = v} type="password" showPasswordOn="mousedown" placeholder={t('pages.login.placeholder.password')} size="large" inputProps={{ autocomplete: 'new-password' }}>
                     {{
                       default: () => <div class="text-lg i-tabler:lock" />,
                     }}
@@ -195,7 +195,7 @@ export default defineComponent({
                         default: () => (
                           <gocaptcha-click
                             config={{
-                              title: '请点击图像验证码',
+                              title: t('pages.login.placeholder.captcha'),
                             }}
                             data={captchaData}
                             events={clickEvents}
@@ -206,9 +206,9 @@ export default defineComponent({
                             {{
                               default: () => (
                                 <div>
-                                  { captchaTheme.value === 'default' ? '点击验证' : '' }
-                                  { captchaTheme.value === 'success' ? '验证成功' : '' }
-                                  { captchaTheme.value === 'error' ? '验证失败' : '' }
+                                  { captchaTheme.value === 'default' ? t('pages.login.captcha.default') : '' }
+                                  { captchaTheme.value === 'success' ? t('pages.login.captcha.success') : '' }
+                                  { captchaTheme.value === 'error' ? t('pages.login.captcha.error') : '' }
                                 </div>
                               ),
                               icon: () => (
@@ -227,13 +227,13 @@ export default defineComponent({
 
                 <div class="mb-2 mt-4">
                   <NButton type="primary" size="large" block loading={submitLoading.value} onClick={handleSubmit}>
-                    登录
+                    {t('pages.login.buttons.login')}
                   </NButton>
                 </div>
               </NForm>
             </div>
             <div class="text-center text-sm text-gray-5">
-              All rights reserved © duxweb 2024
+              {resource.config?.copyright || 'All rights reserved © duxweb 2024'}
             </div>
           </div>
         </div>

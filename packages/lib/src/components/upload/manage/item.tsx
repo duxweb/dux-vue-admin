@@ -4,15 +4,16 @@ import clsx from 'clsx'
 import { NCheckbox, NImage } from 'naive-ui'
 import { defineComponent } from 'vue'
 
+import { useI18n } from 'vue-i18n'
 import audioSvg from '../../../static/icon/audio.svg'
 import excelSvg from '../../../static/icon/excel.svg'
 import folderSvg from '../../../static/icon/folder.svg'
 import pdfSvg from '../../../static/icon/pdf.svg'
+
 import pptSvg from '../../../static/icon/ppt.svg'
-
 import videoSvg from '../../../static/icon/video.svg'
-import wordSvg from '../../../static/icon/word.svg'
 
+import wordSvg from '../../../static/icon/word.svg'
 import { useDialog } from '../../dialog'
 
 export const DuxFileManageItem = defineComponent({
@@ -29,6 +30,7 @@ export const DuxFileManageItem = defineComponent({
   },
   setup(props) {
     const dialog = useDialog()
+    const { t } = useI18n()
 
     const mimeMap = {
       image: 'image/',
@@ -71,7 +73,7 @@ export const DuxFileManageItem = defineComponent({
                 <div onClick={(e) => {
                   e.stopPropagation()
                   dialog.node({
-                    title: '预览',
+                    title: t('buttons.preview'),
                     render: () => (
                       <div class="flex items-center justify-center">
                         <video class="w-120 max-w-full" controls>
@@ -89,7 +91,7 @@ export const DuxFileManageItem = defineComponent({
                 <div onClick={(e) => {
                   e.stopPropagation()
                   dialog.node({
-                    title: '预览',
+                    title: t('buttons.preview'),
                     render: () => (
                       <div class="flex items-center justify-center">
                         <audio class="w-120 max-w-full" controls>

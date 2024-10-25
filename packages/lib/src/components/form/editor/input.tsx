@@ -1,10 +1,12 @@
+import type { ComposerTranslation } from 'vue-i18n'
 import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 import { useVModel } from '@vueuse/core'
 import { NCheckbox, NFormItem, NInput, NInputNumber } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
 import { DuxRadio } from '../../radio'
-import { DuxFormEditorItem, DuxFormEditorRule } from './common'
+import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const FormEditorInput = defineComponent({
   name: 'FormEditorInput',
@@ -30,68 +32,69 @@ const FormEditorInputSetting = defineComponent({
   },
   setup(props, { emit }) {
     const data = useVModel(props, 'value', emit)
+    const { t } = useI18n()
 
     return () => (
       <div class="">
 
         <DuxFormEditorItem v-model:value={props.value} />
 
-        <WidgetEditorSettingCard title="组件配置">
-          <NFormItem label="输入类型">
+        <WidgetEditorSettingCard title={t('components.formEditor.config')}>
+          <NFormItem label={t('components.formEditor.input.type')}>
             <DuxRadio
               v-model:value={data.value.attr.type}
               defaultValue="input"
               options={[
-                { label: '文本框', value: 'text' },
-                { label: '多行', value: 'textarea' },
-                { label: '密码', value: 'password' },
+                { label: t('components.formEditor.input.text'), value: 'text' },
+                { label: t('components.formEditor.input.textarea'), value: 'textarea' },
+                { label: t('components.formEditor.input.password'), value: 'password' },
               ]}
             />
           </NFormItem>
 
-          <NFormItem label="占位文本">
+          <NFormItem label={t('components.formEditor.input.placeholder')}>
             <NInput
               v-model:value={data.value.attr.placeholder}
             />
           </NFormItem>
-          <NFormItem label="最小字数">
+          <NFormItem label={t('components.formEditor.input.minLength')}>
             <NInputNumber
               v-model:value={data.value.attr.minlength}
             />
           </NFormItem>
 
-          <NFormItem label="最大字数">
+          <NFormItem label={t('components.formEditor.input.maxLength')}>
             <NInputNumber
               v-model:value={data.value.attr.maxlength}
             />
           </NFormItem>
-          <NFormItem label="前缀文本">
+          <NFormItem label={t('components.formEditor.input.prefix')}>
             <NInput
               v-model:value={data.value.attr['v-slot:prefix']}
             />
           </NFormItem>
-          <NFormItem label="后缀文本">
+          <NFormItem label={t('components.formEditor.input.suffix')}>
             <NInput
               v-model:value={data.value.attr['v-slot:suffix']}
             />
           </NFormItem>
 
-          <NFormItem label="组件状态">
+          <NFormItem label={t('components.formEditor.common.status')}>
             <div class="w-full grid grid-cols-2">
               <NCheckbox
-                label="只读"
+                label={t('components.formEditor.input.readonly')}
                 v-model:checked={data.value.attr.readonly}
               />
               <NCheckbox
-                label="禁用"
+                label={t('components.formEditor.common.disabled')}
                 v-model:checked={data.value.attr.disabled}
               />
               <NCheckbox
-                label="可清除"
+                label={t('components.formEditor.input.clearable')}
                 v-model:checked={data.value.attr.clearable}
               />
               <NCheckbox
-                label="统计字数"
+                label={t('components.formEditor.input.showCount')}
                 v-model:checked={data.value.attr.showCount}
               />
             </div>
@@ -104,16 +107,16 @@ const FormEditorInputSetting = defineComponent({
   },
 })
 
-export function duxFormEditorInput(): PageEditorComponent {
+export function duxFormEditorInput(t: ComposerTranslation): PageEditorComponent {
   return {
     name: 'input',
     icon: 'i-tabler:cursor-text',
-    label: '文本框',
+    label: t('components.formEditor.input.name'),
     group: 'form',
     component: props => <FormEditorInput {...props} />,
     setting: props => <FormEditorInputSetting {...props} />,
     settingDefault: {
-      label: '文本框',
+      label: t('components.formEditor.input.name'),
       name: 'text',
       attr: {
         type: 'text',

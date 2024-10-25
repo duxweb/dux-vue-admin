@@ -1,7 +1,9 @@
+import type { AiMessage } from 'aieditor'
 import type { PropType } from 'vue'
 import { AiEditor } from 'aieditor'
 import { storeToRefs } from 'pinia'
 import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useResource } from '../../hooks'
 import { useManageStore } from '../../stores'
 import { useThemeStore } from '../../stores/theme'
@@ -27,12 +29,13 @@ export const DuxAiEditor = defineComponent({
     const { send } = useUpload()
 
     const { getUser } = useManageStore()
+    const { t } = useI18n()
 
     onMounted(() => {
       aiEditor = new AiEditor({
         theme: darkMode.value ? 'dark' : 'light',
         element: divRef.value as Element,
-        placeholder: '请输入内容...',
+        placeholder: t('components.editor.placeholder'),
         content: props?.value || props?.defaultValue,
         onChange: (aiEditor) => {
           const value = aiEditor.getHtml()
@@ -133,7 +136,7 @@ export const DuxAiEditor = defineComponent({
               wrapPayload: (message: string) => {
                 return JSON.stringify({ prompt: message })
               },
-              parseMessage: (message: string) => {
+              parseMessage: (message: string): AiMessage => {
                 const data = JSON.parse(message)
                 return {
                   role: 'assistant',
@@ -143,7 +146,7 @@ export const DuxAiEditor = defineComponent({
                 }
               },
               protocol: 'sse',
-            },
+            } as Record<string, any>,
           },
 
         },

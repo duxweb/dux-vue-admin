@@ -1,10 +1,12 @@
+import type { ComposerTranslation } from 'vue-i18n'
 import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 import { useVModel } from '@vueuse/core'
 import { NFormItem, NInput } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { DuxAiEditor } from '../../editor'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
-import { DuxFormEditorItem, DuxFormEditorRule } from './common'
+import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const Comp = defineComponent({
   props: {
@@ -28,15 +30,16 @@ const Setting = defineComponent({
   },
   setup(props, { emit }) {
     const data = useVModel(props, 'value', emit)
+    const { t } = useI18n()
 
     return () => (
       <div class="">
 
         <DuxFormEditorItem v-model:value={props.value} />
 
-        <WidgetEditorSettingCard title="组件选项">
+        <WidgetEditorSettingCard title={t('components.formEditor.config')}>
 
-          <NFormItem label="上传地址" feedback="默认自动处理">
+          <NFormItem label={t('components.formEditor.editor.uploadUrl')} feedback={t('components.formEditor.editor.uploadFeedback')}>
             <NInput v-model:value={data.value.attr.uploadUrl} />
           </NFormItem>
 
@@ -47,16 +50,16 @@ const Setting = defineComponent({
   },
 })
 
-export function duxFormEditorAIEditor(): PageEditorComponent {
+export function duxFormEditorAIEditor(t: ComposerTranslation): PageEditorComponent {
   return {
     name: 'editor',
     icon: 'i-tabler:pencil',
-    label: '编辑器',
+    label: t('components.formEditor.editor.name'),
     group: 'form',
     component: props => <Comp {...props} />,
     setting: props => <Setting {...props} />,
     settingDefault: {
-      label: '编辑器',
+      label: t('components.formEditor.editor.name'),
       name: 'editor',
       attr: {
       },

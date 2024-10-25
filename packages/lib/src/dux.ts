@@ -23,6 +23,10 @@ export function createDux(config: Config) {
     defaults: unoConfig,
   })
 
+  if (config.lang) {
+    i18n.global.locale = config.lang
+  }
+
   return {
     install(app: App) {
       const pinia = createPinia()

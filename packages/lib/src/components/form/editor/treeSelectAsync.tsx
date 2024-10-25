@@ -1,10 +1,12 @@
+import type { ComposerTranslation } from 'vue-i18n'
 import type { PageEditorComponent } from '../../pageEditor/editor/hook'
 import { useVModel } from '@vueuse/core'
 import { NFormItem, NInput, NSwitch } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
 import { DuxTreeSelectAsync } from '../../treeSelect'
-import { DuxFormEditorItem, DuxFormEditorRule } from './common'
+import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const Comp = defineComponent({
   props: {
@@ -28,21 +30,22 @@ const Setting = defineComponent({
   },
   setup(props, { emit }) {
     const data = useVModel(props, 'value', emit)
+    const { t } = useI18n()
 
     return () => (
       <div class="">
 
         <DuxFormEditorItem v-model:value={props.value} />
 
-        <WidgetEditorSettingCard title="组件配置">
+        <WidgetEditorSettingCard title={t('components.formEditor.config')}>
 
-          <NFormItem label="禁用" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.common.disabled')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.disabled} />
             </div>
           </NFormItem>
 
-          <NFormItem label="可清除" labelPlacement="left" showFeedback={false}>
+          <NFormItem label={t('components.formEditor.cascader.clearable')} labelPlacement="left" showFeedback={false}>
             <div class="flex flex-1 justify-end">
               <NSwitch v-model:value={data.value.attr.clearable} />
             </div>
@@ -50,16 +53,16 @@ const Setting = defineComponent({
 
         </WidgetEditorSettingCard>
 
-        <WidgetEditorSettingCard title="组件选项">
+        <WidgetEditorSettingCard title={t('components.formEditor.options')}>
 
-          <NFormItem label="Url">
+          <NFormItem label={t('components.formEditor.treeSelectAsync.url')}>
             <NInput v-model:value={data.value.attr.url} />
           </NFormItem>
-          <NFormItem label="标签字段">
+          <NFormItem label={t('components.formEditor.treeSelectAsync.labelField')}>
             <NInput v-model:value={data.value.attr.labelField} />
           </NFormItem>
 
-          <NFormItem label="值字段">
+          <NFormItem label={t('components.formEditor.treeSelectAsync.keyField')}>
             <NInput v-model:value={data.value.attr.keyField} />
           </NFormItem>
 
@@ -71,16 +74,16 @@ const Setting = defineComponent({
   },
 })
 
-export function duxFormEditorTreeSelectAsync(): PageEditorComponent {
+export function duxFormEditorTreeSelectAsync(t: ComposerTranslation): PageEditorComponent {
   return {
     name: 'treeSelectAsync',
     icon: 'i-tabler:binary-tree',
-    label: '异步树形',
+    label: t('components.formEditor.treeSelectAsync.name'),
     group: 'async',
     component: props => <Comp {...props} />,
     setting: props => <Setting {...props} />,
     settingDefault: {
-      label: '异步树形',
+      label: t('components.formEditor.treeSelectAsync.name'),
       name: 'treeSelectAsync',
       attr: {
         url: '',

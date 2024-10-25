@@ -1,7 +1,7 @@
+import type { PropType } from 'vue'
 import { useVModel } from '@vueuse/core'
 import { NDynamicInput, NInput } from 'naive-ui'
 import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
 
 interface OptionItem {
   label: string
@@ -41,7 +41,7 @@ const DuxFormEditorOptions = defineComponent({
           {{
             default: ({ value }) => (
               <div class="grid grid-cols-2 gap-2">
-                {props.options?.map((item, index) => <NInput key={index} v-model:value={value[item.value]} placeholder={`请输入${item.label}`} />)}
+                {props.options?.map((item, index) => <NInput key={index} v-model:value={value[item.value]} />)}
               </div>
             ),
           }}
