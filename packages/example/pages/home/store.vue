@@ -379,7 +379,7 @@ const userData = [
           />
         </dux-stats-todo>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 3xl:grid-cols-2 gap-4">
           <dux-stats-card title="商品 TOP 10" content-class="!p-0">
             <n-data-table :data="mallData" :columns="mallColumn" :bordered="false" />
           </dux-stats-card>

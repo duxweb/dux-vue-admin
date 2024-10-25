@@ -41,7 +41,7 @@ export const DuxLayout = defineComponent({
         {!isMobile.value && (
           <>
             {layout.value === 'app' && (
-              <NLayoutSider collapsed={collapsed.value} showTrigger={showCollapsed.value} collapseMode="width" width={240} collapsedWidth={64} bordered nativeScrollbar={false} onUpdateCollapsed={(v: boolean) => sideCollapsed.value = v}>
+              <NLayoutSider collapsed={collapsed.value} showTrigger={showCollapsed.value} collapseMode="width" width={220} collapsedWidth={64} bordered nativeScrollbar={false} onUpdateCollapsed={(v: boolean) => sideCollapsed.value = v}>
                 <div class="flex  h-screen">
 
                   <div class="flex h-full flex-col flex-none w-64px">
