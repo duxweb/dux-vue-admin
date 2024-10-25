@@ -1,4 +1,5 @@
-import type { DuxRoute } from 'src/stores'
+import type { DuxUploadType } from '../components'
+import type { DuxRoute } from '../stores'
 
 interface UserMenu {
   label: string
@@ -32,6 +33,7 @@ export interface ConfigApiConfig {
   updatePassword?: string
   upload?: string
   uploadManage?: string
+  uploadType?: DuxUploadType
   router?: string
   notice?: string
   aiChat?: string

@@ -1,11 +1,13 @@
+import type { UploadFileInfo, UploadInst } from 'naive-ui'
+import type { PropType } from 'vue'
+import type { DuxUploadFile, DuxUploadType, UploadFileInfoExtend } from './useUpload'
 import { useVModel } from '@vueuse/core'
 import { NButton, NProgress, NUpload, NUploadDragger } from 'naive-ui'
 import { defineComponent, ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
-import type { UploadFileInfo, UploadInst } from 'naive-ui'
-import type { PropType } from 'vue'
+import { useResource } from '../../hooks'
+import { useModal } from '../modal'
 import { useNaiveUpload } from './useUpload'
-import type { DuxUploadFile, UploadFileInfoExtend } from './useUpload'
 
 export const DuxFileUpload = defineComponent({
   name: 'DuxFileUpload',
@@ -16,6 +18,14 @@ export const DuxFileUpload = defineComponent({
     multiple: Boolean,
     max: Number,
     url: String,
+    manageUrl: String,
+    manage: {
+      type: Boolean,
+      default: true,
+    },
+    uploadType: {
+      type: String as PropType<DuxUploadType>,
+    },
     headers: Object as PropType<Record<string, any>>,
     data: Object as PropType<Record<string, any>>,
   },
@@ -27,7 +37,8 @@ export const DuxFileUpload = defineComponent({
       defaultValue: props.defaultValue,
     })
 
-    const { customRequest, onAbort } = useNaiveUpload()
+    const { uploadUrl, uploadType } = useResource()
+    const { customRequest, onAbort } = useNaiveUpload(props.uploadType || uploadType)
 
     const fileToFileList = (list: DuxUploadFile[]): UploadFileInfo[] => {
       return list.map((item, index) => {
@@ -43,7 +54,7 @@ export const DuxFileUpload = defineComponent({
     }
 
     const fileListToFile = (list: UploadFileInfoExtend[]): DuxUploadFile[] => {
-      return list?.filter(item => !!item.url).map((item) => {
+      return list?.filter(item => !!item?.url)?.map((item) => {
         return {
           url: item.url,
           name: item.name,
@@ -70,6 +81,8 @@ export const DuxFileUpload = defineComponent({
       model.value = fileListToFile(props.multiple ? val : [val?.[0]])
     }, { immediate: true })
 
+    const modal = useModal()
+
     return () => (
       <div class="w-full lg:max-w-400px">
         <NUpload
@@ -81,7 +94,7 @@ export const DuxFileUpload = defineComponent({
           }}
           headers={props.headers}
           data={props.data}
-          action={props.url}
+          action={props.url || uploadUrl}
           directoryDnd={true}
           multiple={props.multiple}
           max={props.multiple ? props.max : 1}
@@ -93,12 +106,46 @@ export const DuxFileUpload = defineComponent({
             <div
               class="flex items-center justify-center py-2 px-6"
             >
-              <div class="flex justify-center items-center flex-col">
+              <div class="flex justify-center items-center flex-col gap-2">
                 <div class="i-tabler:cloud-upload w-10 h-10 text-gray-9"></div>
+                <div>
+                  拖动文件、文件夹到此处上传
+                </div>
                 <div
-                  class="text-gray-8 mt-4"
+                  class="text-gray-8 flex justify-center items-center gap-2"
                 >
-                  拖动文件、文件夹或者点击此处上传
+                  <NButton class="inline-block" type="primary" text>点击上传</NButton>
+                  {props.manage && (
+                    <NButton
+                      class="inline-block"
+                      type="primary"
+                      text
+                      onClick={(e) => {
+                        e.stopPropagation()
+
+                        modal.show({
+                          title: '文件管理',
+                          component: () => import('./fileManage'),
+                          width: 800,
+                          componentProps: {
+                            url: props.manageUrl,
+                            uploadUrl: props.url,
+                            multiple: props.multiple,
+                            uploadType: props.uploadType,
+                          },
+                        }).then((res) => {
+                          if (props.multiple) {
+                            files.value = files.value.concat(fileToFileList(res))
+                          }
+                          else {
+                            files.value = fileToFileList(res)
+                          }
+                        })
+                      }}
+                    >
+                      选择文件
+                    </NButton>
+                  )}
                 </div>
               </div>
             </div>

@@ -181,6 +181,26 @@ export default [
   },
 
   {
+    label: '上传组件',
+    name: 'component.upload',
+    parent: 'component.index',
+  },
+  {
+    label: '图片上传',
+    name: 'component.uploadImage',
+    path: 'component/uploadImage',
+    parent: 'component.upload',
+    component: () => import('../../pages/component/upload/image.vue'),
+  },
+  {
+    label: '文件上传',
+    name: 'component.uploadFile',
+    path: 'component/uploadFile',
+    parent: 'component.upload',
+    component: () => import('../../pages/component/upload/file.vue'),
+  },
+
+  {
     label: '编辑器',
     name: 'component.edit',
     parent: 'component.index',

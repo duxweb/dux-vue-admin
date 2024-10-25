@@ -1,9 +1,9 @@
+import type { ButtonProps } from 'naive-ui'
+import type { PropType } from 'vue'
 import clsx from 'clsx'
 import { ceil } from 'lodash-es'
 import { NCard, NTabPane, NTabs } from 'naive-ui'
 import { defineComponent, ref } from 'vue'
-import type { ButtonProps } from 'naive-ui'
-import type { PropType } from 'vue'
 
 export const DuxStatsTotalTab = defineComponent({
   name: 'DuxStatsTab',

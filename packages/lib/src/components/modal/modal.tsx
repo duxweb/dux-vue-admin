@@ -35,13 +35,13 @@ export const DuxModal = defineComponent({
         role="dialog"
         aria-modal="true"
         size="huge"
-        class="p-4 h-screen shadow-none! flex items-center"
+        class="p-4 shadow-none! size-screen flex justify-center items-center"
       >
         <div>
           <div
-            class="bg-white dark:bg-gray-2 max-w-full rounded shadow max-h-full flex flex-col"
+            class="bg-white dark:bg-gray-2 w-full rounded shadow max-h-full flex flex-col"
             style={{
-              width: `${props.width}px`,
+              maxWidth: `${props.width}px`,
             }}
           >
             <div class="flex-none">

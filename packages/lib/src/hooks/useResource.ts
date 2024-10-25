@@ -41,6 +41,7 @@ export function useResource() {
     registerUrl: config?.apiConfig?.register || '/register',
     forgotPasswordUrl: config?.apiConfig?.forgotPassword || '/forgotPassword',
     updatePasswordUrl: config?.apiConfig?.updatePassword || '/updatePassword',
+    uploadType: config?.apiConfig?.uploadType || 'local',
     genUrl,
     getIndexPath,
   }

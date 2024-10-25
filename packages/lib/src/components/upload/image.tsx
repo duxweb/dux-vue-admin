@@ -1,11 +1,13 @@
 import type { UploadFileInfo, UploadInst } from 'naive-ui'
 import type { PropType } from 'vue'
+import type { DuxUploadFile, DuxUploadType } from './useUpload'
 import { useVModel } from '@vueuse/core'
 import clsx from 'clsx'
 import { NButton, NImage, NProgress, NUpload } from 'naive-ui'
 import { defineComponent, ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
-import { useImagePreview } from '../../hooks'
+import { useImagePreview, useResource } from '../../hooks'
+import { useModal } from '../modal'
 import { useNaiveUpload } from './useUpload'
 
 export const DuxImageUpload = defineComponent({
@@ -16,6 +18,14 @@ export const DuxImageUpload = defineComponent({
     multiple: Boolean,
     max: Number,
     url: String,
+    manageUrl: String,
+    manage: {
+      type: Boolean,
+      default: true,
+    },
+    uploadType: {
+      type: String as PropType<DuxUploadType>,
+    },
     headers: Object as PropType<Record<string, any>>,
     data: Object as PropType<Record<string, any>>,
   },
@@ -27,7 +37,8 @@ export const DuxImageUpload = defineComponent({
       defaultValue: props.defaultValue,
     })
 
-    const { customRequest, onAbort } = useNaiveUpload()
+    const { uploadUrl, uploadType } = useResource()
+    const { customRequest, onAbort } = useNaiveUpload(props.uploadType || uploadType)
 
     const imagesToFileList = (images: string[]): UploadFileInfo[] => {
       return images.map((url, index) => {
@@ -38,6 +49,19 @@ export const DuxImageUpload = defineComponent({
           url,
           status: 'finished',
           name: fileName,
+        } as UploadFileInfo
+      })
+    }
+
+    const fileToFileList = (list: DuxUploadFile[]): UploadFileInfo[] => {
+      return list.map((item, index) => {
+        return {
+          id: String(index),
+          url: item.url,
+          status: 'finished',
+          name: item.name,
+          type: item.mime,
+          ext: item.ext,
         } as UploadFileInfo
       })
     }
@@ -59,6 +83,7 @@ export const DuxImageUpload = defineComponent({
     }, { immediate: true })
 
     const image = useImagePreview()
+    const modal = useModal()
 
     return () => (
       <div>
@@ -71,7 +96,7 @@ export const DuxImageUpload = defineComponent({
           }}
           headers={props.headers}
           data={props.data}
-          action={props.url}
+          action={props.url || uploadUrl}
           multiple={props.multiple}
           max={props.multiple ? props.max : 1}
           customRequest={customRequest}
@@ -90,7 +115,7 @@ export const DuxImageUpload = defineComponent({
             <div
               key={index}
               class={clsx([
-                'w-100px h-100px rounded border-1 border-gray-3 relative group draggable',
+                'w-100px h-100px rounded border-1 border-gray-3 relative group draggable flex items-center',
                 item.status === 'error' ? 'border-error text-error' : 'border-gray-3',
               ])}
             >
@@ -98,8 +123,9 @@ export const DuxImageUpload = defineComponent({
                 ? (
                     <NImage
                       class="z-0 rounded"
-                      objectFit="cover"
-                      width="100"
+                      objectFit="scale-down"
+                      width={100}
+                      height={100}
                       previewDisabled
                       src={item.url as string}
                     >
@@ -166,15 +192,49 @@ export const DuxImageUpload = defineComponent({
 
           {(props.multiple || files.value?.length === 0) && (
             <div
-              class="w-100px h-100px rounded border-1 border-dashed border-gray-3 flex justify-center items-center hover:border-primary-7 cursor-pointer text-sm"
+              class="w-100px h-100px rounded flex flex-col  border-1 border-dashed border-gray-3 cursor-pointer text-sm  hover:border-primary-7"
               style={{
                 backgroundColor: 'var(--n-action-color)',
               }}
-              onClick={() => {
-                uploadRef.value?.openOpenFileDialog()
-              }}
             >
-              点击上传
+              {props.manage && (
+                <div
+                  class="flex-none border-b border-gray-4 border-dashed text-center py-1 bg-gray-2 hover:bg-gray-3 flex items-center justify-center gap-1"
+                  onClick={() => {
+                    modal.show({
+                      title: '文件管理',
+                      component: () => import('./fileManage'),
+                      width: 800,
+                      componentProps: {
+                        url: props.manageUrl,
+                        uploadUrl: props.url,
+                        multiple: props.multiple,
+                        uploadType: props.uploadType,
+                        uploadAccept: 'image/*',
+                        type: 'image',
+                      },
+                    }).then((res) => {
+                      if (props.multiple) {
+                        files.value = files.value.concat(fileToFileList(res))
+                      }
+                      else {
+                        files.value = fileToFileList(res)
+                      }
+                    })
+                  }}
+                >
+                  <div class="i-tabler:folder size-4"></div>
+                </div>
+              )}
+              <div
+                class="flex-1 flex flex-col justify-center items-center gap-1"
+                onClick={() => {
+                  uploadRef.value?.openOpenFileDialog()
+                }}
+              >
+                <div class="i-tabler:plus size-5"></div>
+                上传图片
+              </div>
             </div>
           )}
         </VueDraggable>
