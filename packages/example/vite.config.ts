@@ -20,7 +20,7 @@ export default defineConfig({
           'vendor-vueuse': ['@vueuse/core'],
           'vendor-echarts': ['echarts', 'vue-echarts'],
           'vendor-ai': ['aieditor'],
-          'vendor-code': ['vue3-ace-editor', 'ace-builds', 'shiki'],
+          'vendor-code': ['vue3-ace-editor', 'ace-builds'],
           'vendor-alova': ['alova'],
           'vendor-excel': ['exceljs'],
           'vendor-pinia': ['pinia', 'pinia-plugin-persistedstate'],

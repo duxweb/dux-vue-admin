@@ -48,7 +48,6 @@
     "pinia": "^2.2.2",
     "pinia-plugin-persistedstate": "^4.0.1",
     "sass-embedded": "^1.80.3",
-    "shiki": "^1.20.0",
     "short-unique-id": "^5.2.0",
     "unocss": "^0.62.3",
     "vfonts": "^0.0.3",

@@ -2,8 +2,11 @@ import type { Options, Resource } from 'vue3-sfc-loader'
 import * as vueUse from '@vueuse/core'
 import * as alova from 'alova'
 import * as alovaClient from 'alova/client'
+import axios from 'axios'
 import crypto from 'crypto-js'
 import * as echarts from 'echarts'
+import * as _ from 'lodash-es'
+import * as math from 'mathjs'
 import mime from 'mime'
 import mitt from 'mitt'
 import * as NaiveUI from 'naive-ui'
@@ -11,7 +14,7 @@ import * as pinia from 'pinia'
 import * as Vue from 'vue'
 import * as VueDraggable from 'vue-draggable-plus'
 import VChart from 'vue-echarts'
-import { useI18n } from 'vue-i18n'
+import i18n from 'vue-i18n'
 import * as vueRouter from 'vue-router'
 import { loadModule } from 'vue3-sfc-loader'
 import JsonRender from '../components/render/jsonRender'
@@ -20,7 +23,7 @@ import * as index from '../index'
 
 export function sfcRender(path: string) {
   const client = useClient()
-  const { mergeLocaleMessage } = useI18n()
+  const { mergeLocaleMessage } = i18n.useI18n()
   const options: Options = {
     moduleCache: {
       'vue': Vue,
@@ -30,13 +33,17 @@ export function sfcRender(path: string) {
       'echarts': echarts,
       'alova': alova,
       'alova/client': alovaClient,
+      'axios': axios,
       'crypto': crypto,
       'mime': mime,
+      'math': math,
       'mitt': mitt,
+      '_': _,
       'pinia': pinia,
       'vue-router': vueRouter,
       'vue-echarts': VChart,
       'vue-draggable-plus': VueDraggable,
+      'vue-i18n': i18n,
       'static!': function (content: string, _path: string, type: string) {
         const name = mime.getType(type)
         if (name?.startsWith('image')) {
