@@ -22,8 +22,8 @@ export const DuxBlockEmpty = defineComponent({
             </svg>
           </div>
           <div class="flex flex-col gap-0">
-            <div>{props.text || t('page.empty.title')}</div>
-            <div class="text-gray-6">{props.desc || t('page.empty.desc')}</div>
+            <div>{props.text || t('pages.empty.title')}</div>
+            <div class="text-gray-6">{props.desc || t('pages.empty.desc')}</div>
           </div>
         </div>
       </div>

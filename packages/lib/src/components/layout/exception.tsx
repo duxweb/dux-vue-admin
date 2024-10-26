@@ -22,14 +22,14 @@ export const DuxException = defineComponent({
       console.error(err)
       if (!route.name) {
         data.value = {
-          title: t('page.404.title'),
-          desc: t('page.404.desc'),
+          title: t('pages.404.title'),
+          desc: t('pages.404.desc'),
         }
       }
       else {
         data.value = {
-          title: t('page.500.title'),
-          desc: t('page.500.desc'),
+          title: t('pages.500.title'),
+          desc: t('pages.500.desc'),
         }
       }
       return false
