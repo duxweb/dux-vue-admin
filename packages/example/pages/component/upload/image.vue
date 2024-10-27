@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { DuxDynamicDataColumn, TableColumn } from 'dux-vue-admin'
-import { DuxMedia } from 'dux-vue-admin'
+import type { DuxDynamicDataColumn, TableColumn } from '@duxweb/dux-vue-admin'
+import { DuxMedia } from '@duxweb/dux-vue-admin'
 import { NInputNumber } from 'naive-ui'
 import { h, ref } from 'vue'
 

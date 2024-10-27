@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useExportExcel, useImportExcel } from 'dux-vue-admin'
+import { useExportExcel, useImportExcel } from '@duxweb/dux-vue-admin'
 import { ref } from 'vue'
 
-const importCode = ref(`import { useImportExcel } from 'dux-vue-admin'
+const importCode = ref(`import { useImportExcel } from '@duxweb/dux-vue-admin'
 
 const importExcel = useImportExcel()
 
@@ -17,7 +17,7 @@ importExcel.send({
 })
 `)
 
-const exportCode = ref(`import { useImportExcel } from 'dux-vue-admin'
+const exportCode = ref(`import { useImportExcel } from '@duxweb/dux-vue-admin'
 
 const exportExcel = useExportExcel()
 

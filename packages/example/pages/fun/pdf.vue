@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { usePdf } from 'dux-vue-admin'
+import { usePdf } from '@duxweb/dux-vue-admin'
 import { ref } from 'vue'
 
 const asyncCode = ref(`const pdf = usePdf()

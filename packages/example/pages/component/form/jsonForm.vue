@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { JsonFormItemSchema } from 'dux-vue-admin'
+import type { JsonFormItemSchema } from '@duxweb/dux-vue-admin'
 import { ref } from 'vue'
 
 const baseCode = ref(`<script setup>

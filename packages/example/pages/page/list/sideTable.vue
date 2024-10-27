@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { JsonFormItemSchema, TableAction, TableColumn, TreeMenu } from 'dux-vue-admin'
+import type { JsonFormItemSchema, TableAction, TableColumn, TreeMenu } from '@duxweb/dux-vue-admin'
 import { ref } from 'vue'
 
 const tabs = [

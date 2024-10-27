@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useModal } from 'dux-vue-admin'
+import { useModal } from '@duxweb/dux-vue-admin'
 import { ref } from 'vue'
 
 const compCode = ref(`// 模态框调用
 <script setup>
-import { useModal } from 'dux-vue-admin'
+import { useModal } from '@duxweb/dux-vue-admin'
 const modal = useModal()
 
 function openModal() {
@@ -33,7 +33,7 @@ function openModal() {
 
 const formCode = ref(`// 模态框调用
 <script setup>
-import { useModal } from 'dux-vue-admin'
+import { useModal } from '@duxweb/dux-vue-admin'
 const modal = useModal()
 
 function openComp() {

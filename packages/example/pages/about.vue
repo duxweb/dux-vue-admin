@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { usePackage } from 'dux-vue-admin'
+import { usePackage } from '@duxweb/dux-vue-admin'
 
 const packages = usePackage()
 </script>

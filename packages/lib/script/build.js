@@ -14,9 +14,13 @@ async function updatePackageJson() {
     await copyfiles([sourceFiles, dir], { up: 1 }, (err) => {
       if (err) reject(err);
       else resolve();
-    });
-  }));
+    })
+  }))
 
+  await copyfiles(['LICENSE', 'dist'], { up: true }, (err) => {
+    if (err) reject(err);
+    else resolve();
+  })
 
   const packagePath = join(__dirname, 'package.json')
   const packageData = JSON.parse(await readFile(packagePath, 'utf8'))

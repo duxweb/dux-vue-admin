@@ -1,4 +1,4 @@
-import type { JsonFormItemSchema } from 'dux-vue-admin'
+import type { JsonFormItemSchema } from '@duxweb/dux-vue-admin'
 
 const schema: JsonFormItemSchema[] = [
   {

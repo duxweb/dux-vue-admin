@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DuxStepFormItem } from 'dux-vue-admin'
+import type { DuxStepFormItem } from '@duxweb/dux-vue-admin'
 
 const steps: DuxStepFormItem[] = [
   {

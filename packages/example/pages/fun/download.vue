@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useDownload } from 'dux-vue-admin'
+import { useDownload } from '@duxweb/dux-vue-admin'
 import { ref } from 'vue'
 
 const asyncCode = ref(`const download = useDownload()

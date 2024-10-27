@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useTable } from 'dux-vue-admin'
+import { useTable } from '@duxweb/dux-vue-admin'
 import { ref } from 'vue'
 
 const baseCode = ref(`<script setup>

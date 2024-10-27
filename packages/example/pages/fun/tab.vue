@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useTabStore } from 'dux-vue-admin'
+import { useTabStore } from '@duxweb/dux-vue-admin'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const asyncCode = ref(`import { useRouter } from 'vue-router'
-import { useTabStore } from 'dux-vue-admin'
+import { useTabStore } from '@duxweb/dux-vue-admin'
 
 const router = useRouter()
 const tab = useTabStore()

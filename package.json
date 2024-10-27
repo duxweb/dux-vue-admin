@@ -7,8 +7,9 @@
     "dev:example": "bun --filter dux-vue-example dev",
     "build:example": "bun --filter dux-vue-example build",
     "preview:example": "bun --filter dux-vue-example preview",
-    "build:lib": "bun --filter dux-vue-admin build",
-    "local:lib": "bun --filter dux-vue-admin local",
+    "build:lib": "bun --filter @duxweb/dux-vue-admin build",
+    "local:lib": "bun --filter @duxweb/dux-vue-admin local",
+    "push:lib": "bun --filter @duxweb/dux-vue-admin push",
     "dev:docs": "bun --filter dux-vue-docs dev",
     "build:docs": "bun --filter dux-vue-docs build",
     "preview:docs": "bun --filter dux-vue-docs preview"

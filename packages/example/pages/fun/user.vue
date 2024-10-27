@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useManageStore } from 'dux-vue-admin'
+import { useManageStore } from '@duxweb/dux-vue-admin'
 import { ref } from 'vue'
 
 const asyncCode = ref(`import audioFile from './test.mp3'
-import { useAudio } from 'dux-vue-admin'
+import { useAudio } from '@duxweb/dux-vue-admin'
 
 const audio = useAudio({
   src: audioFile,

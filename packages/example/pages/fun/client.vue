@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useClient } from 'dux-vue-admin'
+import { useClient } from '@duxweb/dux-vue-admin'
 import { ref } from 'vue'
 
-const asyncCode = ref(`import { useClient } from 'dux-vue-admin'
+const asyncCode = ref(`import { useClient } from '@duxweb/dux-vue-admin'
 
 const client = useClient()
 

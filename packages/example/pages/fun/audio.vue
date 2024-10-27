@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useAudio } from 'dux-vue-admin'
+import { useAudio } from '@duxweb/dux-vue-admin'
 import { ref } from 'vue'
 import audioFile from './test.mp3'
 
 const asyncCode = ref(`import audioFile from './test.mp3'
-import { useAudio } from 'dux-vue-admin'
+import { useAudio } from '@duxweb/dux-vue-admin'
 
 const audio = useAudio({
   src: audioFile,

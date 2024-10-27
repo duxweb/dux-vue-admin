@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useDialog } from 'dux-vue-admin'
+import { useDialog } from '@duxweb/dux-vue-admin'
 import { ref } from 'vue'
 
-const listCode = ref(`import { useDialog } from 'dux-vue-admin'
+const listCode = ref(`import { useDialog } from '@duxweb/dux-vue-admin'
 const dialog = useDialog()
 
 dialog.confirm({

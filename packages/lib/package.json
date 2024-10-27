@@ -1,5 +1,5 @@
 {
-  "name": "dux-vue-admin",
+  "name": "@duxweb/dux-vue-admin",
   "type": "module",
   "version": "0.0.0",
   "author": "DuxWeb",
@@ -9,8 +9,13 @@
     "clean": "rimraf dist",
     "build": "bun run clean && vite build && bun run script/build.js",
     "local": "bun run build && yalc push",
+    "push": "bun run build && bun publish --cwd ./dist",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
+  },
+  "publishConfig": {
+    "access": "public",
+    "prefix": "dist"
   },
   "dependencies": {
     "@alova/adapter-axios": "^2.0.7",

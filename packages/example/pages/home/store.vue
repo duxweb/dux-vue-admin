@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DuxMedia } from 'dux-vue-admin'
+import { DuxMedia } from '@duxweb/dux-vue-admin'
 import { type DataTableColumn, NTag } from 'naive-ui'
 import { h } from 'vue'
 

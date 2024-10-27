@@ -1,5 +1,5 @@
-import type { Config } from 'dux-vue-admin'
-import { createDux } from 'dux-vue-admin'
+import type { Config } from '@duxweb/dux-vue-admin'
+import { createDux } from '@duxweb/dux-vue-admin'
 import { createApp } from 'vue'
 import App from './App.vue'
 

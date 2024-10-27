@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useDrawer } from 'dux-vue-admin'
+import { useDrawer } from '@duxweb/dux-vue-admin'
 import { ref } from 'vue'
 
 const compCode = ref(`// 抽屉框调用
 <script setup>
-import { useDrawer } from 'dux-vue-admin'
+import { useDrawer } from '@duxweb/dux-vue-admin'
 const drawer = useDrawer()
 
 function drawerComp() {
@@ -33,7 +33,7 @@ function drawerComp() {
 
 const formCode = ref(`// 抽屉框调用
 <script setup>
-import { useDrawer } from 'dux-vue-admin'
+import { useDrawer } from '@duxweb/dux-vue-admin'
 const drawer = useDrawer()
 
 function drawerForm() {

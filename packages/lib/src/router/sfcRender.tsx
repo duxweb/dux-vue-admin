@@ -27,7 +27,7 @@ export function sfcRender(path: string) {
   const options: Options = {
     moduleCache: {
       'vue': Vue,
-      'dux-vue-admin': index,
+      '@duxweb/dux-vue-admin': index,
       'naive-ui': NaiveUI,
       '@vueuse/core': vueUse,
       'echarts': echarts,

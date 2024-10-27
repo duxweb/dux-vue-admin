@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useImagePreview } from 'dux-vue-admin'
+import { useImagePreview } from '@duxweb/dux-vue-admin'
 import { ref } from 'vue'
 
 const asyncCode = ref(`import audioFile from './test.mp3'
-import { useImagePreview } from 'dux-vue-admin'
+import { useImagePreview } from '@duxweb/dux-vue-admin'
 
 const image = useImagePreview()
 
