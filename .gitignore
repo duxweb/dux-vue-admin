@@ -9,6 +9,10 @@ lerna-debug.log*
 
 node_modules
 dist
+esm
+umd
+cjs
+lib
 *.local
 
 # Editor directories and files

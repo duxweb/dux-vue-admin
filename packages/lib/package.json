@@ -7,8 +7,7 @@
   "main": "src/index.ts",
   "scripts": {
     "clean": "rimraf dist",
-    "copy-files": "copyfiles -u 1 src/**/*.{css,scss,js,png,jpg,svg,jsx,d.ts,json} dist/",
-    "build": "bun run clean && vue-tsc && bun run copy-files  && bun run script/build.js",
+    "build": "bun run clean && vite build && bun run script/build.js",
     "local": "bun run build && yalc push",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
@@ -63,15 +62,17 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.5.0",
-    "@vitejs/plugin-vue": "^5.1.3",
+    "@vitejs/plugin-vue": "^5.1.4",
     "@vitejs/plugin-vue-jsx": "^4.0.1",
     "copyfiles": "^2.4.1",
     "eslint": "^9.9.0",
     "eslint-plugin-format": "^0.1.2",
     "path": "^0.12.7",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-visualizer": "^5.12.0",
     "typescript": "^5.5.3",
     "vite": "^5.4.3",
-    "vite-plugin-dts": "^4.2.3",
+    "vite-plugin-build": "^0.10.0",
     "vue-tsc": "^2.1.6"
   }
 }

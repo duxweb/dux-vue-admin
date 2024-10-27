@@ -105,25 +105,25 @@ const DuxFileManage = defineComponent({
       })
     }
 
-    const explame = ref([
-      {
-        id: 1,
-        type: 'folder',
-        name: '新建文件夹',
-        time: '2021-12-12 12:12:12',
-        size: '10M',
-      },
-      {
-        id: 2,
-        type: 'file',
-        name: '1.jpg',
-        mime: 'image/jpg',
-        url: 'https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel2.jpeg',
-        size: '100kb',
-        time: '2021-12-12 12:12:12',
-      },
+    // const explame = ref([
+    //   {
+    //     id: 1,
+    //     type: 'folder',
+    //     name: '新建文件夹',
+    //     time: '2021-12-12 12:12:12',
+    //     size: '10M',
+    //   },
+    //   {
+    //     id: 2,
+    //     type: 'file',
+    //     name: '1.jpg',
+    //     mime: 'image/jpg',
+    //     url: 'https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel2.jpeg',
+    //     size: '100kb',
+    //     time: '2021-12-12 12:12:12',
+    //   },
 
-    ])
+    // ])
 
     const typeDisable = computed<boolean>(() => {
       return !!(props.type && props.type !== 'all')

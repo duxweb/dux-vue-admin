@@ -13,12 +13,13 @@
     "build:docs": "bun --filter dux-vue-docs build",
     "preview:docs": "bun --filter dux-vue-docs preview"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "engines": {
     "node": ">=20.0.0"
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "devDependencies": {
+  }
 }
