@@ -1,7 +1,8 @@
 import type { PropType, VNodeChild } from 'vue'
 import { useVModel } from '@vueuse/core'
-import { NAvatar, NSelect, NTag } from 'naive-ui'
+import { NAvatar, NImage, NSelect, NTag } from 'naive-ui'
 import { defineComponent } from 'vue'
+import placeholder from '../../static/images/placeholder.png'
 import { useSelect } from './useSelect'
 
 export const DuxSelectAsync = defineComponent({
@@ -12,6 +13,9 @@ export const DuxSelectAsync = defineComponent({
     pagination: {
       type: Boolean,
       default: true,
+    },
+    avatarField: {
+      type: String,
     },
     imageField: {
       type: String,
@@ -49,14 +53,26 @@ export const DuxSelectAsync = defineComponent({
         labelField={props.labelField}
         v-model:value={model.value}
         multiple={props.multiple}
-        renderLabel={(item) => {
+        renderLabel={(item: Record<string, any>) => {
           if (props.imageField || props.descField) {
             return (
               <div class="flex gap-2 items-center py-2">
                 {props.imageField && (
-                  <NAvatar round src={item[props.imageField]} size={32} />
+                  <NImage src={item[props.imageField] || placeholder} fallbackSrc={placeholder} objectFit="cover" width={32} height={32} />
                 )}
-                <div class="flex-1 flex flex-col justify-center">
+                {props.avatarField && (
+                  <NAvatar
+                    style={{
+                      background: 'rgba(var(--n-primary-color))',
+                    }}
+                    round
+                    src={item[props.avatarField] || placeholder}
+                    size={32}
+                  >
+                    {item[props.labelField]?.charAt?.(0)}
+                  </NAvatar>
+                )}
+                <div class="flex-1 flex flex-col justify-center leading-4">
                   <div>{item[props.labelField]}</div>
                   {props.descField && <div class="text-gray-6">{item[props.descField]}</div>}
                 </div>
@@ -80,10 +96,10 @@ export const DuxSelectAsync = defineComponent({
                     handleClose()
                   }}
                 >
-                  {renderTag(option, props.labelField, props?.imageField, props.descField)}
+                  {renderTag(option, props.labelField, props?.imageField, props?.avatarField, props.descField)}
                 </NTag>
               )
-            : renderTag(option, props.labelField, props?.imageField, props.descField)
+            : renderTag(option, props.labelField, props?.imageField, props?.avatarField, props.descField)
         }}
       >
         {{
@@ -94,12 +110,24 @@ export const DuxSelectAsync = defineComponent({
   },
 })
 
-function renderTag(option: Record<string, any>, labelField: string, imageField?: string, descField?: string) {
-  return (imageField || descField)
+function renderTag(option: Record<string, any>, labelField: string, imageField?: string, avatarField?: string, descField?: string) {
+  return (imageField || descField || avatarField)
     ? (
         <div class="flex gap-2 items-center py-2">
           {imageField && (
-            <NAvatar round src={option[imageField] as string || ''} size={22} />
+            <NImage src={option[imageField] || placeholder} fallbackSrc={placeholder} objectFit="cover" width={22} height={22} />
+          )}
+          {avatarField && (
+            <NAvatar
+              style={{
+                background: 'rgba(var(--n-primary-color))',
+              }}
+              round
+              src={option[avatarField] as string || ''}
+              size={22}
+            >
+              {option[labelField]?.charAt?.(0)}
+            </NAvatar>
           )}
           <div class="flex-1 flex flex-col justify-center">
             {option[labelField]}

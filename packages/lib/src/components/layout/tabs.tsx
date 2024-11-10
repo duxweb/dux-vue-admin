@@ -1,9 +1,10 @@
+import type { TabRoute } from '../../stores/tab'
 import clsx from 'clsx'
 import { NTab, NTabs } from 'naive-ui'
 import { defineComponent, Transition, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { type DuxRoute, useRouteStore } from '../../stores'
+import { useRouteStore } from '../../stores'
 import { useTabStore } from '../../stores/tab'
 import './tabs.css'
 
@@ -17,11 +18,11 @@ export const DuxTabs = defineComponent({
     const { t } = useI18n()
 
     watch([route, () => routeStore.routes], () => {
-      const info = routeStore.searchRoute(route.path)
+      const info = routeStore.searchRouteName(route.name as string)
       if (!info) {
         return
       }
-      const item = { label: info.label as string, path: info.path, name: info.name }
+      const item = { label: info.label as string, url: route.path, name: info.name }
       tab.addTab(item)
     }, { immediate: true })
 
@@ -30,7 +31,6 @@ export const DuxTabs = defineComponent({
         <div
           class={clsx([
             'dux-tabs items-end px-2 my-2',
-            // 'flex',
             tab.tabs.length > 1 ? 'flex' : 'hidden',
           ])}
         >
@@ -39,10 +39,14 @@ export const DuxTabs = defineComponent({
             size="small"
             class="layout-tabs"
             type="card"
-            onUpdateValue={(v: string) => tab.changeTab(v, (v: DuxRoute) => router.push(v.path || ''))}
-            onClose={(v: string) => tab.delTab(v, (v: DuxRoute) => router.push(v.path || ''))}
+            onUpdateValue={(v: string) => {
+              tab.changeTab(v, (v: TabRoute) => {
+                router.push(v.url || '')
+              })
+            }}
+            onClose={(v: string) => tab.delTab(v, (v: TabRoute) => router.push(v.url || ''))}
           >
-            {tab.tabs?.map((tag, key) => <NTab key={key} name={tag.name} tab={tag.labelLang ? t(tag.labelLang) : tag.label} closable={key !== 0} />)}
+            {tab.tabs?.map((tag, key) => <NTab key={key} name={tag.url || ''} tab={tag.labelLang ? t(tag.labelLang) : tag.label} closable={key !== 0} />)}
           </NTabs>
         </div>
       </Transition>

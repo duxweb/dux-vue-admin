@@ -1,7 +1,7 @@
 import type { Column } from 'exceljs'
-import type { Ref } from 'vue'
-import { usePagination } from 'alova/client'
+import { actionDelegationMiddleware, usePagination } from 'alova/client'
 import { NButton, NDropdown } from 'naive-ui'
+import { ref, type Ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useClient, useExportExcel, useImportExcel } from '../../hooks'
 
@@ -21,6 +21,7 @@ export function useList({ url, form, cacheTime = Infinity, excelColumns, export:
   const excelExport = useExportExcel()
   const excelImport = useImportExcel()
   const { t } = useI18n()
+  const meta = ref<Record<string, any>>()
 
   const {
     loading,
@@ -31,6 +32,7 @@ export function useList({ url, form, cacheTime = Infinity, excelColumns, export:
     total,
     send,
     reload,
+    onSuccess,
   } = usePagination(
     (page, pageSize) => {
       return client.get({
@@ -52,11 +54,16 @@ export function useList({ url, form, cacheTime = Infinity, excelColumns, export:
       },
       initialPage: 1,
       initialPageSize: defaultPageSize,
+      middleware: actionDelegationMiddleware(url || ''),
       append,
       total: res => res.meta?.total || 0,
       data: res => res.data || [],
     },
   )
+
+  onSuccess((res) => {
+    meta.value = res.data?.meta || {}
+  })
 
   const onPrevPage = () => {
     if (page.value <= 1) {
@@ -143,6 +150,7 @@ export function useList({ url, form, cacheTime = Infinity, excelColumns, export:
   return {
     loading,
     data,
+    meta,
     page,
     pageSize,
     pageCount,

@@ -42,7 +42,7 @@ export const DuxDynamicData = defineComponent({
   setup(props, { emit }) {
     const model = useVModel(props, 'value', emit, {
       passive: true,
-      defaultValue: props.defaultValue,
+      defaultValue: props.defaultValue || [],
       deep: true,
     })
 
@@ -127,6 +127,9 @@ export const DuxDynamicData = defineComponent({
                             props.onCreate()
                           }
                           else {
+                            if (!model.value) {
+                              model.value = []
+                            }
                             model.value?.push(props?.createCallback?.(model.value) || {})
                           }
                         }}

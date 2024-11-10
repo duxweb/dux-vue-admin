@@ -1,34 +1,22 @@
-import type { ButtonProps } from 'naive-ui'
-import type { AsyncComponentLoader, PropType } from 'vue'
+import type { PropType } from 'vue'
 import type { JsonFormItemSchema } from '../form'
 import type { TableTab } from '../table'
+import type { FilterAction } from './useFilter'
 import { useVModel } from '@vueuse/core'
 import clsx from 'clsx'
 import { NButton, NForm, NTabPane, NTabs } from 'naive-ui'
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 import { DuxJsonForm } from '../form'
 import { useFilter } from './useFilter'
-
-export interface ListAction {
-  label: string
-  type: 'modal' | 'drawer' | 'link' | 'confirm'
-  title?: string
-  content?: string
-  color?: ButtonProps['type']
-  icon?: string
-  path?: string
-  component?: AsyncComponentLoader<any>
-  componentProps?: Record<string, any>
-  show?: (rowData?: object, rowIndex?: number) => boolean
-}
 
 export const DuxFilter = defineComponent({
   name: 'DuxFilter',
   props: {
     filter: Array<JsonFormItemSchema>,
     tabs: Array<TableTab>,
-    actions: Array<ListAction>,
+    actions: Array<FilterAction>,
     title: {
       type: String,
     },
@@ -40,9 +28,12 @@ export const DuxFilter = defineComponent({
       default: {},
     },
     onSubmit: Function,
+    url: String,
   },
   setup(props, { emit, slots }) {
     const { t } = useI18n()
+    const route = useRoute()
+    const title = ref(route.meta?.title)
     const filterModel = useVModel(props, 'value', emit, {
       passive: true,
       deep: true,
@@ -69,13 +60,13 @@ export const DuxFilter = defineComponent({
                       props.onSubmit?.()
                     }}
                   >
-                    {props?.tabs?.map((item, key) => <NTabPane key={key} tab={item.label} name={item.value}></NTabPane>)}
+                    {props?.tabs?.map((item, key) => <NTabPane key={key} tab={item?.labelLang ? t(item.labelLang) : item.label} name={item.value}></NTabPane>)}
                   </NTabs>
                 </div>
               )
             : (
                 <div class="text-base font-bold flex-1">
-                  {props?.titleLang ? t(props.titleLang) : props?.title}
+                  {props?.titleLang ? t(props.titleLang) : props?.title || title.value}
                 </div>
               ) }
 
@@ -97,21 +88,23 @@ export const DuxFilter = defineComponent({
                 filterShow.value ? 'grid' : 'hidden',
               ])}
             >
+              {slots?.filter?.()}
               <DuxJsonForm model={filterModel} schema={props?.filter} />
             </div>
-            <div class="flex-none flex gap-2 items-center justify-between md:justify-end">
 
-              <NButton
-                class="!md:hidden"
-                type="default"
-                secondary
-                renderIcon={() => <div class="i-tabler:filter"></div>}
-                onClick={() => {
-                  filterShow.value = !filterShow.value
-                }}
-              >
-                {t('buttons.filter')}
-              </NButton>
+            <div class="flex-none flex gap-2 items-center justify-between md:justify-end">
+              <div class="!md:hidden flex gap-2">
+                <NButton
+                  type="default"
+                  secondary
+                  renderIcon={() => <div class="i-tabler:filter"></div>}
+                  onClick={() => {
+                    filterShow.value = !filterShow.value
+                  }}
+                >
+                  {t('buttons.filter')}
+                </NButton>
+              </div>
 
               <div class="flex gap-2">
                 {width.value > 768 && filterHeight.value > 60 && (
@@ -126,15 +119,17 @@ export const DuxFilter = defineComponent({
                     <div class={clsx(['i-tabler:chevron-down transition-all', filterMore.value ? 'rotate-180' : 'rotate-0'])}></div>
                   </NButton>
                 )}
-                <NButton
-                  class={filterShow.value ? 'flex' : 'hidden'}
-                  type="primary"
-                  secondary
-                  renderIcon={() => <div class="i-tabler:search"></div>}
-                  onClick={() => props.onSubmit?.()}
-                >
-                  {t('buttons.query')}
-                </NButton>
+                {props?.filter && props?.filter?.length > 0 && (
+                  <NButton
+                    class={filterShow.value ? 'flex' : 'hidden'}
+                    type="primary"
+                    secondary
+                    renderIcon={() => <div class="i-tabler:search"></div>}
+                    onClick={() => props.onSubmit?.()}
+                  >
+                    {t('buttons.query')}
+                  </NButton>
+                )}
 
                 {slots?.tools?.()}
               </div>

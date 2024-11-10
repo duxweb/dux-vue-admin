@@ -9,14 +9,14 @@ export const DuxPageFormItem = defineComponent({
   extends: NFormItem,
   setup(props, { slots }) {
     return () => (
-      <div class="grid grid-cols-3 xl:grid-cols-4 items-start gap-4 pt-3">
-        <div class="col-span-3 lg:col-span-1 flex flex-col gap-0">
+      <div class="grid grid-cols-1 lg:grid-cols-5 items-start gap-2 pt-4">
+        <div class="lg:col-span-1 flex flex-col gap-0">
           <div>{props.label}</div>
           <div class="text-gray-6">
             {props.desc}
           </div>
         </div>
-        <div class="col-span-3 lg:col-span-2 lg:pt-2">
+        <div class="lg:col-span-4 xl:col-span-3 lg:pt-2">
           <NFormItem {...props} showLabel={false}>
             {slots.default?.()}
           </NFormItem>

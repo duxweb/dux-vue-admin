@@ -1,9 +1,9 @@
 import type { DropdownOption, TreeDropInfo, TreeOption } from 'naive-ui'
 import type { PropType } from 'vue'
-import type { UseTableResult } from '../table'
 import { useVModel } from '@vueuse/core'
+import clsx from 'clsx'
 import { NCard, NDropdown, NInput, NScrollbar, NSpin, NTree } from 'naive-ui'
-import { computed, defineComponent, inject, ref, watch } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useClient } from '../../hooks'
 import { useCascader } from '../cascader'
@@ -23,14 +23,15 @@ export const DuxTreeFilter = defineComponent({
     menus: Array as PropType<TreeMenu[]>,
     title: String,
     numField: String,
+    iconField: String,
     sortUrl: String,
     value: Array as PropType<(string | number)[]>,
     defaultValue: Array as PropType<(string | number)[]>,
   },
   extends: NTree,
-  setup(props, { emit }) {
+  setup(props, { emit, slots }) {
     const model = useVModel(props, 'value', emit, {
-      passive: true,
+      passive: false,
       defaultValue: props.defaultValue,
     })
 
@@ -141,11 +142,6 @@ export const DuxTreeFilter = defineComponent({
       })
     }
 
-    const table = inject<UseTableResult>('table')
-    watch(model, () => {
-      table?.send()
-    })
-
     const { t } = useI18n()
 
     return () => (
@@ -156,8 +152,11 @@ export const DuxTreeFilter = defineComponent({
             {props.title}
           </div>
         )}
-        <div class="p-2">
-          <NInput v-model:value={keyword.value} placeholder={t('components.tree.placeholder')} />
+        <div class="p-2 flex gap-2 items-center">
+          <div class="flex-1">
+            <NInput v-model:value={keyword.value} placeholder={t('components.tree.placeholder')} />
+          </div>
+          {slots.tools?.()}
         </div>
         <NScrollbar class="flex-1 h-1" xScrollable>
           <div class="p-2">
@@ -174,10 +173,19 @@ export const DuxTreeFilter = defineComponent({
                 }}
                 onDrop={handleDrop}
                 pattern={keyword.value}
-                renderPrefix={props?.numField
+                renderPrefix={props?.numField || (props?.iconField)
                   ? ({ option }) => {
                       return (
-                        <div class="rounded-full bg-primary px-2 text-xs text-white">{option[props.numField as any] || 0}</div>
+                        <>
+                          {props.iconField && option[props.iconField] && (
+                            <div class={clsx(
+                              option[props.iconField] || '',
+                              'size-4',
+                            )}
+                            />
+                          )}
+                          {props.numField && <div class="rounded-full bg-primary px-2 text-xs text-white">{option[props.numField as any] || 0}</div>}
+                        </>
                       )
                     }
                   : undefined}

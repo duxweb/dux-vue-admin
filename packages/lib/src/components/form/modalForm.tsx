@@ -1,9 +1,11 @@
 import type { PropType } from 'vue'
 import type { JsonFormItemSchema } from './handler'
+import { useVModel } from '@vueuse/core'
 import { NButton } from 'naive-ui'
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { DuxModalPage } from '../modal'
+import { DuxForm } from './form'
 import { DuxJsonForm } from './jsonForm'
 import { useForm } from './useForm'
 
@@ -12,18 +14,27 @@ export const DuxModalForm = defineComponent({
   props: {
     onConfirm: Function as PropType<(value: any) => void>,
     onClose: Function as PropType<() => void>,
-
+    model: Object as PropType<Record<string, any>>,
     data: Object as PropType<Record<string, any>>,
     schema: Object as PropType<JsonFormItemSchema[]>,
     url: String,
     id: [String, Number],
     invalidate: String,
+    initData: Object as PropType<Record<string, any>>,
   },
-  setup(props) {
+  extends: DuxForm,
+  setup(props, { emit, slots }) {
+    const modelData = useVModel(props, 'model', emit, {
+      passive: true,
+      defaultValue: {},
+    })
+
     const { loading, model, onSubmit } = useForm({
       url: props.url,
       id: props.id,
       invalidate: props.invalidate,
+      model: modelData,
+      initData: props.initData,
       success: (res) => {
         props.onConfirm?.(res)
       },
@@ -35,9 +46,10 @@ export const DuxModalForm = defineComponent({
         {{
           default: () => (
             <div class="p-4">
-
-              <DuxJsonForm model={model} schema={props.schema} data={props.data} />
-
+              <DuxForm {...props} layout="top">
+                {slots.default?.()}
+                <DuxJsonForm model={model} schema={props.schema} data={props.data} />
+              </DuxForm>
             </div>
           ),
           action: () => (
@@ -49,7 +61,7 @@ export const DuxModalForm = defineComponent({
                   props.onClose?.()
                 }}
               >
-                {t('components.formEditor.buttons.cancel')}
+                {t('buttons.cancel')}
               </NButton>
               <NButton
                 type="primary"
@@ -58,7 +70,7 @@ export const DuxModalForm = defineComponent({
                   onSubmit()
                 }}
               >
-                {t('components.formEditor.buttons.confirm')}
+                {t('buttons.confirm')}
               </NButton>
             </>
           ),

@@ -1,40 +1,10 @@
 <script setup lang="ts">
-import { useLoadingBar } from 'naive-ui'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { DuxLayout } from '../components'
-import { initAsyncRouter } from '../core/manage'
-import { usePermission, useResource } from '../hooks'
-import { useRouteStore, useTabStore } from '../stores'
-import { DuxLoading } from './loading'
+import { useTabStore } from '../stores'
+import DuxLoading from './loading.vue'
 
-const router = useRouter()
 const route = useRoute()
-const routeStore = useRouteStore()
-const resource = useResource()
-const loadingBar = useLoadingBar()
-const { can } = usePermission()
-
-router.beforeEach((to, _from, next) => {
-  loadingBar.start()
-  const routeInfo = routeStore.searchRoute(to.path)
-  if (routeInfo) {
-    to.name = routeInfo.name
-    to.meta.title = routeInfo.label
-    document.title = resource.config?.manage?.[resource.manage]?.title || ''
-  }
-  if (to.name) {
-    if (!can(to.name as string) && to.name !== '403') {
-      return next({ path: `/${resource.manage}/403`, replace: true })
-    }
-  }
-  return next()
-})
-
-router.afterEach(() => {
-  setTimeout(() => {
-    loadingBar.finish()
-  }, 300)
-})
 
 const tabStore = useTabStore()
 
@@ -61,24 +31,22 @@ function wrap(name, component) {
 
 tabStore.$subscribe((_mutation, state) => {
   cacheMap.forEach((cache) => {
-    if (!state.tabs.some(t => t.path === cache.name)) {
+    if (!state.tabs.some(t => t.url === cache.name)) {
       cacheMap.delete(cache.name)
     }
   })
 })
-
-initAsyncRouter()
 </script>
 
 <template>
-  <Suspense>
+  <Suspense timeout="5000">
     <DuxLayout
       v-cloak
       un-cloak
     >
       <RouterView v-slot="{ Component }">
         <transition name="fade" mode="out-in" appear>
-          <keep-alive :include="tabStore.tabs.map(t => t.path || '')">
+          <keep-alive :include="tabStore.tabs.map(t => t.url || '')">
             <component :is="wrap(route.path, Component)" :key="route.path" />
           </keep-alive>
         </transition>

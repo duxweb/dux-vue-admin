@@ -1,7 +1,7 @@
 import type { AsyncComponentLoader, PropType } from 'vue'
 import { useExtendOverlay } from '@overlastic/vue'
-import { NDrawer } from 'naive-ui'
-import { defineAsyncComponent, defineComponent } from 'vue'
+import { NDrawer, NSpin } from 'naive-ui'
+import { defineAsyncComponent, defineComponent, Suspense } from 'vue'
 import { DuxWindowHeader } from '../window'
 
 export default defineComponent({
@@ -42,7 +42,17 @@ export default defineComponent({
       >
         <div class="h-full flex flex-col">
           <DuxWindowHeader title={props.title} onClose={reject} />
-          <Page {...params} onSuccess={resolve} onClose={reject} />
+          <Suspense>
+            {{
+              default: () => <Page {...params} onSuccess={resolve} onClose={reject} />,
+              fallback: () => (
+                <NSpin show>
+                  <div class="flex-1 h-1"></div>
+                </NSpin>
+              ),
+            }}
+          </Suspense>
+
         </div>
       </NDrawer>
     )

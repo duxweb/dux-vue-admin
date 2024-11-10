@@ -1,4 +1,4 @@
-import { usePagination } from 'alova/client'
+import { actionDelegationMiddleware, usePagination } from 'alova/client'
 import { NPagination } from 'naive-ui'
 import { ref, watch } from 'vue'
 import { useClient } from '../../hooks'
@@ -45,7 +45,7 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
       },
       initialPage: 1,
       initialPageSize: pagination ? 10 : 0,
-
+      middleware: actionDelegationMiddleware(url || ''),
     },
   )
 

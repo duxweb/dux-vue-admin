@@ -1,38 +1,35 @@
-import type { DataTableColumn, DataTableFilterState, DataTableSortState } from 'naive-ui'
-import type { TableAction, TableColumn, UseTableProps, UseTableResult } from './types'
-import { usePagination } from 'alova/client'
+import type { DataTableColumns, DataTableFilterState, DataTableRowKey, DataTableSortState } from 'naive-ui'
+import type { Ref } from 'vue'
+import type { BatchAction, TableAction, TableColumn, UseTableProps, UseTableResult } from './types'
+import { useWindowSize } from '@vueuse/core'
+import { actionDelegationMiddleware, usePagination } from 'alova/client'
 import { NButton, NCheckbox, NDropdown, NPopover, NTooltip, useMessage } from 'naive-ui'
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, toRef, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useI18n } from 'vue-i18n'
-import { useExportExcel, useImportExcel } from '../../hooks'
+import { treeToArr, useExportExcel, useImportExcel } from '../../hooks'
 import { useClient } from '../../hooks/useClient'
+import { useDialog } from '../dialog'
 import { listRenderAction } from '../filter'
 import { columnMap, columnMedia, columnStatus, columnTags, columnText, columnType } from './column'
+import { columnSwitch } from './column/switch'
 
-export function useTable({ filter, url, columns, columnActions, excelColumns, export: exportStatus, import: importStatus, key = 'id' }: UseTableProps): UseTableResult {
+export function useTable({ filter, url, batch, columns: tableColumn, columnActions, excelColumns, export: exportStatus, import: importStatus, expanded: expandedStatus, cacheTime, key = 'id' }: UseTableProps): UseTableResult {
   const client = useClient()
   const message = useMessage()
   const excelExport = useExportExcel()
   const excelImport = useImportExcel()
   const { t } = useI18n()
+  const selected = ref<never[]>([])
+  const expanded = ref<never[]>([])
+  const { width } = useWindowSize()
 
-  // 增加默认显示，用于过滤列
-  const formatColumns = columns?.map((item: any) => {
-    item.show = true
-    return item
-  })
-
-  const tableColumns = ref<TableColumn[]>(formatColumns)
-
-  // 处理自定义列配置
-  const resultColumns = computed(() => {
-    return convertTableColumns(key, tableColumns.value, columnActions)
-  })
+  const columns = toRef(tableColumn)
 
   // 表格数据
   const sorter = reactive<Record<string, any>>({})
   const filters = reactive<Record<string, any>>({})
+  const meta = ref<Record<string, any>>({})
 
   const {
     page,
@@ -41,8 +38,8 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
     data: tableData,
     loading,
     send,
-    // onSuccess,
     onError,
+    onSuccess,
     refresh,
   } = usePagination(
     (page, pageSize) => {
@@ -55,6 +52,10 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
           ...filters,
           ...filter,
         },
+        config: {
+          name: url,
+          cacheFor: cacheTime || 60 * 10 * 1000,
+        },
       })
     },
     {
@@ -65,8 +66,14 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
       initialPage: 1,
       initialPageSize: 20,
       total: res => res.meta?.total || 0,
+      middleware: actionDelegationMiddleware(url || ''),
     },
   )
+
+  onSuccess((res) => {
+    selected.value = []
+    meta.value = res.data?.meta || {}
+  })
 
   onError((res) => {
     message.error(res?.error?.message || t('components.list.getError'))
@@ -76,6 +83,46 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
   const onSend = () => {
     send(1, pageSize.value)
   }
+
+  // 自动展开
+  watch(tableData, (val) => {
+    if (expandedStatus) {
+      expanded.value = treeToArr(val, key, 'children')
+    }
+  })
+
+  const onUpdateExpandedRowKeys = (val) => {
+    expanded.value = val
+  }
+
+  // 增加默认显示，用于过滤列
+  const formatColumns = computed(() => {
+    return columns?.value?.map((item: any) => {
+      item.show = true
+      return item
+    })
+  })
+
+  const columnRender = useTableColumns({
+    key,
+    actions: columnActions,
+    batch,
+    selected,
+    url,
+    onSend,
+  })
+
+  const tableColumns = ref<TableColumn[]>([])
+
+  watch(formatColumns, (val) => {
+    tableColumns.value = val || []
+  }, { immediate: true })
+
+  // 处理自定义列配置
+  const resultColumns = computed(() => {
+    const cols = columnRender(tableColumns.value)
+    return cols
+  })
 
   // 表格列设置
   const toolsColumns = (
@@ -206,7 +253,7 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
         delete sorter[`${item.columnKey}_sort`]
       }
     })
-    send(1, pageSize.value)
+    onSend()
   }
 
   // 筛选处理
@@ -214,15 +261,24 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
     Object.entries(v).forEach(([key, value]) => {
       filters[key] = value
     })
-    send(1, pageSize.value)
+    onSend()
   }
 
-  // 表格扩展参数
+  // 多选
+  const onUpdateCheckedRowKeys = (keys: DataTableRowKey[]) => {
+    selected.value = keys as never[]
+  }
+
+  // 表格参数
   const tableParams = computed(() => {
     return {
       remote: true,
+      checkedRowKeys: selected.value,
+      onUpdateCheckedRowKeys,
       onUpdateSorter,
       onUpdateFilters,
+      expandedRowKeys: expanded.value,
+      onUpdateExpandedRowKeys,
     }
   })
 
@@ -242,6 +298,8 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
       pageSize: pageSize.value,
       pageCount: pageCount.value,
       pageSizes: [10, 20, 30, 40, 50],
+      pageSlot: 5,
+      simple: width.value < 768,
       onUpdatePageSize,
       onUpdatePage,
       showSizePicker: true,
@@ -250,7 +308,8 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
   })
 
   return {
-    tableColumns: resultColumns,
+    meta,
+    tableColumns: resultColumns as Ref<DataTableColumns>,
     toolsColumns,
     toolsBtn,
     send: onSend,
@@ -258,80 +317,150 @@ export function useTable({ filter, url, columns, columnActions, excelColumns, ex
     data: tableData,
     tableParams,
     pagination,
+    selected,
+    expanded,
   }
 }
 
-export function convertTableColumns(key: string | number, columns?: TableColumn[], actions?: TableAction[]): DataTableColumn[] {
-  const restColumns = columns?.filter((item) => {
-    return item.show === undefined || item.show === true
-  })?.map((item) => {
-    const { renderType, renderProps, ...itemProps } = item
+interface UseTableColumnsProps {
+  key: string | number
+  url?: string
+  batch?: BatchAction[]
+  actions?: TableAction[]
+  selected?: Ref<never[]>
+  onSend?: () => void
 
-    // 增加通用 key 配置
-    const params: Record<string, any> = { key: item?.key, ...renderProps }
+}
 
-    // 处理渲染类型
-    if (item.renderType === 'text') {
-      return {
-        ...itemProps,
-        render: columnText(params),
-      }
-    }
-    if (item.renderType === 'media') {
-      return {
-        ...itemProps,
-        render: columnMedia(params),
-      }
-    }
-    if (item.renderType === 'status') {
-      return {
-        ...itemProps,
-        render: columnStatus(params),
-      }
-    }
-    if (item.renderType === 'tags') {
-      return {
-        ...itemProps,
-        render: columnTags(params),
-      }
-    }
-    if (item.renderType === 'type') {
-      return {
-        ...itemProps,
-        render: columnType(params),
-      }
-    }
-    if (item.renderType === 'map') {
-      return {
-        ...itemProps,
-        render: columnMap(params),
-      }
-    }
-    if (item.render && typeof item.render === 'function') {
-      return {
-        ...itemProps,
-        render: item.render,
-      }
-    }
-    return item
-  }) || []
+export function useTableColumns(props: UseTableColumnsProps) {
+  const dialog = useDialog()
+  const { t } = useI18n()
+  const client = useClient()
+  const message = useMessage()
 
-  // 行操作渲染
-  if (restColumns && actions && actions?.length > 0) {
-    const columnWidth = actions.reduce((accumulator, currentValue) => {
-      return accumulator + currentValue.label?.length * 22
-    }, 0)
+  const render = (columns?: TableColumn[]) => {
+    const restColumns = columns?.filter((item) => {
+      return item.show === undefined || item.show === true
+    })?.map((item) => {
+      const { renderType, renderProps, ...itemProps } = item
 
-    restColumns.push({
-      title: '操作',
-      fixed: 'right',
-      align: 'center',
-      width: columnWidth,
-      render: (rowData, rowIndex) => {
-        return <div class="flex gap-2 justify-center">{listRenderAction({ key, rowData, rowIndex, text: true, actions })}</div>
-      },
-    } as TableColumn)
+      // 增加通用 key 配置
+      const params: Record<string, any> = { key: item?.key, ...renderProps }
+
+      // 处理渲染类型
+      if (!item.renderType || item.renderType === 'text') {
+        return {
+          ...itemProps,
+          render: columnText(params),
+        }
+      }
+      if (item.renderType === 'media') {
+        return {
+          ...itemProps,
+          render: columnMedia(params),
+        }
+      }
+      if (item.renderType === 'status') {
+        return {
+          ...itemProps,
+          render: columnStatus(params),
+        }
+      }
+      if (item.renderType === 'tags') {
+        return {
+          ...itemProps,
+          render: columnTags(params),
+        }
+      }
+      if (item.renderType === 'type') {
+        return {
+          ...itemProps,
+          render: columnType(params),
+        }
+      }
+      if (item.renderType === 'map') {
+        return {
+          ...itemProps,
+          render: columnMap(params),
+        }
+      }
+      if (item.renderType === 'switch') {
+        return {
+          ...itemProps,
+          render: columnSwitch(params, client, message, props.key, props.url),
+        }
+      }
+      if (item.renderType === 'render' || (item.render && typeof item.render === 'function')) {
+        return {
+          ...itemProps,
+          title: itemProps.titleLang ? t(itemProps.titleLang) : itemProps.title,
+          render: item.render,
+        }
+      }
+      return item
+    }) || []
+
+    // 多选操作
+    if (props.batch) {
+      restColumns.unshift({
+        width: 80,
+        multiple: true,
+        type: 'selection',
+        options: props.selected && props.selected.value?.length > 0
+          ? props.batch?.map((item) => {
+            return {
+              label: item.labelLang ? t(item.labelLang) : item.label,
+              icon: item?.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined,
+              onSelect: () => {
+                if (item?.callback) {
+                  item.callback()
+                  return
+                }
+
+                dialog.confirm({
+                  title: t('dialog.confirm.title'),
+                  content: t('dialog.confirm.content'),
+                }).then(() => {
+                  client.post({
+                    url: item?.url || `${props.url}/batch`,
+                    data: {
+                      data: props.selected?.value,
+                      type: item?.name,
+                    },
+                  }).then((res) => {
+                    message.success(res?.message || t('message.requestSuccess'))
+                    client.invalidate(props.url)
+                  }).catch(() => {
+                    message.error(t('message.requestError'))
+                  })
+                })
+              },
+            }
+          })
+          : undefined,
+      } as any,
+      )
+    }
+
+    // 行操作渲染
+    if (restColumns && props.actions && props.actions?.length > 0) {
+      const columnWidth = props.actions.reduce((accumulator, currentValue) => {
+        const label = currentValue.labelLang ? t(currentValue.labelLang) : currentValue.label
+        return accumulator + (label?.length || 0) * 24
+      }, 0)
+
+      restColumns.push({
+        title: t('components.list.options'),
+        fixed: 'right',
+        align: 'center',
+        width: columnWidth + 10,
+        render: (rowData, rowIndex) => {
+          return <div class="flex gap-2 justify-center">{listRenderAction({ key: props.key, rowData, rowIndex, text: true, actions: props.actions, url: props.url })}</div>
+        },
+      } as TableColumn)
+    }
+    return restColumns
   }
 
-  return restColumns
+  return render
 }

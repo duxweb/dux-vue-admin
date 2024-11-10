@@ -1,5 +1,7 @@
 import { type AlovaGenerics, type AlovaMethodCreateConfig, invalidateCache, type Method, type RequestBody } from 'alova'
+import { accessAction } from 'alova/client'
 import { useRouter } from 'vue-router'
+import { i18n } from '../i18n'
 import { useManageStore } from '../stores'
 import { alovaInstance } from './alova'
 import { useResource } from './useResource'
@@ -29,12 +31,12 @@ export function useClient(props?: useClientProps) {
   const user = getUser()
   const router = useRouter()
 
-  // 响应拦截器
-  alovaInstance.options.baseURL = res.config?.apiUrl
-
   alovaInstance.options.responded = {
     onSuccess: async (response) => {
       const json = response.data
+      if (response.status === 204) {
+        return undefined
+      }
       if (response.status === 200) {
         return props?.raw ? response : json
       }
@@ -54,8 +56,9 @@ export function useClient(props?: useClientProps) {
 
   const globalHeaders = (type?: ClientRequestType) => {
     const data = {
-      Accept: 'application/json',
-      Authorization: user?.token,
+      'Accept': 'application/json',
+      'Authorization': user?.token,
+      'Accept-Language': i18n.global.locale?.value,
     }
 
     switch (type) {
@@ -72,8 +75,15 @@ export function useClient(props?: useClientProps) {
     return data
   }
 
+  const getUrl = (url: string = '') => {
+    if (url?.startsWith('//') || /^.+?:\/\//.test(url || '')) {
+      return url
+    }
+    return res.config?.apiUrl ? `${res.config?.apiUrl}${res.genUrl(url)}` : res.genUrl(url)
+  }
+
   const Get = <T = any>({ url, timeout = 5000, headers, params, config }: ClientRequestProps<T>): Method => {
-    return alovaInstance.Get<T>(url ? res.genUrl(url) : res?.resUrl, {
+    return alovaInstance.Get<T>(getUrl(url), {
       headers: {
         ...globalHeaders(),
         ...headers,
@@ -86,7 +96,7 @@ export function useClient(props?: useClientProps) {
   }
 
   const Post = <T = any>({ url, data, headers, params, config, type, timeout = 5000 }: ClientRequestProps<T>): Method => {
-    return alovaInstance.Post<T>(url ? res.genUrl(url) : res?.resUrl, data, {
+    return alovaInstance.Post<T>(getUrl(url), data, {
       headers: {
         ...globalHeaders(type),
         ...headers,
@@ -98,7 +108,7 @@ export function useClient(props?: useClientProps) {
   }
 
   const Put = <T = any>({ url, data, headers, params, config, type, timeout = 5000 }: ClientRequestProps<T>): Method => {
-    return alovaInstance.Put<T>(url ? res.genUrl(url) : res?.resUrl, data, {
+    return alovaInstance.Put<T>(getUrl(url), data, {
       headers: {
         ...globalHeaders(type),
         ...headers,
@@ -110,7 +120,7 @@ export function useClient(props?: useClientProps) {
   }
 
   const Patch = <T = any>({ url, data, headers, params, config, type, timeout = 5000 }: ClientRequestProps<T>): Method => {
-    return alovaInstance.Patch<T>(url ? res.genUrl(url) : res?.resUrl, data, {
+    return alovaInstance.Patch<T>(getUrl(url), data, {
       headers: {
         ...globalHeaders(type),
         ...headers,
@@ -122,7 +132,7 @@ export function useClient(props?: useClientProps) {
   }
 
   const Delete = <T = any>({ url, data, headers, params, config, type, timeout = 5000 }: ClientRequestProps<T>): Method => {
-    return alovaInstance.Delete<T>(url ? res.genUrl(url) : res?.resUrl, data, {
+    return alovaInstance.Delete<T>(getUrl(url), data, {
       headers: {
         ...globalHeaders(type),
         ...headers,
@@ -134,13 +144,16 @@ export function useClient(props?: useClientProps) {
   }
 
   const invalidate = (name?: string | RegExp) => {
-    const matchedMethods = alovaInstance.snapshots.match({
-      name,
-    })
+    const matchedMethods = alovaInstance.snapshots.match(`${name}`)
     invalidateCache(matchedMethods)
-    matchedMethods.forEach((item) => {
-      item.send()
-    })
+
+    accessAction(
+      name || '',
+      (delegatedActions) => {
+        delegatedActions?.send?.()
+      },
+      true,
+    )
   }
 
   return {

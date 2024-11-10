@@ -8,63 +8,66 @@
     "list": "List",
     "form": "Form",
     "layout": {
-      "app": "Dual Layout",
-      "collapse": "Single Layout",
-      "separate": "Separate Layout"
+      "app": "Two Columns",
+      "collapse": "Single Column",
+      "separate": "Top Bottom"
     }
   },
   "pages": {
     "login": {
       "placeholder": {
-        "username": "Username",
-        "password": "Password",
-        "captcha": "Captcha"
+        "username": "Enter username",
+        "password": "Enter password",
+        "captcha": "Click captcha image"
       },
       "fields": {
         "username": "Username",
         "password": "Password"
       },
       "captcha": {
-        "default": "Verify",
-        "success": "Success",
-        "error": "Error"
+        "default": "Click to verify",
+        "success": "Verified",
+        "error": "Failed"
       },
       "buttons": {
         "login": "Login"
       }
     },
+    "loading": {
+      "title": "Loading..."
+    },
     "empty": {
       "title": "No Data",
-      "desc": "No Data, Refresh"
+      "desc": "No data available, try refreshing"
     },
     "404": {
       "title": "Page Not Found",
-      "desc": "Page Not Found"
+      "desc": "Sorry, the page does not exist"
     },
     "403": {
       "title": "No Permission",
-      "desc": "No Access"
+      "desc": "Sorry, you don't have access"
     },
     "500": {
       "title": "System Error",
-      "desc": "Contact Admin"
+      "desc": "System error, please contact admin"
     }
   },
   "dialog": {
     "confirm": {
       "title": "Confirm",
-      "content": "Confirm Action?"
+      "content": "Are you sure?"
     },
     "success": {
       "title": "Success",
-      "content": "Action Successful"
+      "content": "Operation completed"
     },
     "error": {
       "title": "Error",
-      "content": "Action Failed"
+      "content": "Operation failed"
     },
     "prompt": {
-      "title": "Input"
+      "title": "Please Input"
     }
   },
   "buttons": {
@@ -77,11 +80,11 @@
     "cancel": "Cancel",
     "close": "Close",
     "add": "Add",
-    "confirm": "Confirm",
+    "confirm": "OK",
     "filter": "Filter",
     "clear": "Clear",
     "refresh": "Refresh",
-    "show": "Show",
+    "show": "View",
     "undo": "Undo",
     "import": "Import",
     "clone": "Clone",
@@ -89,7 +92,7 @@
     "rest": "Reset",
     "setting": "Settings",
     "restore": "Restore",
-    "trash": "Trash",
+    "trash": "Clear",
     "select": "Select",
     "submit": "Submit",
     "export": "Export",
@@ -99,18 +102,19 @@
     "download": "Download",
     "rename": "Rename",
     "more": "More",
+    "batch": "Batch",
     "next": "Next",
     "prev": "Previous"
   },
   "message": {
     "success": "Success",
-    "error": "Failed: {content}",
+    "error": "Error: {content}",
     "requestSuccess": "Submitted",
     "requestError": "Request Failed",
     "validateError": "Validation Failed"
   },
   "placeholder": {
-    "keyword": "Enter Keyword"
+    "keyword": "Enter keyword"
   },
   "components": {
     "message": {
@@ -123,27 +127,28 @@
       "deleteAll": "Delete Read",
       "allMessage": "All Messages",
       "notFound": "No Messages",
-      "notFoundDesc": "No Open Messages"
+      "notFoundDesc": "No messages open",
+      "notFoundMore": "No more messages"
     },
     "list": {
-      "actions": "Actions",
-      "refresh": "Refresh Data",
+      "options": "Actions",
+      "refresh": "Refresh",
       "excelImport": "Import Excel",
       "excelExport": "Export Excel",
-      "getError": "Data Error",
-      "columnSetting": "Column Settings"
+      "getError": "Failed to get data",
+      "columnSetting": "Columns"
     },
     "editor": {
-      "placeholder": "Enter Content..."
+      "placeholder": "Enter content..."
     },
     "tree": {
-      "placeholder": "Search Keywords"
+      "placeholder": "Search keywords"
     },
     "pageEditor": {
       "grid": {
         "name": "Grid Layout",
         "title": "Layout Config",
-        "col": "Grid Count",
+        "col": "Columns",
         "spac": "Spacing"
       },
       "group": {
@@ -155,7 +160,7 @@
       "config": "Config",
       "options": "Options",
       "group": {
-        "form": "Inputs",
+        "form": "Input",
         "select": "Select",
         "async": "Async"
       },
@@ -164,54 +169,54 @@
         "disabled": "Disabled",
         "optionLabel": "Label",
         "optionValue": "Value",
-        "data": "Data",
+        "data": "Edit Data",
         "status": "Status",
-        "jsonOut": "Json Out",
-        "json": "Json Form"
+        "jsonOut": "Output JSON",
+        "json": "Form JSON for JSON form component"
       },
       "base": {
         "label": "Label",
         "field": "Field",
-        "rule": "Rule",
-        "rulePlaceholder": "Select Rule",
+        "rule": "Rules",
+        "rulePlaceholder": "Select rule",
         "required": "Required",
-        "regexp": "Regex",
-        "regexpPlaceholder": "Regex",
-        "messagePlaceholder": "Message",
+        "regexp": "Regexp",
+        "regexpPlaceholder": "Enter regexp",
+        "messagePlaceholder": "Validation message",
         "addRule": "Add Rule"
       },
       "page": {
         "name": "Form Config",
-        "placement": "Placement",
+        "placement": "Label Position",
         "left": "Left",
         "right": "Right",
         "center": "Center"
       },
       "cascader": {
         "name": "Cascader",
-        "multiple": "Multi",
+        "multiple": "Multiple",
         "cascade": "Cascade",
         "showPath": "Show Path",
         "disabled": "Disabled",
         "clearable": "Clearable",
-        "optionsDescription": "Define with label, value, children"
+        "optionsDescription": "Use \"label\", \"value\" and \"children\" to define JSON array options"
       },
       "cascaderAsync": {
-        "name": "Cascader",
-        "url": "Url",
-        "labelField": "Label",
-        "valueField": "Value"
+        "name": "Async Cascader",
+        "url": "URL",
+        "labelField": "Label Field",
+        "valueField": "Value Field"
       },
       "checkbox": {
         "name": "Checkbox",
-        "optionsDescription": "Define with label, value"
+        "optionsDescription": "Use \"label\", \"value\" to define JSON array options"
       },
       "color": {
-        "name": "Color",
+        "name": "Color Picker",
         "showAlpha": "Alpha"
       },
       "date": {
-        "name": "Date",
+        "name": "Date Picker",
         "inputType": "Type",
         "date": "Date",
         "dateRange": "Date Range",
@@ -228,19 +233,19 @@
         "clearable": "Clearable"
       },
       "dynamicInput": {
-        "name": "Dynamic",
-        "min": "Min",
-        "max": "Max",
+        "name": "Dynamic Input",
+        "min": "Min Items",
+        "max": "Max Items",
         "disabled": "Disabled"
       },
       "dynamicTags": {
-        "name": "Tags",
-        "max": "Max"
+        "name": "Tag Input",
+        "max": "Max Tags"
       },
       "editor": {
         "name": "Editor",
         "componentOptions": "Options",
-        "uploadUrl": "Upload Url",
+        "uploadUrl": "Upload URL",
         "uploadFeedback": "Auto Process"
       },
       "input": {
@@ -256,7 +261,7 @@
         "suffix": "Suffix",
         "readonly": "Readonly",
         "clearable": "Clearable",
-        "showCount": "Count"
+        "showCount": "Show Count"
       },
       "inputNumber": {
         "name": "Number",
@@ -270,41 +275,41 @@
         "clearable": "Clearable"
       },
       "mentionAsync": {
-        "name": "Mention",
+        "name": "Async Mention",
         "clearable": "Clearable",
-        "url": "Url",
-        "labelField": "Label",
-        "valueField": "Value"
+        "url": "URL",
+        "labelField": "Label Field",
+        "valueField": "Value Field"
       },
       "radio": {
         "name": "Radio",
-        "labelField": "Label",
-        "valueField": "Value",
-        "optionsDescription": "Define with label, value"
+        "labelField": "Label Field",
+        "valueField": "Value Field",
+        "optionsDescription": "Use \"label\", \"value\" to define JSON array options"
       },
       "region": {
-        "name": "Region",
-        "url": "Url",
-        "labelField": "Label",
-        "valueField": "Value",
+        "name": "Region Picker",
+        "url": "URL",
+        "labelField": "Label Field",
+        "valueField": "Value Field",
         "disabled": "Disabled"
       },
       "select": {
         "name": "Select",
-        "multiple": "Multi",
+        "multiple": "Multiple",
         "clearable": "Clearable",
-        "labelField": "Label",
-        "valueField": "Value",
-        "optionsDescription": "Define with label, value"
+        "labelField": "Label Field",
+        "valueField": "Value Field",
+        "optionsDescription": "Use \"label\", \"value\" to define JSON array options"
       },
       "selectAsync": {
-        "name": "Select",
+        "name": "Async Select",
         "pagination": "Pagination",
-        "url": "Url",
-        "labelField": "Label",
-        "valueField": "Value",
-        "imageField": "Image",
-        "descField": "Desc"
+        "url": "URL",
+        "labelField": "Label Field",
+        "valueField": "Value Field",
+        "imageField": "Image Field",
+        "descField": "Desc Field"
       },
       "sider": {
         "name": "Slider",
@@ -316,71 +321,72 @@
         "name": "Switch"
       },
       "time": {
-        "name": "Time",
+        "name": "Time Picker",
         "format": "Format",
-        "use12Hours": "12-Hour",
+        "use12Hours": "12 Hours",
         "clearable": "Clearable"
       },
       "transferAsync": {
-        "name": "Transfer"
+        "name": "Async Transfer"
       },
       "treeSelect": {
-        "name": "Tree"
+        "name": "Tree Select"
       },
       "treeSelectAsync": {
-        "name": "Tree",
-        "url": "Url",
-        "labelField": "Label",
-        "keyField": "Key"
+        "name": "Async Tree Select",
+        "url": "URL",
+        "labelField": "Label Field",
+        "keyField": "Key Field"
       }
     },
     "iconPicker": {
-      "title": "Icon Picker"
+      "title": "Select Icon"
     },
     "region": {
-      "title": "Region Picker",
-      "province": "Province",
-      "city": "City",
-      "district": "District",
-      "street": "Street"
+      "title": "Region",
+      "province": "Select Province",
+      "city": "Select City",
+      "district": "Select District",
+      "street": "Select Street"
     },
     "stats": {
       "area": "Area",
       "dataItem": "Data"
     },
     "upload": {
-      "drag": "Drag Files",
+      "drag": "Drag files here to upload",
       "file": "Upload File",
-      "manage": "Manage Files",
+      "manage": "Browse Files",
       "image": "Upload Image"
     },
     "uploadManage": {
-      "namePlaceholder": "Name",
-      "createError": "Create Failed",
-      "editError": "Edit Failed",
-      "delError": "Delete Failed",
+      "namePlaceholder": "Enter name",
+      "createError": "Failed to create folder",
+      "editError": "Failed to rename",
+      "delError": "Failed to delete",
       "all": "All",
       "image": "Images",
       "media": "Media",
       "docs": "Docs",
       "upload": "Upload",
-      "success": "Success",
-      "error": "Error",
-      "empty": "Empty",
-      "delTitle": "Delete Confirm",
-      "delDesc": "Delete File/Dir?"
+      "success": "Upload Success",
+      "error": "Upload Failed",
+      "empty": "No Files",
+      "delTitle": "Confirm Delete",
+      "delDesc": "Delete this file or folder?",
+      "back": "Back"
     }
   },
   "hooks": {
     "excel": {
-      "importError": "Import Error",
+      "importError": "Import Failed",
       "importSuccess": "Import Success"
     },
     "pdf": {
-      "title": "PDF Preview"
+      "title": "Preview"
     }
   },
   "command": {
-    "placeholder": "Menu Name..."
+    "placeholder": "Enter menu name..."
   }
 }

@@ -10,6 +10,7 @@ export interface DuxRoute {
   sort?: number
   parent?: string
   hidden?: boolean
+  loader?: string
   component?: () => any
   meta?: Record<string, any>
 }
@@ -22,6 +23,12 @@ export const useRouteStore = defineStore('routes', () => {
   const searchRoute = (path: string) => {
     return routes.value?.find((item) => {
       return item.path === path
+    })
+  }
+
+  const searchRouteName = (name: string) => {
+    return routes.value?.find((item) => {
+      return item.name === name
     })
   }
 
@@ -41,14 +48,29 @@ export const useRouteStore = defineStore('routes', () => {
     return routes.value
   }
 
+  const getIndexRoute = () => {
+    const indexRoute = routes.value?.find((item) => {
+      if (item.name === '404' || item.name === '403') {
+        return false
+      }
+      return !!item.path
+    })
+
+    if (indexRoute) {
+      return indexRoute
+    }
+  }
+
   return {
     routes,
     init,
     asyncInit,
     searchRoute,
+    searchRouteName,
     appendRoute,
     appendRoutes,
     setRoutes,
     getRoutes,
+    getIndexRoute,
   }
 })

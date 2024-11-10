@@ -1,6 +1,6 @@
 import { useExtendOverlay } from '@overlastic/vue'
-import { NModal } from 'naive-ui'
-import { defineAsyncComponent, defineComponent } from 'vue'
+import { NModal, NSpin } from 'naive-ui'
+import { defineAsyncComponent, defineComponent, Suspense } from 'vue'
 import { DuxWindowHeader } from '../window'
 
 export const DuxModal = defineComponent({
@@ -47,7 +47,16 @@ export const DuxModal = defineComponent({
             <div class="flex-none">
               <DuxWindowHeader title={props.title} onClose={reject} />
             </div>
-            <Page {...params} />
+            <Suspense>
+              {{
+                default: () => <Page {...params} />,
+                fallback: () => (
+                  <NSpin show>
+                    <div class="h-100"></div>
+                  </NSpin>
+                ),
+              }}
+            </Suspense>
           </div>
         </div>
       </NModal>

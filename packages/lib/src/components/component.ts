@@ -1,15 +1,18 @@
 import type { App } from 'vue'
+import { DuxAutoCompleteAsync } from './autoComplete'
 import { DuxCardHeader } from './card'
 import { DuxCascaderAsync } from './cascader'
 import { DuxCodeEditor } from './code'
+import { DuxCollapsePanel } from './collapse'
 import { DuxLogo } from './common'
+import { DuxAvatarCrop, DuxImageCropModal } from './crop'
 import { DuxDynamicData, DuxDynamicSelect } from './data'
 import { DuxDrawApps, DuxDrawAuth, DuxDrawEmpty, DuxDrawEmptyForm, DuxDrawError } from './draw'
 import { DuxDrawerPage } from './drawer'
 import { DuxAiEditor } from './editor/aiEditor'
 import { DuxExample } from './example'
 import { DuxFilter, DuxTreeFilter } from './filter'
-import { DuxDrawerForm, DuxFormEditor, DuxJsonForm, DuxModalForm, DuxPageForm, DuxPageFormItem, DuxStepForm, DuxTabForm } from './form'
+import { DuxDrawerForm, DuxForm, DuxFormEditor, DuxFormItem, DuxJsonForm, DuxModalForm, DuxPageForm, DuxPageFormItem, DuxStepForm, DuxTabForm } from './form'
 import { DuxIconPicker } from './icon'
 import { DuxException, DuxGrid } from './layout'
 import { DuxCardList, DuxList } from './list'
@@ -28,6 +31,7 @@ import { DuxPageEmpty } from './status/pageEmpty'
 import { DuxStep } from './step/step'
 import { DuxBaseTable, DuxPageTable, DuxTable } from './table'
 import { DuxTransferAsync } from './transfer'
+import { DuxTreeAsync } from './tree'
 import { DuxTreeSelectAsync } from './treeSelect'
 import { DuxFileUpload, DuxImageUpload } from './upload'
 import { DuxCarousel, DuxMedia } from './widget'
@@ -121,5 +125,12 @@ export default {
     app.component('DuxTabForm', DuxTabForm)
     app.component('DuxTreeFilter', DuxTreeFilter)
     app.component('DuxMessagePage', DuxMessagePage)
+    app.component('DuxCollapsePanel', DuxCollapsePanel)
+    app.component('DuxTreeAsync', DuxTreeAsync)
+    app.component('DuxAvatarCrop', DuxAvatarCrop)
+    app.component('DuxImageCropModal', DuxImageCropModal)
+    app.component('DuxForm', DuxForm)
+    app.component('DuxFormItem', DuxFormItem)
+    app.component('DuxAutoCompleteAsync', DuxAutoCompleteAsync)
   },
 }

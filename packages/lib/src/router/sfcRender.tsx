@@ -14,7 +14,7 @@ import * as pinia from 'pinia'
 import * as Vue from 'vue'
 import * as VueDraggable from 'vue-draggable-plus'
 import VChart from 'vue-echarts'
-import * as i18n from 'vue-i18n'
+import * as vueI18n from 'vue-i18n'
 import * as vueRouter from 'vue-router'
 import { loadModule } from 'vue3-sfc-loader'
 import JsonRender from '../components/render/jsonRender'
@@ -23,7 +23,7 @@ import * as index from '../index'
 
 export function sfcRender(path: string) {
   const client = useClient()
-  const { mergeLocaleMessage } = i18n.useI18n()
+  const { mergeLocaleMessage } = vueI18n.useI18n()
   const options: Options = {
     moduleCache: {
       'vue': Vue,
@@ -38,16 +38,16 @@ export function sfcRender(path: string) {
       'mime': mime,
       'math': math,
       'mitt': mitt,
-      '_': _,
+      'lodash-es': _,
       'pinia': pinia,
       'vue-router': vueRouter,
       'vue-echarts': VChart,
       'vue-draggable-plus': VueDraggable,
-      'vue-i18n': i18n,
+      'vue-i18n': vueI18n,
       'static!': function (content: string, _path: string, type: string) {
         const name = mime.getType(type)
         if (name?.startsWith('image')) {
-          return `data:${name};base64,${btoa(content)}`
+          return `data:${name};charset=utf-8;base64,${btoa(content)}`
         }
         if (type === '.json') {
           return JSON.parse(content)
@@ -74,6 +74,9 @@ export function sfcRender(path: string) {
       }
     },
     getFile: async (url) => {
+      url = removeSuffix(url, '.vue')
+      url = removeSuffix(url, '.json')
+
       const res = await client.post({
         url: `/static`,
         data: {
@@ -95,14 +98,9 @@ export function sfcRender(path: string) {
     getResource({ refPath, relPath }, options: Options): Resource {
       const { moduleCache, pathResolve, getFile } = options
 
-      const loaders: string[] = []
-      const resourceRelPath = relPath
+      const [resourceRelPath, ...loaders] = relPath.match(/([^!]+!)|[^!]+$/g).reverse()
 
-      if (relPath.startsWith('./')) {
-        loaders.push('static!')
-      }
-
-      const processContentThroughLoaders = (content: () => any, path: string, type: string, options: Options) => {
+      const processContentThroughLoaders = (content, path, type, options) => {
         return loaders.reduce((content, loader) => {
           return moduleCache[loader](content, path, type, options)
         }, content)
@@ -127,4 +125,9 @@ export function sfcRender(path: string) {
   }
 
   return () => loadModule(`${path}`, { ...options })
+}
+
+function removeSuffix(url: string, suffix: string) {
+  const regex = new RegExp(`${suffix}$`) // 创建一个正则表达式，匹配后缀名
+  return url.replace(regex, '')
 }

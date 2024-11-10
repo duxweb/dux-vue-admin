@@ -1,41 +1,36 @@
 import type { Column } from 'exceljs'
-import type { ButtonProps, DataTableBaseColumn, DataTableColumns, DataTableExpandColumn, DataTableProps, PaginationProps } from 'naive-ui'
-import type { AsyncComponentLoader, Ref, VNodeChild } from 'vue'
+import type { DataTableBaseColumn, DataTableColumns, DataTableExpandColumn, DataTableProps, PaginationProps } from 'naive-ui'
+import type { Ref, VNodeChild } from 'vue'
 import type { UseDialogResult } from '../../dialog'
 import type { UseDrawerResult } from '../../drawer'
+import type { FilterAction } from '../../filter'
 import type { UseModalResult } from '../../modal'
 import type { ColumnMapProps, ColumnMediaProps, ColumnStatusProps, ColumnTagsProps, ColumnTextProps } from '../column'
+import type { ColumnSwitchProps } from '../column/switch'
 
-export interface TableAction {
-  label: string
-  type: 'modal' | 'drawer' | 'link' | 'confirm'
-  title?: string
-  content?: string
-  color?: ButtonProps['type']
-  icon?: string
-  path?: string
-  component?: AsyncComponentLoader<any>
-  componentProps?: Record<string, any>
-  show?: (rowData?: object, rowIndex?: number) => boolean
-}
+export type TableAction = FilterAction
 
 export interface UseTableProps {
-  actions?: TableAction[]
-  columns: TableColumn[]
+  columns: TableColumn[] | Ref<TableColumn[] | undefined>
   columnActions?: TableAction[]
   filter?: Record<string, any>
   excelColumns?: Column[]
+  batch?: BatchAction[]
+  selected?: Ref<never[]>
   url?: string
   key?: string | number
   name?: any
   export?: boolean
   import?: boolean
+  expanded?: boolean
+  cacheTime?: number
 }
 
 export type TableColumnRender = (rowData: object, rowIndex: number) => VNodeChild
 
 export interface UseTableResult {
   data: Ref<any[]>
+  meta: Ref<Record<string, any>>
   pagination: Ref<PaginationProps>
   tableColumns: Ref<DataTableColumns>
   toolsColumns: VNodeChild
@@ -43,6 +38,8 @@ export interface UseTableResult {
   loading: Ref<boolean>
   tableParams: Ref<DataTableProps>
   send: () => void
+  selected: Ref<never[]>
+  expanded: Ref<never[]>
 }
 
 export interface TableTabProps {
@@ -57,17 +54,20 @@ export interface TableActionAttrMap {
   status: ColumnStatusProps
   media: ColumnMediaProps
   map: ColumnMapProps
+  switch: ColumnSwitchProps
+  render: any
 }
 
 export type TableActionAdaptor<T extends keyof TableActionAttrMap> = TableActionAttrMap[T] | Record<string, any>
 
 type DataTableColumn = DataTableBaseColumn | DataTableExpandColumn
 export interface TableColumnExtend {
-  renderType: 'text' | 'type' | 'tags' | 'status' | 'media' | 'map'
+  renderType: 'text' | 'type' | 'tags' | 'status' | 'media' | 'map' | 'switch' | 'render'
   renderProps?: TableActionAdaptor<this['renderType']>
   render?: TableColumnRender
   show?: boolean
   key?: any
+  titleLang?: string
 }
 
 export type TableColumn = DataTableColumn & TableColumnExtend
@@ -78,4 +78,13 @@ export interface HandleAction {
   modal?: UseModalResult
   dialog?: UseDialogResult
   drawer?: UseDrawerResult
+}
+
+export interface BatchAction {
+  label?: string
+  labelLang?: string
+  name?: string
+  url?: string
+  icon?: string
+  callback?: (selected?: (string | number)[]) => void
 }

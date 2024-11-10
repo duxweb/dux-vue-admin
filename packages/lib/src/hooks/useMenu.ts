@@ -4,6 +4,7 @@ import { useWindowSize } from '@vueuse/core'
 import { cloneDeep } from 'lodash-es'
 import { storeToRefs } from 'pinia'
 import { computed, h, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { RouterLink, useRoute } from 'vue-router'
 import { useThemeStore } from '../stores'
 import { useRouteStore } from '../stores/route'
@@ -14,6 +15,7 @@ export function useMenu() {
   const isMobile = ref<boolean>(false)
   const appCollapsed = ref<boolean>(true)
   const sideCollapsed = ref<boolean>(false)
+  const { t } = useI18n()
 
   const routeStore = useRouteStore()
   const { routes } = storeToRefs(routeStore)
@@ -21,15 +23,17 @@ export function useMenu() {
   const themeStore = useThemeStore()
   const { layout } = storeToRefs(themeStore)
 
-  const getMenu = (data: DuxRoute[]): MenuOption[] => {
-    return data?.filter(item => !!item?.name && (item.hidden === undefined || item.hidden === false))?.map<MenuOption>((item) => {
+  const getMenu = (data: DuxRoute[], hidden: boolean = true): MenuOption[] => {
+    return cloneDeep(data)?.filter(item => !!item?.name).filter(item => !hidden || item.hidden === undefined || item.hidden === false)?.map<MenuOption>((item) => {
+      const field = item.labelLang ? t(item.labelLang) : item.label
       return {
         key: item.name,
         parent: item.parent,
         path: item.path,
         sort: item.sort,
-        labelName: item.label,
+        labelName: field,
         iconName: item.icon,
+        hidden: item.hidden,
         icon: item?.icon
           ? () => {
               return h('div', {
@@ -46,22 +50,33 @@ export function useMenu() {
                   path: item.path,
                 },
               },
-              { default: () => item.label },
+              { default: () => field },
             )
-            : item.label
+            : field
         },
       }
     })
   }
 
-  const list = computed<MenuOption[]>(() => {
-    const menus = getMenu(routes.value)
+  const originalList = computed<MenuOption[]>(() => {
+    const menus = getMenu(routes.value, false)
     return arrayToTree(menus, {
       idKey: 'key',
       parentKey: 'parent',
       childrenKey: 'children',
       sortKey: 'sort',
     }, undefined)
+  })
+
+  const list = computed<MenuOption[]>(() => {
+    const menus = getMenu(routes.value)
+    const data = arrayToTree(menus, {
+      idKey: 'key',
+      parentKey: 'parent',
+      childrenKey: 'children',
+      sortKey: 'sort',
+    }, undefined)
+    return data
   })
 
   const route = useRoute()
@@ -92,8 +107,8 @@ export function useMenu() {
   })
 
   const crumbs = computed(() => {
-    const data = searchTree(list.value, (item) => {
-      return item?.key === (!subMenu.value.length ? appKey.value : subKey.value)
+    const data = searchTree(originalList.value, (item) => {
+      return item?.key === route.name
     })
     return data
   })
@@ -134,24 +149,40 @@ export function useMenu() {
   })
 
   const showCollapsed = computed(() => {
+    if (!subMenu.value) {
+      return true
+    }
     return (sideCollapsed.value || subMenu.value.length > 0) && !isPad.value ? 'bar' : false
   })
 
   // 根据路由改变高亮
-  watch([route, list, sideCollapsed], () => {
-    const paths = searchTree(list.value, (item) => {
-      return item.path === route.path
+  watch([route, originalList, sideCollapsed], () => {
+    const paths = searchTree(originalList.value, (item) => {
+      return item.key === route.name
     })
 
-    allKey.value = paths?.[paths.length - 1]?.key
+    const findIndex = (list: MenuOption[]) => {
+      let index = -1
+      for (let i = list.length - 1; i >= 0; i--) {
+        if (list[i].hidden === false || list[i].hidden === undefined) {
+          index = i
+          break
+        }
+      }
+      return index
+    }
+
+    const subIndex = findIndex(paths)
+
+    allKey.value = paths?.[subIndex]?.key
 
     if (sideCollapsed.value) {
-      appKey.value = paths?.[paths.length - 1]?.key
-      subKey.value = paths?.[paths.length - 1]?.key
+      appKey.value = paths?.[subIndex]?.key
+      subKey.value = paths?.[subIndex]?.key
     }
     else {
       appKey.value = paths?.[0]?.key
-      subKey.value = paths?.[paths.length - 1]?.key
+      subKey.value = paths?.[subIndex]?.key
     }
   }, { immediate: true })
 

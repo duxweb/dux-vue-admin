@@ -1,6 +1,6 @@
 import type { PropType } from 'vue'
 import type { FormLayoutType, JsonFormItemSchema } from './handler'
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import JsonRender from '../render/jsonRender'
 import { formToJson } from './handler'
 
@@ -16,12 +16,12 @@ export const DuxJsonForm = defineComponent({
     },
   },
   setup(props) {
-    const nodeJson = formToJson(props.schema || [], props.layout)
+    const nodeJson = computed(() => formToJson(props.schema || [], props.layout))
 
     return () => (
       <JsonRender
         debug={false}
-        nodes={nodeJson}
+        nodes={nodeJson.value}
         data={{
           ...props.data,
           model: props.model,

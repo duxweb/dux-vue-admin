@@ -1,6 +1,6 @@
-import type { Ref } from 'vue'
-import { useWatcher } from 'alova/client'
-import { useClient } from '../../hooks'
+import { actionDelegationMiddleware, useWatcher } from 'alova/client'
+import { ref, type Ref } from 'vue'
+import { treeToArr, useClient } from '../../hooks'
 
 interface UseCascaderProps {
   url?: Ref<string | undefined>
@@ -8,6 +8,7 @@ interface UseCascaderProps {
 }
 export function useCascader({ url, params }: UseCascaderProps) {
   const client = useClient()
+  const expanded = ref<(string | number)[]>([])
 
   const getList = () => {
     return client.get({
@@ -16,16 +17,22 @@ export function useCascader({ url, params }: UseCascaderProps) {
     })
   }
 
-  const { loading, data } = useWatcher(
+  const { loading, data, onSuccess } = useWatcher(
     () => getList(),
     [url, params],
     {
+      middleware: actionDelegationMiddleware(url?.value || ''),
       immediate: true,
     },
   )
 
+  onSuccess((v) => {
+    expanded.value = treeToArr(v.data?.data || [], 'id', 'children')
+  })
+
   return {
     options: data,
     loading,
+    expanded,
   }
 }

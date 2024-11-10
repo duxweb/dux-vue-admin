@@ -11,12 +11,13 @@ export const DuxFullPage = defineComponent({
     const tab = useTabStore()
 
     return () => (
-      <div class={clsx([
-        'flex-1 h-1',
-        'p-2',
-        tab.tabs.length > 1 ? 'pt-0' : '',
-        props.class,
-      ])}
+      <div
+        class={clsx([
+          'flex-1 h-1',
+          'p-2',
+          tab.tabs.length > 1 ? 'pt-0' : '',
+          props.class,
+        ])}
       >
 
         {slots.default?.()}

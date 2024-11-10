@@ -44,6 +44,10 @@ export const DuxMessagePage = defineComponent({
       type: String,
       default: 'read',
     },
+    senderField: {
+      type: String,
+      default: 'sender',
+    },
     read: {
       type: Boolean,
       default: true,
@@ -73,18 +77,18 @@ export const DuxMessagePage = defineComponent({
     const client = useClient()
     const { t } = useI18n()
 
-    const handleDelete = (id?: any) => {
+    const oneDelete = (id?: any) => {
       client.delete({
-        url: id ? `${props.url}/${id}` : `${props.url}`,
+        url: `${props.url}/${id}`,
       }).then(() => {
         currentMessage.value = undefined
         onReload()
       })
     }
 
-    const handleRead = (id?: any) => {
+    const oneRead = (id?: any) => {
       client.patch({
-        url: id ? `${props.url}/${id}` : `${props.url}`,
+        url: `${props.url}/${id}`,
         data: {
           [props.readField]: true,
         },
@@ -92,6 +96,15 @@ export const DuxMessagePage = defineComponent({
         if (!id) {
           onReload()
         }
+      })
+    }
+
+    const handleBatch = (method: string, data: any[]) => {
+      client.post({
+        url: `${props.url}/batch`,
+        data: { method, data },
+      }).then(() => {
+        onReload()
       })
     }
 
@@ -135,32 +148,36 @@ export const DuxMessagePage = defineComponent({
                 <NInfiniteScroll distance={10} onLoad={handleLoad}>
                   {loading.value && <NSpin class="h-full absolute w-full bg-gray-1/50" />}
 
-                  <div class="flex flex-col divide-y divide-gray-2">
-                    {data?.value?.map?.((item, key) => (
-                      <div
-                        key={key}
-                        class={clsx([
-                          'flex flex-col py-2 px-4 rounded cursor-pointer',
-                          currentMessage.value === item ? 'bg-primary/10' : 'bg-gray-1',
-                        ])}
-                        onClick={() => {
-                          item[props.readField] = true
-                          currentMessage.value = item
-                          handleRead(item?.[props.valueField])
-                        }}
-                      >
-                        <div class={clsx([
-                          'text-sm truncate',
-                          currentMessage.value === item ? 'text-primary' : '',
-                          item[props.readField] ? '' : 'font-bold',
-                        ])}
-                        >
-                          {item[props.titleField]}
+                  {data?.value?.length > 0
+                    ? (
+                        <div class="flex flex-col divide-y divide-gray-2">
+                          {data?.value?.map?.((item, key) => (
+                            <div
+                              key={key}
+                              class={clsx([
+                                'flex flex-col py-2 px-4 cursor-pointer',
+                                currentMessage.value === item ? 'bg-primary/10' : 'bg-gray-1',
+                              ])}
+                              onClick={() => {
+                                item[props.readField] = true
+                                currentMessage.value = item
+                                oneRead(item?.[props.valueField])
+                              }}
+                            >
+                              <div class={clsx([
+                                'text-sm truncate',
+                                currentMessage.value === item ? 'text-primary' : '',
+                                item[props.readField] ? '' : 'font-bold',
+                              ])}
+                              >
+                                {item[props.titleField]}
+                              </div>
+                              <div class="text-gray-6 truncate">{item[props.descField]}</div>
+                            </div>
+                          ))}
                         </div>
-                        <div class="text-gray-6 truncate">{item[props.descField]}</div>
-                      </div>
-                    ))}
-                  </div>
+                      )
+                    : <div class="h-full absolute w-full flex items-center justify-center"><DuxBlockEmpty simple text={t('components.message.notFound')} desc={t('components.message.notFoundMore')} /></div>}
                 </NInfiniteScroll>
               </div>
               {(props.read || props.delete) && (
@@ -171,7 +188,7 @@ export const DuxMessagePage = defineComponent({
                       tertiary
                       block
                       onClick={() => {
-                        handleRead()
+                        handleBatch('read', data.value.map(v => v[props.valueField]))
                       }}
                     >
                       {t('components.message.readAll')}
@@ -183,7 +200,7 @@ export const DuxMessagePage = defineComponent({
                       tertiary
                       block
                       onClick={() => {
-                        handleDelete()
+                        handleBatch('delete', data.value.map(v => v[props.valueField]))
                       }}
                     >
                       {t('components.message.deleteAll')}
@@ -198,7 +215,10 @@ export const DuxMessagePage = defineComponent({
                     <div class="border-b border-gray-2 p-4 flex justify-between items-center">
                       <div class="flex-col gap-1">
                         <div class="text-lg font-bold">{currentMessage.value[props.titleField]}</div>
-                        <div class="text-gray-6 text-xs">{currentMessage.value[props.timeField]}</div>
+                        <div class="text-gray-6 text-xs flex gap-2">
+                          {currentMessage.value[props.senderField] && <div class="text-primary">{currentMessage.value[props.senderField]}</div>}
+                          <div>{currentMessage.value[props.timeField]}</div>
+                        </div>
                       </div>
                       <div class="hidden lg:block">
                         {props.delete && (
@@ -207,7 +227,7 @@ export const DuxMessagePage = defineComponent({
                             quaternary
                             renderIcon={() => <div class="i-tabler:trash"></div>}
                             onClick={() => {
-                              handleDelete(currentMessage.value?.[props.valueField])
+                              oneDelete(currentMessage.value?.[props.valueField])
                             }}
                           >
                           </NButton>
@@ -237,7 +257,7 @@ export const DuxMessagePage = defineComponent({
                           quaternary
                           renderIcon={() => <div class="i-tabler:trash"></div>}
                           onClick={() => {
-                            handleDelete(currentMessage.value?.[props.valueField])
+                            oneDelete(currentMessage.value?.[props.valueField])
                           }}
                         >
                           {t('buttons.delete')}
@@ -258,6 +278,7 @@ export const DuxMessagePage = defineComponent({
                 )
               : (
                   <div class="hidden lg:flex flex-1 items-center justify-center">
+
                     <DuxBlockEmpty text={t('components.message.notFound')} desc={t('components.message.notFoundDesc')} />
                   </div>
                 )}

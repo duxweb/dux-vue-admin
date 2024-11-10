@@ -5,5 +5,10 @@ export interface ColumnTextProps {
 }
 
 export function columnText(props: ColumnTextProps): TableColumnRender {
-  return rowData => props.key ? `${rowData?.[props.key]}` : '-'
+  return (rowData) => {
+    if (!props.key || rowData?.[props.key] === undefined || rowData?.[props.key] === null || rowData?.[props.key] === '') {
+      return '-'
+    }
+    return rowData?.[props.key]
+  }
 }

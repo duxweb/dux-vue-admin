@@ -1,11 +1,12 @@
 import clsx from 'clsx'
-import { NImage, NImageGroup } from 'naive-ui'
+import { NAvatar, NImage, NImageGroup } from 'naive-ui'
 import { computed, defineComponent } from 'vue'
 
 export const DuxMedia = defineComponent({
   name: 'DuxMedia',
   props: {
     title: String,
+    avatar: Boolean,
     image: [String, Array<string>],
     desc: [String, Array<string>],
     extend: String,
@@ -32,11 +33,21 @@ export const DuxMedia = defineComponent({
         {slots?.image && <div class="flex-none flex items-center gap-2">{slots?.image?.()}</div>}
         {images?.value.length > 0 && (
           <div class="flex-none flex items-center gap-2">
-            <NImageGroup>
-              { images.value.map((item, key) => (
-                <NImage key={key} src={item} class="rounded" objectFit="cover" width={props.imageWidth} height={props.imageHeight} />
-              ))}
-            </NImageGroup>
+            {props.avatar
+              ? (
+                  <>
+                    { images.value.map((item, key) => (
+                      <NAvatar key={key} src={item} round size={props.imageWidth} />
+                    ))}
+                  </>
+                )
+              : (
+                  <NImageGroup>
+                    { images.value.map((item, key) => (
+                      <NImage key={key} src={item} class="rounded" objectFit="cover" width={props.imageWidth} height={props.imageHeight} />
+                    ))}
+                  </NImageGroup>
+                )}
           </div>
         )}
         <div class="flex-1 flex-col gap-2 w-1 truncate items-center">

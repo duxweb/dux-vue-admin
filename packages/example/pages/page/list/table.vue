@@ -154,7 +154,7 @@ const columnActions: TableAction[] = [
 </script>
 
 <template>
-  <dux-page-table url="/mall" title="测试22" :tabs="tabs" :filter="filter" :actions="actions" :columns="columns" :column-actions="columnActions" />
+  <dux-page-table url="/mall" :tabs="tabs" :filter="filter" :actions="actions" :columns="columns" :column-actions="columnActions" />
 </template>
 
 <style scoped>

@@ -1,12 +1,13 @@
 import type { AsyncComponentLoader, PropType } from 'vue'
-import { useWindowSize } from '@vueuse/core'
-import { NButton, NCard, NForm } from 'naive-ui'
+import { useVModel } from '@vueuse/core'
+import { NButton, NCard } from 'naive-ui'
 import { computed, defineAsyncComponent, defineComponent, ref, Transition } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useTabStore } from '../../stores'
 import { DuxFullPage } from '../page'
 import { DuxStep } from '../step/step'
+import { DuxForm } from './form'
 import { useForm } from './useForm'
 
 export interface DuxStepFormItem {
@@ -22,30 +23,36 @@ export const DuxStepForm = defineComponent({
     url: String,
     id: [String, Number],
     invalidate: String,
+    model: Object as PropType<Record<string, any>>,
     steps: {
       type: Array as PropType<DuxStepFormItem[]>,
       default: [],
     },
   },
-  setup(props) {
+  extends: DuxForm,
+  setup(props, { emit }) {
     const tab = useTabStore()
     const router = useRouter()
+
+    const modelData = useVModel(props, 'model', emit, {
+      passive: true,
+      defaultValue: {},
+    })
 
     const { loading, model, onSubmit, onReset } = useForm({
       url: props.url,
       id: props.id,
       invalidate: props.invalidate,
+      model: modelData,
       success: () => {
         if (!props.id && tab.current) {
-          tab.delTab(tab.current, v => router.push(v.path || ''))
+          tab.delTab(tab.current, v => router.push(v.url || ''))
         }
         else {
           onReset()
         }
       },
     })
-
-    const { width } = useWindowSize()
 
     const step = ref(0)
 
@@ -79,15 +86,17 @@ export const DuxStepForm = defineComponent({
               <DuxStep current={step.value} options={props.steps} />
             ),
             default: () => (
-              <NForm model={model} labelPlacement={width.value > 768 ? 'left' : 'top'} labelWidth={width.value > 768 ? 100 : 0} class="h-full">
+              <div class="h-full">
                 <n-scrollbar>
-                  <div class="p-6">
-                    <Transition name="fade" mode="out-in" appear>
-                      <dynamicComponent.value model={model} />
-                    </Transition>
-                  </div>
+                  <DuxForm {...props}>
+                    <div class="p-6">
+                      <Transition name="fade" mode="out-in" appear>
+                        <dynamicComponent.value model={model} />
+                      </Transition>
+                    </div>
+                  </DuxForm>
                 </n-scrollbar>
-              </NForm>
+              </div>
             ),
             action: () => (
               <div class="flex justify-end gap-4">

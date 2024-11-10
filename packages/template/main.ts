@@ -11,7 +11,25 @@ declare global {
 
 const app = createApp(App)
 
-const config: Config = window.duxConfig || {}
+const config: Config = {
+  apiUrl: 'http://0.0.0.0:8900',
+  captcha: true,
+  manage: {
+    admin: {
+      apiPrefix: 'admin',
+      indexPath: 'system/total/index',
+      title: '中后台管理系统',
+      userMenu: [
+        {
+          label: '个人资料',
+          path: 'system/profile',
+          icon: 'i-tabler:settings',
+        },
+      ],
+    },
+  },
+
+}
 
 app.use(createDux(config))
 

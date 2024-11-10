@@ -38,17 +38,19 @@ export const DuxIconPicker = defineComponent({
               {t('components.iconPicker.title')}
             </div>
           ),
-          icon: () => model.value && (
-            <div
-              class="rounded-full p-1 hover:bg-gray-2 hover:text-gray-7"
-              onClick={(e) => {
-                e.stopPropagation()
-                model.value = undefined
-              }}
-            >
-              <div class="size-3 i-tabler:x"></div>
-            </div>
-          ),
+          icon: () => model.value
+            ? (
+                <div
+                  class="rounded-full p-1 hover:bg-gray-2 hover:text-gray-7"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    model.value = undefined
+                  }}
+                >
+                  <div class="size-3 i-tabler:x"></div>
+                </div>
+              )
+            : undefined,
         }}
       </NButton>
     )

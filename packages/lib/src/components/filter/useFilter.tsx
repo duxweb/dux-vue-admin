@@ -1,22 +1,30 @@
 import { useWindowSize } from '@vueuse/core'
 import clsx from 'clsx'
-import { type ButtonProps, NButton, NDropdown } from 'naive-ui'
+import { type ButtonProps, NButton, NDropdown, useMessage } from 'naive-ui'
 import { type AsyncComponentLoader, onMounted, onUnmounted, ref, type VNodeChild, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { router } from '../../core'
-import { useDialog, type UseDialogResult } from '../dialog'
-import { useDrawer, type UseDrawerResult } from '../drawer'
-import { useModal, type UseModalResult } from '../modal'
+import { useClient, useResource } from '../../hooks'
+import { useDialog } from '../dialog'
+import { useDrawer } from '../drawer'
+import { useModal } from '../modal'
 
 export interface FilterAction {
-  label: string
-  type: 'modal' | 'drawer' | 'link' | 'confirm'
+  label?: string
+  labelLang?: string
+  type: 'modal' | 'drawer' | 'link' | 'confirm' | 'delete' | 'callback'
+  callback?: (id?: string | number, itemData?: object) => void
   title?: string
+  titleLang?: string
   content?: string
   color?: ButtonProps['type']
   icon?: string
-  path?: string
+  url?: string | ((id?: string | number, itemData?: object) => string)
+  path?: string | ((id?: string | number, itemData?: object) => string)
+  invalidate?: string
   component?: AsyncComponentLoader<any>
   componentProps?: Record<string, any>
+  width?: number
   show?: (rowData?: object, rowIndex?: number) => boolean
 }
 
@@ -79,45 +87,82 @@ export function useFilter({ actions }: UseFilterProps) {
   }
 }
 
-export interface ListHandleAction {
+export interface TriggerAction {
   id?: string | number
   item: FilterAction
-  modal?: UseModalResult
-  dialog?: UseDialogResult
-  drawer?: UseDrawerResult
+  itemData?: object
+  width?: number | string
 }
 
-// 操作执行处理
-export function listHandleAction({ id, item, modal, dialog, drawer }: ListHandleAction) {
-  if (item.type === 'modal') {
-    modal?.show({
-      title: item?.title || item?.label,
-      component: item.component,
-      componentProps: {
-        ...item.componentProps,
-        id,
-      },
-    })
-  }
-  if (item.type === 'drawer' && item.component) {
-    drawer?.show({
-      title: item?.title || item?.label,
-      component: item.component,
-      componentProps: {
-        ...item.componentProps,
-        id,
-      },
-    })
+export function useAction({ url }: { url?: string }) {
+  const res = useResource()
+  const { t } = useI18n()
+  const modal = useModal()
+  const drawer = useDrawer()
+  const dialog = useDialog()
+  const client = useClient()
+  const message = useMessage()
+
+  const trigger = ({ item, id, itemData }: TriggerAction) => {
+    const title = item?.titleLang ? t(item.titleLang) : item.title
+    const label = item?.labelLang ? t(item.labelLang) : item.label
+
+    if (item.type === 'modal') {
+      modal?.show({
+        title: title || label,
+        component: item.component,
+        componentProps: {
+          ...item.componentProps,
+          id,
+        },
+        width: item.width,
+      })
+    }
+    if (item.type === 'drawer' && item.component) {
+      drawer?.show({
+        title: title || label,
+        component: item.component,
+        componentProps: {
+          ...item.componentProps,
+          id,
+        },
+        width: item.width,
+      })
+    }
+    if (item.type === 'confirm') {
+      dialog?.confirm({
+        title: title || label,
+        content: item?.content,
+      }).then(() => {
+        item.callback?.(id, itemData)
+      })
+    }
+    if (item.type === 'delete') {
+      dialog?.confirm({
+        title: title || label,
+        content: item?.content,
+      }).then(() => {
+        client.delete({
+          url: typeof item.url === 'function' ? item.url?.(id, itemData) : (item.url ? `${item.url}/${id}` : `${url}/${id}`),
+        }).then(() => {
+          client.invalidate(item.invalidate || (typeof item.url === 'string' ? item.url : url))
+        }).catch((res) => {
+          message.error(res?.message || t('message.requestError'))
+        })
+      })
+    }
+    if (item.type === 'link') {
+      router.push({
+        path: typeof item.path === 'function' ? item.path?.(id, itemData) : res.genPath(id ? `${item.path}/${id}` : item.path),
+      })
+    }
+    if (item.type === 'callback') {
+      item.callback?.(id, itemData)
+    }
   }
 
-  if (item.type === 'confirm') {
-    dialog?.confirm({
-      title: item?.title,
-      content: item?.content,
-    })
-  }
-  if (item.type === 'link') {
-    router.push(item.path || '')
+  return {
+    trigger,
   }
 }
 
@@ -127,13 +172,13 @@ export interface RenderActionProps {
   actions?: FilterAction[]
   rowData?: object
   rowIndex?: number
+  url?: string
 }
 
 // 渲染操作按钮
-export function listRenderAction({ key, text, rowData, rowIndex, actions }: RenderActionProps): VNodeChild {
-  const modal = useModal()
-  const dialog = useDialog()
-  const drawer = useDrawer()
+export function listRenderAction({ key, text, rowData, rowIndex, actions, url }: RenderActionProps): VNodeChild {
+  const { trigger } = useAction({ url })
+  const { t } = useI18n()
 
   return (
     <>
@@ -146,7 +191,13 @@ export function listRenderAction({ key, text, rowData, rowIndex, actions }: Rend
             key={index}
             text={text}
             type={item.color}
-            onClick={() => listHandleAction({ id: key ? rowData?.[key] : null, item, modal, dialog, drawer })}
+            onClick={() => {
+              trigger({
+                item,
+                itemData: rowData,
+                id: key ? rowData?.[key] : null,
+              })
+            }}
             renderIcon={
               item?.icon
                 ? () => (
@@ -160,7 +211,7 @@ export function listRenderAction({ key, text, rowData, rowIndex, actions }: Rend
                 : undefined
             }
           >
-            {item.label}
+            {item.labelLang ? t(item.labelLang) : item.label}
           </NButton>
         )
       })}
@@ -169,9 +220,9 @@ export function listRenderAction({ key, text, rowData, rowIndex, actions }: Rend
 }
 
 export function listRenderDropdown({ actions }: RenderActionProps): VNodeChild {
-  const modal = useModal()
-  const dialog = useDialog()
-  const drawer = useDrawer()
+  const { trigger } = useAction({})
+  const { t } = useI18n()
+
   return (
     actions && actions?.length > 0
       ? (
@@ -179,7 +230,7 @@ export function listRenderDropdown({ actions }: RenderActionProps): VNodeChild {
             trigger="click"
             options={actions?.map((item, index) => {
               return {
-                label: item.label,
+                label: item.labelLang ? t(item.labelLang) : item.label,
                 key: index,
                 icon: item?.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined,
               }
@@ -188,11 +239,8 @@ export function listRenderDropdown({ actions }: RenderActionProps): VNodeChild {
               if (!actions?.[key]) {
                 return
               }
-              listHandleAction({
+              trigger({
                 item: actions[key],
-                modal,
-                dialog,
-                drawer,
               })
             }}
           >

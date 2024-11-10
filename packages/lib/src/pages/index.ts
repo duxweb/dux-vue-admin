@@ -1,5 +1,5 @@
 export * as DuxIframe from './iframe'
-export * as DuxLoading from './loading'
+export * as DuxLoading from './loading.vue'
 export * as DuxLogin from './login'
 export * as DuxMain from './main.vue'
 export * as DuxNotFound from './notFound'

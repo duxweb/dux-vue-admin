@@ -1,6 +1,5 @@
 import type { UploadFileInfo, UploadInst } from 'naive-ui'
 import type { PropType } from 'vue'
-import type { DuxUploadFile, DuxUploadType, UploadFileInfoExtend } from './useUpload'
 import { useVModel } from '@vueuse/core'
 import { NButton, NProgress, NUpload, NUploadDragger } from 'naive-ui'
 import { defineComponent, ref, watch } from 'vue'
@@ -8,7 +7,7 @@ import { VueDraggable } from 'vue-draggable-plus'
 import { useI18n } from 'vue-i18n'
 import { useResource } from '../../hooks'
 import { useModal } from '../modal'
-import { useNaiveUpload } from './useUpload'
+import { type DuxUploadFile, type UploadFileInfoExtend, useNaiveUpload } from './useUpload'
 
 export const DuxFileUpload = defineComponent({
   name: 'DuxFileUpload',
@@ -24,9 +23,6 @@ export const DuxFileUpload = defineComponent({
       type: Boolean,
       default: true,
     },
-    uploadType: {
-      type: String as PropType<DuxUploadType>,
-    },
     headers: Object as PropType<Record<string, any>>,
     data: Object as PropType<Record<string, any>>,
   },
@@ -38,8 +34,8 @@ export const DuxFileUpload = defineComponent({
       defaultValue: props.defaultValue,
     })
 
-    const { uploadUrl, uploadType } = useResource()
-    const { customRequest, onAbort } = useNaiveUpload(props.uploadType || uploadType)
+    const { uploadUrl } = useResource()
+    const { customRequest, onAbort } = useNaiveUpload()
     const { t } = useI18n()
 
     const fileToFileList = (list: DuxUploadFile[]): UploadFileInfo[] => {
@@ -133,7 +129,6 @@ export const DuxFileUpload = defineComponent({
                             url: props.manageUrl,
                             uploadUrl: props.url,
                             multiple: props.multiple,
-                            uploadType: props.uploadType,
                           },
                         }).then((res) => {
                           if (props.multiple) {

@@ -1,5 +1,5 @@
 import type { PropType } from 'vue'
-import type { DuxUploadType } from './useUpload'
+import { cloneDeep } from 'lodash-es'
 import { NButton, NDropdown, NInfiniteScroll, NSpin, NTab, NTabs, NTooltip, useMessage } from 'naive-ui'
 import { computed, defineComponent, nextTick, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -9,17 +9,13 @@ import { useDialog } from '../dialog'
 import { useList } from '../list'
 import { DuxModalPage } from '../modal'
 import { DuxFileManageItem } from './manage/item'
-import { useS3Upload, useUpload } from './useUpload'
+import { useUpload } from './useUpload'
 
 const DuxFileManage = defineComponent({
   name: 'DuxFileManage',
   props: {
     url: String,
     uploadUrl: String,
-    uploadType: {
-      type: String as PropType<DuxUploadType>,
-      default: 'local',
-    },
     uploadAccept: String,
     type: String,
     onConfirm: Function as PropType<(value: any) => void>,
@@ -39,7 +35,6 @@ const DuxFileManage = defineComponent({
     const message = useMessage()
     const download = useDownload()
     const upload = useUpload()
-    const s3upload = useS3Upload()
     const { uploadUrl, uploadManageUrl } = useResource()
     const form = ref<Record<string, any>>({
       type: props.type || 'all',
@@ -47,7 +42,7 @@ const DuxFileManage = defineComponent({
     const uploadRate = ref(0)
     const currentData = ref<Record<string, any>>()
 
-    const { data, loading, onNextPage, onReload } = useList({
+    const { data, meta, loading, onNextPage, onReload } = useList({
       url: props.url || uploadManageUrl,
       form,
       append: true,
@@ -62,6 +57,7 @@ const DuxFileManage = defineComponent({
         url: props.url || uploadManageUrl,
         data: {
           name,
+          folder: form.value.folder,
         },
       }).then(() => {
         onReload()
@@ -71,7 +67,7 @@ const DuxFileManage = defineComponent({
       })
     }
 
-    const renameFile = (name?: string, id?: string | number) => {
+    const renameFile = (type: 'folder' | 'file', name?: string, id?: string | number) => {
       if (!name) {
         message.error(t('components.uploadManage.namePlaceholder'))
         return
@@ -81,6 +77,7 @@ const DuxFileManage = defineComponent({
         data: {
           name,
           id,
+          type,
         },
       }).then(() => {
         onReload()
@@ -90,12 +87,13 @@ const DuxFileManage = defineComponent({
       })
     }
 
-    const deleteFile = (id?: any) => {
+    const deleteFile = (type: 'folder' | 'file', id?: any) => {
       client.post({
         url: `${props.url || uploadManageUrl}/batch`,
         data: {
           method: 'delete',
           data: Array.isArray(id) ? id : [id],
+          type,
         },
       }).then(() => {
         onReload()
@@ -104,26 +102,6 @@ const DuxFileManage = defineComponent({
         message.error(t('components.uploadManage.delError'))
       })
     }
-
-    // const explame = ref([
-    //   {
-    //     id: 1,
-    //     type: 'folder',
-    //     name: '新建文件夹',
-    //     time: '2021-12-12 12:12:12',
-    //     size: '10M',
-    //   },
-    //   {
-    //     id: 2,
-    //     type: 'file',
-    //     name: '1.jpg',
-    //     mime: 'image/jpg',
-    //     url: 'https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel2.jpeg',
-    //     size: '100kb',
-    //     time: '2021-12-12 12:12:12',
-    //   },
-
-    // ])
 
     const typeDisable = computed<boolean>(() => {
       return !!(props.type && props.type !== 'all')
@@ -192,41 +170,18 @@ const DuxFileManage = defineComponent({
                       fileInput.multiple = props.multiple
 
                       fileInput.onchange = (e: any) => {
-                        const file = e.target?.files?.[0]
-                        if (!file) {
-                          return
-                        }
-                        const formData = new FormData()
-                        formData.append('file', file)
-                        formData.append('manage', '1')
-                        formData.append('folder', form.value.folder)
+                        const files = e.target?.files
 
-                        if (props.uploadType === 'local') {
+                        for (const file of files) {
+                          const data = {
+                            manage: 1,
+                            folder: form.value.folder,
+                          }
+
                           upload.send({
                             url: props.uploadUrl || uploadUrl,
-                            formData,
-                            onSuccess() {
-                              message.success(t('components.uploadManage.success'))
-                              selectValues.value = []
-                              onReload()
-                              fileInput.remove()
-                            },
-                            onError() {
-                              fileInput.remove()
-                            },
-                            onProgress(percent) {
-                              if (percent >= 100) {
-                                uploadRate.value = 0
-                              }
-                              else {
-                                uploadRate.value = percent
-                              }
-                            },
-                          })
-                        }
-                        else {
-                          s3upload.send({
-                            url: props.uploadUrl || uploadUrl,
+                            file,
+                            data,
                             params: {
                               manage: 1,
                               folder: form.value.folder,
@@ -235,10 +190,8 @@ const DuxFileManage = defineComponent({
                               message.success(t('components.uploadManage.success'))
                               selectValues.value = []
                               onReload()
-                              fileInput.remove()
                             },
                             onError() {
-                              fileInput.remove()
                             },
                             onProgress(percent) {
                               if (percent >= 100) {
@@ -250,6 +203,8 @@ const DuxFileManage = defineComponent({
                             },
                           })
                         }
+
+                        fileInput.remove()
                       }
 
                       fileInput.click()
@@ -270,14 +225,26 @@ const DuxFileManage = defineComponent({
                   {loading.value && <NSpin class="h-full absolute w-full bg-gray-1/50" />}
                   {data.value?.length > 0
                     ? (
-                        <div class="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 text-sm items-start justify-start">
-                          {data.value?.map((item, key) => (
-                            <NTooltip placement="bottom" trigger={item.url ? 'hover' : 'manual'}>
+                        <div class="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-5 text-sm items-start justify-start">
+                          {form.value?.folder && form.value?.folder !== meta.value?.folder && (
+                            <DuxFileManageItem
+                              key={`parent-${meta.value?.folder}`}
+                              type="folder"
+                              name="上一级"
+                              onSelect={() => {
+                                selectValues.value = []
+                                form.value.folder = meta?.value?.folder
+                                onReload()
+                              }}
+                            />
+                          )}
+                          {data.value?.map(item => (
+                            <NTooltip placement="bottom" key={`${item.url ? 'file' : 'folder'}-${item.id}`} trigger={item.url ? 'hover' : 'manual'}>
                               {{
                                 default: () => item.size,
                                 trigger: () => (
                                   <DuxFileManageItem
-                                    key={key}
+
                                     onContextmenu={(e) => {
                                       currentData.value = item
                                       showDropdown.value = false
@@ -333,6 +300,21 @@ const DuxFileManage = defineComponent({
                               <DuxDrawEmpty />
                             </div>
                             <div>{t('components.uploadManage.empty')}</div>
+                            {form.value?.folder && form.value?.folder !== meta.value?.folder && (
+                              <div class="text-xs text-gray-6">
+                                <NButton
+                                  type="default"
+                                  ghost
+                                  onClick={() => {
+                                    selectValues.value = []
+                                    form.value.folder = meta?.value?.folder
+                                    onReload()
+                                  }}
+                                >
+                                  {t('components.uploadManage.back')}
+                                </NButton>
+                              </div>
+                            )}
                           </div>
                         </div>
                       )}
@@ -354,9 +336,10 @@ const DuxFileManage = defineComponent({
                   }
                 }}
                 onSelect={(v) => {
+                  const itemData = cloneDeep(currentData.value)
                   switch (v) {
                     case 'download':
-                      download.url(currentData.value?.url)
+                      download.url(itemData?.url)
                       break
                     case 'rename':
                       dialog.prompt({
@@ -368,10 +351,10 @@ const DuxFileManage = defineComponent({
                           },
                         ],
                         defaultValue: {
-                          name: currentData.value?.name,
+                          name: itemData?.name,
                         },
                       }).then((res: any) => {
-                        renameFile(res?.name, currentData.value?.id)
+                        renameFile(itemData?.type, res?.name, itemData?.id)
                       })
                       break
                     case 'delete':
@@ -379,7 +362,7 @@ const DuxFileManage = defineComponent({
                         title: t('components.uploadManage.delTitle'),
                         content: t('components.uploadManage.delDesc'),
                       }).then(() => {
-                        deleteFile(currentData.value?.id)
+                        deleteFile(itemData?.type, itemData?.id)
                       })
                       break
                   }
@@ -416,7 +399,7 @@ const DuxFileManage = defineComponent({
                         title: t('components.uploadManage.delTitle'),
                         content: t('components.uploadManage.delDesc'),
                       }).then(() => {
-                        deleteFile(selectValues.value?.map(v => v.id))
+                        deleteFile('file', selectValues.value?.map(v => v.id))
                       })
                     }}
                   >

@@ -1,6 +1,5 @@
 import type { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui'
 
-import axios from 'axios'
 import { useMessage } from 'naive-ui'
 
 import { reactive } from 'vue'
@@ -11,83 +10,41 @@ export interface UploadFileInfoExtend extends UploadFileInfo {
   ext?: string
 }
 
-export type DuxUploadType = 's3' | 'local'
-
-export function useNaiveUpload(type: DuxUploadType) {
+export function useNaiveUpload() {
   const { send, abort } = useUpload()
-  const { send: s3Send, abort: s3Abort } = useS3Upload()
 
   const customRequest = ({
     file,
     action,
     headers,
-    data,
     onFinish,
     onError,
     onProgress,
   }: UploadCustomRequestOptions & {
     file: UploadFileInfoExtend
   }) => {
-    const formData = new FormData()
-    if (data) {
-      Object.keys(data).forEach((key) => {
-        formData.append(
-          key,
-          data[key as keyof UploadCustomRequestOptions['data']],
-        )
-      })
-    }
-    formData.append(file.name, file.file as File)
-
-    if (type === 'local') {
-      send({
-        id: file.id,
-        url: action,
-        headers,
-        formData,
-        onSuccess: (res) => {
-          file.url = res?.url || null
-          file.size = res?.size
-          file.ext = res?.ext
-          onFinish()
-        },
-        onError: () => {
-          onError()
-        },
-        onProgress: (percent) => {
-          onProgress({ percent })
-        },
-      })
-    }
-
-    if (type === 's3') {
-      s3Send({
-        id: file.id,
-        url: action,
-        file: file.file || undefined,
-        onSuccess: (res) => {
-          file.url = res?.url || null
-          file.size = res?.size
-          file.ext = res?.ext
-          onFinish()
-        },
-        onError: () => {
-          onError()
-        },
-        onProgress: (percent) => {
-          onProgress({ percent })
-        },
-      })
-    }
+    send({
+      id: file.id,
+      url: action,
+      headers,
+      file: file.file as File,
+      onSuccess: (res) => {
+        file.url = res?.url || null
+        file.size = res?.size
+        file.ext = res?.ext
+        onFinish()
+      },
+      onError: () => {
+        onError()
+      },
+      onProgress: (percent) => {
+        onProgress({ percent })
+      },
+    })
   }
 
   const onAbort = (id: string) => {
-    if (type === 'local') {
-      abort(id)
-    }
-    if (type === 's3') {
-      s3Abort(id)
-    }
+    abort(id)
   }
 
   return {
@@ -107,11 +64,19 @@ export interface DuxUploadFile {
 export interface DuxUploadSendProps {
   id?: string
   url?: string
+  params?: Record<string, any>
+  data?: Record<string, any>
   headers?: Record<string, any>
-  formData?: FormData
+  name?: string
+  file: File
   onProgress?: (percent: number) => void
   onSuccess?: (data?: DuxUploadFile) => void
   onError?: (error: Error) => void
+}
+
+export interface DuxS3UploadProps extends DuxUploadSendProps {
+  url?: string
+  apiUrl?: string
 }
 
 export function useUpload() {
@@ -119,7 +84,18 @@ export function useUpload() {
   const message = useMessage()
   const uploadRequest = reactive({})
 
-  const send = ({ id, url, headers, formData, onProgress, onSuccess, onError }: DuxUploadSendProps) => {
+  const upload = ({ id, url, apiUrl, file, headers, params, data, onProgress, onSuccess, onError }: DuxS3UploadProps) => {
+    const formData = new FormData()
+
+    Object.keys(params || {}).forEach((key) => {
+      formData.append(key, params?.[key])
+    })
+    Object.keys(data || {}).forEach((key) => {
+      formData.append(key, data?.[key])
+    })
+    formData.append('Content-Type', file.type)
+    formData.append('file', file)
+
     const uploadMethod = client.post({
       url,
       type: 'file',
@@ -132,6 +108,7 @@ export function useUpload() {
         timeout: 0,
       },
     })
+
     if (id) {
       uploadRequest[id] = uploadMethod
     }
@@ -141,10 +118,28 @@ export function useUpload() {
       onProgress?.(percent)
     })
 
-    uploadMethod.then((res) => {
-      onSuccess?.(res?.data[0])
+    uploadMethod.then(() => {
+      client.put({
+        url: apiUrl,
+        data: {
+          ...data,
+          path: params?.key,
+          name: file?.name,
+          size: file?.size,
+          mime: file?.type,
+          ext: file?.name.split('.').pop(),
+        },
+        config: {
+          cache: false,
+        },
+      }).then((res) => {
+        onSuccess?.(res?.data)
+      }).catch((error) => {
+        message.error(error.message)
+        onError?.(error)
+      })
     }).catch((error) => {
-      if (error.message?.includes('CanceledError')) {
+      if (error.name === 'AbortError') {
         return
       }
       message.error(error.message)
@@ -157,109 +152,42 @@ export function useUpload() {
     })
   }
 
-  const abort = (id: string) => {
-    uploadRequest[id]?.abort()
-  }
-
-  return {
-    send,
-    abort,
-  }
-}
-
-export interface DuxS3UploadSendProps {
-  id?: string
-  url?: string
-  params?: Record<string, any>
-  name?: string
-  file?: File
-  onProgress?: (percent: number) => void
-  onSuccess?: (data?: DuxUploadFile) => void
-  onError?: (error: Error) => void
-}
-
-export interface DuxS3UploadProps extends DuxS3UploadSendProps {
-  url?: string
-  apiUrl?: string
-  signUrl?: string
-}
-
-export function useS3Upload() {
-  const client = useClient()
-  const message = useMessage()
-  const uploadRequest = reactive<Record<string, AbortController>>({})
-
-  const upload = ({ id, url, signUrl, apiUrl, file, params, onProgress, onSuccess, onError }: DuxS3UploadProps) => {
-    const controller = new AbortController()
-    const signal = controller.signal
-
-    if (id) {
-      uploadRequest[id] = controller
-    }
-
-    axios.put(signUrl || '', file, {
-      signal,
-      onUploadProgress: (progressEvent) => {
-        if (!progressEvent?.total) {
-          return
-        }
-        const percentCompleted = Math.round(
-          Math.ceil(progressEvent.loaded / progressEvent?.total * 100),
-        )
-        onProgress?.(percentCompleted)
-      },
-    }).then(() => {
-      const fileParams = {
-        url,
-        name: file?.name,
-        size: file?.size,
-        mime: file?.type,
-        ext: file?.name.split('.').pop(),
-      }
-
-      client.post({
-        url: apiUrl,
-        data: {
-          ...params,
-          ...fileParams,
-        },
-      })
-
-      onSuccess?.(fileParams)
-    }).catch((error) => {
-      if (error.name === 'AbortError') {
-        return
-      }
-      message.error(error.message)
-      onError?.(error)
-    }).finally(() => {
-      if (id) {
-        delete uploadRequest[id]
-      }
-    })
-  }
-
-  const send = (props: DuxS3UploadSendProps) => {
+  const send = (props: DuxUploadSendProps) => {
     // 获取预签名url
     client.get({
       url: props.url,
-      data: {
+      params: {
         name: props.file?.name,
         size: props.file?.size,
         mime: props.file?.type,
+        ...props.params,
+      },
+      config: {
+        cacheFor: 0,
       },
     }).then((res) => {
-      if (!res?.data?.signUrl || !res?.data?.url) {
+      if (!res?.data?.url && !res?.data?.params) {
         message.error('get sign error')
         props.onError?.(new Error('get sign error'))
         return
       }
-      // 请求上传
+      const params = res?.data?.params || {}
+      const url = res.data?.url || props.url
+
       upload({
         ...props,
+        url,
         apiUrl: props.url,
-        signUrl: res.data?.signUrl,
-        url: res.data?.url,
+        file: props.file,
+        params: {
+          ...params,
+        },
+        data: props.params,
+        headers: !res.data?.url
+          ? {}
+          : {
+              Authorization: undefined,
+            },
       })
     }).catch((error) => {
       message.error(error.message)

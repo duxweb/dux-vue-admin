@@ -14,12 +14,18 @@ export function useResource() {
     if (prefix === undefined) {
       prefix = manage?.value
     }
-    return path ? `${prefix ? `/${prefix}` : ''}${path || ''}` : ''
+    path = path ? path.replace(/^\//, '') : ''
+    return path ? `${prefix ? `/${prefix}` : ''}/${path || ''}` : ''
   }
 
   const getIndexPath = () => {
-    const indexPath = config?.manage?.[manage?.value || 'admin'].indexPath
-    return indexPath ? `/${manage?.value}/${indexPath}` : `/${manage?.value}/index`
+    return `/${manage?.value}`
+  }
+
+  const genPath = (path?: string) => {
+    const prefix = manage?.value || 'admin'
+    path = path ? path.replace(/^\//, '') : ''
+    return path ? `${prefix ? `/${prefix}` : ''}/${path || ''}` : ''
   }
 
   return {
@@ -29,9 +35,8 @@ export function useResource() {
     name,
     config,
     manageConfig: config?.manage?.[manage?.value || 'admin'],
-    resUrl: path,
-    routerUrl: config?.apiConfig?.router || '/route',
-    noticeUrl: config?.apiConfig?.notice || '/notice',
+    routerUrl: config?.apiConfig?.router || '/router',
+    messageUrl: config?.apiConfig?.message || '/message',
     aichatUrl: config?.apiConfig?.aiChat || '/aiChat',
     uploadUrl: config?.apiConfig?.upload || '/upload',
     uploadManageUrl: config?.apiConfig?.uploadManage || '/uploadManage',
@@ -39,8 +44,8 @@ export function useResource() {
     checkUrl: config?.apiConfig?.check || '/check',
     captchaUrl: config?.apiConfig?.captcha || '/captcha',
     verifyUrl: config?.apiConfig?.verify || '/verify',
-    uploadType: config?.apiConfig?.uploadType || 'local',
     genUrl,
+    genPath,
     getIndexPath,
   }
 }

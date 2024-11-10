@@ -1,7 +1,7 @@
 import type { TableAction, TableColumn } from './types'
 import { NDataTable } from 'naive-ui'
 import { computed, defineComponent } from 'vue'
-import { convertTableColumns } from './useTable'
+import { useTableColumns } from './useTable'
 
 export const DuxBaseTable = defineComponent({
   name: 'DuxBaseTable',
@@ -15,14 +15,19 @@ export const DuxBaseTable = defineComponent({
   },
   extends: NDataTable,
   setup(props) {
+    const columnRender = useTableColumns({
+      key: props.tableKey,
+      actions: props.columnActions,
+    })
+
     const tableColumns = computed(() => {
-      return convertTableColumns(props.tableKey, props.columns, props.columnActions)
+      return columnRender(props.columns)
     })
 
     return () => (
       <NDataTable
         {...props}
-        columns={tableColumns.value}
+        columns={tableColumns.value as any}
       />
     )
   },

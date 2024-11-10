@@ -64,7 +64,7 @@ export default defineComponent({
 
     onSuccess((res) => {
       manage.login(res.data?.data)
-      router.replace(`/${resource.manage}/index`)
+      router.replace(resource.getIndexPath())
     })
 
     onError((res) => {

@@ -33,6 +33,7 @@ export const DuxCodeEditor = defineComponent({
   },
   setup(props, { emit }) {
     const data = useVModel(props, 'value', emit, {
+      passive: true,
       defaultValue: props.defaultValue || '',
     })
     const themeStore = useThemeStore()

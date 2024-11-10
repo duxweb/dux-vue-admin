@@ -2,9 +2,9 @@ import type { Column } from 'exceljs'
 import type { DataTableInst } from 'naive-ui'
 import type { PropType } from 'vue'
 import type { JsonFormItemSchema } from '../form'
-import type { TableAction, TableColumn } from './types'
+import type { BatchAction, TableAction, TableColumn } from './types'
 import type { TableTab } from './types/table'
-import { useWindowSize } from '@vueuse/core'
+import { useVModel, useWindowSize } from '@vueuse/core'
 import { NCard, NDataTable } from 'naive-ui'
 import { defineComponent, onMounted, onUnmounted, provide, ref, toRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -15,7 +15,10 @@ import { useTable } from './useTable'
 export const DuxPageTable = defineComponent({
   name: 'DuxPageTable',
   props: {
-    tableKey: [String, Number],
+    tableKey: {
+      type: [String, Number],
+      default: 'id',
+    },
     url: String,
     title: {
       type: String,
@@ -37,25 +40,37 @@ export const DuxPageTable = defineComponent({
       type: Boolean,
       default: true,
     },
+    expanded: {
+      type: Boolean,
+      default: true,
+    },
     form: Object as PropType<Record<string, any>>,
+    batch: Array<BatchAction>,
   },
-  setup(props, { slots }) {
+  setup(props, { slots, emit, expose }) {
     const { width } = useWindowSize()
     const route = useRoute()
     const tableRef = ref<DataTableInst>()
-    const form = toRef<Record<string, any>>(props.form || {})
+
+    const form = useVModel(props, 'form', emit, {
+      passive: true,
+      defaultValue: {},
+    })
+
+    const columns = toRef(props, 'columns')
 
     const tableHook = useTable({
       key: props.tableKey,
       url: props.url,
       name: route.name,
-      actions: props.actions || [],
-      columns: props.columns || [],
+      columns: columns || [],
       columnActions: props.columnActions || [],
       filter: form?.value,
       excelColumns: props.excelColumns,
       export: props.export,
       import: props.import,
+      batch: props.batch,
+      expanded: props.expanded,
     })
 
     const { data, tableColumns, toolsColumns, toolsBtn, send, loading, tableParams, pagination } = tableHook
@@ -89,6 +104,7 @@ export const DuxPageTable = defineComponent({
       window.removeEventListener('resize', getFilterHeight)
     })
 
+    // 自动高度处理
     watch(filterRef, (v) => {
       if (!v) {
         return
@@ -99,6 +115,9 @@ export const DuxPageTable = defineComponent({
     })
 
     provide('table', tableHook)
+    expose({
+      table: tableHook,
+    })
 
     return () => (
       <DuxFullPage class="flex flex-col lg:flex-row gap-2">
@@ -125,19 +144,25 @@ export const DuxPageTable = defineComponent({
                       {toolsBtn}
                     </>
                   ),
+                  filter: slots?.filter,
                 }}
               </DuxFilter>
+              {slots?.top?.()}
               <div class="flex-1">
                 <NDataTable
                   loading={loading.value}
                   class="h-full"
                   minHeight={200}
+                  tableLayout="fixed"
                   flexHeight
                   ref={tableRef}
                   data={data.value}
+                  rowKey={row => row[props.tableKey]}
                   columns={tableColumns.value}
+                  defaultExpandAll={true}
                   {...tableParams.value}
                   pagination={pagination.value}
+
                 />
               </div>
             </div>

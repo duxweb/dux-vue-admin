@@ -50,7 +50,7 @@ export const DuxFileManageItem = defineComponent({
         class="flex flex-col items-center justify-center hover:bg-primary/10 cursor-pointer p-2 rounded-sm relative group"
         onContextmenu={props.onContextmenu}
         onClick={() => {
-          props.onSelect?.(!props.value)
+          props.onSelect?.(!props?.value)
         }}
       >
         <div class="mb-2">
@@ -69,7 +69,7 @@ export const DuxFileManageItem = defineComponent({
                   <NImage width="100%" height="100%" src={props.url} />
                 </div>
               )}
-              {props.mime?.includes('video/') && (
+              {props.mime?.includes(mimeMap.video) && (
                 <div onClick={(e) => {
                   e.stopPropagation()
                   dialog.node({

@@ -1,7 +1,7 @@
 import type { RouteRecordRaw } from 'vue-router'
 import type { DuxRoute } from '../stores'
-import { useMessage } from 'naive-ui'
 import { useClient, useResource } from '../hooks'
+import { i18n } from '../i18n'
 import { useRouteStore } from '../stores'
 import { router } from './router'
 
@@ -12,6 +12,7 @@ export function createManage(manage: string, routers: DuxRoute[]) {
     path: `403`,
     component: () => import('../pages/notPermission'),
     name: '403',
+    label: '403',
     labelLang: 'pages.403.title',
     hidden: true,
   })
@@ -20,6 +21,7 @@ export function createManage(manage: string, routers: DuxRoute[]) {
     path: `404`,
     component: () => import('../pages/notFound'),
     name: '404',
+    label: '404',
     labelLang: 'pages.404.title',
     hidden: true,
   })
@@ -40,7 +42,6 @@ export function createManage(manage: string, routers: DuxRoute[]) {
       component: item.component,
       children: [],
       meta: {
-        title: item.label,
         ...item.meta,
       },
     }
@@ -52,14 +53,11 @@ export function createManage(manage: string, routers: DuxRoute[]) {
     children: [
       {
         path: '',
-        name: 'Manage',
+        name: `${manage}.manage`,
         component: () => import('../pages/main.vue'),
         children: [
           ...children,
-          {
-            path: ':path(.*)*',
-            component: () => import('../router/loader'),
-          },
+          { path: ':path(.*)*', component: () => import('../pages/notFound'), name: 'notFound', meta: { title: (i18n?.global as any)?.t('pages.404.title') } },
         ],
       },
       { path: 'login', component: () => import('../pages/login'), name: 'login' },
@@ -67,29 +65,70 @@ export function createManage(manage: string, routers: DuxRoute[]) {
   })
 }
 
-export function initAsyncRouter() {
+export async function initAsyncRouter() {
   const res = useResource()
-  const client = useClient()
   const routeStore = useRouteStore()
-  const message = useMessage()
+  const client = useClient()
 
   if (routeStore.asyncInit) {
-    return
+    return false
   }
 
-  client?.get({
+  await client?.get({
     url: res.routerUrl,
   }).then((data) => {
     const list: DuxRoute[] = []
-    data?.data?.forEach((item) => {
+    const children: RouteRecordRaw[] = []
+    data?.data?.forEach((item: DuxRoute) => {
       list.push({
         ...item,
         path: item.path ? `/${res.manage}/${item.path}` : undefined,
       })
+
+      if (!item.path) {
+        return true
+      }
+
+      const routeItem = {
+        path: item.path,
+        name: item.name,
+        component: (item.meta?.src) ? () => import('../pages/iframe') : () => import('../router/loader'),
+        children: [],
+        meta: {
+          loader: item.loader,
+          icon: item.icon,
+          ...item.meta,
+        },
+      }
+
+      children.push(routeItem)
     })
     routeStore.appendRoutes(list)
-    routeStore.asyncInit = true
+
+    // 路由注册
+    const manageRoute = router.getRoutes().find((v) => {
+      if (v.name === `${res.manage}.manage`) {
+        return true
+      }
+      return false
+    })
+
+    if (!manageRoute) {
+      return
+    }
+
+    manageRoute.children = [
+      ...(manageRoute?.children || []),
+      ...children,
+    ]
+
+    children?.forEach((item) => {
+      router.addRoute(`${res.manage}.manage`, item)
+    })
   }).catch((err) => {
-    message.error(err?.message || 'get router error')
+    throw err
   })
+
+  routeStore.asyncInit = true
+  return true
 }

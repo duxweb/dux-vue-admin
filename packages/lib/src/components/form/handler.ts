@@ -1,6 +1,6 @@
 import type { AutoCompleteProps, CascaderProps, CheckboxProps, ColorPickerProps, DatePickerProps, DynamicInputProps, DynamicTagsProps, FormItemProps, InputNumberProps, InputProps, MentionProps, RadioProps, RateProps, SelectProps, SliderProps, SpaceProps, SwitchProps, TimeProps, TransferProps, TreeSelectProps } from 'naive-ui'
-import type { DuxAiEditor, DuxCascaderAsync, DuxFileUpload, DuxImageUpload, DuxMentionAsync, DuxRegion, DuxSelectAsync, DuxTransferAsync, DuxTreeSelectAsync } from '../'
 
+import type { DuxAiEditor, DuxCascaderAsync, DuxFileUpload, DuxImageUpload, DuxMentionAsync, DuxRegion, DuxSelectAsync, DuxTransferAsync, DuxTreeSelectAsync } from '../'
 import type { JSONSchema } from '../render/jsonRender'
 import type { CheckboxGroupAdaptor, GridProps } from './adaptor'
 import type { RadioGroupAdaptor } from './adaptor/radioGroup'
@@ -10,7 +10,7 @@ export interface JsonFormToAttrMap {
   'editor': typeof DuxAiEditor
   'auto-complete': AutoCompleteProps
   'cascader': CascaderProps
-  'cascader-async': typeof DuxCascaderAsync
+  'cascader-async': InstanceType<typeof DuxCascaderAsync>['$props']
   'checkbox': CheckboxProps
   'checkbox-group': CheckboxGroupAdaptor
   'color': ColorPickerProps
@@ -26,18 +26,18 @@ export interface JsonFormToAttrMap {
   'radio-group': RadioGroupAdaptor
   'rate': RateProps
   'select': SelectProps
-  'select-async': typeof DuxSelectAsync
+  'select-async': InstanceType<typeof DuxSelectAsync>['$props']
   'slider': SliderProps
   'space': SpaceProps
   'switch': SwitchProps
   'time': TimeProps
   'transfer': TransferProps
   'tree-select': TreeSelectProps
-  'file-upload': typeof DuxFileUpload
-  'image-upload': typeof DuxImageUpload
-  'region': typeof DuxRegion
-  'tree-select-async': typeof DuxTreeSelectAsync
-  'transfer-async': typeof DuxTransferAsync
+  'file-upload': InstanceType<typeof DuxFileUpload>['$props']
+  'image-upload': InstanceType<typeof DuxImageUpload>['$props']
+  'region': InstanceType<typeof DuxRegion>['$props']
+  'tree-select-async': InstanceType<typeof DuxTreeSelectAsync>['$props']
+  'transfer-async': InstanceType<typeof DuxTransferAsync>['$props']
 }
 
 export type JsonFormItemAdaptor<T extends keyof JsonFormToAttrMap> = JsonFormToAttrMap[T] | Record<string, any>

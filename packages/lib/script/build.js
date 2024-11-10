@@ -25,19 +25,18 @@ async function updatePackageJson() {
   const packagePath = join(__dirname, 'package.json')
   const packageData = JSON.parse(await readFile(packagePath, 'utf8'))
 
-  packageData.main = 'dist/cjs/index.js'
-  packageData.module = 'dist/esm/index.js'
+  packageData.main = 'cjs/index.js'
+  packageData.module = 'esm/index.js'
   packageData.exports = {
-    "import": {
-      "types": "./dist/esm/index.d.ts",
-      "default": "./dist/esm/index.js"
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./cjs/index.js",
+      "default": "./browser/index.js"
     },
-    "require": {
-      "types": "./dist/cjs/index.d.ts",
-      "default": "./dist/cjs/index.js"
-    },
-    "default": {
-      "default": "./dist/umd/index.js"
+    "./style.css": {
+      "import": "./esm/dux.css",
+      "require": "./cjs/dux.css",
+      "default": "./browser/style.css"
     }
   }
 

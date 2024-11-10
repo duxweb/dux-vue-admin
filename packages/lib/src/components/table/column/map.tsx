@@ -1,6 +1,6 @@
-import clsx from 'clsx'
 import type { VNodeChild } from 'vue'
 import type { TableColumnRender } from '..'
+import clsx from 'clsx'
 
 export interface ColumnMapTypeValue {
   icon?: string

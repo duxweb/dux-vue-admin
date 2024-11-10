@@ -26,7 +26,7 @@ export const DuxTreeSelectAsync = defineComponent({
     const model = useVModel(props, 'value', emit, {
       passive: true,
       deep: true,
-      defaultValue: props.defaultValue,
+      defaultValue: props.defaultValue || [],
     })
 
     const { options, loading } = useCascader({
@@ -37,6 +37,7 @@ export const DuxTreeSelectAsync = defineComponent({
     return () => (
       <NTreeSelect
         {...props}
+
         loading={loading.value}
         options={options.value?.data || []}
         v-model:value={model.value}

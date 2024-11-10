@@ -1,4 +1,3 @@
-import type { DuxUploadType } from '../components'
 import type { DuxRoute } from '../stores'
 
 interface UserMenu {
@@ -30,9 +29,9 @@ export interface ConfigApiConfig {
   verify?: string
   upload?: string
   uploadManage?: string
-  uploadType?: DuxUploadType
   router?: string
-  notice?: string
+  i18n?: string
+  message?: string
   aiChat?: string
 }
 

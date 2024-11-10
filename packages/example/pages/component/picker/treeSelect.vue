@@ -1,25 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const baseCode = ref(`<n-select
+const baseCode = ref(`<n-tree-select
   :options="[
-    { label: '选项1', value: 1 },
-    { label: '选项2', value: 2 },
+    { label: '选项1', key: 1 },
+    { label: '选项2', key: 2 },
   ]"
 />`)
 
-const asyncCode = ref(`<dux-select-async
-  url="/mall"
-  value-field="id"
-  label-field="title"
-/>`)
-
-const asyncMediaCode = ref(`<dux-select-async
-  url="/mall"
-  value-field="id"
-  label-field="title"
-  desc-field="active"
-  image-field="image"
+const asyncCode = ref(`<dux-tree-select-async
+  url="/class"
+  key-field="id"
+  label-field="name"
 />`)
 </script>
 

@@ -43,7 +43,7 @@ export function useExportExcel() {
           data: [],
         },
         initialPage: 1,
-        initialPageSize: 8,
+        initialPageSize: 50,
         total: res => res.meta?.total || 0,
         append: true,
         watchingStates: [() => params],
