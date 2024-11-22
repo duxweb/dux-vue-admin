@@ -64,7 +64,11 @@ export default defineComponent({
 
     onSuccess((res) => {
       manage.login(res.data?.data)
-      router.replace(resource.getIndexPath())
+      router.push({
+        path: resource.getIndexPath(),
+        replace: true,
+        force: true,
+      })
     })
 
     onError((res) => {
@@ -206,9 +210,9 @@ export default defineComponent({
                             {{
                               default: () => (
                                 <div>
-                                  { captchaTheme.value === 'default' ? t('pages.login.captcha.default') : '' }
-                                  { captchaTheme.value === 'success' ? t('pages.login.captcha.success') : '' }
-                                  { captchaTheme.value === 'error' ? t('pages.login.captcha.error') : '' }
+                                  {captchaTheme.value === 'default' ? t('pages.login.captcha.default') : ''}
+                                  {captchaTheme.value === 'success' ? t('pages.login.captcha.success') : ''}
+                                  {captchaTheme.value === 'error' ? t('pages.login.captcha.error') : ''}
                                 </div>
                               ),
                               icon: () => (
