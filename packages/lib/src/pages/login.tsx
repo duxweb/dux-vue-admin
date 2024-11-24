@@ -64,11 +64,13 @@ export default defineComponent({
 
     onSuccess((res) => {
       manage.login(res.data?.data)
-      router.push({
-        path: resource.getIndexPath(),
-        replace: true,
-        force: true,
-      })
+      setTimeout(() => {
+        router.push({
+          path: resource.getIndexPath(),
+          replace: true,
+          force: true,
+        })
+      }, 100)
     })
 
     onError((res) => {

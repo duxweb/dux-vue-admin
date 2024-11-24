@@ -13,10 +13,14 @@ export default defineConfig({
     vue(),
     vueJsx(),
     buildPlugin({
-      fileBuild: { emitDeclaration: true, isVue: true, formats: [
-        { format: 'cjs', outDir: path.resolve(__dirname, 'dist/cjs') },
-        { format: 'es', outDir: path.resolve(__dirname, 'dist/esm') },
-      ] },
+      fileBuild: {
+        emitDeclaration: true,
+        isVue: true,
+        formats: [
+          { format: 'cjs', outDir: path.resolve(__dirname, 'dist/cjs') },
+          { format: 'es', outDir: path.resolve(__dirname, 'dist/esm') },
+        ],
+      },
       libBuild: {
         buildOptions: {
           outDir: path.resolve(__dirname, 'dist/browser'),

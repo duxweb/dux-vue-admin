@@ -3,6 +3,7 @@ import type { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui'
 import { useMessage } from 'naive-ui'
 
 import { reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useClient } from '../../hooks/useClient'
 
 export interface UploadFileInfoExtend extends UploadFileInfo {
@@ -83,11 +84,15 @@ export function useUpload() {
   const client = useClient()
   const message = useMessage()
   const uploadRequest = reactive({})
+  const { t } = useI18n()
 
   const upload = ({ id, url, apiUrl, file, headers, params, data, onProgress, onSuccess, onError }: DuxS3UploadProps) => {
     const formData = new FormData()
 
     Object.keys(params || {}).forEach((key) => {
+      if (key === 'folder' || key === 'driver') {
+        return
+      }
       formData.append(key, params?.[key])
     })
     Object.keys(data || {}).forEach((key) => {
@@ -139,10 +144,10 @@ export function useUpload() {
         onError?.(error)
       })
     }).catch((error) => {
-      if (error.name === 'AbortError') {
+      if (error?.name === 'AbortError') {
         return
       }
-      message.error(error.message)
+      message.error(error?.message || t('message.requestError'))
       onError?.(error)
     }).finally(() => {
       offUploadEvent()
@@ -186,8 +191,8 @@ export function useUpload() {
         headers: !res.data?.url
           ? {}
           : {
-              Authorization: undefined,
-            },
+            Authorization: undefined,
+          },
       })
     }).catch((error) => {
       message.error(error.message)
