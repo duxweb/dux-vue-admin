@@ -1,13 +1,13 @@
 {
   "name": "@duxweb/dux-vue-admin",
   "type": "module",
-  "version": "0.0.5-alpha",
+  "version": "0.0.6-beta.1",
   "author": "DuxWeb",
   "license": "LGPL-3.0",
   "main": "src/index.ts",
   "scripts": {
     "clean": "rimraf dist",
-    "build": "bun run clean && vite build && bun run script/build.js",
+    "build": "bun run clean && vue-tsc --noEmit && vite build --verbose --debug && bun run script/build.js",
     "local": "bun run build && bun link --cwd ./dist",
     "push": "bun run build && bun publish --cwd ./dist",
     "lint": "eslint .",
@@ -26,6 +26,7 @@
     "@overlastic/vue": "^0.8.1",
     "@unocss/core": "^0.64.1",
     "@unocss/preset-icons": "^0.64.1",
+    "@unocss/preset-typography": "^0.64.1",
     "@unocss/preset-uno": "^0.64.1",
     "@unocss/reset": "^0.64.1",
     "@unocss/runtime": "^0.64.1",

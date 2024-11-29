@@ -1,6 +1,6 @@
 import type { UploadFileInfo, UploadInst } from 'naive-ui'
 import type { PropType } from 'vue'
-import type { DuxUploadFile, DuxUploadType } from './useUpload'
+import type { DuxUploadFile } from './useUpload'
 import { useVModel } from '@vueuse/core'
 import clsx from 'clsx'
 import { NButton, NImage, NProgress, NUpload } from 'naive-ui'
@@ -25,7 +25,7 @@ export const DuxImageUpload = defineComponent({
       default: true,
     },
     uploadType: {
-      type: String as PropType<DuxUploadType>,
+      type: String,
     },
     headers: Object as PropType<Record<string, any>>,
     data: Object as PropType<Record<string, any>>,
@@ -38,8 +38,8 @@ export const DuxImageUpload = defineComponent({
       defaultValue: props.defaultValue,
     })
 
-    const { uploadUrl, uploadType } = useResource()
-    const { customRequest, onAbort } = useNaiveUpload(props.uploadType || uploadType)
+    const { uploadUrl } = useResource()
+    const { customRequest, onAbort } = useNaiveUpload()
     const { t } = useI18n()
 
     const imagesToFileList = (images: string[]): UploadFileInfo[] => {
@@ -123,34 +123,34 @@ export const DuxImageUpload = defineComponent({
             >
               {item.status === 'finished'
                 ? (
-                    <NImage
-                      class="z-0 rounded"
-                      objectFit="scale-down"
-                      width={100}
-                      height={100}
-                      previewDisabled
-                      src={item.url as string}
-                    >
-                      <div class="size-full flex items-center justify-center">
-                        <div class="i-tabler:photo size-8"></div>
-                      </div>
-                    </NImage>
-                  )
-                : (
-                    <div class="size-100px flex items-center justify-center rounded">
+                  <NImage
+                    class="z-0 rounded"
+                    objectFit="scale-down"
+                    width={100}
+                    height={100}
+                    previewDisabled
+                    src={item.url as string}
+                  >
+                    <div class="size-full flex items-center justify-center">
                       <div class="i-tabler:photo size-8"></div>
-                      {item.status === 'uploading' && (
-                        <div class="absolute left-2 right-2 bottom-2">
-                          <NProgress
-                            type="line"
-                            percentage={item.percentage || 0}
-                            height={5}
-                            showIndicator={false}
-                          />
-                        </div>
-                      )}
                     </div>
-                  )}
+                  </NImage>
+                )
+                : (
+                  <div class="size-100px flex items-center justify-center rounded">
+                    <div class="i-tabler:photo size-8"></div>
+                    {item.status === 'uploading' && (
+                      <div class="absolute left-2 right-2 bottom-2">
+                        <NProgress
+                          type="line"
+                          percentage={item.percentage || 0}
+                          height={5}
+                          showIndicator={false}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
               <div class="z-1 size-full inset-0 absolute flex items-center justify-center bg-gray-2 bg-opacity-90 transition-all opacity-0 group-hover:opacity-100 rounded">
                 {item.status === 'finished' && (
                   <NButton

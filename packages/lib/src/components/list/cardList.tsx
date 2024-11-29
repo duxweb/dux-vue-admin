@@ -4,7 +4,7 @@ import type { JsonFormItemSchema } from '../form'
 import type { TableTab } from '../table'
 import { NCard, NPagination, NScrollbar, NSkeleton } from 'naive-ui'
 import { defineComponent, ref } from 'vue'
-import { DuxFilter, type ListAction } from '../filter'
+import { DuxFilter, type FilterAction } from '../filter'
 import { DuxFullPage } from '../page'
 import { DuxPageEmpty } from '../status/pageEmpty'
 import { useList } from './useList'
@@ -14,7 +14,7 @@ export const DuxCardList = defineComponent({
   props: {
     filter: Array<JsonFormItemSchema>,
     tabs: Array<TableTab>,
-    actions: Array<ListAction>,
+    actions: Array<FilterAction>,
     title: {
       type: String,
     },
@@ -55,7 +55,7 @@ export const DuxCardList = defineComponent({
               filter={props.filter}
               tabs={props.tabs}
               actions={props.actions}
-              v-model:value={form}
+              v-model:value={form.value}
               onSubmit={() => {
                 list.onFilter()
               }}

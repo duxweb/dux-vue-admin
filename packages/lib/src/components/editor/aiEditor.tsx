@@ -44,14 +44,11 @@ export const DuxAiEditor = defineComponent({
         image: {
           uploadUrl: props.uploadUrl || uploadUrl,
           uploadHeaders: props.uploadHeaders || {},
-          uploader: (file: File, uploadUrl: string, headers: Record<string, any>, formName: string): Promise<Record<string, any>> => {
-            const formData = new FormData()
-            formData.append(formName, file)
-
+          uploader: (file: File, uploadUrl: string, headers: Record<string, any>): Promise<Record<string, any>> => {
             return new Promise((resolve, reject) => {
               send({
                 url: uploadUrl,
-                formData,
+                file,
                 headers,
                 onSuccess(res) {
                   resolve({
@@ -72,13 +69,11 @@ export const DuxAiEditor = defineComponent({
         video: {
           uploadUrl: props.uploadUrl || uploadUrl,
           uploadHeaders: props.uploadHeaders || {},
-          uploader: (file, uploadUrl, headers, formName) => {
-            const formData = new FormData()
-            formData.append(formName, file)
+          uploader: (file, uploadUrl, headers) => {
             return new Promise((resolve, reject) => {
               send({
                 url: uploadUrl,
-                formData,
+                file,
                 headers,
                 onSuccess(res) {
                   resolve({
@@ -98,13 +93,11 @@ export const DuxAiEditor = defineComponent({
         attachment: {
           uploadUrl: props.uploadUrl || uploadUrl,
           uploadHeaders: props.uploadHeaders || {},
-          uploader: (file, uploadUrl, headers, formName) => {
-            const formData = new FormData()
-            formData.append(formName, file)
+          uploader: (file, uploadUrl, headers) => {
             return new Promise((resolve, reject) => {
               send({
                 url: uploadUrl,
-                formData,
+                file,
                 headers,
                 onSuccess(res) {
                   resolve({

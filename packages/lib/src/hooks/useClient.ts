@@ -147,7 +147,8 @@ export function useClient(props?: useClientProps) {
     const matchedMethods = alovaInstance.snapshots.match(`${name}`)
     invalidateCache(matchedMethods)
 
-    accessAction(
+    const action = accessAction as any
+    action(
       name || '',
       (delegatedActions) => {
         delegatedActions?.send?.()
