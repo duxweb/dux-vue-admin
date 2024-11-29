@@ -1,7 +1,7 @@
+import type { ButtonProps } from 'naive-ui'
 import { NButton, NCard } from 'naive-ui'
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { ButtonProps } from 'naive-ui'
 
 export interface DuxStatsAccountOption {
   label: string

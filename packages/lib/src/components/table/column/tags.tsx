@@ -1,6 +1,6 @@
-import { NTag } from 'naive-ui'
 import type { TableColumnRender } from '../../table'
 import type { ColumnStatusType } from './status'
+import { NTag } from 'naive-ui'
 
 export interface ColumnTagsProps {
   key?: string

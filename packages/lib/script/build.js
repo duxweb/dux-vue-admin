@@ -5,21 +5,26 @@ import copyfiles from 'copyfiles'
 async function updatePackageJson() {
   const __dirname = resolve()
 
-  const sourceFiles = 'src/static/**/*';
-  const targetDirs = ['dist/esm', 'dist/cjs'];
+  const sourceFiles = 'src/static/**/*'
+  const targetDirs = ['dist/esm', 'dist/cjs']
 
-   await Promise.all(targetDirs.map(async (dir) => {
-    const fullPath = join(__dirname, dir);
+  await Promise.all(targetDirs.map(async (dir) => {
+    const fullPath = join(__dirname, dir)
     await mkdir(fullPath, { recursive: true })
     await copyfiles([sourceFiles, dir], { up: 1 }, (err) => {
-      if (err) reject(err);
-      else resolve();
+      if (err) {
+        throw err
+      }
+      else {
+        resolve()
+      }
     })
   }))
 
   await copyfiles(['LICENSE', 'dist'], { up: true }, (err) => {
-    if (err) reject(err);
-    else resolve();
+    if (err)
+      throw err
+    else resolve()
   })
 
   const packagePath = join(__dirname, 'package.json')
@@ -28,16 +33,14 @@ async function updatePackageJson() {
   packageData.main = 'cjs/index.js'
   packageData.module = 'esm/index.js'
   packageData.exports = {
-    ".": {
-      "import": "./esm/index.js",
-      "require": "./cjs/index.js",
-      "default": "./browser/index.js"
+    '.': {
+      import: './esm/index.js',
+      require: './cjs/index.js',
     },
-    "./style.css": {
-      "import": "./esm/dux.css",
-      "require": "./cjs/dux.css",
-      "default": "./browser/style.css"
-    }
+    './style.css': {
+      import: './esm/dux.css',
+      require: './cjs/dux.css',
+    },
   }
 
   const distDir = join(__dirname, 'dist')

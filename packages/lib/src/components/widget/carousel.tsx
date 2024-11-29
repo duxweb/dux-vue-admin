@@ -1,6 +1,6 @@
+import type { PropType } from 'vue'
 import { NCarousel } from 'naive-ui'
 import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
 
 export interface DuxCarouselData {
   src: string

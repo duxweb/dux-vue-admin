@@ -7,7 +7,7 @@
   "main": "src/index.ts",
   "scripts": {
     "clean": "rimraf dist",
-    "build": "bun run clean && vue-tsc --noEmit && vite build --verbose --debug && bun run script/build.js",
+    "build": "bun run clean && vue-tsc --noEmit && vite build && bun run script/build.js",
     "local": "bun run build && bun link --cwd ./dist",
     "push": "bun run build && bun publish --cwd ./dist",
     "lint": "eslint .",
@@ -76,12 +76,13 @@
     "eslint": "^9.9.0",
     "eslint-plugin-format": "^0.1.2",
     "path": "^0.12.7",
+    "pkg-types": "^1.2.1",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-external-globals": "^0.12.0",
     "rollup-plugin-visualizer": "^5.12.0",
-    "typescript": "^5.5.3",
+    "typescript": "5.6.2",
     "vite": "^5.4.3",
     "vite-plugin-build": "^0.10.0",
-    "vue-tsc": "^2.1.6"
+    "vue-tsc": "2.0.29"
   }
 }

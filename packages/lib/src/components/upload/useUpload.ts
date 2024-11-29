@@ -191,8 +191,8 @@ export function useUpload() {
         headers: !res.data?.url
           ? {}
           : {
-            Authorization: undefined,
-          },
+              Authorization: undefined,
+            },
       })
     }).catch((error) => {
       message.error(error.message)
