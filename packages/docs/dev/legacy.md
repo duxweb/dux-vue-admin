@@ -6,16 +6,13 @@
 ## 开发环境
 - Node.js >= 21.0.0
 - bun >= 1.x
-- Vue 3.x
-- TypeScript 5.x
-- Vite 5.x
 
 
 ## 初始化
 
 ```bash
 创建项目
-npx degit github:duxweb/dux-vue-admin-template my-project
+npx degit github:duxweb/dux-vue-admin-template/packages/legacy my-project
 进入项目目录
 cd my-project
 安装依赖
@@ -27,10 +24,10 @@ bun run dev
 
 ## 目录结构
 
-手动创建项目时，需要手动创建以下目录结构：
+创建后的项目目录结构如下：
 
 ```bash
-project/
+my-project/
 ├── src/ # 源代码
 │ │ ├── components/ # 组件
 │ │ ├── config/ # 配置
@@ -39,7 +36,7 @@ project/
 │ │ ├── App.vue # 根组件
 │ │ └── main.ts # 入口文件
 │ ├── public/ # 静态资源
-│ ├── index.html # HTML 模板
+│ ├── index.html # HTML 入口
 │ ├── eslint.config.js # ESLint 配置
 │ ├── package.json # 项目配置
 │ ├── tsconfig.json # TypeScript 配置
