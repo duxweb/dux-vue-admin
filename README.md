@@ -88,7 +88,7 @@ bun run build
 
 ## 📄 开源协议
 
-[Apache License 2.0](LICENSE)
+[LGPL 3.0](LICENSE)
 
 ## 🤝 支持与贡献
 
