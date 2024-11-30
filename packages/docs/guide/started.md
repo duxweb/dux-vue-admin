@@ -1,6 +1,6 @@
 # 快速开始
 
-快速启动一个 dux-vue-admin 示例，只需要几步即可完成，如果需要后端集成，请参考 [后端集成](./backend.md)。
+快速启动一个 dux-vue-admin 示例，只需要几步即可完成，如果需要后端集成，请参考 [基座模式](../dev/mount.md)。
 
 ## 环境准备
 
@@ -35,5 +35,3 @@ bun install
 ```bash
 bun dev:example
 ```
-
-启动后，访问 [http://localhost:5173](http://localhost:5173) 即可访问示例。
