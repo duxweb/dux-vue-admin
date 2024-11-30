@@ -24,7 +24,7 @@ export const route = [
     name: 'docs',
     path: 'docs',
     icon: 'i-tabler:book',
-    component: () => import('dux-vue-admin/src/pages/iframe'),
+    component: () => import('@duxweb/dux-vue-admin/src/pages/iframe'),
     meta: {
       src: 'https://vue-docs.dux.plus/',
     },
