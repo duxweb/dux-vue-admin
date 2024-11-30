@@ -14,20 +14,16 @@ export default defineConfig({
         index: resolve(__dirname, 'index.html'),
       },
       output: {
-        manualChunks: {
-          'vendor-vue': ['vue', 'vue-router'],
-          'vendor-naive': ['naive-ui'],
-          'vendor-vueuse': ['@vueuse/core'],
-          'vendor-echarts': ['echarts', 'vue-echarts'],
-          'vendor-ai': ['aieditor'],
-          'vendor-code': ['vue3-ace-editor', 'ace-builds'],
-          'vendor-alova': ['alova'],
-          'vendor-excel': ['exceljs'],
-          'vendor-pinia': ['pinia', 'pinia-plugin-persistedstate'],
-          'vendor-loader': ['vue3-sfc-loader'],
-          'vendor-pdf': ['vue-pdf-embed'],
-          'vendor-lodash': ['lodash-es', 'lodash'],
-          'vendor-icon': ['@iconify-json/tabler'],
+        entryFileNames: 'js/[name]-[hash].js',
+        chunkFileNames: 'js/[name]-[hash].js',
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return id
+              .toString()
+              .split('node_modules/')[1]
+              .split('/')[0]
+              .toString()
+          }
         },
       },
     },
