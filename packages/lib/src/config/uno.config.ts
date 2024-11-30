@@ -1,12 +1,11 @@
 import type { UserConfig } from '@unocss/core'
-import type { Theme } from '@unocss/preset-uno'
 // uno.config.ts
 import presetIcons from '@unocss/preset-icons/browser'
+import presetTypography from '@unocss/preset-typography'
 import presetUno from '@unocss/preset-uno'
-import { presetTypography } from 'unocss'
 import { presetDux } from '..'
 
-export const config: UserConfig<Theme> = {
+export const config: UserConfig = {
   // ...UnoCSS options
   presets: [
     presetUno(),
