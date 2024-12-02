@@ -20,13 +20,14 @@ export default defineConfig({
         items: [
           { text: '介绍', link: '/guide/info' },
           { text: '快速开始', link: '/guide/started' },
+          { text: '传统模式', link: '/guide/legacy' },
+          { text: '基座模式', link: '/guide/mount' },
         ]
       },
       {
         text: '开发',
         items: [
-          { text: '传统模式', link: '/dev/legacy' },
-          { text: '基座模式', link: '/dev/mount' },
+          { text: '框架配置', link: '/dev/config' },
         ]
       }
     ],

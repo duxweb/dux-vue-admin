@@ -17,7 +17,6 @@ const config: Config = {
   manage: {
     admin: {
       apiPrefix: 'admin',
-      indexPath: 'system/total/index',
       title: '中后台管理系统',
       userMenu: [
         {

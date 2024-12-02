@@ -14,7 +14,6 @@ export interface ConfigManage {
   updatePassword?: boolean
   [key: string]: any
   apiPrefix?: string
-  indexPath?: string
   routers?: DuxRoute[]
   userMenu?: UserMenu[]
 }
