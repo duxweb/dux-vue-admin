@@ -116,11 +116,11 @@ const routes: DuxRoute[] = [
 
 ## 框架配置
 
-在 `createDux` 函数中来配置框架，具体配置项请参考 [配置](./config.md) 章节。
+在 `createDux` 函数中来配置框架，具体配置项请参考 [配置](../dev/config.md) 章节。
 
 
 ## 页面组件
 
-在 `src/pages` 目录下创建页面组件，组件请参考 [页面组件](./page.md) 章节。
+在 `src/pages` 目录下创建页面组件，组件请参考 [页面组件](../dev/page.md) 章节。
 
 
