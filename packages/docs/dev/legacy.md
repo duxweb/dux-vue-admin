@@ -18,7 +18,7 @@ cd my-project
 安装依赖
 bun install
 启动项目
-bun run dev
+bun dev
 ```
 
 
