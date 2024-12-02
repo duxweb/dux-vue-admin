@@ -213,11 +213,81 @@ public class AssetService {
 ```
 :::
 
+
+### 总结
+
+以上示例代码展示了如何在不同后端框架中解析 manifest.json 并在模板中引入编译后的资源文件。你需要根据实际项目的目录结构和框架特性进行相应调整。
+
+
 ## 路由输出
 
+基座模式下，前端路由由后端提供，后端需要输出 JSON 格式的路由数据，如下。
+
+```json
+[
+    // 目录
+    {
+        "hidden": false, // 是否隐藏
+        "icon": "i-tabler:home", // 图标
+        "label": "首页", // 菜单名称
+        "loader": "system/total/index", // Vue 路径
+        "name": "index", // 路由名称
+        "path": "system/index", // 路由路径
+        "sort": 0 // 排序
+    },
+    // 路由
+    {
+        "hidden": false, // 是否隐藏
+        "label": "用户列表", // 菜单名称
+        "loader": "system/user/table", // Vue 路径
+        "name": "system.user.list", // 路由名称
+        "parent": "system.userGroup", // 父级路由名称
+        "path": "system/user", // 路由路径
+        "sort": 0 // 排序
+    },
+    // 嵌入
+    {
+      "hidden": false, // 是否隐藏
+      "icon": "i-tabler:brand-redux", // 图标
+      "label": "Dux文档", // 菜单名称
+      "meta": {
+        "src": "https://vue-docs.dux.plus/", // 嵌入链接
+      },
+      "name": "iframe.dux", // 路由名称
+      "path": "iframe/dux", // 路由路径
+      "sort": 4 // 排序
+    },
+    // 外链
+    {
+      "hidden": false,
+      "icon": "i-tabler:external-link", // 图标
+      "label": "Dux官网", // 菜单名称
+      "meta": {
+        "url": "https://www.dux.cn" // 外部链接
+      },
+      "name": "link.dux", // 路由名称
+      "path": "link/dux", // 路由路径
+      "sort": 5 // 排序
+    }
+]
+```
 
 ## 页面输出
 
-## 总结
+路由中需要定义 `loader` 为 Vue 路径，访问路由后会自动请求后端Api，后端需要根据 `loader` 路径来输出 Vue 页面内容，基座得到结果后前端会自动渲染 vue 页面。
 
-以上示例代码展示了如何在不同后端框架中解析 manifest.json 并在模板中引入编译后的资源文件。你需要根据实际项目的目录结构和框架特性进行相应调整。
+输出示例：
+
+```json
+{
+    "code": 200,
+    "message": "ok",
+    "data": {
+        "content": "<template>{{ hello }}</template><script>const hello = 'hello world'</script>",
+        "name": "/admin/system/total/index",
+        "type": ".vue"
+    },
+    "meta": {}
+}
+```
+
