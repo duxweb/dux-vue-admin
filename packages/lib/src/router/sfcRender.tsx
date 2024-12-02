@@ -4,6 +4,7 @@ import * as alova from 'alova'
 import * as alovaClient from 'alova/client'
 import axios from 'axios'
 import crypto from 'crypto-js'
+import * as dayjs from 'dayjs'
 import * as echarts from 'echarts'
 import * as _ from 'lodash-es'
 import * as math from 'mathjs'
@@ -44,6 +45,7 @@ export function sfcRender(path: string) {
       'vue-echarts': VChart,
       'vue-draggable-plus': VueDraggable,
       'vue-i18n': vueI18n,
+      'dayjs': dayjs,
       'static!': function (content: string, _path: string, type: string) {
         const name = mime.getType(type)
         if (name?.startsWith('image')) {
@@ -121,7 +123,7 @@ export function sfcRender(path: string) {
         },
       }
     },
-    addStyle: () => {},
+    addStyle: () => { },
   }
 
   return () => loadModule(`${path}`, { ...options })
