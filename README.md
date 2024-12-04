@@ -64,7 +64,7 @@ bun run build
 
 ## 📚 文档
 
-详细文档请访问：[https://vue-admin.dux.plus](https://vue-admin.dux.plus)
+详细文档请访问：[https://vue-docs.dux.plus](https://vue-docs.dux.plus)
 
 ## 🎯 在线演示
 
