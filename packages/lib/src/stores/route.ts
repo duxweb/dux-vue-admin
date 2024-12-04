@@ -49,16 +49,37 @@ export const useRouteStore = defineStore('routes', () => {
   }
 
   const getIndexRoute = () => {
-    const indexRoute = routes.value?.find((item) => {
-      if (item.name === '404' || item.name === '403') {
-        return false
-      }
-      return !!item.path
-    })
+    const topRoutes = routes.value
+      ?.filter(item => !item.parent && item.name !== '404' && item.name !== '403')
+      ?.sort((a, b) => (a.sort || 0) - (b.sort || 0))
 
-    if (indexRoute) {
-      return indexRoute
+    const findFirstValidRoute = (route: DuxRoute): DuxRoute | undefined => {
+      if (route.path) {
+        return route
+      }
+
+      const children = routes.value
+        ?.filter(item => item.parent === route.name)
+        ?.sort((a, b) => (a.sort || 0) - (b.sort || 0))
+
+      for (const child of children || []) {
+        const validRoute = findFirstValidRoute(child)
+        if (validRoute) {
+          return validRoute
+        }
+      }
+
+      return undefined
     }
+
+    for (const route of topRoutes || []) {
+      const validRoute = findFirstValidRoute(route)
+      if (validRoute) {
+        return validRoute
+      }
+    }
+
+    return undefined
   }
 
   return {

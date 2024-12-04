@@ -158,7 +158,7 @@ export default defineComponent({
           darkMode.value ? 'login-dark-bg' : 'login-bg',
         ])}
       >
-        <div class="relative m-4 max-w-180 w-full grid-cols-2 gap-12 overflow-hidden rounded-lg p-8 shadow bg-gray-1 grid">
+        <div class="relative md:m-4 max-w-180  w-full grid-cols-1 md:grid-cols-2 gap-12 overflow-hidden md:rounded-lg p-8 md:shadow md:bg-gray-1 grid">
           <div
             class="flex justify-center tex absolute h-30 w-30 rotate-45 cursor-pointer items-end p-3 text-white bg-primary -right-15 -top-15 hover:bg-brand-hover"
             onClick={themeStore.toggleDarkMode}
