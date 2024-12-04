@@ -4,7 +4,6 @@ import type { Config } from '../index'
 import { useLoadingBar } from 'naive-ui'
 import { inject, ref } from 'vue'
 
-import { useI18n } from 'vue-i18n'
 import { createManage, initAsyncRouter } from '../core/manage'
 import { router, useManageStore, usePermission, useRouteStore } from '../index'
 import DuxLoading from './loading.vue'
@@ -18,7 +17,6 @@ const manageStore = useManageStore()
 const loadingBar = useLoadingBar()
 
 const { can } = usePermission()
-const { t } = useI18n()
 
 const firstManage = Object.getOwnPropertyNames(config?.manage)[0]
 const loading = ref(true)
@@ -56,7 +54,7 @@ router.beforeEach(async (to, _from, next) => {
     // 动态设置路由信息
     const routeInfo = routeStore.searchRouteName(to.name as string)
     if (routeInfo) {
-      const title = routeInfo.labelLang ? t(routeInfo.labelLang) : routeInfo.label
+      const title = routeInfo.label
       to.meta.title = title
       document.title = `${title} - ${config?.manage?.[manage || 'admin']?.title}` || ''
     }
@@ -98,6 +96,4 @@ router.afterEach(() => {
   </RouterView>
 </template>
 
-<style>
-
-</style>
+<style></style>

@@ -4,7 +4,6 @@ import { useWindowSize } from '@vueuse/core'
 import { cloneDeep } from 'lodash-es'
 import { storeToRefs } from 'pinia'
 import { computed, h, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { RouterLink, useRoute } from 'vue-router'
 import { useThemeStore } from '../stores'
 import { useRouteStore } from '../stores/route'
@@ -15,7 +14,6 @@ export function useMenu() {
   const isMobile = ref<boolean>(false)
   const appCollapsed = ref<boolean>(true)
   const sideCollapsed = ref<boolean>(false)
-  const { t } = useI18n()
 
   const routeStore = useRouteStore()
   const { routes } = storeToRefs(routeStore)
@@ -25,7 +23,7 @@ export function useMenu() {
 
   const getMenu = (data: DuxRoute[], hidden: boolean = true): MenuOption[] => {
     return cloneDeep(data)?.filter(item => !!item?.name).filter(item => !hidden || item.hidden === undefined || item.hidden === false)?.map<MenuOption>((item) => {
-      const field = item.labelLang ? t(item.labelLang) : item.label
+      const field = item.label
       return {
         key: item.name,
         parent: item.parent,
@@ -36,10 +34,10 @@ export function useMenu() {
         hidden: item.hidden,
         icon: item?.icon
           ? () => {
-              return h('div', {
-                class: item.icon,
-              })
-            }
+            return h('div', {
+              class: item.icon,
+            })
+          }
           : undefined,
         label() {
           return item.path

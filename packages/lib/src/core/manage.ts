@@ -13,7 +13,6 @@ export function createManage(manage: string, routers: DuxRoute[]) {
     component: () => import('../pages/notPermission'),
     name: '403',
     label: '403',
-    labelLang: 'pages.403.title',
     hidden: true,
   })
 
@@ -22,7 +21,6 @@ export function createManage(manage: string, routers: DuxRoute[]) {
     component: () => import('../pages/notFound'),
     name: '404',
     label: '404',
-    labelLang: 'pages.404.title',
     hidden: true,
   })
 

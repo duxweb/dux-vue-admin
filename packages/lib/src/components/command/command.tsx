@@ -34,7 +34,7 @@ export const DuxCommand = defineComponent({
     const onSearch = (value: string) => {
       if (value) {
         const data = cloneDeep(routeStore.routes).filter((item) => {
-          const label = item.label || t(item.labelLang || '')
+          const label = item.label
           return label?.includes(value)
         })
         list.value = data
