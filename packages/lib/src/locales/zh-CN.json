@@ -117,6 +117,12 @@
     "keyword": "请输入关键词"
   },
   "components": {
+    "tabs": {
+      "lock": "锁定 / 解锁",
+      "closeOther": "关闭其他",
+      "closeLeft": "关闭左侧",
+      "closeRight": "关闭右侧"
+    },
     "message": {
       "title": "用户消息",
       "list": "消息列表",

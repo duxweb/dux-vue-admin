@@ -31,6 +31,11 @@ export const useTabStore = defineStore('tab', () => {
       return
     }
 
+    const tab = tabs.value[index]
+    if (tab?.meta?.lock) {
+      return
+    }
+
     const prev = tabs.value[index - 1]
     const next = tabs.value[index + 1]
 
@@ -39,6 +44,39 @@ export const useTabStore = defineStore('tab', () => {
     setTimeout(() => {
       tabs.value.splice(index, 1)
     }, 0)
+  }
+
+  const delOther = (url: string, cb?: () => void) => {
+    tabs.value = tabs.value.filter(t => t.url === url || t.meta?.lock)
+    cb?.()
+  }
+
+  const delLeft = (url: string, cb?: () => void) => {
+    const index = tabs.value.findIndex(t => t.url === url)
+    if (index <= 0) {
+      return
+    }
+    tabs.value = [...tabs.value.slice(0, index).filter(t => t.meta?.lock), ...tabs.value.slice(index)]
+    cb?.()
+  }
+
+  const delRight = (url: string, cb?: () => void) => {
+    const index = tabs.value.findIndex(t => t.url === url)
+    if (index === -1 || index === tabs.value.length - 1) {
+      return
+    }
+    tabs.value = [...tabs.value.slice(0, index + 1), ...tabs.value.slice(index + 1).filter(t => t.meta?.lock)]
+    cb?.()
+  }
+
+  const lockTab = (url: string) => {
+    const index = tabs.value.findIndex(t => t.url === url)
+    if (index !== -1 && tabs.value[index]) {
+      if (!tabs.value[index].meta) {
+        tabs.value[index].meta = {}
+      }
+      tabs.value[index].meta.lock = !tabs.value[index].meta.lock
+    }
   }
 
   const changeTab = (url: string, cb?: (item: TabRoute) => void) => {
@@ -50,7 +88,9 @@ export const useTabStore = defineStore('tab', () => {
   }
 
   const indexRoute = routeStore.getIndexRoute()
-  addTab({ label: indexRoute?.label, labelLang: indexRoute?.labelLang, url: indexRoute?.path, name: indexRoute?.name || '' })
+  if (indexRoute) {
+    addTab({ meta: { ...indexRoute.meta, lock: true }, label: indexRoute?.label, url: indexRoute?.path, name: indexRoute?.name || '' })
+  }
 
   return {
     current,
@@ -59,5 +99,9 @@ export const useTabStore = defineStore('tab', () => {
     addTab,
     delTab,
     changeTab,
+    delOther,
+    delLeft,
+    delRight,
+    lockTab,
   }
 })

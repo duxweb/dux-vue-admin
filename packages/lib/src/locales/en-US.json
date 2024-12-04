@@ -117,6 +117,12 @@
     "keyword": "Enter keyword"
   },
   "components": {
+    "tabs": {
+      "lock": "Lock / Unlock",
+      "closeOther": "Close Other",
+      "closeLeft": "Close Left",
+      "closeRight": "Close Right"
+    },
     "message": {
       "title": "Messages",
       "list": "Message List",

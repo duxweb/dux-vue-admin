@@ -1,7 +1,7 @@
 import type { TabRoute } from '../../stores/tab'
 import clsx from 'clsx'
-import { NTab, NTabs } from 'naive-ui'
-import { defineComponent, Transition, watch } from 'vue'
+import { NDropdown, NTab, NTabs } from 'naive-ui'
+import { defineComponent, nextTick, ref, Transition, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useRouteStore } from '../../stores'
@@ -26,6 +26,68 @@ export const DuxTabs = defineComponent({
       tab.addTab(item)
     }, { immediate: true })
 
+    const showDropdownRef = ref(false)
+    const xRef = ref(0)
+    const yRef = ref(0)
+    const tagRef = ref<TabRoute | null>(null)
+
+    const handleContextMenu = (e: MouseEvent, tag: TabRoute) => {
+      e.preventDefault()
+      showDropdownRef.value = false
+      nextTick().then(() => {
+        showDropdownRef.value = true
+        xRef.value = e.clientX
+        yRef.value = e.clientY
+        tagRef.value = tag
+      })
+    }
+
+    const handleSelect = (key: string) => {
+      showDropdownRef.value = false
+
+      switch (key) {
+        case 'lock':
+          tab.lockTab(tagRef.value?.url || '')
+          break
+        case 'closeOther':
+          tab.delOther(tagRef.value?.url || '', () => {
+            router.push(tagRef.value?.url || '')
+          })
+          break
+        case 'closeLeft':
+          tab.delLeft(tagRef.value?.url || '', () => {
+            router.push(tagRef.value?.url || '')
+          })
+          break
+        case 'closeRight':
+          tab.delRight(tagRef.value?.url || '', () => {
+            router.push(tagRef.value?.url || '')
+          })
+          break
+        default:
+          break
+      }
+    }
+
+    const options = [
+      {
+        label: t('components.tabs.lock'),
+        key: 'lock',
+      },
+      {
+        label: t('components.tabs.closeOther'),
+        key: 'closeOther',
+      },
+      {
+        label: t('components.tabs.closeLeft'),
+        key: 'closeLeft',
+      },
+      {
+        label: t('components.tabs.closeRight'),
+        key: 'closeRight',
+      },
+    ]
+
     return () => (
       <Transition name="draw">
         <div
@@ -46,9 +108,37 @@ export const DuxTabs = defineComponent({
             }}
             onClose={(v: string) => tab.delTab(v, (v: TabRoute) => router.push(v.url || ''))}
           >
-            {tab.tabs?.map((tag, key) => <NTab key={key} name={tag.url || ''} tab={tag.labelLang ? t(tag.labelLang) : tag.label} closable={key !== 0} />)}
+            {tab.tabs?.map((tag, key) => (
+              <NTab
+                key={key}
+                name={tag.url || ''}
+                closable={!tag.meta?.lock}
+              >
+                <div
+                  class="flex gap-1 items-center"
+                  onContextmenu={(e) => {
+                    handleContextMenu(e, tag)
+                  }}
+                >
+                  {tag.label}
+                  {tag.meta?.lock && <div class="i-tabler:pinned"></div>}
+                </div>
+              </NTab>
+            ))}
           </NTabs>
+          <NDropdown
+            placement="bottom-start"
+            trigger="manual"
+            x={xRef.value}
+            y={yRef.value}
+            options={options}
+            show={showDropdownRef.value}
+            onSelect={handleSelect}
+            onClickoutside={() => showDropdownRef.value = false}
+          >
+          </NDropdown>
         </div>
+
       </Transition>
     )
   },

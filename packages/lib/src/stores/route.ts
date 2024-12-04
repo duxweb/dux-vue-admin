@@ -3,7 +3,6 @@ import { ref } from 'vue'
 
 export interface DuxRoute {
   label?: string
-  labelLang?: string
   name: string
   path?: string
   icon?: string
