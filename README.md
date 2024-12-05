@@ -46,7 +46,7 @@
 
 纯前端演示地址：[https://vue-admin.dux.plus](https://vue-admin.dux.plus)
 
-后端Go演示地址：[https://go-admin.dux.plus/api](https://go-admin.dux.plus/manage)，演示账号：admin/admin
+后端Go演示地址：[https://go-admin.dux.plus/manage](https://go-admin.dux.plus/manage)，演示账号：admin/admin
 
 ## 📦 开发环境
 
