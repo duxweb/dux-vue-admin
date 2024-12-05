@@ -84,6 +84,9 @@ export default defineComponent({
     }
 
     function getCaptcha() {
+      if (!resource.config?.captcha) {
+        return
+      }
       captchaLoading.value = true
       client.get<Record<string, any>>({
         url: resource.captchaUrl,
@@ -145,9 +148,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      if (resource.config?.captcha) {
-        getCaptcha()
-      }
+      getCaptcha()
     })
 
     return () => (

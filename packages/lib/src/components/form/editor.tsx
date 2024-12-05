@@ -33,7 +33,7 @@ export const DuxFormEditor = defineComponent({
     onSave: Function,
   },
   extends: DuxPageEditor,
-  setup(props) {
+  setup(props, { emit }) {
     const { t } = useI18n()
     const groups = computed<PageEditorGroup[]>(() => {
       return [
@@ -83,9 +83,14 @@ export const DuxFormEditor = defineComponent({
 
     const modal = useModal()
 
+    const updateModelValue = (newValue) => {
+      emit('update:modelValue', newValue)
+    }
+
     return () => (
       <DuxPageEditor
         {...props}
+        onUpdateValue={updateModelValue}
         groups={groups.value}
         components={components.value}
         settingPage={{

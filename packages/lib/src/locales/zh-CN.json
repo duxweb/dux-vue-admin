@@ -177,7 +177,7 @@
         "optionValue": "选型值",
         "data": "编辑数据",
         "status": "组件状态",
-        "jsonOut": "输出 Json",
+        "jsonOut": "预览 Json",
         "json": "表单 Json 可直接调用 Json 表单组件使用"
       },
       "base": {
