@@ -23,6 +23,17 @@
 - 🗣️ **语言与主题**: 支持 i18n 国际化，主题色彩、多种布局，支持明暗自适应色彩，移动端自适应
 - 🆓 **免费开源**: 基于 Apache 2.0 协议，免费开源，可商用
 
+
+## 📚 文档
+
+详细文档请访问：[https://vue-docs.dux.plus](https://vue-docs.dux.plus)
+
+## 🎯 在线演示
+
+纯前端演示地址：[https://vue-admin.dux.plus](https://vue-admin.dux.plus)
+
+后端Go演示地址：[https://go-admin.dux.plus/api](https://go-admin.dux.plus/manage)，演示账号：admin/admin
+
 ## 📦 开发环境
 
 - Node.js >= 21.0.0
@@ -62,13 +73,6 @@ bun install
 bun run build
 ```
 
-## 📚 文档
-
-详细文档请访问：[https://vue-docs.dux.plus](https://vue-docs.dux.plus)
-
-## 🎯 在线演示
-
-演示地址：[https://vue-admin.dux.plus](https://vue-admin.dux.plus)
 
 ## 💡 技术栈
 

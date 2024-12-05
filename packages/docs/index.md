@@ -18,8 +18,12 @@ hero:
       link: /guide/project-structure
 
     - theme: alt
-      text: 在线预览
+      text: 纯前端演示
       link: https://vue-admin.dux.plus
+
+    - theme: alt
+      text: 后端Go演示
+      link: https://go-admin.dux.plus/manage
 
 features:
   - icon: 🏗️
