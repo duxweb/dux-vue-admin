@@ -21,14 +21,14 @@
 - 🗣️ **语言与主题**: 支持 i18n 国际化，主题色彩、多种布局，支持明暗自适应色彩，移动端自适应
 - 🆓 **免费开源**: 基于 Apache 2.0 协议，免费开源，可商用
 
-## PC截图
+## 📸 PC截图
 
 <p align="center">
 <img src="./images/pc-login.jpeg" width="400">
 <img src="./images/pc-home.jpeg" width="400">
 </p>
 
-## 移动端截图
+## 📱 移动端截图
 
 <p align="center">
 <img src="./images/mobile-login.jpeg" width="200">
