@@ -31,10 +31,10 @@
 ## 移动端截图
 
 <p align="center">
-<img src="./images/mobile-login.jpeg" width="300">
-<img src="./images/mobile-home.jpeg" width="300">
-<img src="./images/mobile-menu.jpeg" width="300" >
-<img src="./images/mobile-list.jpeg" width="300">
+<img src="./images/mobile-login.jpeg" width="200">
+<img src="./images/mobile-home.jpeg" width="200">
+<img src="./images/mobile-menu.jpeg" width="200" >
+<img src="./images/mobile-list.jpeg" width="200">
 </p>
 
 
