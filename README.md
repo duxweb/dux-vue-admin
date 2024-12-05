@@ -12,7 +12,7 @@
 
 ## 🌟 特性
 
-- 🏗️ **主流架构**: 基于 Vue3、Vite、TypeScript、Pinia、Vue Router、Naive UI 作为基础架构
+- 🏗️ **主流架构**: 基于 Vue3、Vite、TypeScript、Pinia、Vue Router、Naive UI、UnoCss 作为基础架构
 - 📄 **Json渲染**: Json 渲染器，仅用 Json 即可渲染为 Vue 组件，可用于低代码渲染平台
 - 🌐 **远程渲染**: 基于 Vue Sfc 的运行基座，异步加载 Vue 或 Json 并渲染，无需编译和打包
 - 👶 **新手友好**: 无论是新手还是老手，都能快速上手，特别针对后端全栈开发，提供优秀的解决方案
