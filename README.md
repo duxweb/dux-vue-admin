@@ -23,16 +23,19 @@
 
 ## PC截图
 
-<img src="./images/pc-login.jpeg" width="500" height="300">
-<img src="./images/pc-home.jpeg" width="500" height="300">
+<p align="center">
+<img src="./images/pc-login.jpeg" width="400">
+<img src="./images/pc-home.jpeg" width="400">
+</p>
 
 ## 移动端截图
 
+<p align="center">
 <img src="./images/mobile-login.jpeg" width="300">
 <img src="./images/mobile-home.jpeg" width="300">
 <img src="./images/mobile-menu.jpeg" width="300" >
 <img src="./images/mobile-list.jpeg" width="300">
-
+</p>
 
 
 ## 📚 文档
