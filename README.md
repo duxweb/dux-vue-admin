@@ -1,7 +1,5 @@
-# Dux Vue Admin
-
 <p align="center">
-  <img src="./packages/docs/public/logo.svg" width="200" alt="Dux Vue Admin Logo">
+  Dux Vue Admin
 </p>
 
 <p align="center">
@@ -22,6 +20,19 @@
 - 🎨 **UX & UI**: 优秀的用户体验和美观的界面设计，满足各种业务需求
 - 🗣️ **语言与主题**: 支持 i18n 国际化，主题色彩、多种布局，支持明暗自适应色彩，移动端自适应
 - 🆓 **免费开源**: 基于 Apache 2.0 协议，免费开源，可商用
+
+## PC截图
+
+<img src="./images/pc-login.jpeg" width="500" height="300">
+<img src="./images/pc-home.jpeg" width="500" height="300">
+
+## 移动端截图
+
+<img src="./images/mobile-login.jpeg" width="300">
+<img src="./images/mobile-home.jpeg" width="300">
+<img src="./images/mobile-menu.jpeg" width="300" >
+<img src="./images/mobile-list.jpeg" width="300">
+
 
 
 ## 📚 文档
