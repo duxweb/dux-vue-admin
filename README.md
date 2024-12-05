@@ -1,6 +1,6 @@
-<p align="center">
+<h1 align="center">
   Dux Vue Admin
-</p>
+</h1>
 
 <p align="center">
   <strong>适用于全栈开发的异步中后台前端解决方案</strong>
