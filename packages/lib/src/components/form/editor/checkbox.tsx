@@ -6,6 +6,7 @@ import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useModal } from '../../modal'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
+import { DuxFormItem } from '../formItem'
 import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const FormCheckbox = defineComponent({
@@ -15,12 +16,12 @@ const FormCheckbox = defineComponent({
   },
   setup(props) {
     return () => (
-      <NFormItem label={props.options?.label}>
+      <DuxFormItem label={props.options?.label}>
         <NCheckboxGroup {...props.options?.attr} value={props.options?.attr?.defaultValue}>
           {props.options?.attr?.options?.map((item, index) => <NCheckbox key={index} value={item.value}>{item.label}</NCheckbox>)}
         </NCheckboxGroup>
 
-      </NFormItem>
+      </DuxFormItem>
     )
   },
 })
@@ -101,7 +102,7 @@ const FormCheckboxSetting = defineComponent({
 
 export function duxFormEditorCheckbox(t: ComposerTranslation): PageEditorComponent {
   return {
-    name: 'checkbox',
+    name: 'checkbox-group',
     icon: 'i-tabler:square-check',
     label: t('components.formEditor.checkbox.name'),
     group: 'select',

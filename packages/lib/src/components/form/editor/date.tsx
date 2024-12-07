@@ -5,6 +5,7 @@ import { NDatePicker, NFormItem, NSelect, NSwitch } from 'naive-ui'
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
+import { DuxFormItem } from '../formItem'
 import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const FormDate = defineComponent({
@@ -15,11 +16,11 @@ const FormDate = defineComponent({
   setup(props) {
     const attr = props.options?.attr
     return () => (
-      <NFormItem label={props.options?.label}>
+      <DuxFormItem label={props.options?.label}>
         <div class="flex-1">
           <NDatePicker {...attr} />
         </div>
-      </NFormItem>
+      </DuxFormItem>
     )
   },
 })

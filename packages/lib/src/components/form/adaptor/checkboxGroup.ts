@@ -6,7 +6,7 @@ export interface CheckboxGroupAdaptor extends CheckboxGroupProps {
   options?: CheckboxProps[]
 }
 
-export function checkboxGroup({ label, name, itemAttr, attr }: JsonFormItemSchema) {
+export function checkboxGroup({ label, name, modelName, itemAttr, attr }: JsonFormItemSchema) {
   const { options, ...groupAttr } = attr as CheckboxGroupAdaptor
   return item({
     label,
@@ -15,7 +15,7 @@ export function checkboxGroup({ label, name, itemAttr, attr }: JsonFormItemSchem
     child: {
       tag: 'n-checkbox-group',
       attr: {
-        'v-model:value': `model.${name}`,
+        'v-model:value': `${modelName}.${name}`,
         ...groupAttr,
       },
       child: {

@@ -5,6 +5,7 @@ import { NFormItem, NInput, NSwitch, NTimePicker } from 'naive-ui'
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
+import { DuxFormItem } from '../formItem'
 import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const Comp = defineComponent({
@@ -14,11 +15,11 @@ const Comp = defineComponent({
   setup(props) {
     const attr = props.options?.attr
     return () => (
-      <NFormItem label={props.options?.label}>
+      <DuxFormItem label={props.options?.label}>
         <div class="flex-1">
           <NTimePicker {...attr} />
         </div>
-      </NFormItem>
+      </DuxFormItem>
     )
   },
 })

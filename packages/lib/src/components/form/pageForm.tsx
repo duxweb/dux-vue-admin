@@ -59,8 +59,8 @@ export const DuxPageForm = defineComponent({
                 <n-scrollbar>
                   <DuxForm {...props}>
                     <div class={clsx([
-                      'px-6 ',
-                      props.divider ? 'py-2  divide-y divide-gray-2' : 'py-4',
+                      'px-6 flex flex-col gap-4',
+                      props.divider ? 'py-4  divide-y divide-gray-2' : 'py-4',
                     ])}
                     >
                       {slots.default?.(model)}

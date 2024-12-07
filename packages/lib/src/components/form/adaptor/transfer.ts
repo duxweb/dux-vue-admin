@@ -1,7 +1,7 @@
 import type { JsonFormItemSchema } from '../handler'
 import { item } from './item'
 
-export function transfer({ label, name, itemAttr, attr }: JsonFormItemSchema) {
+export function transfer({ label, name, modelName, itemAttr, attr }: JsonFormItemSchema) {
   return item({
     label,
     name,
@@ -9,7 +9,7 @@ export function transfer({ label, name, itemAttr, attr }: JsonFormItemSchema) {
     child: {
       tag: 'n-transfer-picker',
       attr: {
-        'v-model:value': `model.${name}`,
+        'v-model:value': `${modelName}.${name}`,
         ...attr,
       },
     },

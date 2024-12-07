@@ -6,6 +6,7 @@ import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useModal } from '../../modal'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
+import { DuxFormItem } from '../formItem'
 import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const FormSelect = defineComponent({
@@ -15,9 +16,9 @@ const FormSelect = defineComponent({
   },
   setup(props) {
     return () => (
-      <NFormItem label={props.options?.label}>
+      <DuxFormItem label={props.options?.label}>
         <NSelect {...props.options?.attr} />
-      </NFormItem>
+      </DuxFormItem>
     )
   },
 })

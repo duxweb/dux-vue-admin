@@ -26,10 +26,10 @@ export const DuxFormEditorSettingPage = defineComponent({
 
               <DuxRadio
                 v-model:value={value.labelPlacement}
+                defaultValue="left"
                 options={[
                   { label: t('components.formEditor.page.left'), value: 'left' },
-                  { label: t('components.formEditor.page.center'), value: 'center' },
-                  { label: t('components.formEditor.page.right'), value: 'right' },
+                  { label: t('components.formEditor.page.top'), value: 'top' },
                 ]}
               />
             </NFormItem>

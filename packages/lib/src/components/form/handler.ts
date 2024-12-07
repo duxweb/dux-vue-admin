@@ -58,15 +58,17 @@ export interface JsonFormItemSchema {
   type: JsonFormType
   label?: string
   name?: string
+  modelName?: string
   attr?: JsonFormItemAdaptor<this['type']>
   itemAttr?: JsonFormItemProps
   child?: JsonFormItemSchema | JsonFormItemSchema[]
 }
 
-export function formToJson(schema: JsonFormItemSchema[], layout: FormLayoutType = 'form'): JSONSchema[] {
+export function formToJson(schema: JsonFormItemSchema[], layout: FormLayoutType = 'form', modelName: string = 'model'): JSONSchema[] {
   return schema?.map((item: JsonFormItemSchema) => {
     item.itemAttr = item.itemAttr || {}
     item.itemAttr.layout = layout
+    item.modelName = modelName
     let itemJson: JSONSchema = {}
     if (item.type === 'editor') {
       itemJson = editor(item)
@@ -161,7 +163,7 @@ export function formToJson(schema: JsonFormItemSchema[], layout: FormLayoutType 
     if (item.type === 'region') {
       itemJson = region(item)
     }
-    if (item.child) {
+    if (item.child && !itemJson.child) {
       const child = Array.isArray(item.child) ? item.child : [item.child]
       itemJson.child = formToJson(child)
     }

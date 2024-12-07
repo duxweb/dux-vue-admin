@@ -7,6 +7,7 @@ import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { DuxWidgetEditorPreview } from '../../pageEditor/editor/preview'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
+import { DuxFormItem } from '../formItem'
 import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const FormDynamicInput = defineComponent({
@@ -23,7 +24,7 @@ const FormDynamicInput = defineComponent({
     const attr = props.options?.attr
 
     return () => (
-      <NFormItem label={props.options?.label}>
+      <DuxFormItem label={props.options?.label}>
         <div class="flex-1 w-full">
           <NDynamicInput {...attr} value={[{}]}>
             {{
@@ -40,7 +41,7 @@ const FormDynamicInput = defineComponent({
             }}
           </NDynamicInput>
         </div>
-      </NFormItem>
+      </DuxFormItem>
     )
   },
 })
@@ -90,7 +91,7 @@ const FormDynamicInputSetting = defineComponent({
 
 export function duxFormEditorDynamicInput(t: ComposerTranslation): PageEditorComponent {
   return {
-    name: 'dynamicInput',
+    name: 'dynamic-input',
     icon: 'i-tabler:calendar-due',
     label: t('components.formEditor.dynamicInput.name'),
     group: 'form',
@@ -99,7 +100,7 @@ export function duxFormEditorDynamicInput(t: ComposerTranslation): PageEditorCom
     nested: true,
     settingDefault: {
       label: t('components.formEditor.dynamicInput.name'),
-      name: 'dynamicInput',
+      name: 'dynamic-input',
       attr: {
       },
       rule: [],

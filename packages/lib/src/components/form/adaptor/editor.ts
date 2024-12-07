@@ -1,7 +1,7 @@
 import type { JsonFormItemSchema } from '../handler'
 import { item } from './item'
 
-export function editor({ label, name, itemAttr, attr }: JsonFormItemSchema) {
+export function editor({ label, name, modelName, itemAttr, attr }: JsonFormItemSchema) {
   return item({
     label,
     name,
@@ -9,7 +9,7 @@ export function editor({ label, name, itemAttr, attr }: JsonFormItemSchema) {
     child: {
       tag: 'dux-ai-editor',
       attr: {
-        'v-model:value': `model.${name}`,
+        'v-model:value': `${modelName}.${name}`,
         ...attr,
       },
     },

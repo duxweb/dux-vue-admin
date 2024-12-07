@@ -64,5 +64,5 @@ export function useValidation() {
 }
 
 export function useValidationContext() {
-  return inject<ValidationContext>('validation')
+  return inject<ValidationContext | undefined>('validation', undefined)
 }

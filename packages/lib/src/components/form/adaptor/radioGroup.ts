@@ -6,7 +6,7 @@ export interface RadioGroupAdaptor extends RadioGroupProps {
   options?: CheckboxProps[]
 }
 
-export function radioGroup({ label, name, itemAttr, attr }: JsonFormItemSchema) {
+export function radioGroup({ label, name, modelName, itemAttr, attr }: JsonFormItemSchema) {
   const { options, ...groupAttr } = attr as RadioGroupAdaptor
   return item({
     label,
@@ -15,7 +15,7 @@ export function radioGroup({ label, name, itemAttr, attr }: JsonFormItemSchema) 
     child: {
       tag: 'n-radio-group',
       attr: {
-        'v-model:value': `model.${name}`,
+        'v-model:value': `${modelName}.${name}`,
         ...groupAttr,
       },
       child: {

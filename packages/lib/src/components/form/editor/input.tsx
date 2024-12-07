@@ -6,6 +6,7 @@ import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
 import { DuxRadio } from '../../radio'
+import { DuxFormItem } from '../formItem'
 import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const FormEditorInput = defineComponent({
@@ -15,9 +16,9 @@ const FormEditorInput = defineComponent({
   },
   setup(props) {
     return () => (
-      <NFormItem label={props.options?.label}>
+      <DuxFormItem label={props.options?.label}>
         <NInput {...props.options?.attr} inputProps={{ autocomplete: 'new-password' }} />
-      </NFormItem>
+      </DuxFormItem>
     )
   },
 })

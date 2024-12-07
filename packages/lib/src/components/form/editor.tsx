@@ -2,6 +2,7 @@ import type { PageEditorComponent, PageEditorGroup, UseEditorResult } from '../p
 import { NButton } from 'naive-ui'
 import { computed, defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useModal } from '../modal'
 import { DuxPageEditor } from '../pageEditor/editor'
 import { duxFormEditorCascader } from './editor/cascader'
 import { duxFormEditorCascaderAsync } from './editor/cascaderAsync'
@@ -32,8 +33,9 @@ export const DuxFormEditor = defineComponent({
     onSave: Function,
   },
   extends: DuxPageEditor,
-  setup(props, { emit }) {
+  setup(props) {
     const { t } = useI18n()
+    const modal = useModal()
     const groups = computed<PageEditorGroup[]>(() => {
       return [
         {
@@ -104,7 +106,6 @@ export const DuxFormEditor = defineComponent({
                     component: () => import('./editorJson'),
                     componentProps: {
                       value: edit?.value?.value.data || [],
-
                     },
                   })
                 }}

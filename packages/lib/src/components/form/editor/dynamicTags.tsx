@@ -5,6 +5,7 @@ import { NDynamicTags, NFormItem, NInputNumber, NSwitch } from 'naive-ui'
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
+import { DuxFormItem } from '../formItem'
 import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const Comp = defineComponent({
@@ -13,9 +14,9 @@ const Comp = defineComponent({
   },
   setup(props) {
     return () => (
-      <NFormItem label={props.options?.label}>
+      <DuxFormItem label={props.options?.label}>
         <NDynamicTags {...props.options?.attr} />
-      </NFormItem>
+      </DuxFormItem>
     )
   },
 })
@@ -61,7 +62,7 @@ const Setting = defineComponent({
 
 export function duxFormEditorDynamicTags(t: ComposerTranslation): PageEditorComponent {
   return {
-    name: 'dynamicTags',
+    name: 'dynamic-tags',
     icon: 'i-tabler:tag',
     label: t('components.formEditor.dynamicTags.name'),
     group: 'form',
@@ -69,7 +70,7 @@ export function duxFormEditorDynamicTags(t: ComposerTranslation): PageEditorComp
     setting: props => <Setting {...props} />,
     settingDefault: {
       label: t('components.formEditor.dynamicTags.name'),
-      name: 'dynamicTags',
+      name: 'dynamic-tags',
       attr: {
       },
       rule: [],

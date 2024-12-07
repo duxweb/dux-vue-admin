@@ -1,7 +1,7 @@
 import type { JsonFormItemSchema } from '../handler'
 import { item } from './item'
 
-export function time({ label, name, itemAttr, attr }: JsonFormItemSchema) {
+export function time({ label, name, modelName, itemAttr, attr }: JsonFormItemSchema) {
   return item({
     label,
     name,
@@ -9,7 +9,7 @@ export function time({ label, name, itemAttr, attr }: JsonFormItemSchema) {
     child: {
       tag: 'n-time-picker',
       attr: {
-        'v-model:value': `model.${name}`,
+        'v-model:value': `${modelName}.${name}`,
         ...attr,
       },
     },

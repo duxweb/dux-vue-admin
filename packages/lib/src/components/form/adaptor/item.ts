@@ -10,7 +10,7 @@ interface layoutProps {
 
 export function item({ label, name, attr, child }: layoutProps) {
   return {
-    tag: attr?.layout === 'page' ? 'dux-page-form-item' : 'n-form-item',
+    tag: attr?.layout === 'page' ? 'dux-page-form-item' : 'dux-form-item',
     attr: {
       label,
       path: name,

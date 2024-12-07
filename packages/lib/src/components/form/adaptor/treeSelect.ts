@@ -1,7 +1,7 @@
 import type { JsonFormItemSchema } from '../handler'
 import { item } from './item'
 
-export function treeSelect({ label, name, itemAttr, attr }: JsonFormItemSchema) {
+export function treeSelect({ label, name, modelName, itemAttr, attr }: JsonFormItemSchema) {
   return item({
     label,
     name,
@@ -9,7 +9,7 @@ export function treeSelect({ label, name, itemAttr, attr }: JsonFormItemSchema) 
     child: {
       tag: 'n-tree-select',
       attr: {
-        'v-model:value': `model.${name}`,
+        'v-model:value': `${modelName}.${name}`,
         ...attr,
       },
     },

@@ -1,7 +1,7 @@
 import type { PropType, Ref, VNode } from 'vue'
 import clsx from 'clsx'
 import { NFormItem, NTooltip } from 'naive-ui'
-import { computed, defineComponent, inject, watch } from 'vue'
+import { computed, defineComponent, inject, ref, watch } from 'vue'
 import { useValidationContext } from './useValidation'
 
 export const DuxFormItem = defineComponent({
@@ -26,8 +26,8 @@ export const DuxFormItem = defineComponent({
       return (valid?.validation?.value[props.field]?.errors?.length || 0) > 0
     })
 
-    const layout = inject<Ref<'left' | 'top' | 'config'>>('formLayout')
-    const labelWidth = inject<Ref<number | string>>('formLabelWidth')
+    const layout = inject<Ref<'left' | 'top' | 'config'>>('formLayout', ref('top'))
+    const labelWidth = inject<Ref<number | string>>('formLabelWidth', ref(100))
 
     watch(() => props.field, () => {
       if (!props.field) {
@@ -44,38 +44,40 @@ export const DuxFormItem = defineComponent({
         layout?.value === 'config' && 'grid grid-cols-1 lg:grid-cols-5 items-start',
       ])}
       >
-        <div class={clsx([
-          layout?.value === 'config' && 'lg:col-span-1 flex-col',
-          layout?.value === 'left' && `lg:w-[${labelWidth?.value}px]`,
-        ])}
-        >
+        {props.label && (
           <div class={clsx([
-            'flex gap-2 items-center',
+            layout?.value === 'config' && 'lg:col-span-1 flex-col',
+            layout?.value === 'left' && `lg:w-[${labelWidth?.value}px]`,
           ])}
           >
-            {props.required && (
-              <div class="text-error leading-1 mt-1">
-                *
+            <div class={clsx([
+              'flex gap-2 items-center',
+            ])}
+            >
+              {props.required && (
+                <div class="text-error leading-1 mt-1">
+                  *
+                </div>
+              )}
+              <div>{props.label}</div>
+              {props.tooltip && (
+                <NTooltip>
+                  {{
+                    default: () => props.tooltip,
+                    trigger: () => (
+                      <div class="i-tabler:info-circle" />
+                    ),
+                  }}
+                </NTooltip>
+              )}
+            </div>
+            {layout?.value === 'config' && props.desc && (
+              <div class="text-gray-6">
+                {props.desc}
               </div>
             )}
-            <div>{props.label}</div>
-            {props.tooltip && (
-              <NTooltip>
-                {{
-                  default: () => props.tooltip,
-                  trigger: () => (
-                    <div class="i-tabler:info-circle" />
-                  ),
-                }}
-              </NTooltip>
-            )}
           </div>
-          {layout?.value === 'config' && props.desc && (
-            <div class="text-gray-6">
-              {props.desc}
-            </div>
-          )}
-        </div>
+        )}
         <div class={clsx([
           'flex-1 flex flex-col gap-2',
           isError.value ? 'text-error' : '',

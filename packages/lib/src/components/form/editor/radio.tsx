@@ -6,6 +6,7 @@ import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useModal } from '../../modal'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
+import { DuxFormItem } from '../formItem'
 import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const FormRadio = defineComponent({
@@ -15,12 +16,12 @@ const FormRadio = defineComponent({
   },
   setup(props) {
     return () => (
-      <NFormItem label={props.options?.label}>
+      <DuxFormItem label={props.options?.label}>
         <NRadioGroup {...props.options?.attr} value={props.options?.attr?.defaultValue}>
           {props.options?.attr?.options?.map((item, index) => <NRadio key={index} value={item.value}>{item.label}</NRadio>)}
         </NRadioGroup>
 
-      </NFormItem>
+      </DuxFormItem>
     )
   },
 })

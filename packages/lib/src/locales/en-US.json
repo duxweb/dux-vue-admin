@@ -195,8 +195,7 @@
         "name": "Form Config",
         "placement": "Label Position",
         "left": "Left",
-        "right": "Right",
-        "center": "Center"
+        "top": "Top"
       },
       "cascader": {
         "name": "Cascader",

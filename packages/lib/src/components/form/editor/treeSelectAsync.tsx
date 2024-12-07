@@ -6,6 +6,7 @@ import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
 import { DuxTreeSelectAsync } from '../../treeSelect'
+import { DuxFormItem } from '../formItem'
 import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const Comp = defineComponent({
@@ -14,9 +15,9 @@ const Comp = defineComponent({
   },
   setup(props) {
     return () => (
-      <NFormItem label={props.options?.label}>
+      <DuxFormItem label={props.options?.label}>
         <DuxTreeSelectAsync {...props.options?.attr} />
-      </NFormItem>
+      </DuxFormItem>
     )
   },
 })

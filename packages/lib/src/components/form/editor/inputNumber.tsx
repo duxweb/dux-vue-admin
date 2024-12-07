@@ -5,6 +5,7 @@ import { NCheckbox, NFormItem, NInput, NInputNumber } from 'naive-ui'
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { WidgetEditorSettingCard } from '../../pageEditor/editor/setting'
+import { DuxFormItem } from '../formItem'
 import { DuxFormEditorItem, DuxFormEditorRule } from './base'
 
 const FormEditorInputNumber = defineComponent({
@@ -15,7 +16,7 @@ const FormEditorInputNumber = defineComponent({
   setup(props) {
     const attr = props.options?.attr
     return () => (
-      <NFormItem label={props.options?.label}>
+      <DuxFormItem label={props.options?.label}>
         <div class="flex-1">
           <NInputNumber {...attr}>
             {{
@@ -24,7 +25,7 @@ const FormEditorInputNumber = defineComponent({
             }}
           </NInputNumber>
         </div>
-      </NFormItem>
+      </DuxFormItem>
     )
   },
 })

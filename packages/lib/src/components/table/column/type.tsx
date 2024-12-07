@@ -6,10 +6,11 @@ import { NTag } from 'naive-ui'
 export function columnType({ key, maps }: ColumnStatusProps): TableColumnRender {
   return (rowData) => {
     return (
-      <>
+      <div class="flex flex-row gap-1">
         {key
-          ? rowData?.[key]?.map((value: any) => {
-            const type = findKey(maps, v => v.value === value) as ColumnStatusType
+          ? rowData?.[key]?.map?.((value: any) => {
+            // eslint-disable-next-line eqeqeq
+            const type = findKey(maps, v => v.value == value) as ColumnStatusType
             const info = maps?.[type]
             return (
               <NTag round bordered={false} type={type}>
@@ -18,7 +19,7 @@ export function columnType({ key, maps }: ColumnStatusProps): TableColumnRender 
             )
           })
           : '-'}
-      </>
+      </div>
     )
   }
 }
