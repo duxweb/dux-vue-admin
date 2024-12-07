@@ -24,17 +24,17 @@
 ## 📸 PC截图
 
 <p align="center">
-<img src="./images/pc-login.jpeg" width="400">
-<img src="./images/pc-home.jpeg" width="400">
+<img src="./packages/docs/public/images/pc-login.jpeg" width="400">
+<img src="./packages/docs/public/images/pc-home.jpeg" width="400">
 </p>
 
 ## 📱 移动端截图
 
 <p align="center">
-<img src="./images/mobile-login.jpeg" width="200">
-<img src="./images/mobile-home.jpeg" width="200">
-<img src="./images/mobile-menu.jpeg" width="200" >
-<img src="./images/mobile-list.jpeg" width="200">
+<img src="./packages/docs/public/images/mobile-login.jpeg" width="200">
+<img src="./packages/docs/public/images/mobile-home.jpeg" width="200">
+<img src="./packages/docs/public/images/mobile-menu.jpeg" width="200" >
+<img src="./packages/docs/public/images/mobile-list.jpeg" width="200">
 </p>
 
 
@@ -117,3 +117,7 @@ bun run build
 - [文档](https://vue-admin.dux.plus)
 - [在线演示](https://vue-admin.dux.plus)
 - [问题反馈](https://github.com/duxweb/dux-vue-admin/issues)
+
+## 🧰 微信群
+
+<img src="./packages/docs/public/images/qrcode.png" width="200">

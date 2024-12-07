@@ -52,3 +52,110 @@ features:
     details: 基于 Apache 2.0 协议，免费开源，可商用，可修改，可二次开发，可定制化。
 ---
 
+
+
+<div class="vp-doc custom-block">
+  <div class="image-container">
+    <div class="screenshots">
+      <div class="image-item">
+        <img src="/images/pc-login.jpeg" alt="产品截图1">
+        <p>PC 登录</p>
+      </div>
+      <div class="image-item">
+        <img src="/images/pc-home.jpeg" alt="产品截图2">
+        <p>PC 首页</p>
+      </div>
+    </div>
+    <div class="screenshots-mobile">
+      <div class="image-item">
+        <img src="/images/mobile-login.jpeg" alt="产品截图2">
+        <p>移动端登录</p>
+      </div>
+      <div class="image-item">
+        <img src="/images/mobile-home.jpeg" alt="产品截图2">
+        <p>移动端首页</p>
+      </div>
+      <div class="image-item">
+        <img src="/images/mobile-menu.jpeg" alt="产品截图2">
+        <p>移动端菜单</p>
+      </div>
+      <div class="image-item">
+        <img src="/images/mobile-list.jpeg" alt="产品截图2">
+        <p>移动端列表</p>
+      </div>
+    </div>
+    <div class="qrcode">
+      <div class="image-item">
+        <img src="/images/qrcode.png" alt="微信群">
+        <p>扫码加入交流群</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.image-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin: 2rem auto;
+  max-width: 1200px;
+  align-items: center;
+}
+
+.screenshots {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  justify-content: center;
+}
+
+.screenshots-mobile {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.qrcode {
+  display: flex;
+  justify-content: center;
+}
+
+.image-item {
+  text-align: center;
+}
+
+.image-item img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.qrcode .image-item img {
+  max-width: 200px;
+}
+
+.image-item p {
+  margin-top: 1rem;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .screenshots {
+    grid-template-columns: 1fr;
+  }
+
+  .screenshots-mobile {
+    grid-template-columns: 1fr;
+  }
+
+  .image-item img {
+    max-width: 100%;
+  }
+  
+  .qrcode .image-item img {
+    max-width: 160px;
+  }
+}
+</style>

@@ -10,7 +10,7 @@ export interface ColumnTagsProps {
 export function columnTags({ key, type }: ColumnTagsProps): TableColumnRender {
   return (rowData) => {
     return (
-      <>
+      <div class="flex gap-1">
         {rowData?.[key || 0]?.map((value: any) => {
           return (
             <NTag round bordered={false} type={type}>
@@ -18,7 +18,7 @@ export function columnTags({ key, type }: ColumnTagsProps): TableColumnRender {
             </NTag>
           )
         })}
-      </>
+      </div>
     )
   }
 }

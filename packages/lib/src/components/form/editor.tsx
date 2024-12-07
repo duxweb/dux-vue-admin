@@ -2,7 +2,6 @@ import type { PageEditorComponent, PageEditorGroup, UseEditorResult } from '../p
 import { NButton } from 'naive-ui'
 import { computed, defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useModal } from '../modal'
 import { DuxPageEditor } from '../pageEditor/editor'
 import { duxFormEditorCascader } from './editor/cascader'
 import { duxFormEditorCascaderAsync } from './editor/cascaderAsync'
@@ -81,16 +80,9 @@ export const DuxFormEditor = defineComponent({
       ]
     })
 
-    const modal = useModal()
-
-    const updateModelValue = (newValue) => {
-      emit('update:modelValue', newValue)
-    }
-
     return () => (
       <DuxPageEditor
         {...props}
-        onUpdateValue={updateModelValue}
         groups={groups.value}
         components={components.value}
         settingPage={{

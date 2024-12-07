@@ -1,5 +1,6 @@
 import type { PropType, VNode } from 'vue'
 import type { PageEditorComponent, PageEditorGroup, PageEditorSettingPage, UseEditorResult, UseEditorValue } from './editor/hook'
+import { useVModel } from '@vueuse/core'
 import clsx from 'clsx'
 import { cloneDeep } from 'lodash-es'
 import { NScrollbar } from 'naive-ui'
@@ -16,7 +17,6 @@ export const DuxPageEditor = defineComponent({
   name: 'DuxPageEditor',
   props: {
     value: Object as PropType<UseEditorValue | undefined>,
-    onUpdateValue: Function,
     groups: Array as PropType<PageEditorGroup[]>,
     components: Array as PropType<PageEditorComponent[]>,
     settingPage: Object as PropType<PageEditorSettingPage>,
@@ -75,17 +75,16 @@ export const DuxPageEditor = defineComponent({
       } as any
     }
 
-    watch(editor.value, (v) => {
-      props.onUpdateValue?.(v)
-      emit('update:modelValue', v)
-    }, { deep: true, immediate: true })
+    const model = useVModel(props, 'value', emit, {
+      passive: true,
+    })
 
-    watch(() => props.value, (v) => {
-      editor.value.value = v || {
+    watch(model, () => {
+      editor.value.value = model.value || {
         config: {},
         data: [],
       }
-    })
+    }, { deep: true, immediate: true })
 
     return () => (
       <div class="flex-1 h-1 px-2 flex flex-row pb-2 text-sm">
