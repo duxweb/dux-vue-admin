@@ -2,13 +2,13 @@ import type { Method } from 'alova'
 import type { FormInst } from 'naive-ui'
 import { cloneDeep } from 'lodash-es'
 import { useMessage } from 'naive-ui'
-import { type Ref, ref, toRef, watch } from 'vue'
+import { type ComputedRef, isRef, type Ref, ref, toRef, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useClient } from '../../hooks/useClient'
 import { useValidation } from './useValidation'
 
 export interface UseFormProps {
-  url?: string
+  url?: string | ComputedRef<string | undefined>
   id?: unknown | Ref<unknown>
   initData?: Record<string, any>
   formRef?: Ref<FormInst>
@@ -29,16 +29,23 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
   const initModel = ref(initData)
   const idRef = toRef(id)
 
+  const getUrl = () => {
+    if (!url) {
+      return ''
+    }
+    return isRef(url) ? url.value : url
+  }
+
   const request = (): Method => {
     if (idRef.value) {
       return client.put({
-        url: `${url}/${idRef.value}`,
+        url: `${getUrl()}/${idRef.value}`,
         data: formModel.value,
       })
     }
     else {
       return client.post({
-        url,
+        url: getUrl(),
         data: formModel.value,
       })
     }
@@ -49,7 +56,7 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
     request().then((res) => {
       message.success(res.data?.message || t('message.requestSuccess'))
       success?.(res)
-      client.invalidate(invalidate || url)
+      client.invalidate(invalidate || getUrl())
     }).catch((res) => {
       if (res?.data) {
         Object.entries(res?.data).forEach(([key, value]) => {
@@ -65,7 +72,7 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
   const getData = () => {
     formLoading.value = true
     client.get({
-      url: idRef.value ? `${url}/${idRef.value}` : url,
+      url: idRef.value ? `${getUrl()}/${idRef.value}` : getUrl(),
       config: {
         cacheFor: 0,
       },

@@ -2,7 +2,7 @@ import type { PropType } from 'vue'
 import type { JsonFormItemSchema } from './handler'
 import { useVModel } from '@vueuse/core'
 import { NButton } from 'naive-ui'
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { DuxModalPage } from '../modal'
 import { DuxForm } from './form'
@@ -29,8 +29,10 @@ export const DuxModalForm = defineComponent({
       defaultValue: {},
     })
 
+    const formUrl = computed(() => props.url)
+
     const { loading, model, onSubmit } = useForm({
-      url: props.url,
+      url: formUrl,
       id: props.id,
       invalidate: props.invalidate,
       model: modelData,
