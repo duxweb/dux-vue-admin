@@ -27,7 +27,7 @@ export const DuxFormItem = defineComponent({
     })
 
     const layout = inject<Ref<'left' | 'top' | 'config'>>('formLayout', ref('top'))
-    const labelWidth = inject<Ref<number | string>>('formLabelWidth', ref(100))
+    const labelWidth = inject<Ref<number | string>>('formLabelWidth', ref(80))
 
     watch(() => props.field, () => {
       if (!props.field) {
@@ -39,15 +39,15 @@ export const DuxFormItem = defineComponent({
     return () => (
       <div class={clsx([
         'gap-2 w-full text-sm',
-        layout?.value === 'left' && 'flex lg:flex-row flex-col items-center',
+        layout?.value === 'left' && 'flex md:flex-row flex-col items-center',
         layout?.value === 'top' && 'flex flex-col',
-        layout?.value === 'config' && 'grid grid-cols-1 lg:grid-cols-5 items-start',
+        layout?.value === 'config' && 'grid grid-cols-1 md:grid-cols-5 items-start',
       ])}
       >
         {props.label && (
           <div class={clsx([
-            layout?.value === 'config' && 'lg:col-span-1 flex-col',
-            layout?.value === 'left' && `lg:w-[${labelWidth?.value}px]`,
+            layout?.value === 'config' && 'md:col-span-1 flex-col',
+            layout?.value === 'left' && `md:w-[${labelWidth?.value}px]`,
           ])}
           >
             <div class={clsx([
