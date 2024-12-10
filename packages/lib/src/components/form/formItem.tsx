@@ -28,6 +28,7 @@ export const DuxFormItem = defineComponent({
 
     const layout = inject<Ref<'left' | 'top' | 'config'>>('formLayout', ref('top'))
     const labelWidth = inject<Ref<number | string>>('formLabelWidth', ref(80))
+    const labelAlign = inject<Ref<'left' | 'center' | 'right'>>('formLabelAlign', ref('left'))
 
     watch(() => props.field, () => {
       if (!props.field) {
@@ -52,6 +53,8 @@ export const DuxFormItem = defineComponent({
           >
             <div class={clsx([
               'flex gap-2 items-center',
+              labelAlign?.value === 'center' && 'justify-center',
+              labelAlign?.value === 'right' && 'justify-end',
             ])}
             >
               {props.required && (

@@ -78,12 +78,12 @@ export const DuxFilter = defineComponent({
           </div>
         </div>
 
-        <DuxForm layout={width.value > 768 ? 'left' : 'top'}>
+        <DuxForm layout={width.value > 768 ? 'left' : 'top'} labelWidth="auto">
           <div class="flex flex-col md:flex-row gap-4">
             <div
               ref={filterRef}
               class={clsx([
-                'flex-1 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-6 gap-3 lg:flex-1 overflow-hidden',
+                'flex-1 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-6 gap-2 lg:flex-1 overflow-hidden',
                 filterMore.value ? 'h-auto' : 'h-35px',
                 filterShow.value ? 'grid' : 'hidden',
               ])}

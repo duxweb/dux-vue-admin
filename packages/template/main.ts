@@ -13,7 +13,7 @@ const app = createApp(App)
 
 const config: Config = {
   apiUrl: 'http://0.0.0.0:8900',
-  captcha: true,
+  captcha: false,
   manage: {
     admin: {
       apiPrefix: 'admin',

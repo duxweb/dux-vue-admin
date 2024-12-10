@@ -12,11 +12,15 @@ export const DuxForm = defineComponent({
       type: String as PropType<'left' | 'top' | 'config'>,
       default: 'left',
     },
+    labelAlign: {
+      type: String as PropType<'left' | 'center' | 'right'>,
+      default: 'left',
+    },
   },
   setup(props, { slots }) {
     provide('formLayout', toRef(props, 'layout'))
     provide('formLabelWidth', toRef(props, 'labelWidth'))
-
+    provide('formLabelAlign', toRef(props, 'labelAlign'))
     return () => (
       <div class="flex flex-col gap-4">
         {slots.default?.()}

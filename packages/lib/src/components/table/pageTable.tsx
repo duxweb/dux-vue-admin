@@ -55,6 +55,7 @@ export const DuxPageTable = defineComponent({
     const form = useVModel(props, 'form', emit, {
       passive: true,
       defaultValue: {},
+      deep: true,
     })
 
     const columns = toRef(props, 'columns')
