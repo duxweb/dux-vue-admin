@@ -19,6 +19,7 @@ export const DuxTabForm = defineComponent({
     schema: Object as PropType<JsonFormItemSchema[]>,
     url: String,
     id: [String, Number],
+    edit: Boolean,
     invalidate: String,
     tab: String,
   },
@@ -38,8 +39,9 @@ export const DuxTabForm = defineComponent({
       id: props.id,
       invalidate: props.invalidate,
       model: modelData,
+      edit: props.edit,
       success: () => {
-        if (!props.id && tab.current) {
+        if (!props.id && tab.current && !props.edit) {
           tab.delTab(tab.current, v => router.push(v.url || ''))
         }
         else {
