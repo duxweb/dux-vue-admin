@@ -23,7 +23,7 @@ export interface FilterAction {
   path?: string | ((id?: string | number, itemData?: object) => string)
   invalidate?: string
   component?: AsyncComponentLoader<any>
-  componentProps?: Record<string, any>
+  componentProps?: Record<string, any> | ((data: any) => Record<string, any>)
   width?: number
   show?: (rowData?: object, rowIndex?: number) => boolean
 }
@@ -106,13 +106,14 @@ export function useAction({ url }: { url?: string }) {
   const trigger = ({ item, id, itemData }: TriggerAction) => {
     const title = item?.titleLang ? t(item.titleLang) : item.title
     const label = item?.labelLang ? t(item.labelLang) : item.label
+    const componentProps = typeof item.componentProps === 'function' ? item.componentProps(itemData) : item.componentProps
 
     if (item.type === 'modal') {
       modal?.show({
         title: title || label,
         component: item.component,
         componentProps: {
-          ...item.componentProps,
+          ...componentProps,
           id,
         },
         width: item.width,
@@ -123,7 +124,7 @@ export function useAction({ url }: { url?: string }) {
         title: title || label,
         component: item.component,
         componentProps: {
-          ...item.componentProps,
+          ...componentProps,
           id,
         },
         width: item.width,
@@ -201,13 +202,13 @@ export function listRenderAction({ key, text, rowData, rowIndex, actions, url }:
             renderIcon={
               item?.icon
                 ? () => (
-                    <div class={clsx([
-                      'n-icon',
-                      item.icon,
-                    ])}
-                    >
-                    </div>
-                  )
+                  <div class={clsx([
+                    'n-icon',
+                    item.icon,
+                  ])}
+                  >
+                  </div>
+                )
                 : undefined
             }
           >
@@ -226,29 +227,29 @@ export function listRenderDropdown({ actions }: RenderActionProps): VNodeChild {
   return (
     actions && actions?.length > 0
       ? (
-          <NDropdown
-            trigger="click"
-            options={actions?.map((item, index) => {
-              return {
-                label: item.labelLang ? t(item.labelLang) : item.label,
-                key: index,
-                icon: item?.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined,
-              }
-            })}
-            onSelect={(key) => {
-              if (!actions?.[key]) {
-                return
-              }
-              trigger({
-                item: actions[key],
-              })
-            }}
-          >
-            {{
-              default: () => <NButton type="default" secondary renderIcon={() => <div class="i-tabler:grid-dots"></div>}></NButton>,
-            }}
-          </NDropdown>
-        )
+        <NDropdown
+          trigger="click"
+          options={actions?.map((item, index) => {
+            return {
+              label: item.labelLang ? t(item.labelLang) : item.label,
+              key: index,
+              icon: item?.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined,
+            }
+          })}
+          onSelect={(key) => {
+            if (!actions?.[key]) {
+              return
+            }
+            trigger({
+              item: actions[key],
+            })
+          }}
+        >
+          {{
+            default: () => <NButton type="default" secondary renderIcon={() => <div class="i-tabler:grid-dots"></div>}></NButton>,
+          }}
+        </NDropdown>
+      )
       : null
   )
 }

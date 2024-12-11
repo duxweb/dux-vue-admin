@@ -50,15 +50,13 @@ export const DuxTabForm = defineComponent({
 
     return () => (
       <DuxFullPage>
-        <div class="flex flex-col gap-4 h-full">
+        <DuxForm {...props} class="flex flex-col gap-4 h-full">
           <NCard
             class="h-full"
             contentClass="p-0! h-1 flex flex-col"
           >
-            <NTabs type="line" class="flex-1 h-1" tabClass="p-4!" paneClass="flex-1 h-1 overflow-auto p-4!" defaultValue={props.tab}>
-              <DuxForm {...props}>
-                {slots.default?.()}
-              </DuxForm>
+            <NTabs type="line" class="flex-1 h-1 flex flex-col" tabClass="p-4!" paneClass="flex-1 h-1 overflow-auto p-4!" defaultValue={props.tab}>
+              {slots.default?.()}
             </NTabs>
             <div class="border-t border-gray-2 p-4 flex justify-end gap-4">
               <NButton tertiary loading={loading.value} onClick={onReset}>
@@ -69,7 +67,7 @@ export const DuxTabForm = defineComponent({
               </NButton>
             </div>
           </NCard>
-        </div>
+        </DuxForm>
       </DuxFullPage>
     )
   },

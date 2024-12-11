@@ -172,8 +172,10 @@ export default defineComponent({
             {resource.config?.loginBanner ? <img class="w-full h-auto" src={resource.config?.loginBanner} /> : <div class="w-full h-auto"><dux-draw-apps /></div>}
           </div>
           <div class="flex flex-col">
-            <div class="flex flex-col items-center justify-center mt-4 h-20 ">
-              <dux-logo />
+            <div class="flex flex-col items-center justify-center mt-4">
+              <div class="h-16">
+                {resource.config?.logo ? (darkMode.value && resource.config?.darkLogo ? <img class="w-auto h-full" src={resource.config?.darkLogo} /> : <img class="w-auto h-full" src={resource.config?.logo} />) : <dux-logo />}
+              </div>
               <div class="mt-4 text-lg">
                 {resource.manageConfig?.title || 'Dux Admin Manage'}
               </div>
