@@ -12,6 +12,7 @@ import { useClient } from '../../hooks/useClient'
 import { useDialog } from '../dialog'
 import { listRenderAction } from '../filter'
 import { columnMap, columnMedia, columnStatus, columnTags, columnText, columnType } from './column'
+import { columnImage } from './column/image'
 import { columnSwitch } from './column/switch'
 
 export function useTable({ filter, url, batch, columns: tableColumn, columnActions, excelColumns, export: exportStatus, import: importStatus, expanded: expandedStatus, cacheTime, key = 'id' }: UseTableProps): UseTableResult {
@@ -358,6 +359,12 @@ export function useTableColumns(props: UseTableColumnsProps) {
         return {
           ...itemProps,
           render: columnMedia(params),
+        }
+      }
+      if (item.renderType === 'image') {
+        return {
+          ...itemProps,
+          render: columnImage(params),
         }
       }
       if (item.renderType === 'status') {

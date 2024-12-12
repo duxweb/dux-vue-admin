@@ -1,5 +1,15 @@
 html,
 body {
+  font-family:
+    'MiSans',
+    'PingFang SC',
+    'Hiragino Sans GB',
+    'Microsoft YaHei',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   background-color: var(--n-body-color);
   color: var(--n-text-color-base);
   padding: 0;

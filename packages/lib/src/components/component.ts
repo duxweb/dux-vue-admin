@@ -16,6 +16,7 @@ import { DuxDrawerForm, DuxForm, DuxFormEditor, DuxFormItem, DuxJsonForm, DuxMod
 import { DuxIconPicker } from './icon'
 import { DuxException, DuxGrid } from './layout'
 import { DuxCardList, DuxList } from './list'
+import { DuxLocale } from './locale'
 import { DuxMentionAsync } from './mention'
 import { DuxMessagePage } from './message'
 import { DuxModalPage } from './modal'
@@ -123,6 +124,7 @@ export default {
     app.component('DuxTabPage', DuxTabPage)
     app.component('DuxTabPageItem', DuxTabPageItem)
     app.component('DuxTabForm', DuxTabForm)
+    app.component('DuxLocale', DuxLocale)
     app.component('DuxTreeFilter', DuxTreeFilter)
     app.component('DuxMessagePage', DuxMessagePage)
     app.component('DuxCollapsePanel', DuxCollapsePanel)

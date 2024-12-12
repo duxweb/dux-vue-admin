@@ -46,6 +46,10 @@ export const DuxPageTable = defineComponent({
     },
     form: Object as PropType<Record<string, any>>,
     batch: Array<BatchAction>,
+    pagination: {
+      type: Boolean,
+      default: true,
+    },
   },
   setup(props, { slots, emit, expose }) {
     const { width } = useWindowSize()
@@ -162,8 +166,7 @@ export const DuxPageTable = defineComponent({
                   columns={tableColumns.value}
                   defaultExpandAll={true}
                   {...tableParams.value}
-                  pagination={pagination.value}
-
+                  pagination={props.pagination ? pagination.value : false}
                 />
               </div>
             </div>

@@ -12,6 +12,7 @@ import { router } from './core/router'
 import { permissionDirective } from './directive'
 import { i18n } from './i18n'
 
+import { loadMiSansFont } from './theme/fonts'
 import 'go-captcha-vue/dist/style.css'
 import '@unocss/reset/tailwind-compat.css'
 import 'vfonts/Lato.css'
@@ -26,6 +27,8 @@ export function createDux(config: Config) {
   if (config.lang) {
     i18n.global.locale = config.lang
   }
+
+  loadMiSansFont()
 
   return {
     install(app: App) {

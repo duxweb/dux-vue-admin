@@ -6,6 +6,7 @@ import type { UseDrawerResult } from '../../drawer'
 import type { FilterAction } from '../../filter'
 import type { UseModalResult } from '../../modal'
 import type { ColumnMapProps, ColumnMediaProps, ColumnStatusProps, ColumnTagsProps, ColumnTextProps } from '../column'
+import type { ColumnImageProps } from '../column/image'
 import type { ColumnSwitchProps } from '../column/switch'
 
 export type TableAction = FilterAction
@@ -49,6 +50,7 @@ export interface TableTabProps {
 
 export interface TableActionAttrMap {
   text: ColumnTextProps
+  image: ColumnImageProps
   type: ColumnStatusProps
   tags: ColumnTagsProps
   status: ColumnStatusProps
@@ -62,7 +64,7 @@ export type TableActionAdaptor<T extends keyof TableActionAttrMap> = TableAction
 
 type DataTableColumn = DataTableBaseColumn | DataTableExpandColumn
 export interface TableColumnExtend {
-  renderType: 'text' | 'type' | 'tags' | 'status' | 'media' | 'map' | 'switch' | 'render'
+  renderType: 'text' | 'image' | 'type' | 'tags' | 'status' | 'media' | 'map' | 'switch' | 'render'
   renderProps?: TableActionAdaptor<this['renderType']>
   render?: TableColumnRender
   show?: boolean
