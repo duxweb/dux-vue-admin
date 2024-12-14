@@ -1,4 +1,5 @@
 import type { TableColumnRender } from '../../table'
+import { get } from 'lodash-es'
 
 export interface ColumnTextProps {
   key?: string
@@ -6,9 +7,11 @@ export interface ColumnTextProps {
 
 export function columnText(props: ColumnTextProps): TableColumnRender {
   return (rowData) => {
-    if (!props.key || rowData?.[props.key] === undefined || rowData?.[props.key] === null || rowData?.[props.key] === '') {
+    const value = get(rowData, props.key || '')
+
+    if (!props.key || value === undefined || value === null || value === '') {
       return '-'
     }
-    return rowData?.[props.key]
+    return value
   }
 }

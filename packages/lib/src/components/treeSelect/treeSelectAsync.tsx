@@ -37,7 +37,6 @@ export const DuxTreeSelectAsync = defineComponent({
     return () => (
       <NTreeSelect
         {...props}
-
         loading={loading.value}
         options={options.value?.data || []}
         v-model:value={model.value}

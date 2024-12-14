@@ -117,40 +117,40 @@ export const DuxImageUpload = defineComponent({
             <div
               key={index}
               class={clsx([
-                'w-100px h-100px rounded border-1 border-gray-3 relative group draggable flex items-center',
+                'w-80px h-80px rounded border-1 border-gray-3 relative group draggable flex items-center',
                 item.status === 'error' ? 'border-error text-error' : 'border-gray-3',
               ])}
             >
               {item.status === 'finished'
                 ? (
-                    <NImage
-                      class="z-0 rounded"
-                      objectFit="scale-down"
-                      width={100}
-                      height={100}
-                      previewDisabled
-                      src={item.url as string}
-                    >
-                      <div class="size-full flex items-center justify-center">
-                        <div class="i-tabler:photo size-8"></div>
-                      </div>
-                    </NImage>
-                  )
-                : (
-                    <div class="size-100px flex items-center justify-center rounded">
+                  <NImage
+                    class="z-0 rounded"
+                    objectFit="scale-down"
+                    width={100}
+                    height={100}
+                    previewDisabled
+                    src={item.url as string}
+                  >
+                    <div class="size-full flex items-center justify-center">
                       <div class="i-tabler:photo size-8"></div>
-                      {item.status === 'uploading' && (
-                        <div class="absolute left-2 right-2 bottom-2">
-                          <NProgress
-                            type="line"
-                            percentage={item.percentage || 0}
-                            height={5}
-                            showIndicator={false}
-                          />
-                        </div>
-                      )}
                     </div>
-                  )}
+                  </NImage>
+                )
+                : (
+                  <div class="size-80px flex items-center justify-center rounded">
+                    <div class="i-tabler:photo size-8"></div>
+                    {item.status === 'uploading' && (
+                      <div class="absolute left-2 right-2 bottom-2">
+                        <NProgress
+                          type="line"
+                          percentage={item.percentage || 0}
+                          height={5}
+                          showIndicator={false}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
               <div class="z-1 size-full inset-0 absolute flex items-center justify-center bg-gray-2 bg-opacity-90 transition-all opacity-0 group-hover:opacity-100 rounded">
                 {item.status === 'finished' && (
                   <NButton
@@ -194,7 +194,7 @@ export const DuxImageUpload = defineComponent({
 
           {(props.multiple || files.value?.length === 0) && (
             <div
-              class="w-100px h-100px rounded flex flex-col  border-1 border-dashed border-gray-3 cursor-pointer text-sm  hover:border-primary-7"
+              class="w-80px h-80px rounded flex flex-col  border-1 border-dashed border-gray-3 cursor-pointer text-sm  hover:border-primary-7"
               style={{
                 backgroundColor: 'var(--n-action-color)',
               }}

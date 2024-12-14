@@ -81,18 +81,18 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
   const Pagination = () => (
     pagination
       ? (
-          <div class="flex justify-center">
-            <NPagination
-              page={page.value}
-              pageSize={pageSize.value}
-              pageCount={pageCount.value}
-              pageSlot={3}
-              onUpdatePage={(v) => {
-                page.value = v
-              }}
-            />
-          </div>
-        )
+        <div class="flex justify-center">
+          <NPagination
+            page={page.value}
+            pageSize={pageSize.value}
+            pageCount={pageCount.value}
+            pageSlot={3}
+            onUpdatePage={(v) => {
+              page.value = v
+            }}
+          />
+        </div>
+      )
       : null
   )
 

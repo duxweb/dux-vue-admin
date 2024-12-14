@@ -53,6 +53,9 @@ export const DuxSelectAsync = defineComponent({
         labelField={props.labelField}
         v-model:value={model.value}
         multiple={props.multiple}
+        onClear={() => {
+          onSearch('')
+        }}
         renderLabel={(item: Record<string, any>) => {
           if (props.imageField || props.descField) {
             return (

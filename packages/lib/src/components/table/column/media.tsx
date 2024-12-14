@@ -1,12 +1,13 @@
 import type { VNode } from 'vue'
 import type { TableColumnRender } from '../../table'
+import { get } from 'lodash-es'
 import { NAvatar, NImage } from 'naive-ui'
 import placeholder from '../../../static/images/placeholder.png'
 
 export interface ColumnMediaProps {
   image?: string
   images?: string[]
-  avatar?: string
+  avatar?: string | ((rowData: Record<string, any>) => VNode)
   title?: string | ((rowData: Record<string, any>) => VNode)
   desc?: string | ((rowData: Record<string, any>) => VNode)
   descs?: string[]
@@ -16,20 +17,22 @@ export interface ColumnMediaProps {
 
 export function columnMedia({ imageWidth = 36, imageHeight = 36, ...props }: ColumnMediaProps): TableColumnRender {
   return (rowData) => {
-    const title = typeof props.title === 'function' ? props.title(rowData) : rowData[props.title || '']
-    const desc = typeof props.desc === 'function' ? props.desc(rowData) : rowData[props.desc || '']
+    const title = typeof props.title === 'function' ? props.title(rowData) : get(rowData, props.title || '')
+    const desc = typeof props.desc === 'function' ? props.desc(rowData) : get(rowData, props.desc || '')
+    const avatar = typeof props.avatar === 'function' ? props.avatar(rowData) : get(rowData, props.avatar || '')
     return (
       <div class="flex flex-row flex-nowrap gap-2 items-center leading-4">
         {props.avatar && (
           <NAvatar
-            src={rowData[props.avatar]}
+            src={avatar}
             style={{
               background: 'rgba(var(--n-primary-color))',
             }}
             round
+            lazy
             size={imageHeight}
           >
-            {title?.charAt?.(0)}
+            {!avatar ? title?.charAt?.(0) : undefined}
           </NAvatar>
         )}
         {props.image && <div><NImage src={rowData[props.image] || placeholder} fallbackSrc={placeholder} objectFit="cover" width={imageWidth} height={imageHeight} /></div>}

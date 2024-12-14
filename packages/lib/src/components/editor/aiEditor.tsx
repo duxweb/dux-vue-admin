@@ -1,5 +1,6 @@
 import type { AiMessage } from 'aieditor'
 import type { PropType } from 'vue'
+import { useVModel } from '@vueuse/core'
 import { AiEditor } from 'aieditor'
 import { storeToRefs } from 'pinia'
 import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue'
@@ -18,6 +19,10 @@ export const DuxAiEditor = defineComponent({
     uploadUrl: String,
     uploadHeaders: Object as PropType<Record<string, any>>,
     aiUrl: String,
+    height: {
+      type: String,
+      default: '500px',
+    },
   },
   setup(props, { emit }) {
     const divRef = ref()
@@ -30,16 +35,25 @@ export const DuxAiEditor = defineComponent({
 
     const { getUser } = useManageStore()
     const { t } = useI18n()
+    const model = useVModel(props, 'value', emit, {
+      passive: true,
+    })
+
+    watch(model, (value) => {
+      if (!aiEditor) {
+        return
+      }
+      aiEditor.setContent(value || '')
+    }, { immediate: true })
 
     onMounted(() => {
       aiEditor = new AiEditor({
         theme: darkMode.value ? 'dark' : 'light',
         element: divRef.value as Element,
         placeholder: t('components.editor.placeholder'),
-        content: props?.value || props?.defaultValue,
+        content: model.value,
         onChange: (aiEditor) => {
-          const value = aiEditor.getHtml()
-          emit('update:value', value)
+          model.value = aiEditor.getHtml()
         },
         image: {
           uploadUrl: props.uploadUrl || uploadUrl,
@@ -159,7 +173,7 @@ export const DuxAiEditor = defineComponent({
     })
 
     return () => (
-      <div ref={divRef} style="height: 600px; width:100%" />
+      <div ref={divRef} style={`height: ${props.height}; width:100%`} />
     )
   },
 })
