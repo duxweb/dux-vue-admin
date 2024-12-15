@@ -49,14 +49,15 @@ export const DuxDynamicSelect = defineComponent({
         return
       }
       const ids = model.value?.map(e => e[props.rowKey]) || []
+
       client.get({
         url: props.url,
         params: {
           ids: ids?.join(',') || '',
         },
-      }).then((rows: Record<string, any>[]) => {
+      }).then((rows: Record<string, any>) => {
         once.value = false
-        rows?.forEach((row, index) => {
+        rows?.data?.forEach((row, index) => {
           if (!model.value.some(e => e[props.rowKey] === row[props.rowKey])) {
             model.value.push(row)
           }

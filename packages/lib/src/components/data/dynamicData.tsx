@@ -116,25 +116,25 @@ export const DuxDynamicData = defineComponent({
                     class="w-15"
                   >
                     {props.createAction
-                    && (
-                      <NButton
-                        tertiary
-                        type="primary"
-                        circle
-                        renderIcon={() => <div class="i-tabler:plus h-4 w-4"></div>}
-                        onClick={() => {
-                          if (props?.onCreate) {
-                            props.onCreate()
-                          }
-                          else {
-                            if (!model.value) {
-                              model.value = []
+                      && (
+                        <NButton
+                          tertiary
+                          type="primary"
+                          circle
+                          renderIcon={() => <div class="i-tabler:plus h-4 w-4"></div>}
+                          onClick={() => {
+                            if (props?.onCreate) {
+                              props.onCreate()
                             }
-                            model.value?.push(props?.createCallback?.(model.value) || {})
-                          }
-                        }}
-                      />
-                    )}
+                            else {
+                              if (!model.value) {
+                                model.value = []
+                              }
+                              model.value?.push(props?.createCallback?.(model.value) || {})
+                            }
+                          }}
+                        />
+                      )}
                   </th>
                 )}
               </tr>
@@ -169,12 +169,12 @@ export const DuxDynamicData = defineComponent({
                   </tr>
                 ))
                 : (
-                    <tr>
-                      <td colspan={colNum.value}>
-                        <DuxBlockEmpty />
-                      </td>
-                    </tr>
-                  )}
+                  <tr>
+                    <td colspan={colNum.value}>
+                      <DuxBlockEmpty />
+                    </td>
+                  </tr>
+                )}
             </tbody>
           </NTable>
         </div>
