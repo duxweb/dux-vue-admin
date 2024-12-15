@@ -110,7 +110,14 @@ export const DuxTreeFilter = defineComponent({
 
       switch (dropPosition) {
         case 'before':
-          beforeId = undefined
+          if (parent?.children) {
+            beforeIndex = parent.children.findIndex((item: any) => item.id === node.id) - 1
+            beforeId = beforeIndex >= 0 ? parent.children[beforeIndex]?.id : undefined
+          }
+          else {
+            beforeIndex = data.value.findIndex((item: TreeOption) => item.id === node.id) - 1
+            beforeId = beforeIndex >= 0 && data.value[beforeIndex] ? (data.value[beforeIndex] as any).id : undefined
+          }
           break
         case 'inside':
           parent = node

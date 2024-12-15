@@ -5,7 +5,7 @@ import { NAvatar, NImage } from 'naive-ui'
 import placeholder from '../../../static/images/placeholder.png'
 
 export interface ColumnMediaProps {
-  image?: string
+  image?: string | ((rowData: Record<string, any>) => VNode)
   images?: string[]
   avatar?: string | ((rowData: Record<string, any>) => VNode)
   title?: string | ((rowData: Record<string, any>) => VNode)
@@ -20,6 +20,7 @@ export function columnMedia({ imageWidth = 36, imageHeight = 36, ...props }: Col
     const title = typeof props.title === 'function' ? props.title(rowData) : get(rowData, props.title || '')
     const desc = typeof props.desc === 'function' ? props.desc(rowData) : get(rowData, props.desc || '')
     const avatar = typeof props.avatar === 'function' ? props.avatar(rowData) : get(rowData, props.avatar || '')
+    const image = typeof props.image === 'function' ? props.image(rowData) : get(rowData, props.image || '')
     return (
       <div class="flex flex-row flex-nowrap gap-2 items-center leading-4">
         {props.avatar && (
@@ -35,7 +36,7 @@ export function columnMedia({ imageWidth = 36, imageHeight = 36, ...props }: Col
             {!avatar ? title?.charAt?.(0) : undefined}
           </NAvatar>
         )}
-        {props.image && <div><NImage src={rowData[props.image] || placeholder} fallbackSrc={placeholder} objectFit="cover" width={imageWidth} height={imageHeight} /></div>}
+        {props.image && <div><NImage src={image || placeholder} fallbackSrc={placeholder} objectFit="cover" width={imageWidth} height={imageHeight} /></div>}
         <div class="flex-1 w-1 flex flex-col gap-1">
           {props.title && <div class="truncate" title={title}>{title}</div>}
           {props.desc && <div class="text-gray-6 truncate" title={desc}>{desc}</div>}

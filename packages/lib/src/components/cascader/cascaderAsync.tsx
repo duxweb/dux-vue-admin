@@ -1,7 +1,7 @@
 import type { PropType } from 'vue'
 import { useVModel } from '@vueuse/core'
 import { NCascader } from 'naive-ui'
-import { defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import { useCascader } from './useCascader'
 
 export const DuxCascaderAsync = defineComponent({
@@ -33,10 +33,30 @@ export const DuxCascaderAsync = defineComponent({
       params: useParams,
     })
 
+    const optionsData = computed(() => {
+      const processOptions = (items: any[]) => {
+        return items.map((item) => {
+          const newItem = { ...item }
+          if (Array.isArray(newItem.children)) {
+            if (newItem.children.length === 0) {
+              delete newItem.children
+            }
+            else {
+              newItem.children = processOptions(newItem.children)
+            }
+          }
+          return newItem
+        })
+      }
+
+      return processOptions(options.value?.data || [])
+    })
+
     return () => (
       <NCascader
         {...props}
-        options={options.value?.data || []}
+        clearable
+        options={optionsData.value}
         v-model:value={model.value}
       >
       </NCascader>

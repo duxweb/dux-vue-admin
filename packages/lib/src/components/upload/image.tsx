@@ -234,8 +234,7 @@ export const DuxImageUpload = defineComponent({
                   uploadRef.value?.openOpenFileDialog()
                 }}
               >
-                <div class="i-tabler:plus size-5"></div>
-                {t('components.upload.image')}
+                <div class="i-tabler:plus size-4"></div>
               </div>
             </div>
           )}

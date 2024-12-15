@@ -18,6 +18,7 @@ import '@unocss/reset/tailwind-compat.css'
 import 'vfonts/Lato.css'
 import 'animate.css'
 import './style.css'
+import 'aieditor/dist/style.css'
 
 export function createDux(config: Config) {
   initUnocssRuntime({

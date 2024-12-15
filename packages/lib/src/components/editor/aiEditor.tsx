@@ -9,7 +9,6 @@ import { useResource } from '../../hooks'
 import { useManageStore } from '../../stores'
 import { useThemeStore } from '../../stores/theme'
 import { useUpload } from '../upload'
-import 'aieditor/dist/style.css'
 
 export const DuxAiEditor = defineComponent({
   name: 'DuxAiEditor',
