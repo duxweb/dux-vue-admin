@@ -1,5 +1,5 @@
 export async function loadMiSansFont() {
-  const fontUrl = 'https://registry.npmmirror.com/misans/latest/files/lib/Normal/MiSans-Medium.min.css'
+  const fontUrl = 'https://www.unpkg.com/font-online/css/alibaba-pu-hui-ti-3.offline.css'
 
   try {
     const controller = new AbortController()

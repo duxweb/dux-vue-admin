@@ -173,8 +173,8 @@ export default defineComponent({
           </div>
           <div class="flex flex-col">
             <div class="flex flex-col items-center justify-center mt-4">
-              <div class="h-10">
-                {resource.config?.logo ? (darkMode.value && resource.config?.darkLogo ? <img class="w-auto h-full" src={resource.config?.darkLogo} /> : <img class="w-auto h-full" src={resource.config?.logo} />) : <dux-logo />}
+              <div class="h-12">
+                {resource.config?.logo ? (darkMode.value && resource.config?.darkLogo ? <img class="w-auto max-h-16" src={resource.config?.darkLogo} /> : <img class="w-auto max-h-16" src={resource.config?.logo} />) : <div class="h-10"><dux-logo /></div>}
               </div>
               <div class="mt-4 text-lg">
                 {resource.manageConfig?.title || 'Dux Admin Manage'}
