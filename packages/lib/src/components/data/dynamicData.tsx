@@ -139,7 +139,7 @@ export const DuxDynamicData = defineComponent({
                 )}
               </tr>
             </thead>
-            <tbody class="sort-target ">
+            <tbody class="sort-target">
               {(model.value && model.value?.length > 0)
                 ? model.value.map((row, rowIndex) => (
                   <tr key={rowIndex}>

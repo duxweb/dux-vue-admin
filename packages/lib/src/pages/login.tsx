@@ -173,7 +173,7 @@ export default defineComponent({
           </div>
           <div class="flex flex-col">
             <div class="flex flex-col items-center justify-center mt-4">
-              <div class="h-16">
+              <div class="h-10">
                 {resource.config?.logo ? (darkMode.value && resource.config?.darkLogo ? <img class="w-auto h-full" src={resource.config?.darkLogo} /> : <img class="w-auto h-full" src={resource.config?.logo} />) : <dux-logo />}
               </div>
               <div class="mt-4 text-lg">
@@ -181,15 +181,15 @@ export default defineComponent({
               </div>
             </div>
             <div class="my-6">
-              <NForm ref={formRef} model={form}>
-                <NFormItem showLabel={false} path="username">
+              <NForm ref={formRef} model={form} class="flex flex-col gap-4">
+                <NFormItem showLabel={false} path="username" showFeedback={false}>
                   <NInput value={form.value.username} onUpdateValue={v => form.value.username = v} type="text" placeholder={t('pages.login.placeholder.username')} size="large">
                     {{
                       default: () => <div class="text-lg i-tabler:user" />,
                     }}
                   </NInput>
                 </NFormItem>
-                <NFormItem showLabel={false} path="password">
+                <NFormItem showLabel={false} path="password" showFeedback={false}>
                   <NInput value={form.value.password} onUpdateValue={v => form.value.password = v} type="password" showPasswordOn="mousedown" placeholder={t('pages.login.placeholder.password')} size="large" inputProps={{ autocomplete: 'new-password' }}>
                     {{
                       default: () => <div class="text-lg i-tabler:lock" />,
