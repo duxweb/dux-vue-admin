@@ -59,7 +59,7 @@ export const DuxPageForm = defineComponent({
                 <n-scrollbar>
                   <DuxForm {...props}>
                     <div class={clsx([
-                      'px-6 flex flex-col gap-4',
+                      'px-6 flex flex-col',
                       props.divider ? 'py-4  divide-y divide-gray-2' : 'py-4',
                     ])}
                     >

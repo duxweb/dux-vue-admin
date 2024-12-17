@@ -102,8 +102,10 @@ export const DuxLayout = defineComponent({
             {layout.value === 'collapse' && (
               <NLayoutSider inverted showTrigger={showCollapsed.value} collapseMode="width" width={200} collapsedWidth={64} bordered nativeScrollbar={false} onUpdateCollapsed={(v: boolean) => sideCollapsed.value = v}>
                 <div class="flex flex-col h-screen">
-                  <div class="flex-none p-4 border-gray-10 dark:border-gray-2 border-b w-full h-57px flex justify-start items-center">
-                    <dux-logo dark />
+                  <div class="flex-none px-4 py-2 border-gray-10 dark:border-gray-2 border-b w-full h-57px flex justify-start items-center">
+
+                    {resource.config?.logo ? resource.config?.darkLogo ? <img class="h-40px" src={resource.config?.darkLogo} /> : <img class="h-40px" src={resource.config?.logo} /> : <div class="h-20px"><dux-logo /></div>}
+
                   </div>
                   <div class="flex-1 h-1">
                     <NScrollbar>
@@ -128,8 +130,8 @@ export const DuxLayout = defineComponent({
             <div class="flex items-center px-4 h-56px">
               {isMobile.value && (
                 <div class="flex-1">
-                  <div class="h-20px" onClick={() => mobileMenuShow.value = true}>
-                    <dux-logo />
+                  <div onClick={() => mobileMenuShow.value = true}>
+                    {resource.config?.logo ? (darkMode.value && resource.config?.darkLogo ? <img class="h-40px" src={resource.config?.darkLogo} /> : <img class="h-40px" src={resource.config?.logo} />) : <div class="h-20px"><dux-logo /></div>}
                   </div>
                   <NDrawer show={mobileMenuShow.value} onUpdateShow={v => mobileMenuShow.value = v} width={250} placement="left">
                     <NDrawerContent title={t('common.menu')} closable bodyContentStyle={{ padding: '5px' }}>
@@ -148,9 +150,7 @@ export const DuxLayout = defineComponent({
               {!isMobile.value && layout.value === 'separate' && (
                 <div class="flex gap-2 flex-1 w-1">
                   <div class=" flex items-center">
-                    <div class="h-20px">
-                      <dux-logo />
-                    </div>
+                    {resource.config?.logo ? (darkMode.value && resource.config?.darkLogo ? <img class="h-40px" src={resource.config?.darkLogo} /> : <img class="h-40px" src={resource.config?.logo} />) : <div class="h-20px"><dux-logo /></div>}
                   </div>
                   <div class="flex-1 w-1">
                     <NMenu
