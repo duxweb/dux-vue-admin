@@ -10,14 +10,15 @@ export interface ColumnMapTypeValue {
 }
 
 export interface ColumnMapProps {
-  maps?: ColumnMapTypeValue[]
+  maps?: ColumnMapTypeValue[] | ((rowData: any) => ColumnMapTypeValue[])
 }
 
 export function columnMap({ maps }: ColumnMapProps): TableColumnRender {
   return (rowData) => {
+    const mapsData = typeof maps === 'function' ? maps(rowData) : maps
     return (
       <div class="flex flex-col gap-1">
-        {maps?.map(item => (
+        {mapsData?.map(item => (
           <div class="flex">
             <div class="flex text-gray-6 items-center gap-1">
               {item.icon && (

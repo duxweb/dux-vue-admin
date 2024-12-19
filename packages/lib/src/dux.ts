@@ -14,7 +14,6 @@ import { i18n } from './i18n'
 
 import { loadMiSansFont } from './theme/fonts'
 import 'go-captcha-vue/dist/style.css'
-import '@unocss/reset/tailwind-compat.css'
 import 'vfonts/Lato.css'
 import 'animate.css'
 import './style.css'

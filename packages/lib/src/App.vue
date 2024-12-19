@@ -7,10 +7,15 @@ import { useThemeStore } from './stores'
 
 const themeStore = useThemeStore()
 const { theme, themeOverrides } = storeToRefs(themeStore)
+
+const meta = document.createElement('meta')
+meta.name = 'naive-ui-style'
+document.head.appendChild(meta)
 </script>
 
 <template>
-  <NConfigProvider :theme="theme" :theme-overrides="themeOverrides" :locale="zhCN" :date-locale="dateZhCN" preflight-style-disabled>
+  <NConfigProvider :theme="theme" :theme-overrides="themeOverrides" :locale="zhCN" :date-locale="dateZhCN"
+    preflight-style-disabled>
     <n-loading-bar-provider>
       <NNotificationProvider>
         <NDialogProvider>

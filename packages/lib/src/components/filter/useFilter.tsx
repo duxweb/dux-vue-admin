@@ -9,10 +9,15 @@ import { useDialog } from '../dialog'
 import { useDrawer } from '../drawer'
 import { useModal } from '../modal'
 
+export interface FilterRequest {
+  method?: 'get' | 'post' | 'put' | 'patch' | 'delete'
+  data?: Record<string, any>
+}
+
 export interface FilterAction {
   label?: string
   labelLang?: string
-  type: 'modal' | 'drawer' | 'link' | 'confirm' | 'delete' | 'callback'
+  type: 'modal' | 'drawer' | 'link' | 'confirm' | 'request' | 'delete' | 'callback'
   callback?: (id?: string | number, itemData?: object) => void
   title?: string
   titleLang?: string
@@ -26,6 +31,7 @@ export interface FilterAction {
   componentProps?: Record<string, any> | ((data: any) => Record<string, any>)
   width?: number
   show?: (rowData?: object, rowIndex?: number) => boolean
+  request?: FilterRequest | ((id?: string | number, itemData?: object) => FilterRequest)
 }
 
 export interface UseFilterProps {
@@ -136,6 +142,44 @@ export function useAction({ url }: { url?: string }) {
         content: item?.content,
       }).then(() => {
         item.callback?.(id, itemData)
+      })
+    }
+
+    if (item.type === 'request') {
+      dialog?.confirm({
+        title: title || label,
+        content: item?.content,
+      }).then(() => {
+        const request = typeof item.request === 'function' ? item.request?.(id, itemData) : item.request
+        const methodName = (request?.method || 'post').toLowerCase()
+
+        let req = client.post
+        switch (methodName) {
+          case 'get':
+            req = client.get
+            break
+          case 'post':
+            req = client.post
+            break
+          case 'put':
+            req = client.put
+            break
+          case 'patch':
+            req = client.patch
+            break
+          case 'delete':
+            req = client.delete
+            break
+        }
+
+        req({
+          url: typeof item.url === 'function' ? item.url?.(id, itemData) : (item.url ? `${item.url}/${id}` : `${url}/${id}`),
+          data: request?.data,
+        }).then(() => {
+          client.invalidate(item.invalidate || (typeof item.url === 'string' ? item.url : url))
+        }).catch((res) => {
+          message.error(res?.message || t('message.requestError'))
+        })
       })
     }
     if (item.type === 'delete') {
