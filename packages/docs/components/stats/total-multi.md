@@ -137,10 +137,3 @@ interface DataItem {
   </div>
 </template>
 ```
-
-## 注意事项
-
-1. 列数会根据屏幕宽度自动调整，确保良好的显示效果
-2. 图标需要使用系统内置的图标，请参考图标库文档
-3. 颜色性支持系统预设的主题色：primary、success、warning、error、info
-4. 加载状态会显示骨架屏动画

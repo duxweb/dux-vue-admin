@@ -36,7 +36,7 @@ interface Action {
 <template>
   <dux-stats-store
     name="示例店铺"
-    desc="这是一个示例店��"
+    desc="这是一个示例店铺"
     status="success"
     statusText="正常营业"
   />
@@ -116,10 +116,3 @@ interface Action {
   </div>
 </template>
 ```
-
-## 注意事项
-
-1. 状态颜色会根据 `status` 属性自动设置，无需手动指定
-2. 操作按钮建议不要超过 3 个，以保持良好的视觉效果
-3. 按钮的 `onClick` 事件处理函数为可选项
-4. 组件会自动处理暗黑模式的样式适配
