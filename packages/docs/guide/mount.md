@@ -1,293 +1,297 @@
 # 基座模式
 
-基座模式下，前端与后端在同一项目中，将基础框架代码编译为成品文件，在后端后台模板中引入JS、CSS文件即可，每个 vue 页面内容由后端接口来提供。
+基座模式是一种将前端框架与后端深度集成的开发方式。在这种模式下，前端基础框架代码会被编译为静态资源，然后嵌入到后端模板中，页面内容由后端动态提供。这种模式特别适合需要深度定制和动态化的企业级应用。
 
-
-## 编译环境
+## 开发环境
 
 - Node.js >= 21.0.0
 - bun >= 1.x
 
+## 快速开始
 
-## 初始化
-
-在后端项目中，创建基座源代码目录，进入目录，安装依赖，启动项目。
+### 1. 创建项目
 
 ```bash
-创建项目
+# 创建基座项目
 npx degit github:duxweb/dux-vue-admin-template/packages/mount web
-进入项目目录
+
+# 进入项目目录
 cd web
-安装依赖
+
+# 安装依赖
 bun install
-编译基座
+
+# 编译基座
 bun run build
 ```
 
-## 目录结构
+### 2. 项目配置
 
-创建后的项目目录结构如下：
+修改 `vite.config.ts` 文件，配置编译输出：
+
+```ts
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+
+export default defineConfig({
+  plugins: [vue()],
+  base: "/static/", // 静态资源基础路径
+  build: {
+    outDir: "../public/static", // 输出目录
+    manifest: true, // 生成 manifest.json
+    rollupOptions: {
+      input: {
+        main: "src/main.ts",
+      },
+    },
+  },
+});
+```
+
+## 项目结构
+
+### 1. 源码结构
 
 ```bash
 web/
-├── src/ # 源代码
-│ │ ├── App.vue # 根组件
-│ │ └── main.ts # 入口文件
-│ ├── public/ # 静态资源
-│ ├── index.html # HTML 入口
-│ ├── eslint.config.js # ESLint 配置
-│ ├── package.json # 项目配置
-│ ├── tsconfig.json # TypeScript 配置
-│ └── vite.config.ts # Vite 配置
+├── src/                    # 源代码目录
+│   ├── components/         # 公共组件
+│   │   ├── layout/        # 布局组件
+│   │   └── common/        # 通用组件
+│   ├── config/            # 配置文件
+│   │   └── app.ts        # 应用配置
+│   ├── App.vue            # 根组件
+│   └── main.ts            # 入口文件
+├── public/                # 静态资源
+├── index.html            # HTML 入口
+└── vite.config.ts        # Vite 配置
 ```
 
-### 编译目录
+### 2. 编译输出
 
-在 `vite.config.ts` 中配置 `build.outDir` 为实际编译目录，配置 `base` 路径为 URL可访问路径。
-
-编译后会生成如下目录结构：
+编译后会在指定目录生成以下文件：
 
 ```bash
-static/
-├── .vite/
-│ │ └── manifest.json # 清单文件
-├── assets/ # 静态资源
-├── js/ # JS 文件
+public/static/
+├── assets/               # 静态资源
+│   ├── main.[hash].js    # 主程序
+│   └── main.[hash].css   # 样式文件
+└── .vite/
+    └── manifest.json     # 资源清单
 ```
 
+## 后端集成
 
-## 后端嵌入
+### 1. 资源清单
 
-后端需要解析编译后生成的 manifest.json 文件，提取入口文件(main.ts)相关的 JS 和 CSS 文件路径，然后在模板中引入这些资源。
+`manifest.json` 文件包含了编译后的资源映射信息：
 
-### manifest.json 结构
-
-编译后的 manifest.json 文件结构示例：
 ```json
 {
   "src/main.ts": {
-    "file": "assets/main-abc123.js",
-    "css": ["assets/main-xyz789.css"],
-    "imports": [...]
+    "file": "assets/main-[hash].js",
+    "css": ["assets/main-[hash].css"],
+    "imports": [],
+    "isEntry": true
   }
 }
 ```
 
+### 2. 模板集成
 
-### PHP 实现
+在后端模板中引入编译后的资源：
 
 ::: code-group
+
 ```php [PHP]
 <?php
-// 读取并解析 manifest.json
-$manifest = json_decode(file_get_contents(PUBLIC_PATH . '/static/.vite/manifest.json'), true);
-$mainAsset = $manifest['src/main.ts'];
+class AssetManager {
+    private $manifestPath;
 
-// 提取资源路径
-$jsFile = '/static/' . $mainAsset['file'];
-$cssFiles = array_map(function($css) {
-    return '/static/' . $css;
-}, $mainAsset['css'] ?? []);
+    public function __construct($manifestPath) {
+        $this->manifestPath = $manifestPath;
+    }
 
-// 模板变量赋值
-$this->assign([
-    'jsFile' => $jsFile,
-    'cssFiles' => $cssFiles
-]);
+    public function getAssets() {
+        $manifest = json_decode(file_get_contents($this->manifestPath), true);
+        $mainAsset = $manifest['src/main.ts'];
+
+        return [
+            'js' => '/static/' . $mainAsset['file'],
+            'css' => array_map(fn($css) => '/static/' . $css, $mainAsset['css'] ?? [])
+        ];
+    }
+}
+
+// 使用示例
+$assets = (new AssetManager('public/static/.vite/manifest.json'))->getAssets();
 ```
 
-```html [HTML]
+```html [模板]
 <!DOCTYPE html>
 <html>
-<head>
-    <?php foreach($cssFiles as $css): ?>
-    <link rel="stylesheet" href="<?php echo $css; ?>">
+  <head>
+    <?php foreach($assets['css'] as $css): ?>
+    <link rel="stylesheet" href="<?php echo $css; ?>" />
     <?php endforeach; ?>
-    <style>
-      [v-cloak],
-      [un-cloak] {
-        display: none;
-      }
-    </style>
-</head>
-<body>
-    <div id="app" v-cloak un-cloak></div>
-    <script type="module" src="<?php echo $jsFile; ?>"></script>
-</body>
-</html>
-```
-:::
-
-### Go 实现
-
-::: code-group
-```go [Go]
-type Manifest struct {
-    File  string   `json:"file"`
-    Css   []string `json:"css"`
-}
-
-func getAssets() (string, []string, error) {
-    data, err := os.ReadFile("static/.vite/manifest.json")
-    if err != nil {
-        return "", nil, err
-    }
-    
-    var manifest map[string]Manifest
-    if err := json.Unmarshal(data, &manifest); err != nil {
-        return "", nil, err
-    }
-    
-    mainAsset := manifest["src/main.ts"]
-    jsFile := "/static/" + mainAsset.File
-    cssFiles := make([]string, len(mainAsset.Css))
-    for i, css := range mainAsset.Css {
-        cssFiles[i] = "/static/" + css
-    }
-    
-    return jsFile, cssFiles, nil
-}
-```
-
-```html [HTML]
-<!DOCTYPE html>
-<html>
-<head>
-    {{range .CssFiles}}
-    <link rel="stylesheet" href="{{.}}">
-    {{end}}
-</head>
-<body>
+  </head>
+  <body>
     <div id="app"></div>
-    <script type="module" src="{{.JsFile}}"></script>
-</body>
+    <script type="module" src="<?php echo $assets['js']; ?>"></script>
+  </body>
 </html>
 ```
+
 :::
 
-### Java 实现
+## 动态路由
 
-::: code-group
-```java [Java]
-public class ManifestAsset {
-    private String file;
-    private List<String> css;
-    // getters and setters
-}
+### 1. 路由配置
 
-@Service
-public class AssetService {
-    public Map<String, String[]> getAssets() {
-        ObjectMapper mapper = new ObjectMapper();
-        File manifestFile = new File("static/.vite/manifest.json");
-        
-        try {
-            Map<String, ManifestAsset> manifest = mapper.readValue(manifestFile,
-                new TypeReference<Map<String, ManifestAsset>>() {});
-            
-            ManifestAsset mainAsset = manifest.get("src/main.ts");
-            String jsFile = "/static/" + mainAsset.getFile();
-            String[] cssFiles = mainAsset.getCss().stream()
-                .map(css -> "/static/" + css)
-                .toArray(String[]::new);
-                
-            return Map.of("jsFile", jsFile, "cssFiles", cssFiles);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read manifest", e);
-        }
-    }
+后端需要提供统一的路由配置接口，返回 JSON 格式的路由数据：
+
+```typescript
+interface RouteItem {
+  name: string; // 路由名称
+  path: string; // 路由路径
+  label: string; // 菜单名称
+  icon?: string; // 图标
+  hidden?: boolean; // 是否隐藏
+  parent?: string; // 父级路由
+  loader?: string; // Vue 组件路径
+  sort?: number; // 排序
+  meta?: {
+    // 元数据
+    src?: string; // 嵌入页面 URL
+    url?: string; // 外部链接
+  };
 }
 ```
 
-```html [HTML]
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <link th:each="css : ${cssFiles}" rel="stylesheet" th:href="${css}">
-</head>
-<body>
-    <div id="app"></div>
-    <script type="module" th:src="${jsFile}"></script>
-</body>
-</html>
-```
-:::
+### 2. 路由类型
 
+系统支持以下几种路由类型：
 
-### 总结
-
-以上示例代码展示了如何在不同后端框架中解析 manifest.json 并在模板中引入编译后的资源文件。你需要根据实际项目的目录结构和框架特性进行相应调整。
-
-
-## 路由输出
-
-基座模式下，前端路由由后端提供，后端需要输出 JSON 格式的路由数据，如下。
-
-```json
-[
-    // 目录
-    {
-        "hidden": false, // 是否隐藏
-        "icon": "i-tabler:home", // 图标
-        "label": "首页", // 菜单名称
-        "loader": "system/total/index", // Vue 路径
-        "name": "index", // 路由名称
-        "path": "system/index", // 路由路径
-        "sort": 0 // 排序
-    },
-    // 路由
-    {
-        "hidden": false, // 是否隐藏
-        "label": "用户列表", // 菜单名称
-        "loader": "system/user/table", // Vue 路径
-        "name": "system.user.list", // 路由名称
-        "parent": "system.userGroup", // 父级路由名称
-        "path": "system/user", // 路由路径
-        "sort": 0 // 排序
-    },
-    // 嵌入
-    {
-      "hidden": false, // 是否隐藏
-      "icon": "i-tabler:brand-redux", // 图标
-      "label": "Dux文档", // 菜单名称
-      "meta": {
-        "src": "https://vue-docs.dux.plus/", // 嵌入链接
-      },
-      "name": "iframe.dux", // 路由名称
-      "path": "iframe/dux", // 路由路径
-      "sort": 4 // 排序
-    },
-    // 外链
-    {
-      "hidden": false,
-      "icon": "i-tabler:external-link", // 图标
-      "label": "Dux官网", // 菜单名称
-      "meta": {
-        "url": "https://www.dux.cn" // 外部链接
-      },
-      "name": "link.dux", // 路由名称
-      "path": "link/dux", // 路由路径
-      "sort": 5 // 排序
-    }
-]
-```
-
-## 页面输出
-
-路由中需要定义 `loader` 为 Vue 路径，访问路由后会自动请求后端Api，后端需要根据 `loader` 路径来输出 Vue 页面内容，基座得到结果后前端会自动渲染 vue 页面。
-
-输出示例：
+#### 目录路由
 
 ```json
 {
-    "code": 200,
-    "message": "ok",
-    "data": {
-        "content": "<template>{{ hello }}</template><script>const hello = 'hello world'</script>",
-        "name": "/admin/system/total/index",
-        "type": ".vue"
-    },
-    "meta": {}
+  "name": "system",
+  "path": "system",
+  "label": "系统管理",
+  "icon": "i-tabler:settings",
+  "sort": 0
 }
 ```
 
+#### 页面路由
+
+```json
+{
+  "name": "system.user",
+  "path": "system/user",
+  "label": "用户管理",
+  "parent": "system",
+  "loader": "system/user/index",
+  "sort": 1
+}
+```
+
+#### 嵌入页面
+
+```json
+{
+  "name": "iframe.docs",
+  "path": "iframe/docs",
+  "label": "在线文档",
+  "icon": "i-tabler:book",
+  "meta": {
+    "src": "https://docs.example.com"
+  }
+}
+```
+
+#### 外部链接
+
+```json
+{
+  "name": "link.website",
+  "path": "link/website",
+  "label": "官方网站",
+  "icon": "i-tabler:external-link",
+  "meta": {
+    "url": "https://www.example.com"
+  }
+}
+```
+
+## 页面渲染
+
+### 1. 页面请求
+
+当访问动态路由时，系统会根据路由的 `loader` 属性请求对应的 Vue 组件内容：
+
+```
+GET /api/page?loader=system/user/index
+```
+
+### 2. 响应格式
+
+后端需要返回标准的页面数据格式：
+
+```typescript
+interface PageResponse {
+  code: number; // 状态码
+  message: string; // 消息
+  data: {
+    content: string; // Vue 组件内容
+    name: string; // 组件名称
+    type: string; // 文件类型
+  };
+}
+```
+
+响应示例：
+
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "content": "<template><div>用户管理页面</div></template>",
+    "name": "system/user/index",
+    "type": ".vue"
+  }
+}
+```
+
+## 开发建议
+
+1. **资源管理**
+
+   - 合理配置静态资源路径
+   - 使用 CDN 加速静态资源
+   - 开启资源压缩和缓存
+
+2. **路由设计**
+
+   - 保持路由结构清晰
+   - 合理使用路由嵌套
+   - 注意路由权限控制
+
+3. **页面优化**
+
+   - 实现页面缓存机制
+   - 优化页面加载性能
+   - 处理页面异常情况
+
+4. **安全考虑**
+   - 验证页面请求权限
+   - 防止 XSS 攻击
+   - 保护敏感配置信息
+
+## 更多资源
+
+- [路由配置](../dev/route.md)
+- [权限控制](../dev/auth.md)
+- [页面组件](../dev/component.md)

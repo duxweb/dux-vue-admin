@@ -27,9 +27,15 @@ export default defineConfig({
       {
         text: '开发',
         items: [
-          { text: '框架配置', link: '/dev/config' },
-        ]
-      }
+            { text: '框架配置', link: '/dev/config' },
+            { text: '路由配置', link: '/dev/router' },
+          { text: "数据结构", link: "/dev/data" },
+          { text: "数据请求", link: "/dev/request" },
+          { text: "登录与权限", link: "/dev/auth" },
+          { text: "多语言配置", link: "/dev/lang" },
+          { text: "多管理端配置", link: "/dev/manage" },
+        ],
+      },
     ],
 
     socialLinks: [
