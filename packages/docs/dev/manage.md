@@ -264,6 +264,6 @@ export const manageConfig: Config = {
 
 ## 更多资源
 
-- [路由配置](./route.md)
+- [路由配置](./router.md)
 - [权限控制](./auth.md)
-- [请求配置](./request.md)
+- [数据请求](./request.md)

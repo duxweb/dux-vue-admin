@@ -292,6 +292,6 @@ interface PageResponse {
 
 ## 更多资源
 
-- [路由配置](../dev/route.md)
+- [路由配置](../dev/router.md)
 - [权限控制](../dev/auth.md)
-- [页面组件](../dev/component.md)
+- [页面开发](../dev/page.md)

@@ -224,7 +224,6 @@ app.mount("#app");
 
 ## 更多资源
 
-- [组件文档](../dev/component.md)
-- [路由配置](../dev/route.md)
+- [路由配置](../dev/router.md)
 - [数据请求](../dev/request.md)
 - [权限控制](../dev/auth.md)
