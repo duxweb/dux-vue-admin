@@ -123,34 +123,35 @@ export const DuxImageUpload = defineComponent({
             >
               {item.status === 'finished'
                 ? (
-                  <NImage
-                    class="z-0 rounded"
-                    objectFit="scale-down"
-                    width={100}
-                    height={100}
-                    previewDisabled
-                    src={item.url as string}
-                  >
-                    <div class="size-full flex items-center justify-center">
-                      <div class="i-tabler:photo size-8"></div>
-                    </div>
-                  </NImage>
-                )
-                : (
-                  <div class="size-80px flex items-center justify-center rounded">
-                    <div class="i-tabler:photo size-8"></div>
-                    {item.status === 'uploading' && (
-                      <div class="absolute left-2 right-2 bottom-2">
-                        <NProgress
-                          type="line"
-                          percentage={item.percentage || 0}
-                          height={5}
-                          showIndicator={false}
-                        />
+                    <NImage
+                      class="z-0 rounded"
+                      objectFit="scale-down"
+                      width={78}
+                      height={78}
+                      previewDisabled
+                      src={item.url as string}
+                    >
+                      <div class="size-full flex items-center justify-center">
+                        <div class="i-tabler:photo size-8"></div>
                       </div>
-                    )}
-                  </div>
-                )}
+                    </NImage>
+
+                  )
+                : (
+                    <div class="size-80px flex items-center justify-center rounded">
+                      <div class="i-tabler:photo size-8"></div>
+                      {item.status === 'uploading' && (
+                        <div class="absolute left-2 right-2 bottom-2">
+                          <NProgress
+                            type="line"
+                            percentage={item.percentage || 0}
+                            height={5}
+                            showIndicator={false}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
               <div class="z-1 size-full inset-0 absolute flex items-center justify-center bg-gray-2 bg-opacity-90 transition-all opacity-0 group-hover:opacity-100 rounded">
                 {item.status === 'finished' && (
                   <NButton
