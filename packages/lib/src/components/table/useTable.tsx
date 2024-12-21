@@ -228,7 +228,11 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
           if (key === 'export') {
             excelExport.send({
               url,
-              params: { ...filters.value, ...filter?.value, ...sorter.value },
+              params: {
+                ...filters,
+                ...filter,
+                ...sorter,
+              },
               columns: exportColumns || tableColumns.value.map((item: Record<string, any>) => {
                 return {
                   header: item.title,
@@ -241,7 +245,11 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
           if (key === 'csvExport') {
             csvExport.send({
               url,
-              params: { ...filters.value, ...filter?.value, ...sorter.value },
+              params: {
+                ...filters,
+                ...filter,
+                ...sorter,
+              },
               columns: exportColumns || tableColumns.value.map((item: Record<string, any>) => {
                 return item.key
               }),
@@ -249,22 +257,28 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
           }
           if (key === 'import') {
             excelImport.send({
-              url: '/import',
+              url: `${url}/import`,
               params: {
-                ...filter?.value,
-                ...filters.value,
+                ...filter,
+                ...filters,
               },
               columns: importColumns,
+              callback: () => {
+                refresh()
+              },
             })
           }
           if (key === 'importCsv') {
             csvImport.send({
-              url: '/import',
+              url: `${url}/import`,
               params: {
-                ...filter?.value,
-                ...filters.value,
+                ...filter,
+                ...filters,
               },
               columns: importColumns as string[],
+              callback: () => {
+                refresh()
+              },
             })
           }
         }}

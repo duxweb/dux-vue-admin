@@ -13,66 +13,72 @@ export interface ExportCsvProps {
   columns?: string[]
   params?: Record<string, any>
   filename?: string
+  callback?: () => void
 }
 
 export function useExportCsv() {
   const message = useMessage()
   const client = useClient()
   const loading = ref(false)
+  const { t } = useI18n()
 
-  const onSend = ({ url, columns, params, filename }: ExportCsvProps) => {
+  const onSend = ({ url, columns, params, filename, callback }: ExportCsvProps) => {
+    const messageRef = message.loading(t('hooks.excel.exporting'), { duration: 0 })
     loading.value = true
-    const pagination = usePagination(
-      (page, pageSize) => {
-        return client.get({
-          url,
-          params: {
-            page,
-            pageSize,
-            ...params,
-          },
-          config: {
-            cacheFor: 0,
-          },
-        })
-      },
-      {
-        initialData: {
-          total: 0,
-          data: [],
+
+    try {
+      const pagination = usePagination(
+        (page, pageSize) => {
+          return client.get({
+            url,
+            params: {
+              page,
+              pageSize,
+              ...params,
+            },
+            config: {
+              cacheFor: 0,
+            },
+          })
         },
-        initialPage: 1,
-        initialPageSize: 50,
-        total: res => res.meta?.total || 0,
-        append: true,
-        watchingStates: [() => params],
-        debounce: 0,
-        preloadPreviousPage: false,
-        preloadNextPage: false,
-        immediate: true,
-      },
-    )
+        {
+          initialData: {
+            total: 0,
+            data: [],
+          },
+          initialPage: 1,
+          initialPageSize: 50,
+          total: res => res.meta?.total || 0,
+          append: true,
+          watchingStates: [() => params],
+          debounce: 0,
+          preloadPreviousPage: false,
+          preloadNextPage: false,
+          immediate: true,
+        },
+      )
 
-    const dataStatus = ref(false)
+      const dataStatus = ref(false)
 
-    pagination.onComplete(() => {
-      if (pagination.isLastPage.value) {
-        dataStatus.value = true
-        return
-      }
-      pagination.page.value++
-    })
+      pagination.onComplete(() => {
+        if (pagination.isLastPage.value) {
+          dataStatus.value = true
+          return
+        }
+        pagination.page.value++
+      })
 
-    pagination.onError((error) => {
-      message.error(error.error?.message || 'Error')
-    })
+      pagination.onError((error) => {
+        message.error(error.error?.message || 'Error')
+        loading.value = false
+      })
 
-    watch(dataStatus, async (status) => {
-      if (!status) {
-        return
-      }
+      watch(dataStatus, async (status) => {
+        if (!status) {
+          loading.value = false
+          return
+        }
 
-      try {
         const csv = await json2csv(pagination.data.value, {
           keys: columns,
           emptyFieldValue: '',
@@ -82,12 +88,19 @@ export function useExportCsv() {
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
         FileSaver.saveAs(blob, `${filename || format(new Date(), 'yyyy-MM-dd-HH:mm:ss')}.csv`)
         loading.value = false
+        callback?.()
+      })
+    }
+    catch (error) {
+      loading.value = false
+      message.error(`Export failure: ${error}`)
+    }
+
+    watch(loading, (v) => {
+      if (!v) {
+        messageRef?.destroy()
       }
-      catch (error) {
-        loading.value = false
-        message.error(`Export failure: ${error}`)
-      }
-    })
+    }, { immediate: true, deep: true })
   }
 
   return {
@@ -100,6 +113,7 @@ export interface ImportCsvProps {
   url?: string
   columns?: string[]
   params?: Record<string, any>
+  callback?: () => void
 }
 
 export function useImportCsv() {
@@ -111,8 +125,9 @@ export function useImportCsv() {
   const url = ref<string>()
   const params = ref<Record<string, any>>()
   const columns = ref<string[]>()
-
+  const callback = ref<() => void>()
   const { t } = useI18n()
+  let messageRef: any = null
 
   const { open, reset, onChange } = useFileDialog({
     accept: '.csv',
@@ -136,6 +151,8 @@ export function useImportCsv() {
     if (!ev.target?.result) {
       return
     }
+
+    messageRef = message.loading(t('hooks.excel.importing'), { duration: 0 })
 
     try {
       const csvContent = ev.target.result as string
@@ -167,6 +184,7 @@ export function useImportCsv() {
 
       req.onSuccess((res) => {
         message.success(res.data?.message || t('hooks.excel.importSuccess'))
+        callback.value?.()
       })
 
       req.onError((error) => {
@@ -175,17 +193,25 @@ export function useImportCsv() {
 
       watch(req.loading, (v) => {
         loading.value = v
-      })
+      }, { immediate: true, deep: true })
     }
     catch (error) {
       message.error(`${t('hooks.excel.importError')}: ${error}`)
+      loading.value = false
     }
   }
+
+  watch(loading, (v) => {
+    if (!v) {
+      messageRef?.destroy()
+    }
+  }, { immediate: true, deep: true })
 
   const onSend = (props: ImportCsvProps) => {
     url.value = props.url
     columns.value = props.columns
     params.value = props.params
+    callback.value = props.callback
     open()
     reset()
   }

@@ -139,30 +139,36 @@ export function useList({ url, form, cacheTime = Infinity, exportColumns, import
           }
           if (key === 'export') {
             excelExport.send({
-              url,
+              url: `${url}/export`,
               params: { ...form?.value },
               columns: exportColumns,
             })
           }
           if (key === 'import') {
             excelImport.send({
-              url: '/import',
+              url: `${url}/import`,
               params: form?.value,
               columns: importColumns,
+              callback: () => {
+                reload()
+              },
             })
           }
           if (key === 'csvExport') {
             csvExport.send({
-              url,
+              url: `${url}/export`,
               params: { ...form?.value },
               columns: exportColumns as string[],
             })
           }
           if (key === 'csvImport') {
             csvImport.send({
-              url: '/import',
+              url: `${url}/import`,
               params: form?.value,
               columns: importColumns as string[],
+              callback: () => {
+                reload()
+              },
             })
           }
         }}

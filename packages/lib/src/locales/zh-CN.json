@@ -144,7 +144,9 @@
       "csvImport": "导入 CSV",
       "csvExport": "导出 CSV",
       "getError": "获取数据失败",
-      "columnSetting": "列设置"
+      "columnSetting": "列设置",
+      "exporting": "导出中...",
+      "importing": "导入中..."
     },
     "editor": {
       "placeholder": "请输入内容..."
@@ -387,7 +389,9 @@
   "hooks": {
     "excel": {
       "importError": "导入失败",
-      "importSuccess": "导入成功"
+      "importSuccess": "导入成功",
+      "exporting": "导出中...",
+      "importing": "导入中..."
     },
     "pdf": {
       "title": "文档预览"

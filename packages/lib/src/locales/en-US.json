@@ -387,7 +387,9 @@
   "hooks": {
     "excel": {
       "importError": "Import Failed",
-      "importSuccess": "Import Success"
+      "importSuccess": "Import Success",
+      "exporting": "Exporting...",
+      "importing": "Importing..."
     },
     "pdf": {
       "title": "Preview"
