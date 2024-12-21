@@ -3,7 +3,7 @@ import { actionDelegationMiddleware, usePagination } from 'alova/client'
 import { NButton, NDropdown } from 'naive-ui'
 import { ref, type Ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useClient, useExportExcel, useImportExcel } from '../../hooks'
+import { useClient, useExportCsv, useExportExcel, useImportCsv, useImportExcel } from '../../hooks'
 
 interface UseListProps {
   url?: string
@@ -12,14 +12,19 @@ interface UseListProps {
   cacheTime?: number
   export?: boolean
   import?: boolean
-  excelColumns?: Column[]
+  exportCsv?: boolean
+  importCsv?: boolean
+  exportColumns?: Column[] | string[]
+  importColumns?: Column[] | string[]
   append?: boolean
 }
 
-export function useList({ url, form, cacheTime = Infinity, excelColumns, export: exportStatus, import: importStatus, defaultPageSize = 20, append = false }: UseListProps) {
+export function useList({ url, form, cacheTime = Infinity, exportColumns, importColumns, export: exportStatus, import: importStatus, exportCsv: exportCsvStatus, importCsv: importCsvStatus, defaultPageSize = 20, append = false }: UseListProps) {
   const client = useClient()
   const excelExport = useExportExcel()
   const excelImport = useImportExcel()
+  const csvExport = useExportCsv()
+  const csvImport = useImportCsv()
   const { t } = useI18n()
   const meta = ref<Record<string, any>>()
 
@@ -102,10 +107,24 @@ export function useList({ url, form, cacheTime = Infinity, excelColumns, export:
     })
   }
 
+  if (exportCsvStatus) {
+    toolsOptions.push({
+      label: t('components.list.csvExport'),
+      key: 'csvExport',
+    })
+  }
+
   if (importStatus) {
     toolsOptions.push({
       label: t('components.list.excelImport'),
       key: 'import',
+    })
+  }
+
+  if (importCsvStatus) {
+    toolsOptions.push({
+      label: t('components.list.csvImport'),
+      key: 'csvImport',
     })
   }
 
@@ -122,14 +141,28 @@ export function useList({ url, form, cacheTime = Infinity, excelColumns, export:
             excelExport.send({
               url,
               params: { ...form?.value },
-              columns: excelColumns,
+              columns: exportColumns,
             })
           }
           if (key === 'import') {
             excelImport.send({
               url: '/import',
               params: form?.value,
-              columns: excelColumns,
+              columns: importColumns,
+            })
+          }
+          if (key === 'csvExport') {
+            csvExport.send({
+              url,
+              params: { ...form?.value },
+              columns: exportColumns as string[],
+            })
+          }
+          if (key === 'csvImport') {
+            csvImport.send({
+              url: '/import',
+              params: form?.value,
+              columns: importColumns as string[],
             })
           }
         }}

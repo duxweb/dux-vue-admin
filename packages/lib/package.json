@@ -45,6 +45,7 @@
     "file-saver": "^2.0.5",
     "go-captcha-vue": "^2",
     "jinrishici": "^1.0.6",
+    "json-2-csv": "^5.5.7",
     "lodash-es": "^4.17.21",
     "mathjs": "^13.1.1",
     "mime": "^4.0.4",

@@ -270,7 +270,8 @@ const { loading, data, page, pageSize, pageCount, total, reload } = useList({
   defaultPageSize: 20, // 默认每页条数
   append: false, // 是否追加模式
   // Excel 导出配置
-  excelColumns: [{ header: "名称", key: "name" }],
+  importColumns: [{ header: "名称", key: "name" }],
+  exportColumns: [{ header: "名称", key: "name" }],
   export: true, // 是否启用导出
   import: true, // 是否启用导入
 });

@@ -141,6 +141,8 @@
       "refresh": "Refresh",
       "excelImport": "Import Excel",
       "excelExport": "Export Excel",
+      "csvImport": "Import CSV",
+      "csvExport": "Export CSV",
       "getError": "Failed to get data",
       "columnSetting": "Columns"
     },

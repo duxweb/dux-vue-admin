@@ -15,7 +15,8 @@ export interface UseTableProps {
   columns: TableColumn[] | Ref<TableColumn[] | undefined>
   columnActions?: TableAction[]
   filter?: Record<string, any>
-  excelColumns?: Column[]
+  importColumns?: Column[] | string[]
+  exportColumns?: Column[] | string[]
   batch?: BatchAction[]
   selected?: Ref<never[]>
   url?: string
@@ -23,6 +24,8 @@ export interface UseTableProps {
   name?: any
   export?: boolean
   import?: boolean
+  exportCsv?: boolean
+  importCsv?: boolean
   expanded?: boolean
   cacheTime?: number
 }

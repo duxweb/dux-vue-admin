@@ -246,13 +246,13 @@ export function listRenderAction({ key, text, rowData, rowIndex, actions, url }:
             renderIcon={
               item?.icon
                 ? () => (
-                  <div class={clsx([
-                    'n-icon',
-                    item.icon,
-                  ])}
-                  >
-                  </div>
-                )
+                    <div class={clsx([
+                      'n-icon',
+                      item.icon,
+                    ])}
+                    >
+                    </div>
+                  )
                 : undefined
             }
           >
@@ -271,29 +271,29 @@ export function listRenderDropdown({ actions }: RenderActionProps): VNodeChild {
   return (
     actions && actions?.length > 0
       ? (
-        <NDropdown
-          trigger="click"
-          options={actions?.map((item, index) => {
-            return {
-              label: item.labelLang ? t(item.labelLang) : item.label,
-              key: index,
-              icon: item?.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined,
-            }
-          })}
-          onSelect={(key) => {
-            if (!actions?.[key]) {
-              return
-            }
-            trigger({
-              item: actions[key],
-            })
-          }}
-        >
-          {{
-            default: () => <NButton type="default" secondary renderIcon={() => <div class="i-tabler:grid-dots"></div>}></NButton>,
-          }}
-        </NDropdown>
-      )
+          <NDropdown
+            trigger="click"
+            options={actions?.map((item, index) => {
+              return {
+                label: item.labelLang ? t(item.labelLang) : item.label,
+                key: index,
+                icon: item?.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined,
+              }
+            })}
+            onSelect={(key) => {
+              if (!actions?.[key]) {
+                return
+              }
+              trigger({
+                item: actions[key],
+              })
+            }}
+          >
+            {{
+              default: () => <NButton type="default" secondary renderIcon={() => <div class="i-tabler:grid-dots"></div>}></NButton>,
+            }}
+          </NDropdown>
+        )
       : null
   )
 }

@@ -23,7 +23,8 @@ export const DuxCardList = defineComponent({
     },
     url: String,
     render: Function,
-    excelColumns: Array<Column>,
+    exportColumns: [Array<Column>, Array<string>],
+    importColumns: [Array<Column>, Array<string>],
     export: {
       type: Boolean,
       default: false,
@@ -39,7 +40,8 @@ export const DuxCardList = defineComponent({
     const list = useList({
       form,
       url: props.url,
-      excelColumns: props.excelColumns,
+      exportColumns: props.exportColumns,
+      importColumns: props.importColumns,
       export: props.export,
       import: props.import,
     })

@@ -7,7 +7,7 @@ import { NButton, NCheckbox, NDropdown, NPopover, NTooltip, useMessage } from 'n
 import { computed, reactive, ref, toRef, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useI18n } from 'vue-i18n'
-import { treeToArr, useExportExcel, useImportExcel } from '../../hooks'
+import { treeToArr, useExportCsv, useExportExcel, useImportCsv, useImportExcel } from '../../hooks'
 import { useClient } from '../../hooks/useClient'
 import { useDialog } from '../dialog'
 import { listRenderAction } from '../filter'
@@ -15,11 +15,13 @@ import { columnMap, columnMedia, columnStatus, columnTags, columnText, columnTyp
 import { columnImage } from './column/image'
 import { columnSwitch } from './column/switch'
 
-export function useTable({ filter, url, batch, columns: tableColumn, columnActions, excelColumns, export: exportStatus, import: importStatus, expanded: expandedStatus, cacheTime, key = 'id' }: UseTableProps): UseTableResult {
+export function useTable({ filter, url, batch, columns: tableColumn, columnActions, exportColumns, importColumns, export: exportStatus, import: importStatus, exportCsv: exportCsvStatus, importCsv: importCsvStatus, expanded: expandedStatus, cacheTime, key = 'id' }: UseTableProps): UseTableResult {
   const client = useClient()
   const message = useMessage()
   const excelExport = useExportExcel()
   const excelImport = useImportExcel()
+  const csvExport = useExportCsv()
+  const csvImport = useImportCsv()
   const { t } = useI18n()
   const selected = ref<never[]>([])
   const expanded = ref<never[]>([])
@@ -193,10 +195,24 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
     })
   }
 
+  if (exportCsvStatus) {
+    toolsOptions.push({
+      label: t('components.list.csvExport'),
+      key: 'csvExport',
+    })
+  }
+
   if (importStatus) {
     toolsOptions.push({
       label: t('components.list.excelImport'),
       key: 'import',
+    })
+  }
+
+  if (importCsvStatus) {
+    toolsOptions.push({
+      label: t('components.list.csvImport'),
+      key: 'importCsv',
     })
   }
 
@@ -213,12 +229,21 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
             excelExport.send({
               url,
               params: { ...filters.value, ...filter?.value, ...sorter.value },
-              columns: excelColumns || tableColumns.value.map((item: Record<string, any>) => {
+              columns: exportColumns || tableColumns.value.map((item: Record<string, any>) => {
                 return {
                   header: item.title,
                   key: item.key,
 
                 }
+              }),
+            })
+          }
+          if (key === 'csvExport') {
+            csvExport.send({
+              url,
+              params: { ...filters.value, ...filter?.value, ...sorter.value },
+              columns: exportColumns || tableColumns.value.map((item: Record<string, any>) => {
+                return item.key
               }),
             })
           }
@@ -229,7 +254,17 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
                 ...filter?.value,
                 ...filters.value,
               },
-              columns: excelColumns,
+              columns: importColumns,
+            })
+          }
+          if (key === 'importCsv') {
+            csvImport.send({
+              url: '/import',
+              params: {
+                ...filter?.value,
+                ...filters.value,
+              },
+              columns: importColumns as string[],
             })
           }
         }}

@@ -141,6 +141,8 @@
       "refresh": "刷新数据",
       "excelImport": "导入 Excel",
       "excelExport": "导出 Excel",
+      "csvImport": "导入 CSV",
+      "csvExport": "导出 CSV",
       "getError": "获取数据失败",
       "columnSetting": "列设置"
     },
