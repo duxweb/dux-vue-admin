@@ -34,13 +34,15 @@ export const DuxStatsChartGrid = defineComponent({
     },
   },
   setup(props, { slots }) {
-    const data = props.data?.map?.((item) => {
-      return {
-        type: props.type,
-        name: item.title,
-        stack: item.stack,
-        data: item.data,
-      }
+    const data = computed(() => {
+      return props.data?.map?.((item) => {
+        return {
+          type: props.type,
+          name: item.title,
+          stack: item.stack,
+          data: item.data,
+        }
+      })
     })
 
     const themeStore = useThemeStore()
@@ -79,7 +81,7 @@ export const DuxStatsChartGrid = defineComponent({
           show: true,
           type: 'value',
         }],
-        series: data,
+        series: data.value,
         grid: {
           left: '10',
           right: '10',

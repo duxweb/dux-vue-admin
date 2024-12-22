@@ -23,13 +23,15 @@ export const DuxStatsChartRadar = defineComponent({
     },
   },
   setup(props, { slots }) {
-    const data = props.data?.map?.((item) => {
-      return {
-        name: item.name,
-        value: Object.entries(props.labels || [])?.map(([key]) => {
-          return item[key]
-        }),
-      }
+    const data = computed(() => {
+      return props.data?.map?.((item) => {
+        return {
+          name: item.name,
+          value: Object.entries(props.labels || [])?.map(([key]) => {
+            return item[key]
+          }),
+        }
+      }) as Array<Record<string, any>>
     })
 
     const option = computed(() => {
@@ -50,7 +52,7 @@ export const DuxStatsChartRadar = defineComponent({
         },
         series: {
           type: 'radar',
-          data,
+          data: data.value,
         },
         grid: {
           left: '10',

@@ -3,7 +3,7 @@ import type { PropType } from 'vue'
 import crypto from 'crypto-js'
 import { type EChartsOption, getMap, registerMap } from 'echarts'
 import { NCard, NDataTable } from 'naive-ui'
-import { defineComponent, onMounted, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import VChart from 'vue-echarts'
 import { useI18n } from 'vue-i18n'
 
@@ -29,11 +29,13 @@ export const DuxStatsChartMap = defineComponent({
     },
   },
   setup(props, { slots }) {
-    const data = props.data?.map?.((item) => {
-      return {
-        name: item.name,
-        value: item?.[props.valueKey],
-      }
+    const data = computed(() => {
+      return props.data?.map?.((item) => {
+        return {
+          name: item.name,
+          value: item?.[props.valueKey],
+        }
+      }) as Array<Record<string, any>>
     })
 
     const option = ref()
@@ -60,7 +62,7 @@ export const DuxStatsChartMap = defineComponent({
           type: 'map',
           map: name,
           roam: true,
-          data,
+          data: data.value,
         },
         visualMap: {
           show: true,

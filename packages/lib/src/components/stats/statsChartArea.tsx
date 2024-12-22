@@ -32,11 +32,13 @@ export const DuxStatsChartArea = defineComponent({
     },
   },
   setup(props, { slots }) {
-    const data = props.data?.map?.((item) => {
-      return {
-        name: item.title,
-        value: item.value,
-      }
+    const data = computed(() => {
+      return props.data?.map?.((item) => {
+        return {
+          name: item.title,
+          value: item.value,
+        }
+      }) as Array<Record<string, any>>
     })
 
     const themeStore = useThemeStore()
@@ -107,7 +109,7 @@ export const DuxStatsChartArea = defineComponent({
           label: {
             show: false,
           },
-          data,
+          data: data.value,
         },
         grid: {
           left: '10',

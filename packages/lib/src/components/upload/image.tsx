@@ -29,6 +29,7 @@ export const DuxImageUpload = defineComponent({
     },
     headers: Object as PropType<Record<string, any>>,
     data: Object as PropType<Record<string, any>>,
+    onUpdateValue: Function as PropType<(value: string | string[]) => void>,
   },
   setup(props, { emit }) {
     const uploadRef = ref<UploadInst | null>(null)
@@ -81,7 +82,9 @@ export const DuxImageUpload = defineComponent({
     }, { immediate: true })
 
     watch(files, (val) => {
-      model.value = props.multiple ? val?.filter(item => !!item.url).map(item => item.url || '') : (val[0]?.url || '')
+      const newValue = props.multiple ? val?.filter(item => !!item.url).map(item => item.url || '') : (val[0]?.url || '')
+      model.value = newValue
+      props.onUpdateValue?.(newValue)
     }, { immediate: true })
 
     const image = useImagePreview()

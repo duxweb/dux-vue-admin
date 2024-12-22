@@ -33,6 +33,7 @@ interface DuxStatsTotalTabDataProps {
   value?: string | number
   type?: 'up' | 'down'
   rate?: string | number
+  hidden?: boolean
 }
 
 export const DuxStatsTotalTabItem = defineComponent({
@@ -89,20 +90,26 @@ export const DuxStatsTotalTabItem = defineComponent({
           ),
           footer: () => (
             <div class="flex justify-between">
-              {props.data?.map((item, key) => (
-                <div class="flex gap-1 items-center" key={key}>
-                  <div class="text-gray-6">{item.title}</div>
-                  <div class={clsx([
-                    ' w-3 h-3',
-                    item.type === 'up' ? 'text-primary' : 'text-warning',
-                    item.type === 'up' ? 'i-tabler:arrow-up-right' : 'i-tabler:arrow-down-left',
-                  ])}
-                  />
-                  <div class={item.type === 'up' ? 'text-primary' : 'text-warning'}>
-                    {item.rate}
+              {props.data?.map((item, key) => {
+                if (item.hidden) {
+                  return null
+                }
+
+                return (
+                  <div class="flex gap-1 items-center" key={key}>
+                    <div class="text-gray-6">{item.title}</div>
+                    <div class={clsx([
+                      ' w-3 h-3',
+                      item.type === 'up' ? 'text-primary' : 'text-warning',
+                      item.type === 'up' ? 'i-tabler:arrow-up-right' : 'i-tabler:arrow-down-left',
+                    ])}
+                    />
+                    <div class={item.type === 'up' ? 'text-primary' : 'text-warning'}>
+                      {item.rate}
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
 
             </div>
           ),

@@ -25,6 +25,7 @@ export const DuxFileUpload = defineComponent({
     },
     headers: Object as PropType<Record<string, any>>,
     data: Object as PropType<Record<string, any>>,
+    onUpdateValue: Function as PropType<(value: DuxUploadFile[] | DuxUploadFile) => void>,
   },
   setup(props, { emit }) {
     const uploadRef = ref<UploadInst | null>(null)
@@ -76,7 +77,9 @@ export const DuxFileUpload = defineComponent({
     }, { immediate: true })
 
     watch(files, (val) => {
-      model.value = fileListToFile(props.multiple ? val : [val?.[0]])
+      const newValue = fileListToFile(props.multiple ? val : [val?.[0]])
+      model.value = newValue
+      props.onUpdateValue?.(newValue)
     }, { immediate: true })
 
     const modal = useModal()
