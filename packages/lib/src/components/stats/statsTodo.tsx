@@ -63,7 +63,7 @@ export const DuxStatsTodo = defineComponent({
     return () => (
       <NCard>
         <div class={clsx([
-          'grid grid-cols-2 gap-2 gap-4',
+          'grid grid-cols-2 gap-2 gap-2',
           `md:grid-cols-${ceil(props.col / 2)}`,
           `xl:grid-cols-${props.col}`,
         ])}
