@@ -74,6 +74,9 @@ export async function initAsyncRouter() {
 
   await client?.get({
     url: res.routerUrl,
+    config: {
+      cacheFor: 0,
+    },
   }).then((data) => {
     const list: DuxRoute[] = []
     const children: RouteRecordRaw[] = []

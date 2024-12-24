@@ -35,7 +35,7 @@ export const DuxTreeFilter = defineComponent({
       defaultValue: props.defaultValue,
     })
 
-    const useParams = ref({})
+    const useParams = ref(props.params || {})
     const useUrl = ref(props.url)
 
     const dropdownOption = ref<TreeOption>()
@@ -161,7 +161,11 @@ export const DuxTreeFilter = defineComponent({
         )}
         <div class="p-2 flex gap-2 items-center">
           <div class="flex-1">
-            <NInput v-model:value={keyword.value} placeholder={t('components.tree.placeholder')} />
+            {slots.header
+              ? slots.header()
+              : (
+                  <NInput v-model:value={keyword.value} placeholder={t('components.tree.placeholder')} />
+                )}
           </div>
           {slots.tools?.()}
         </div>
