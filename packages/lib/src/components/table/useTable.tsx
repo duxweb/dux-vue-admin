@@ -13,6 +13,7 @@ import { useDialog } from '../dialog'
 import { listRenderAction } from '../filter'
 import { columnMap, columnMedia, columnStatus, columnTags, columnText, columnType } from './column'
 import { columnImage } from './column/image'
+import { columnImages } from './column/images'
 import { columnSwitch } from './column/switch'
 
 export function useTable({ filter, url, batch, columns: tableColumn, columnActions, exportColumns, importColumns, export: exportStatus, import: importStatus, exportCsv: exportCsvStatus, importCsv: importCsvStatus, expanded: expandedStatus, cacheTime, key = 'id' }: UseTableProps): UseTableResult {
@@ -414,6 +415,12 @@ export function useTableColumns(props: UseTableColumnsProps) {
         return {
           ...itemProps,
           render: columnImage(params),
+        }
+      }
+      if (item.renderType === 'images') {
+        return {
+          ...itemProps,
+          render: columnImages(params),
         }
       }
       if (item.renderType === 'status') {

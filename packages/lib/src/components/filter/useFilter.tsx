@@ -119,8 +119,8 @@ export function useAction({ url }: { url?: string }) {
         title: title || label,
         component: item.component,
         componentProps: {
-          ...componentProps,
           id,
+          ...componentProps,
         },
         width: item.width,
       })
@@ -130,8 +130,8 @@ export function useAction({ url }: { url?: string }) {
         title: title || label,
         component: item.component,
         componentProps: {
-          ...componentProps,
           id,
+          ...componentProps,
         },
         width: item.width,
       })

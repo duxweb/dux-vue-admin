@@ -62,15 +62,15 @@ export default defineComponent({
       },
     )
 
-    onSuccess((res) => {
-      manage.login(res.data?.data)
+    onSuccess(async (res) => {
+      await manage.login(res.data?.data)
       setTimeout(() => {
         router.push({
           path: resource.getIndexPath(),
           replace: true,
           force: true,
         })
-      }, 100)
+      }, 150)
     })
 
     onError((res) => {

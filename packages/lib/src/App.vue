@@ -14,8 +14,10 @@ document.head.appendChild(meta)
 </script>
 
 <template>
-  <NConfigProvider :theme="theme" :theme-overrides="themeOverrides" :locale="zhCN" :date-locale="dateZhCN"
-    preflight-style-disabled>
+  <NConfigProvider
+    :theme="theme" :theme-overrides="themeOverrides" :locale="zhCN" :date-locale="dateZhCN"
+    preflight-style-disabled
+  >
     <n-loading-bar-provider>
       <NNotificationProvider>
         <NDialogProvider>

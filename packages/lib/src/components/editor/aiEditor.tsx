@@ -22,6 +22,7 @@ export const DuxAiEditor = defineComponent({
       type: String,
       default: '500px',
     },
+    onUpdateValue: Function as PropType<(value: string) => void>,
   },
   setup(props, { emit }) {
     const divRef = ref()
@@ -34,6 +35,7 @@ export const DuxAiEditor = defineComponent({
 
     const { getUser } = useManageStore()
     const { t } = useI18n()
+
     const model = useVModel(props, 'value', emit, {
       passive: true,
     })
@@ -43,6 +45,7 @@ export const DuxAiEditor = defineComponent({
         return
       }
       aiEditor.setContent(value || '')
+      props.onUpdateValue?.(model.value || '')
     }, { immediate: true })
 
     onMounted(() => {
@@ -50,8 +53,8 @@ export const DuxAiEditor = defineComponent({
         theme: darkMode.value ? 'dark' : 'light',
         element: divRef.value as Element,
         placeholder: t('components.editor.placeholder'),
-        content: model.value,
-        onChange: (aiEditor) => {
+        content: props.defaultValue || '',
+        onBlur: (aiEditor) => {
           model.value = aiEditor.getHtml()
         },
         image: {
@@ -159,6 +162,10 @@ export const DuxAiEditor = defineComponent({
       })
     })
 
+    onUnmounted(() => {
+      aiEditor?.destroy()
+    })
+
     watch(darkMode, (value) => {
       if (!divRef.value) {
         return
@@ -166,10 +173,6 @@ export const DuxAiEditor = defineComponent({
       divRef.value.classList.remove('aie-theme-dark', 'aie-theme-light')
       divRef.value.classList.add(value ? 'aie-theme-dark' : 'aie-theme-light')
     }, { immediate: true })
-
-    onUnmounted(() => {
-      aiEditor?.destroy()
-    })
 
     return () => (
       <div ref={divRef} style={`height: ${props.height}; width:100%`} />
