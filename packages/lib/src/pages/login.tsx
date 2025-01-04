@@ -65,11 +65,7 @@ export default defineComponent({
     onSuccess(async (res) => {
       await manage.login(res.data?.data)
       setTimeout(() => {
-        router.push({
-          path: resource.getIndexPath(),
-          replace: true,
-          force: true,
-        })
+        window.location.href = resource.getIndexPath()
       }, 150)
     })
 

@@ -10,6 +10,15 @@ class RejectModel extends PolylineEdgeModel {
     return style
   }
 
+  getTextStyle() {
+    const style = super.getTextStyle()
+    style.color = 'rgba(var(--n-error-color), 1)'
+    style.background = {
+      fill: 'var(--n-container-color)',
+    }
+    return style
+  }
+
   setAttributes() {
     super.setAttributes()
     this.text.value = (i18n.global.t as any)('components.flow.reject')

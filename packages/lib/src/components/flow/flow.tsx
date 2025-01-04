@@ -133,6 +133,11 @@ export const DuxFlow = defineComponent({
           size: 20,
         },
         plugins: [],
+        style: {
+          anchorLine: {
+            stroke: 'rgba(var(--n-gray-color-10), 1)',
+          },
+        },
       })
 
       lf.value?.on('node:contextmenu', ({ data, e }) => {

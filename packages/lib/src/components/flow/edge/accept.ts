@@ -9,6 +9,15 @@ class AcceptModel extends PolylineEdgeModel {
     return style
   }
 
+  getTextStyle() {
+    const style = super.getTextStyle()
+    style.color = 'rgba(var(--n-primary-color), 1)'
+    style.background = {
+      fill: 'var(--n-container-color)',
+    }
+    return style
+  }
+
   setAttributes() {
     super.setAttributes()
     this.text.value = (i18n.global.t as any)('components.flow.accept')
