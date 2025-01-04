@@ -21,10 +21,13 @@ import * as vueRouter from 'vue-router'
 import JsonRender from '../components/render/jsonRender'
 import { useClient } from '../hooks/useClient'
 import * as index from '../index'
+import { useResource } from '../index'
 
 export function sfcRender(path: string) {
   const client = useClient()
   const { mergeLocaleMessage } = vueI18n.useI18n()
+  const { config } = useResource()
+
   const options: Options = {
     moduleCache: {
       'vue': Vue,
@@ -46,6 +49,8 @@ export function sfcRender(path: string) {
       'vue-echarts': VChart,
       'vue-draggable-plus': VueDraggable,
       'vue-i18n': vueI18n,
+      ...config?.packages,
+
       'static!': function (content: string, _path: string, type: string) {
         const name = mime.getType(type)
         if (name?.startsWith('image')) {

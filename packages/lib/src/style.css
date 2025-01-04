@@ -226,6 +226,7 @@ body {
   left: 0;
   border-radius: 3px;
 }
+
 @keyframes animate {
   17% {
     border-bottom-right-radius: 3px;
@@ -252,4 +253,17 @@ body {
   50% {
     transform: scale(1.2, 1);
   }
+}
+
+.lf-graph {
+  background-color: var(--n-container-color);
+}
+
+.lf-control, .lf-dndpanel {
+  background-color: rgba(var(--n-gray-color-1), 1);
+}
+
+.lf-control-item:hover {
+  background-color: rgba(var(--n-gray-color-3), 1);
+
 }

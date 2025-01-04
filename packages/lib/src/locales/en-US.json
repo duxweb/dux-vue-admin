@@ -382,6 +382,18 @@
       "delTitle": "Confirm Delete",
       "delDesc": "Delete this file or folder?",
       "back": "Back"
+    },
+    "flow": {
+      "start": "Start",
+      "end": "End",
+      "node": "Node",
+      "reject": "Reject",
+      "accept": "Accept",
+      "save": "Save",
+      "zoomIn": "Zoom In",
+      "zoomOut": "Zoom Out",
+      "edit": "Edit",
+      "delete": "Delete"
     }
   },
   "hooks": {

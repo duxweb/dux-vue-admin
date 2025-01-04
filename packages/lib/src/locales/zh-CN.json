@@ -384,6 +384,18 @@
       "delTitle": "确认删除",
       "delDesc": "确认删除该文件或目录？",
       "back": "返回上一级"
+    },
+    "flow": {
+      "start": "开始",
+      "end": "结束",
+      "node": "节点",
+      "reject": "驳回",
+      "accept": "审批",
+      "save": "保存",
+      "zoomIn": "放大",
+      "zoomOut": "缩小",
+      "edit": "编辑",
+      "delete": "删除"
     }
   },
   "hooks": {

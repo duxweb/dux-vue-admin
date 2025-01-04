@@ -23,6 +23,7 @@
     "@ant-design/colors": "^7.1.0",
     "@ctrl/tinycolor": "^4.1.0",
     "@iconify-json/tabler": "^1.1.120",
+    "@logicflow/core": "^2.0.10",
     "@overlastic/vue": "^0.8.1",
     "@unocss/core": "^0.64.1",
     "@unocss/preset-icons": "^0.64.1",

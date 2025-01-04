@@ -12,6 +12,7 @@ import { DuxDrawerPage } from './drawer'
 import { DuxAiEditor } from './editor/aiEditor'
 import { DuxExample } from './example'
 import { DuxFilter, DuxTreeFilter } from './filter'
+import { DuxFlow } from './flow'
 import { DuxDrawerForm, DuxForm, DuxFormEditor, DuxFormItem, DuxJsonForm, DuxModalForm, DuxPageForm, DuxPageFormItem, DuxStepForm, DuxTabForm } from './form'
 import { DuxIconPicker } from './icon'
 import { DuxException, DuxGrid } from './layout'
@@ -134,5 +135,6 @@ export default {
     app.component('DuxForm', DuxForm)
     app.component('DuxFormItem', DuxFormItem)
     app.component('DuxAutoCompleteAsync', DuxAutoCompleteAsync)
+    app.component('DuxFlow', DuxFlow)
   },
 }

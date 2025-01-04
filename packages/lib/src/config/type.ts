@@ -46,4 +46,5 @@ export interface Config {
   amapMapKey?: string
   manage?: Record<string, ConfigManage>
   asyncRouter?: boolean
+  packages?: Record<string, any>
 }

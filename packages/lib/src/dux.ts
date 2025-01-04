@@ -13,6 +13,7 @@ import { permissionDirective } from './directive'
 import { i18n } from './i18n'
 
 import { loadMiSansFont } from './theme/fonts'
+import '@logicflow/core/lib/style/index.css'
 import 'go-captcha-vue/dist/style.css'
 import 'vfonts/Lato.css'
 import 'animate.css'
