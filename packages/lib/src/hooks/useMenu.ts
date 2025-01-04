@@ -34,10 +34,10 @@ export function useMenu() {
         hidden: item.hidden,
         icon: item?.icon
           ? () => {
-            return h('div', {
-              class: item.icon,
-            })
-          }
+              return h('div', {
+                class: item.icon,
+              })
+            }
           : undefined,
         label() {
           return item.path

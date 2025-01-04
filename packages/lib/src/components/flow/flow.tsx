@@ -18,7 +18,6 @@ export const DuxFlow = defineComponent({
       label: string
       type: string
       icon: string
-      callback: () => void
     }[]>,
     data: {
       type: Object as PropType<{
