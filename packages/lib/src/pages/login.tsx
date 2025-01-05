@@ -5,7 +5,6 @@ import { NButton, NForm, NFormItem, NInput, NPopover, useMessage } from 'naive-u
 import { storeToRefs } from 'pinia'
 import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
 import { useResource } from '../hooks'
 import { useClient } from '../hooks/useClient'
 import { useManageStore } from '../stores/manage'
@@ -34,7 +33,7 @@ export default defineComponent({
     const message = useMessage()
     const resource = useResource()
     const manage = useManageStore()
-    const router = useRouter()
+    // const router = useRouter()
     const client = useClient()
     const { t } = useI18n()
 
@@ -65,7 +64,7 @@ export default defineComponent({
     onSuccess(async (res) => {
       await manage.login(res.data?.data)
       setTimeout(() => {
-        window.location.href = resource.getIndexPath()
+        window.location.href = window.location.href.split('#')[0] + resource.getIndexPath()
       }, 150)
     })
 

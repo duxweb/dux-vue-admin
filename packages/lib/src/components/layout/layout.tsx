@@ -52,7 +52,7 @@ export const DuxLayout = defineComponent({
                     <div class="flex-none px-3 mb-2">
                       <div class="py-2 border-gray-2 border-b">
                         <div class="max-h-40px max-w-60px">
-                          {resource.config?.logo ? (darkMode.value && resource.config?.darkLogo ? <img class="w-auto h-full" src={resource.config?.darkLogo} /> : <img class="w-auto h-full" src={resource.config?.logo} />) : <div class="py-4"><dux-logo /></div>}
+                          {resource.config?.logo ? (darkMode.value && resource.config?.darkLogo ? <img class="max-h-40px max-w-60px" src={resource.config?.darkLogo} /> : <img class="max-h-40px max-w-60px" src={resource.config?.logo} />) : <div class="py-4"><dux-logo /></div>}
                         </div>
                       </div>
                     </div>
@@ -180,15 +180,15 @@ export const DuxLayout = defineComponent({
                         </NBreadcrumbItem>
                       ))
                       : (
-                        <div class="flex gap-2 text-sm">
-                          {route.meta.icon && (
-                            <NIcon>
-                              <div class={route.meta.icon} />
-                            </NIcon>
-                          )}
-                          {route.meta?.title}
-                        </div>
-                      )}
+                          <div class="flex gap-2 text-sm">
+                            {route.meta.icon && (
+                              <NIcon>
+                                <div class={route.meta.icon} />
+                              </NIcon>
+                            )}
+                            {route.meta?.title}
+                          </div>
+                        )}
 
                   </NBreadcrumb>
                 </div>
@@ -214,34 +214,34 @@ export const DuxLayout = defineComponent({
 
           {layout.value === 'separate' && subMenu.value && subMenu.value.length > 0
             ? (
-              <NLayout hasSider>
-                <NLayoutSider width={180} collapsedWidth={64} bordered nativeScrollbar={false}>
-                  <div class="flex flex-col h-full">
-                    <SearchInput />
-                    <div class="flex-1 h-1">
-                      <NScrollbar>
-                        <NMenu
-                          rootIndent={15}
-                          options={subMenu.value}
-                          value={subKey.value as string}
-                          onUpdateValue={(key: string) => subKey.value = key}
-                        />
-                      </NScrollbar>
+                <NLayout hasSider>
+                  <NLayoutSider width={180} collapsedWidth={64} bordered nativeScrollbar={false}>
+                    <div class="flex flex-col h-full">
+                      <SearchInput />
+                      <div class="flex-1 h-1">
+                        <NScrollbar>
+                          <NMenu
+                            rootIndent={15}
+                            options={subMenu.value}
+                            value={subKey.value as string}
+                            onUpdateValue={(key: string) => subKey.value = key}
+                          />
+                        </NScrollbar>
+                      </div>
                     </div>
+                  </NLayoutSider>
+                  <div class="flex-1 w-1 flex flex-col">
+                    <DuxTabs />
+                    {slots.default?.()}
                   </div>
-                </NLayoutSider>
-                <div class="flex-1 w-1 flex flex-col">
+                </NLayout>
+              )
+            : (
+                <>
                   <DuxTabs />
                   {slots.default?.()}
-                </div>
-              </NLayout>
-            )
-            : (
-              <>
-                <DuxTabs />
-                {slots.default?.()}
-              </>
-            )}
+                </>
+              )}
 
           <DuxCommand />
         </NLayout>
