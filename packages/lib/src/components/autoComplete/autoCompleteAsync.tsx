@@ -1,7 +1,7 @@
 import type { PropType } from 'vue'
 import { useVModel } from '@vueuse/core'
 import { NAutoComplete } from 'naive-ui'
-import { defineComponent, watch } from 'vue'
+import { computed, defineComponent, watch } from 'vue'
 import { useSelect } from '../select'
 
 export const DuxAutoCompleteAsync = defineComponent({
@@ -30,9 +30,12 @@ export const DuxAutoCompleteAsync = defineComponent({
       defaultValue: props.defaultValue || undefined,
     })
 
+    const params = computed(() => props.params || {})
+    const url = computed(() => props.url || '')
+
     const { onSearch, loading, Pagination, options } = useSelect({
-      url: props.url,
-      params: props.params,
+      url,
+      params,
       value: model.value,
       pagination: props.pagination,
       valueField: props.valueField || 'id',

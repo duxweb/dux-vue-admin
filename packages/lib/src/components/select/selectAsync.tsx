@@ -1,7 +1,7 @@
 import type { PropType, VNodeChild } from 'vue'
 import { useVModel } from '@vueuse/core'
 import { NAvatar, NImage, NSelect, NTag } from 'naive-ui'
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import placeholder from '../../static/images/placeholder.png'
 import { useSelect } from './useSelect'
 
@@ -27,17 +27,20 @@ export const DuxSelectAsync = defineComponent({
   },
   extends: NSelect,
   setup(props, { emit }) {
+    const params = computed(() => props.params || {})
+    const url = computed(() => props.url || '')
+
     const model = useVModel(props, 'value', emit, {
       passive: true,
       defaultValue: props.defaultValue,
     })
 
     const { onSearch, loading, Pagination, options } = useSelect({
-      url: props.url,
-      params: props.params,
+      url,
+      params,
       value: model.value,
       pagination: props.pagination,
-      valueField: props.valueField,
+      valueField: props.valueField || 'id',
     })
 
     return () => (

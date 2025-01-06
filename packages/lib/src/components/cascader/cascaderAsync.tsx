@@ -1,7 +1,7 @@
 import type { PropType } from 'vue'
 import { useVModel } from '@vueuse/core'
 import { NCascader } from 'naive-ui'
-import { computed, defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { useCascader } from './useCascader'
 
 export const DuxCascaderAsync = defineComponent({
@@ -12,16 +12,8 @@ export const DuxCascaderAsync = defineComponent({
   },
   extends: NCascader,
   setup(props, { emit }) {
-    const useParams = ref({})
-    const useUrl = ref(props.url)
-
-    watch(() => props.url, (val) => {
-      useUrl.value = val || ''
-    })
-
-    watch(() => props.params, (val) => {
-      useParams.value = val || {}
-    })
+    const params = computed(() => props.params || {})
+    const url = computed(() => props.url || '')
 
     const model = useVModel(props, 'value', emit, {
       passive: true,
@@ -29,8 +21,8 @@ export const DuxCascaderAsync = defineComponent({
     })
 
     const { options } = useCascader({
-      url: useUrl,
-      params: useParams,
+      url,
+      params,
     })
 
     const optionsData = computed(() => {

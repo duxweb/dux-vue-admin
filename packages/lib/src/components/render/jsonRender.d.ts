@@ -10,7 +10,7 @@ type JSONSchemaNodeAdaptor<T extends keyof any> = {
 export interface JSONSchema {
   tag?: string
   attr?: JSONSchemaNodeAdaptor<this['tag']>
-  child?: JSONSchema | JSONSchema[]
+  child?: JSONSchema | JSONSchema[] | string
   [key: string]: any
 }
 

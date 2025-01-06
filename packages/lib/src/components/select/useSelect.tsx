@@ -1,3 +1,4 @@
+import type { Ref } from 'vue'
 import { actionDelegationMiddleware, usePagination } from 'alova/client'
 import { NPagination } from 'naive-ui'
 import { ref, watch } from 'vue'
@@ -7,8 +8,8 @@ type value = Array<string | number> | string | number | null | undefined
 
 interface UseSelectProps {
   value: value
-  url?: string
-  params?: Record<string, any>
+  url?: Ref<string | undefined>
+  params?: Ref<Record<string, any>>
   valueField?: string
   pagination?: boolean
 }
@@ -18,8 +19,8 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
 
   const getList = (page: number, pageSize: number) => {
     return client.get({
-      url,
-      params: { page, pageSize, keyword: keyword.value, ...params },
+      url: url?.value,
+      params: { page, pageSize, keyword: keyword.value, ...params?.value },
     })
   }
 
@@ -45,7 +46,7 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
       },
       initialPage: 1,
       initialPageSize: pagination ? 10 : 0,
-      middleware: actionDelegationMiddleware(url || ''),
+      middleware: actionDelegationMiddleware(url?.value || ''),
     },
   )
 
@@ -60,7 +61,7 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
       return
     }
     client.get({
-      url,
+      url: url?.value,
       params: {
         id: Array.isArray(val) ? val.join(',') : val,
       },
@@ -81,18 +82,18 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
   const Pagination = () => (
     pagination
       ? (
-        <div class="flex justify-center">
-          <NPagination
-            page={page.value}
-            pageSize={pageSize.value}
-            pageCount={pageCount.value}
-            pageSlot={3}
-            onUpdatePage={(v) => {
-              page.value = v
-            }}
-          />
-        </div>
-      )
+          <div class="flex justify-center">
+            <NPagination
+              page={page.value}
+              pageSize={pageSize.value}
+              pageCount={pageCount.value}
+              pageSlot={3}
+              onUpdatePage={(v) => {
+                page.value = v
+              }}
+            />
+          </div>
+        )
       : null
   )
 
