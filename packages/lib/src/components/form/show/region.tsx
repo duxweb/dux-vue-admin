@@ -1,6 +1,6 @@
 import { NSpace } from 'naive-ui'
-import { DuxRegion } from 'src/components/region'
 import { defineComponent } from 'vue'
+import { DuxRegion } from '../../../components/region'
 
 export const ShowRegion = defineComponent({
   name: 'ShowRegion',

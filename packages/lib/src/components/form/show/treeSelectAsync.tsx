@@ -1,6 +1,6 @@
 import type { ValueAtom } from 'naive-ui/es/cascader/src/interface'
-import { useCascader } from 'src/components/cascader'
 import { computed, defineComponent } from 'vue'
+import { useCascader } from '../../../components/cascader'
 import { DuxTreeSelectAsync } from '../../../components/treeSelect'
 
 export const ShowTreeSelectAsync = defineComponent({

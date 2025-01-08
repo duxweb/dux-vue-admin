@@ -1,8 +1,8 @@
 import type { TransferOption } from 'naive-ui'
 import { useWatcher } from 'alova/client'
 import { NSpace, NSpin, NTag } from 'naive-ui'
-import { DuxTransferAsync } from 'src/components/transfer'
 import { defineComponent, ref } from 'vue'
+import { DuxTransferAsync } from '../../../components/transfer'
 import { useClient } from '../../../hooks'
 
 export const ShowTransferAsync = defineComponent({

@@ -4,7 +4,7 @@ import { defineComponent } from 'vue'
 export const ShowSpace = defineComponent({
   name: 'ShowSpace',
   extends: NSpace,
-  setup(props, { slots }) {
+  setup(_props, { slots }) {
     return () => (
       <div class="flex items-center">
         <NSpace>
