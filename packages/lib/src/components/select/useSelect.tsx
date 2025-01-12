@@ -32,6 +32,7 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
     page,
     pageSize,
     pageCount,
+    refresh,
   } = usePagination(
     (page, pageSize) => getList(page, pageSize),
     {
@@ -78,6 +79,10 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
   const onSearch = (v) => {
     keyword.value = v
   }
+
+  watch(() => url?.value, () => {
+    refresh()
+  }, { immediate: true })
 
   const Pagination = () => (
     pagination

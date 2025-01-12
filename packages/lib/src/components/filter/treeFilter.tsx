@@ -27,6 +27,10 @@ export const DuxTreeFilter = defineComponent({
     sortUrl: String,
     value: Array as PropType<(string | number)[]>,
     defaultValue: Array as PropType<(string | number)[]>,
+    draggable: {
+      type: Boolean,
+      default: true,
+    },
   },
   extends: NTree,
   setup(props, { emit, slots }) {
@@ -49,14 +53,14 @@ export const DuxTreeFilter = defineComponent({
       useParams.value = val || {}
     })
 
-    const { options, loading } = useCascader({
+    const { options, loading, expanded } = useCascader({
       url: useUrl,
       params: useParams,
     })
 
     watch(options, () => {
       data.value = options.value?.data || []
-    })
+    }, { immediate: true })
 
     const dropdownShow = ref(false)
     const dropdownOptions = computed<DropdownOption[]>(() => {
@@ -149,7 +153,15 @@ export const DuxTreeFilter = defineComponent({
       })
     }
 
+    const expandedKeys = ref<(string | number)[]>([])
     const { t } = useI18n()
+
+    watch(expanded, (v) => {
+      if (expandedKeys?.value?.length > 0) {
+        return
+      }
+      expandedKeys.value = v
+    }, { immediate: true })
 
     return () => (
 
@@ -175,9 +187,11 @@ export const DuxTreeFilter = defineComponent({
               <NTree
                 {...props}
                 data={data.value || []}
-                defaultExpandAll
+                expandedKeys={expandedKeys.value}
+                onUpdateExpandedKeys={(v) => {
+                  expandedKeys.value = v
+                }}
                 blockLine
-                draggable
                 selectedKeys={model.value}
                 onUpdateSelectedKeys={(v) => {
                   model.value = v

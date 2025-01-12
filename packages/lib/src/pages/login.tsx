@@ -65,7 +65,7 @@ export default defineComponent({
       await manage.login(res.data?.data)
       setTimeout(() => {
         window.location.href = `${window.location.href.split('#')[0]}#${resource.getIndexPath()}`
-      }, 150)
+      }, 500)
     })
 
     onError((res) => {
