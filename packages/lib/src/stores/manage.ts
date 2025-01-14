@@ -11,14 +11,14 @@ interface UserState {
 }
 
 export const useManageStore = defineStore('manage', () => {
-  const data = ref<Record<string, UserState>>({})
+  const data = ref<Record<string, UserState | undefined>>({})
   const manage = inject<Ref<string>>('dux.manage')
 
   const getUser = (): UserState => {
     if (!manage?.value) {
       throw new Error('dux.manage is not defined')
     }
-    return data.value[manage?.value || '']
+    return data.value[manage?.value || ''] || {}
   }
 
   const login = (info: Record<string, any>) => {
@@ -51,7 +51,7 @@ export const useManageStore = defineStore('manage', () => {
     if (!manage?.value) {
       throw new Error('dux.manage is not defined')
     }
-    delete data.value[manage?.value || '']
+    data.value[manage.value] = undefined
   }
 
   return {
