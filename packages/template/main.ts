@@ -12,8 +12,8 @@ declare global {
 const app = createApp(App)
 
 const config: Config = {
-  apiUrl: 'http://zbyun-api.test',
-  captcha: false,
+  apiUrl: 'http://0.0.0.0:8900',
+  captcha: true,
   manage: {
     admin: {
       apiPrefix: 'admin',

@@ -175,8 +175,9 @@ export function useAction({ url }: { url?: string }) {
         req({
           url: typeof item.url === 'function' ? item.url?.(id, itemData) : (item.url ? `${item.url}/${id}` : `${url}/${id}`),
           data: request?.data,
-        }).then(() => {
+        }).then((res) => {
           client.invalidate(item.invalidate || (typeof item.url === 'string' ? item.url : url))
+          message.success(res?.message || t('message.requestSuccess'))
         }).catch((res) => {
           message.error(res?.message || t('message.requestError'))
         })

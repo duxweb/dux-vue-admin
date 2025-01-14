@@ -23,6 +23,10 @@ export const DuxFilter = defineComponent({
     titleLang: {
       type: String,
     },
+    headerShow: {
+      type: Boolean,
+      default: true,
+    },
     value: {
       type: Object as PropType<Record<string, any>>,
       default: {},
@@ -46,37 +50,39 @@ export const DuxFilter = defineComponent({
 
     return () => (
       <div class="flex flex-col gap-4">
-        <div class="flex items-center border-b border-gray-2 pb-2 gap-4">
-          {props?.tabs && props?.tabs?.length > 0
-            ? (
-                <div class=" flex-1 w-1">
-                  <NTabs
-                    animated
-                    paneClass="!p-0"
-                    value={filterModel.value?.tab}
-                    defaultValue={props?.tabs?.[0]?.value}
-                    onUpdateValue={(v) => {
-                      filterModel.value.tab = v
-                      props.onSubmit?.()
-                    }}
-                  >
-                    {props?.tabs?.map((item, key) => <NTabPane key={key} tab={item?.labelLang ? t(item.labelLang) : item.label} name={item.value}></NTabPane>)}
-                  </NTabs>
-                </div>
-              )
-            : (
-                <div class="text-base font-bold flex-1">
-                  {props?.titleLang ? t(props.titleLang) : props?.title || title.value}
-                </div>
-              )}
+        {props.headerShow && (
+          <div class="flex items-center border-b border-gray-2 pb-2 gap-4">
+            {props?.tabs && props?.tabs?.length > 0
+              ? (
+                  <div class=" flex-1 w-1">
+                    <NTabs
+                      animated
+                      paneClass="!p-0"
+                      value={filterModel.value?.tab}
+                      defaultValue={props?.tabs?.[0]?.value}
+                      onUpdateValue={(v) => {
+                        filterModel.value.tab = v
+                        props.onSubmit?.()
+                      }}
+                    >
+                      {props?.tabs?.map((item, key) => <NTabPane key={key} tab={item?.labelLang ? t(item.labelLang) : item.label} name={item.value}></NTabPane>)}
+                    </NTabs>
+                  </div>
+                )
+              : (
+                  <div class="text-base font-bold flex-1">
+                    {props?.titleLang ? t(props.titleLang) : props?.title || title.value}
+                  </div>
+                )}
 
-          <div class="md:flex flex-1 gap-2 justify-end hidden">
-            {actionButton}
+            <div class="md:flex flex-1 gap-2 justify-end hidden">
+              {actionButton}
+            </div>
+            <div class="md:hidden">
+              {actionDropdown}
+            </div>
           </div>
-          <div class="md:hidden">
-            {actionDropdown}
-          </div>
-        </div>
+        )}
 
         <DuxForm layout={width.value > 768 ? 'left' : 'top'} labelWidth="auto">
           <div class="flex flex-col md:flex-row gap-4">

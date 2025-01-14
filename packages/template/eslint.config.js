@@ -2,6 +2,10 @@ import antfu from '@antfu/eslint-config'
 
 export default antfu({
   formatters: true,
-  isInEditor: false,
-  
+  isInEditor: true,
+
+  rules: {
+    'sort-imports': 'off',
+    'import/order': 'off',
+  },
 })

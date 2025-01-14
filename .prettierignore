@@ -1,0 +1,2 @@
+# 忽略特定文件
+packages/lib/src/components/index.ts

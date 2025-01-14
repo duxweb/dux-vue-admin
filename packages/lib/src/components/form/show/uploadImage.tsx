@@ -1,6 +1,6 @@
 import { NImage, NSpace } from 'naive-ui'
 import { computed, defineComponent } from 'vue'
-import { DuxImageUpload } from '../../../components/upload'
+import { DuxImageUpload } from '../../upload/image'
 
 export const ShowUploadImage = defineComponent({
   name: 'ShowUploadImage',
