@@ -17,7 +17,7 @@ function open() {
 const manage = useManageStore()
 
 function login() {
-  manage.login(manage.getUser().raw || {})
+  manage.login(manage.getUser()?.raw || {})
 }
 function logout() {
   manage.logout()

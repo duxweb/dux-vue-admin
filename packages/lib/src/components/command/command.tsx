@@ -7,7 +7,6 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { emitter } from '../../event'
 import { useRouteStore } from '../../stores'
-import './style.scss'
 
 export const DuxCommand = defineComponent({
   name: 'DuxCommand',

@@ -2,7 +2,7 @@ import type { Ref } from 'vue'
 import { defineStore } from 'pinia'
 import { inject, ref } from 'vue'
 
-interface UserState {
+export interface UserState {
   raw?: Record<string, any>
   token?: string
   id?: number
@@ -14,11 +14,18 @@ export const useManageStore = defineStore('manage', () => {
   const data = ref<Record<string, UserState | undefined>>({})
   const manage = inject<Ref<string>>('dux.manage')
 
+  const isLogin = (): boolean => {
+    if (!manage?.value) {
+      throw new Error('dux.manage is not defined')
+    }
+    return !!data.value[manage?.value]
+  }
+
   const getUser = (): UserState => {
     if (!manage?.value) {
       throw new Error('dux.manage is not defined')
     }
-    return data.value[manage?.value || ''] || {}
+    return data.value[manage?.value] || {}
   }
 
   const login = (info: Record<string, any>) => {
@@ -58,6 +65,7 @@ export const useManageStore = defineStore('manage', () => {
     data,
     getUser,
     login,
+    isLogin,
     logout,
     update,
   }

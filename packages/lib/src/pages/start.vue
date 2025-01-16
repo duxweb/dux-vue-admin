@@ -40,13 +40,13 @@ router.beforeEach(async (to, _from, next) => {
   }
 
   // 判断是否登录
-  const user = manageStore.getUser()
-  if (!user && to.name !== `login`) {
+  const isLogin = manageStore.isLogin()
+  if (!isLogin && to.name !== `login`) {
     return next({ path: `/${manage}/login`, replace: true })
   }
 
   // 加载异步路由
-  if (user) {
+  if (isLogin) {
     const loadStatus = await initAsyncRouter()
     if (loadStatus) {
       return next({ path: to.path, replace: true })

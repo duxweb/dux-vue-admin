@@ -1,4 +1,5 @@
 @import './rest.css';
+@import './command.scss';
 
 html,
 body {

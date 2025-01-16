@@ -14,7 +14,7 @@ export const Avatar = defineComponent({
     const res = useResource()
     const { t } = useI18n()
     const { getUser, logout } = useManageStore()
-    const info = getUser().info
+    const info = getUser()?.info
 
     const haddieSelect = (key: string) => {
       if (key === 'logout') {
