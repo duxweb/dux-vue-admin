@@ -12,7 +12,7 @@ export interface UseFormProps {
   id?: unknown | Ref<unknown>
   initData?: Record<string, any>
   formRef?: Ref<FormInst>
-  invalidate?: string
+  invalidate?: string | string[]
   success?: (data: Record<string, any>) => void
   model?: Ref<Record<string, any>> | Record<string, any>
   edit?: boolean
@@ -56,7 +56,12 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
     request().then((res) => {
       message.success(res.data?.message || t('message.requestSuccess'))
       success?.(res)
-      client.invalidate(invalidate || getUrl())
+
+      client.invalidate(getUrl())
+
+      if (invalidate) {
+        client.invalidate(invalidate)
+      }
     }).catch((res) => {
       if (res?.data) {
         Object.entries(res?.data).forEach(([key, value]) => {

@@ -143,18 +143,26 @@ export function useClient(props?: useClientProps) {
     })
   }
 
-  const invalidate = (name?: string | RegExp) => {
-    const matchedMethods = alovaInstance.snapshots.match(`${name}`)
-    invalidateCache(matchedMethods)
+  type InvalidateType = string | RegExp | string[] | RegExp[]
+  const invalidate = (name?: InvalidateType) => {
+    let marks: any = name
+    if (!Array.isArray(name)) {
+      marks = [name]
+    }
 
-    const action = accessAction as any
-    action(
-      name || '',
-      (delegatedActions) => {
-        delegatedActions?.send?.()
-      },
-      true,
-    )
+    for (const name of marks) {
+      const matchedMethods = alovaInstance.snapshots.match(`${name}`)
+      invalidateCache(matchedMethods)
+
+      const action = accessAction as any
+      action(
+        name || '',
+        (delegatedActions) => {
+          delegatedActions?.send?.()
+        },
+        true,
+      )
+    }
   }
 
   return {

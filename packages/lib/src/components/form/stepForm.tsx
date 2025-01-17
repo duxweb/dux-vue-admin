@@ -22,7 +22,7 @@ export const DuxStepForm = defineComponent({
     title: String,
     url: String,
     id: [String, Number],
-    invalidate: String,
+    invalidate: [String, Array] as PropType<string | string[]>,
     model: Object as PropType<Record<string, any>>,
     steps: {
       type: Array as PropType<DuxStepFormItem[]>,

@@ -20,7 +20,7 @@ export const DuxTabForm = defineComponent({
     url: String,
     id: [String, Number],
     edit: Boolean,
-    invalidate: String,
+    invalidate: [String, Array] as PropType<string | string[]>,
     tab: String,
   },
   extends: DuxForm,

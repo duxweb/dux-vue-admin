@@ -5,8 +5,9 @@ import { treeToArr, useClient } from '../../hooks'
 interface UseCascaderProps {
   url?: Ref<string | undefined>
   params?: Ref<Record<string, any>>
+  invalidate?: string
 }
-export function useCascader({ url, params }: UseCascaderProps) {
+export function useCascader({ url, params, invalidate }: UseCascaderProps) {
   const client = useClient()
   const expanded = ref<(string | number)[]>([])
 
@@ -21,7 +22,7 @@ export function useCascader({ url, params }: UseCascaderProps) {
     () => getList(),
     [url, params],
     {
-      middleware: actionDelegationMiddleware(url?.value || ''),
+      middleware: actionDelegationMiddleware(invalidate || url?.value || ''),
       immediate: true,
     },
   )

@@ -31,6 +31,7 @@ export const DuxTreeFilter = defineComponent({
       type: Boolean,
       default: true,
     },
+    invalidate: String,
   },
   extends: NTree,
   setup(props, { emit, slots }) {
@@ -56,6 +57,7 @@ export const DuxTreeFilter = defineComponent({
     const { options, loading, expanded } = useCascader({
       url: useUrl,
       params: useParams,
+      invalidate: props.invalidate,
     })
 
     watch(options, () => {

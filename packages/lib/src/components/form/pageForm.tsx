@@ -21,7 +21,7 @@ export const DuxPageForm = defineComponent({
     schema: Object as PropType<JsonFormItemSchema[]>,
     url: String,
     id: [String, Number],
-    invalidate: String,
+    invalidate: [String, Array] as PropType<string | string[]>,
     divider: Boolean,
   },
   extends: DuxForm,
