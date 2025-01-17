@@ -200,7 +200,7 @@ export const DuxLayout = defineComponent({
                   {!isMobile.value && <Fullscreen />}
                   <Message />
                   {!resource.config?.lang && <Lang />}
-                  {!isMobile.value && <Layout />}
+                  {!isMobile.value && !resource.manageConfig?.layout && <Layout />}
                   {!isMobile.value && <Color />}
                   <Theme />
                 </div>

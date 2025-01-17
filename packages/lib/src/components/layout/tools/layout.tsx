@@ -45,7 +45,7 @@ export const Layout = defineComponent({
                   <div class="rounded bg-primary w-8"></div>
                   <div class="flex-1 rounded bg-primary/20"></div>
                 </div>
-                <div class="text-center">{t('common.layout.app')}</div>
+                <div class="text-center">{t('common.layout.collapse')}</div>
               </div>
 
               <div
@@ -62,7 +62,7 @@ export const Layout = defineComponent({
                     <div class="flex-1 rounded bg-primary/20"></div>
                   </div>
                 </div>
-                <div class="text-center">{t('common.layout.app')}</div>
+                <div class="text-center">{t('common.layout.separate')}</div>
               </div>
             </div>
           ),

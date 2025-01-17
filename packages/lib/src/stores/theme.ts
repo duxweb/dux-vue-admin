@@ -5,6 +5,7 @@ import { registerTheme } from 'echarts'
 import { darkTheme } from 'naive-ui'
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
+import { useResource } from '../hooks/useResource'
 import { getTheme } from '../theme/echart'
 import { getGenerateColors, getThemeOverrides } from '../theme/helper'
 
@@ -108,11 +109,17 @@ export const useThemeStore = defineStore('theme', () => {
     registerTheme('default', getTheme(rainbowColors, darkMode.value))
   }, { immediate: true })
 
-  const layout = ref<Layout>('app')
+  const resource = useResource()
+
+  const layout = ref<Layout>(resource.manageConfig?.layout as Layout || resource.manageConfig?.defaultLayout as Layout || 'app')
 
   const toggleLayout = (value: Layout) => {
     layout.value = value
   }
+
+  watch(() => resource.manageConfig?.layout, () => {
+    layout.value = resource.manageConfig?.layout as Layout
+  }, { immediate: true })
 
   return {
     color,

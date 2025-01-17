@@ -16,6 +16,8 @@ export interface ConfigManage {
   apiPrefix?: string
   routers?: DuxRoute[]
   userMenu?: UserMenu[]
+  defaultLayout?: string
+  layout?: string
 }
 
 export type ConfigLang = 'en-US' | 'zh-CN'
