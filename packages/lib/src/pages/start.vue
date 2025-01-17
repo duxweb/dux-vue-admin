@@ -69,7 +69,7 @@ router.beforeEach(async (to, _from, next) => {
   // 默认跳转到主页
   if (to.path === '/' || to.path === '' || to.path === `/${manage}` || to.path === `/${manage}/`) {
     const indexRoute = routeStore.getIndexRoute()
-    return next({ path: indexRoute?.path, replace: true })
+    return next({ path: indexRoute?.path || '/', replace: true })
   }
 
   if (to.meta?.url) {
