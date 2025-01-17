@@ -9,7 +9,7 @@ import { useResource } from '../hooks/useResource'
 import { getTheme } from '../theme/echart'
 import { getGenerateColors, getThemeOverrides } from '../theme/helper'
 
-type Layout = 'app' | 'collapse' | 'separate'
+export type ThemeLayout = 'app' | 'collapse' | 'separate'
 
 export const useThemeStore = defineStore('theme', () => {
   const defaultMode = ref<BasicColorSchema>('auto')
@@ -111,15 +111,11 @@ export const useThemeStore = defineStore('theme', () => {
 
   const resource = useResource()
 
-  const layout = ref<Layout>(resource.manageConfig?.layout as Layout || resource.manageConfig?.defaultLayout as Layout || 'app')
+  const layout = ref<ThemeLayout>(resource.manageConfig?.layout as ThemeLayout || resource.manageConfig?.defaultLayout as ThemeLayout || 'app')
 
-  const toggleLayout = (value: Layout) => {
+  const toggleLayout = (value: ThemeLayout) => {
     layout.value = value
   }
-
-  watch(() => resource.manageConfig?.layout, () => {
-    layout.value = resource.manageConfig?.layout as Layout
-  }, { immediate: true })
 
   return {
     color,

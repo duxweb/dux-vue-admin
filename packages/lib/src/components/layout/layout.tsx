@@ -1,6 +1,7 @@
+import type { ThemeLayout } from '../../stores'
 import { NBreadcrumb, NBreadcrumbItem, NButton, NDrawer, NDrawerContent, NIcon, NLayout, NLayoutHeader, NLayoutSider, NMenu, NScrollbar } from 'naive-ui'
 import { storeToRefs } from 'pinia'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useResource } from '../../hooks'
@@ -32,6 +33,13 @@ export const DuxLayout = defineComponent({
     const themeStore = useThemeStore()
     const { layout, darkMode } = storeToRefs(themeStore)
     const resource = useResource()
+
+    watch(() => resource.manageConfig?.layout, (val) => {
+      if (!val) {
+        return
+      }
+      layout.value = val as ThemeLayout
+    }, { immediate: true })
 
     return () => (
       <NLayout
