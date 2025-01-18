@@ -173,7 +173,7 @@ export function useAction({ url }: { url?: string }) {
         }
 
         req({
-          url: typeof item.url === 'function' ? item.url?.(id, itemData) : (item.url ? `${item.url}/${id}` : `${url}/${id}`),
+          url: typeof item.url === 'function' ? item.url?.(id, itemData) : (item.url ? `${item.url}${itemData === undefined ? '' : `/${id}`}` : `${url}${itemData === undefined ? '' : `/${id}`}`),
           data: request?.data,
         }).then((res) => {
           client.invalidate(item.invalidate || (typeof item.url === 'string' ? item.url : url))
@@ -189,7 +189,7 @@ export function useAction({ url }: { url?: string }) {
         content: item?.content,
       }).then(() => {
         client.delete({
-          url: typeof item.url === 'function' ? item.url?.(id, itemData) : (item.url ? `${item.url}/${id}` : `${url}/${id}`),
+          url: typeof item.url === 'function' ? item.url?.(id, itemData) : (item.url ? `${item.url}${itemData === undefined ? '' : `/${id}`}` : `${url}${itemData === undefined ? '' : `/${id}`}`),
         }).then(() => {
           client.invalidate(item.invalidate || (typeof item.url === 'string' ? item.url : url))
         }).catch((res) => {
@@ -199,7 +199,7 @@ export function useAction({ url }: { url?: string }) {
     }
     if (item.type === 'link') {
       router.push({
-        path: typeof item.path === 'function' ? item.path?.(id, itemData) : res.genPath(id ? `${item.path}/${id}` : item.path),
+        path: typeof item.path === 'function' ? item.path?.(id, itemData) : res.genPath(id ? `${item.path}${itemData === undefined ? '' : `/${id}`}` : item.path),
       })
     }
     if (item.type === 'callback') {

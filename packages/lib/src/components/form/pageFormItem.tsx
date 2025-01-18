@@ -10,7 +10,7 @@ export const DuxPageFormItem = defineComponent({
   extends: NFormItem,
   setup(props, { slots }) {
     return () => (
-      <div class="grid grid-cols-1 lg:grid-cols-5 items-start gap-2 py-4">
+      <div class="grid grid-cols-1 lg:grid-cols-5 items-start gap-y-2 gap-x-6 py-4">
         <div class="lg:col-span-1 flex flex-col gap-0">
           <div class="flex items-center gap-1">
             {props.required && (
@@ -25,7 +25,7 @@ export const DuxPageFormItem = defineComponent({
             {props.desc}
           </div>
         </div>
-        <div class="lg:col-span-4 xl:col-span-3 pt-1.5">
+        <div class="lg:col-span-4 xl:col-span-3 pt-0 lg:pt-1.5">
           <NFormItem {...props} showLabel={false} showFeedback={false}>
             {slots.default?.()}
           </NFormItem>

@@ -5,7 +5,7 @@ import { useLoadingBar } from 'naive-ui'
 import { inject, ref } from 'vue'
 
 import { createManage, initAsyncRouter } from '../core/manage'
-import { router, useManageStore, usePermission, useRouteStore } from '../index'
+import { router, useManageStore, usePermission, useRouteStore, useTabStore } from '../index'
 import DuxLoading from './loading.vue'
 
 // 全局配置
@@ -15,6 +15,7 @@ const manageRef = inject<Ref<string>>('dux.manage')
 const routeStore = useRouteStore()
 const manageStore = useManageStore()
 const loadingBar = useLoadingBar()
+const tabStore = useTabStore()
 
 const { can } = usePermission()
 
@@ -43,6 +44,7 @@ router.beforeEach(async (to, _from, next) => {
   const isLogin = manageStore.isLogin()
   if (!isLogin && to.name !== `login`) {
     routeStore.clearRoutes()
+    tabStore.clearTab()
     return next({ path: `/${manage}/login`, replace: true })
   }
 

@@ -87,6 +87,11 @@ export const useTabStore = defineStore('tab', () => {
     }
   }
 
+  const clearTab = () => {
+    current.value = undefined
+    tabs.value = []
+  }
+
   const indexRoute = routeStore.getIndexRoute()
   if (indexRoute) {
     addTab({ meta: { ...indexRoute.meta, lock: true }, label: indexRoute?.label, url: indexRoute?.path, name: indexRoute?.name || '' })
@@ -103,5 +108,6 @@ export const useTabStore = defineStore('tab', () => {
     delLeft,
     delRight,
     lockTab,
+    clearTab,
   }
 })
