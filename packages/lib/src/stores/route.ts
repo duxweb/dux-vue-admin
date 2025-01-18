@@ -47,6 +47,11 @@ export const useRouteStore = defineStore('routes', () => {
     return routes.value
   }
 
+  const clearRoutes = () => {
+    routes.value = []
+    asyncInit.value = false
+  }
+
   const getIndexRoute = () => {
     const topRoutes = routes.value
       ?.filter(item => !item.parent && item.name !== '404' && item.name !== '403')
@@ -91,6 +96,7 @@ export const useRouteStore = defineStore('routes', () => {
     appendRoutes,
     setRoutes,
     getRoutes,
+    clearRoutes,
     getIndexRoute,
   }
 })

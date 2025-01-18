@@ -93,13 +93,13 @@ export function sfcRender(path: string) {
           cacheFor: 0,
         },
       }).then((res) => {
-        return res.data
+        return res?.data
       }).catch((err) => {
         throw new Error(`${err?.message} ${url}`)
       })
       return {
         getContentData: () => res?.content,
-        type: `${res.type}`,
+        type: `${res?.type || 'vue'}`,
       }
     },
     getResource({ refPath, relPath }, options: Options): Resource {

@@ -42,6 +42,7 @@ router.beforeEach(async (to, _from, next) => {
   // 判断是否登录
   const isLogin = manageStore.isLogin()
   if (!isLogin && to.name !== `login`) {
+    routeStore.clearRoutes()
     return next({ path: `/${manage}/login`, replace: true })
   }
 
