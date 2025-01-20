@@ -59,6 +59,8 @@ export const DuxPageTable = defineComponent({
       type: Boolean,
       default: true,
     },
+    refreshTime: Number,
+    cacheTime: Number,
   },
   setup(props, { slots, emit, expose }) {
     const { width } = useWindowSize()
@@ -88,6 +90,8 @@ export const DuxPageTable = defineComponent({
       importCsv: props.importCsv,
       batch: props.batch,
       expanded: props.expanded,
+      refreshTime: props.refreshTime,
+      cacheTime: props.cacheTime,
     })
 
     const { data, tableColumns, toolsColumns, toolsBtn, send, loading, tableParams, pagination } = tableHook

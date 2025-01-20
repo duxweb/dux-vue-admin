@@ -1,10 +1,10 @@
 import type { DataTableColumns, DataTableFilterState, DataTableRowKey, DataTableSortState } from 'naive-ui'
 import type { Ref } from 'vue'
 import type { BatchAction, TableAction, TableColumn, UseTableProps, UseTableResult } from './types'
-import { useWindowSize } from '@vueuse/core'
+import { useIntervalFn, useWindowSize } from '@vueuse/core'
 import { actionDelegationMiddleware, usePagination } from 'alova/client'
 import { NButton, NCheckbox, NDropdown, NPopover, NTooltip, useMessage } from 'naive-ui'
-import { computed, reactive, ref, toRef, watch } from 'vue'
+import { computed, h, reactive, ref, toRef, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useI18n } from 'vue-i18n'
 import { treeToArr, useExportCsv, useExportExcel, useImportCsv, useImportExcel } from '../../hooks'
@@ -16,7 +16,7 @@ import { columnImage } from './column/image'
 import { columnImages } from './column/images'
 import { columnSwitch } from './column/switch'
 
-export function useTable({ filter, url, batch, columns: tableColumn, columnActions, exportColumns, importColumns, export: exportStatus, import: importStatus, exportCsv: exportCsvStatus, importCsv: importCsvStatus, expanded: expandedStatus, cacheTime, key = 'id' }: UseTableProps): UseTableResult {
+export function useTable({ filter, url, batch, columns: tableColumn, columnActions, exportColumns, importColumns, export: exportStatus, import: importStatus, exportCsv: exportCsvStatus, importCsv: importCsvStatus, expanded: expandedStatus, cacheTime, key = 'id', refreshTime = 10 }: UseTableProps): UseTableResult {
   const client = useClient()
   const message = useMessage()
   const excelExport = useExportExcel()
@@ -182,10 +182,32 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
     </div>
   )
 
+  const autoRefresh = ref(false)
+
+  // 自动刷新
+  const { pause, resume } = useIntervalFn(() => {
+    refresh()
+  }, (refreshTime || 30) * 1000, { immediate: false })
+
+  watch(autoRefresh, (val) => {
+    if (val) {
+      resume()
+    }
+    else {
+      pause()
+    }
+  }, { immediate: true, deep: true })
+
   const toolsOptions = [
     {
       label: t('components.list.refresh'),
       key: 'refresh',
+    },
+    {
+      label: () => h('div', { class: 'flex items-center' }, [
+        !autoRefresh.value ? t('components.list.autoRefresh') : t('components.list.autoRefreshOff'),
+      ]),
+      key: 'autoRefresh',
     },
   ]
 
@@ -225,6 +247,9 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
         onSelect={(key) => {
           if (key === 'refresh') {
             refresh()
+          }
+          if (key === 'autoRefresh') {
+            autoRefresh.value = !autoRefresh.value
           }
           if (key === 'export') {
             excelExport.send({

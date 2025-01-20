@@ -139,6 +139,8 @@
     "list": {
       "options": "Actions",
       "refresh": "Refresh",
+      "autoRefresh": "Auto Refresh",
+      "autoRefreshOff": "Close Refresh",
       "excelImport": "Import Excel",
       "excelExport": "Export Excel",
       "csvImport": "Import CSV",

@@ -29,6 +29,7 @@ export interface UseTableProps {
   importCsv?: boolean
   expanded?: boolean
   cacheTime?: number
+  refreshTime?: number
 }
 
 export type TableColumnRender = (rowData: object, rowIndex: number) => VNodeChild

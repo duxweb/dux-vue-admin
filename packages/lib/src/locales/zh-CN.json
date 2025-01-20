@@ -139,6 +139,8 @@
     "list": {
       "options": "操作",
       "refresh": "刷新数据",
+      "autoRefresh": "自动刷新",
+      "autoRefreshOff": "关闭刷新",
       "excelImport": "导入 Excel",
       "excelExport": "导出 Excel",
       "csvImport": "导入 CSV",
