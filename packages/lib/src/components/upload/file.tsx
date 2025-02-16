@@ -32,6 +32,7 @@ export const DuxFileUpload = defineComponent({
 
     const model = useVModel(props, 'value', emit, {
       passive: true,
+      deep: true,
       defaultValue: props.defaultValue,
     })
 
@@ -66,21 +67,15 @@ export const DuxFileUpload = defineComponent({
 
     const files = ref<UploadFileInfo[]>([])
 
-    const once = ref(false)
-
     watch(() => props.value, (val) => {
-      if (!val || once.value) {
-        return
-      }
-      files.value = [...files.value, ...fileToFileList(props.value ? (Array.isArray(props.value) ? props.value : [props.value]) : [])]
-      once.value = true
-    }, { immediate: true })
+      files.value = [...files.value, ...fileToFileList(val ? (Array.isArray(val) ? val : [val]) : [])]
+    }, { immediate: true, deep: true })
 
     watch(files, (val) => {
       const newValue = fileListToFile(props.multiple ? val : [val?.[0]])
       model.value = newValue
       props.onUpdateValue?.(newValue)
-    }, { immediate: true })
+    }, { immediate: true, deep: true })
 
     const modal = useModal()
 
