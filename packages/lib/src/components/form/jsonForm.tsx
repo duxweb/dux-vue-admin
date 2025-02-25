@@ -30,7 +30,7 @@ export const DuxJsonForm = defineComponent({
         nodes={nodeJson.value}
         data={{
           ...props.data,
-          model: modelData,
+          model: modelData.value,
         }}
       />
     )

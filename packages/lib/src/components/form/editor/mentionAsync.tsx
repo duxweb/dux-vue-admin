@@ -77,7 +77,7 @@ const Setting = defineComponent({
 
 export function duxFormEditorMentionAsync(t: ComposerTranslation): PageEditorComponent {
   return {
-    name: 'mentionAsync',
+    name: 'mention-async',
     icon: 'i-tabler:at',
     label: t('components.formEditor.mentionAsync.name'),
     group: 'async',

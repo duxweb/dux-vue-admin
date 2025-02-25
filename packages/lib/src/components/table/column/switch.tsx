@@ -1,8 +1,6 @@
 import type { TableColumnRender } from '../..'
 import { NSwitch } from 'naive-ui'
 
-export type ColumnStatusType = 'success' | 'error' | 'warning' | 'info' | 'default'
-
 export interface ColumnSwitchProps {
   key?: string
   url?: string | ((rowData: object) => string)

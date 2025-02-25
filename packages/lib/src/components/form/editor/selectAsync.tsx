@@ -97,7 +97,7 @@ const Setting = defineComponent({
 
 export function duxFormEditorSelectAsync(t: ComposerTranslation): PageEditorComponent {
   return {
-    name: 'selectAsync',
+    name: 'select-async',
     icon: 'i-tabler:select',
     label: t('components.formEditor.selectAsync.name'),
     group: 'async',

@@ -77,7 +77,7 @@ const Setting = defineComponent({
 
 export function duxFormEditorTreeSelectAsync(t: ComposerTranslation): PageEditorComponent {
   return {
-    name: 'treeSelectAsync',
+    name: 'tree-select-async',
     icon: 'i-tabler:binary-tree',
     label: t('components.formEditor.treeSelectAsync.name'),
     group: 'async',

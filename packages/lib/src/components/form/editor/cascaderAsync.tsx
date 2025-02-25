@@ -95,7 +95,7 @@ const Setting = defineComponent({
 
 export function duxFormEditorCascaderAsync(t: ComposerTranslation): PageEditorComponent {
   return {
-    name: 'cascaderAsync',
+    name: 'cascader-async',
     icon: 'i-tabler:list-tree',
     label: t('components.formEditor.cascaderAsync.name'),
     group: 'async',

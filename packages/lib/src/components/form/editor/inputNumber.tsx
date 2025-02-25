@@ -103,7 +103,7 @@ const FormEditorInputNumberSetting = defineComponent({
 
 export function duxFormEditorInputNumber(t: ComposerTranslation): PageEditorComponent {
   return {
-    name: 'inputNumber',
+    name: 'number',
     icon: 'i-tabler:number',
     label: t('components.formEditor.inputNumber.name'),
     group: 'form',

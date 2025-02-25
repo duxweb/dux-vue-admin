@@ -14,6 +14,7 @@ import { listRenderAction } from '../filter'
 import { columnMap, columnMedia, columnStatus, columnTags, columnText, columnType } from './column'
 import { columnImage } from './column/image'
 import { columnImages } from './column/images'
+import { columnInput } from './column/input'
 import { columnSwitch } from './column/switch'
 
 export function useTable({ filter, url, batch, columns: tableColumn, columnActions, exportColumns, importColumns, export: exportStatus, import: importStatus, exportCsv: exportCsvStatus, importCsv: importCsvStatus, expanded: expandedStatus, cacheTime, key = 'id', refreshTime = 10 }: UseTableProps): UseTableResult {
@@ -476,6 +477,12 @@ export function useTableColumns(props: UseTableColumnsProps) {
         return {
           ...itemProps,
           render: columnSwitch(params, client, message, props.key, props.url),
+        }
+      }
+      if (item.renderType === 'input') {
+        return {
+          ...itemProps,
+          render: columnInput(params, client, message, props.key, props.url),
         }
       }
       if (item.renderType === 'render' || (item.render && typeof item.render === 'function')) {

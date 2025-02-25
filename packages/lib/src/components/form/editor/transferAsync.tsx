@@ -85,7 +85,7 @@ const Setting = defineComponent({
 
 export function duxFormEditorTransferAsync(t: ComposerTranslation): PageEditorComponent {
   return {
-    name: 'transferAsync',
+    name: 'transfer-async',
     icon: 'i-tabler:transfer',
     label: t('components.formEditor.transferAsync.name'),
     group: 'async',

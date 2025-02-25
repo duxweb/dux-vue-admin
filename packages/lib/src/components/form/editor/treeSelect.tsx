@@ -100,7 +100,7 @@ const Setting = defineComponent({
 
 export function duxFormEditorTreeSelect(t: ComposerTranslation): PageEditorComponent {
   return {
-    name: 'treeSelect',
+    name: 'tree-select',
     icon: 'i-tabler:binary-tree',
     label: t('components.formEditor.treeSelect.name'),
     group: 'select',
