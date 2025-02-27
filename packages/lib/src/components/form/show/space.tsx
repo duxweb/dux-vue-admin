@@ -8,7 +8,7 @@ export const ShowSpace = defineComponent({
     return () => (
       <div class="flex items-center">
         <NSpace>
-          {slots.default?.() || <div class="text-gray-7">-</div>}
+          {slots.default?.() || <div class="">-</div>}
         </NSpace>
       </div>
     )

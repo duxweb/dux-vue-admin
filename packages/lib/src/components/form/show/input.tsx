@@ -6,7 +6,7 @@ export const ShowInput = defineComponent({
   extends: NInput,
   setup(props) {
     return () => (
-      <div class="flex items-center text-gray-7">
+      <div class="flex items-center">
         {props.value || '-'}
       </div>
     )

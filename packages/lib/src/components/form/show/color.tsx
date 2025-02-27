@@ -10,10 +10,10 @@ export const ShowColor = defineComponent({
         {props.value && (
           <>
             <div class="size-4 rounded" style={{ backgroundColor: props.value }} />
-            <div class="text-gray-7">{props.value}</div>
+            <div class="">{props.value}</div>
           </>
         )}
-        {!props.value && <div class="text-gray-7">-</div>}
+        {!props.value && <div class="">-</div>}
       </div>
     )
   },

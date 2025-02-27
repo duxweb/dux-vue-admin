@@ -6,7 +6,7 @@ export const ShowDate = defineComponent({
   extends: NDatePicker,
   setup(props) {
     return () => (
-      <div class="flex items-center text-gray-7">
+      <div class="flex items-center ">
         {props.value || '-'}
       </div>
     )

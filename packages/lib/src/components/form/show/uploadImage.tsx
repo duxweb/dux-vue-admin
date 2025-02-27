@@ -28,7 +28,7 @@ export const ShowUploadImage = defineComponent({
                 ))
               )
             : (
-                <div class="text-gray-7">-</div>
+                <div class="">-</div>
               )}
         </NSpace>
       </div>

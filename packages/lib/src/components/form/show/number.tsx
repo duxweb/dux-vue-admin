@@ -10,7 +10,7 @@ export const ShowNumber = defineComponent({
     }
 
     return () => (
-      <div class="flex items-center text-gray-7">
+      <div class="flex items-center">
         {props.value ? formatNumber(props.value) : '-'}
       </div>
     )

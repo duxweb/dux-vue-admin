@@ -6,7 +6,7 @@ export const ShowTime = defineComponent({
   extends: NTimePicker,
   setup(props) {
     return () => (
-      <div class="flex items-center text-gray-7">
+      <div class="flex items-center ">
         {props.value
           ? (
               <NTime time={props.value} format={props.format || 'HH:mm:ss'} />

@@ -1,4 +1,4 @@
-import { NDynamicInput, NSpace, NTag } from 'naive-ui'
+import { NDynamicInput, NTable } from 'naive-ui'
 import { defineComponent } from 'vue'
 
 export const ShowDynamicInput = defineComponent({
@@ -6,19 +6,33 @@ export const ShowDynamicInput = defineComponent({
   extends: NDynamicInput,
   setup(props) {
     return () => (
-      <div class="flex items-center">
-        <NSpace>
+      <NTable bordered size="small">
+        <thead>
+          <tr>
+            {Object.entries(props.value?.[0]).map(([key]) => (
+              <th key={key}>{String(key)}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
           {props.value?.length
             ? (
                 props.value.map((item, index) => (
-                  <NTag key={index} type="info">{item}</NTag>
+                  <tr key={index}>
+                    {Object.entries(item).map(([key, value]) => (
+                      <td key={key}>{String(value)}</td>
+                    ))}
+                  </tr>
                 ))
               )
             : (
-                <div class="text-gray-7">-</div>
+                <tr>
+                  <td class="">-</td>
+                </tr>
               )}
-        </NSpace>
-      </div>
+
+        </tbody>
+      </NTable>
     )
   },
 })

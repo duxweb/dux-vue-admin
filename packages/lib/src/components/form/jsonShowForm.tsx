@@ -1,4 +1,5 @@
 import type { PropType } from 'vue'
+import type { GridProps } from './adaptor/grid'
 import type { FormLayoutType, JsonFormItemSchema } from './handler'
 import { useVModel } from '@vueuse/core'
 import { defineComponent } from 'vue'
@@ -12,6 +13,7 @@ import {
   ShowDynamicInput,
   ShowDynamicTags,
   ShowEditor,
+  ShowGrid,
   ShowInput,
   ShowMention,
   ShowMentionAsync,
@@ -50,79 +52,125 @@ export const DuxJsonShowForm = defineComponent({
       defaultValue: {},
     })
 
+    // 递归渲染表单项
+    const renderFormItem = (item: JsonFormItemSchema) => {
+      const value = modelData.value?.[item.name || '']
+
+      let show: any
+      switch (item.type) {
+        case 'cascader':
+          show = <ShowCascader value={value} {...item.attr as any} />
+          break
+        case 'cascader-async':
+          show = <ShowCascaderAsync value={value} {...item.attr as any} />
+          break
+        case 'input':
+          show = <ShowInput value={value} {...item.attr as any} />
+          break
+        case 'switch':
+          show = <ShowSwitch value={value} {...item.attr as any} />
+          break
+        case 'number':
+          show = <ShowNumber value={value} {...item.attr as any} />
+          break
+        case 'date':
+          show = <ShowDate value={value} {...item.attr as any} />
+          break
+        case 'select':
+          show = <ShowSelect value={value} {...item.attr as any} />
+          break
+        case 'select-async':
+          show = <ShowSelectAsync value={value} {...item.attr as any} />
+          break
+        case 'radio':
+          show = <ShowRadio value={value} {...item.attr as any} />
+          break
+        case 'radio-group':
+          show = <ShowRadio value={value} {...item.attr as any} />
+          break
+        case 'checkbox':
+          show = <ShowCheckbox value={value} {...item.attr as any} />
+          break
+        case 'checkbox-group':
+          show = <ShowCheckbox value={value} {...item.attr as any} />
+          break
+        case 'rate':
+          show = <ShowRate value={value} {...item.attr as any} />
+          break
+        case 'slider':
+          show = <ShowSlider value={value} {...item.attr as any} />
+          break
+        case 'time':
+          show = <ShowTime value={value} {...item.attr as any} />
+          break
+        case 'color':
+          show = <ShowColor value={value} {...item.attr as any} />
+          break
+        case 'dynamic-tags':
+          show = <ShowDynamicTags value={value} {...item.attr as any} />
+          break
+        case 'dynamic-input':
+          show = <ShowDynamicInput value={value} {...item.attr as any} />
+          break
+        case 'editor':
+          show = <ShowEditor value={value} {...item.attr as any} />
+          break
+        case 'region':
+          show = <ShowRegion value={value} {...item.attr as any} />
+          break
+        case 'space':
+          show = <ShowSpace value={value} {...item.attr as any} />
+          break
+        case 'transfer':
+          show = <ShowTransfer value={value} {...item.attr as any} />
+          break
+        case 'transfer-async':
+          show = <ShowTransferAsync value={value} {...item.attr as any} />
+          break
+        case 'tree-select':
+          show = <ShowTreeSelect value={value} {...item.attr as any} />
+          break
+        case 'tree-select-async':
+          show = <ShowTreeSelectAsync value={value} {...item.attr as any} />
+          break
+        case 'file-upload':
+          show = <ShowUploadFile value={value} {...item.attr as any} />
+          break
+        case 'image-upload':
+          show = <ShowUploadImage value={value} {...item.attr as any} />
+          break
+        case 'auto-complete':
+          show = <ShowAutoComplete value={value} {...item.attr as any} />
+          break
+        case 'mention':
+          show = <ShowMention value={value} {...item.attr as any} />
+          break
+        case 'mention-async':
+          show = <ShowMentionAsync value={value} {...item.attr as any} />
+          break
+        case 'grid':
+        {
+          const childItems = Array.isArray(item.child) ? item.child : [item.child]
+          return (
+            <ShowGrid {...item.attr as GridProps}>
+              {childItems.map(childItem => renderFormItem(childItem as JsonFormItemSchema))}
+            </ShowGrid>
+          )
+          break
+        }
+      }
+
+      return (
+        <div class="flex gap-2 p-3 items-center" key={item.modelName}>
+          <div class="w-20  text-gray-7">{item.label}</div>
+          <div class="flex-1">{show}</div>
+        </div>
+      )
+    }
+
     return () => (
-      <div class="flex flex-col gap-4">
-        {props.schema?.map((item) => {
-          const value = modelData.value?.[item.name || '']
-          switch (item.type) {
-            case 'cascader':
-              return <ShowCascader value={value} {...item.attr as any} />
-            case 'cascader-async':
-              return <ShowCascaderAsync value={value} {...item.attr as any} />
-            case 'input':
-              return <ShowInput value={value} {...item.attr as any} />
-            case 'switch':
-              return <ShowSwitch value={value} {...item.attr as any} />
-            case 'number':
-              return <ShowNumber value={value} {...item.attr as any} />
-            case 'date':
-              return <ShowDate value={value} {...item.attr as any} />
-            case 'select':
-              return <ShowSelect value={value} {...item.attr as any} />
-            case 'select-async':
-              return <ShowSelectAsync value={value} {...item.attr as any} />
-            case 'radio':
-              return <ShowRadio value={value} {...item.attr as any} />
-            case 'radio-group':
-              return <ShowRadio value={value} {...item.attr as any} />
-            case 'checkbox':
-              return <ShowCheckbox value={value} {...item.attr as any} />
-            case 'checkbox-group':
-              return <ShowCheckbox value={value} {...item.attr as any} />
-            case 'rate':
-              return <ShowRate value={value} {...item.attr as any} />
-            case 'slider':
-              return <ShowSlider value={value} {...item.attr as any} />
-            case 'time':
-              return <ShowTime value={value} {...item.attr as any} />
-            case 'color':
-              return <ShowColor value={value} {...item.attr as any} />
-            case 'dynamic-tags':
-              return <ShowDynamicTags value={value} {...item.attr as any} />
-            case 'dynamic-input':
-              return <ShowDynamicInput value={value} {...item.attr as any} />
-            case 'editor':
-              return <ShowEditor value={value} {...item.attr as any} />
-            case 'region':
-              return <ShowRegion value={value} {...item.attr as any} />
-            case 'space':
-              return <ShowSpace value={value} {...item.attr as any} />
-            case 'transfer':
-              return <ShowTransfer value={value} {...item.attr as any} />
-            case 'transfer-async':
-              return <ShowTransferAsync value={value} {...item.attr as any} />
-            case 'tree-select':
-              return <ShowTreeSelect value={value} {...item.attr as any} />
-            case 'tree-select-async':
-              return <ShowTreeSelectAsync value={value} {...item.attr as any} />
-            case 'file-upload':
-              return <ShowUploadFile value={value} {...item.attr as any} />
-            case 'image-upload':
-              return <ShowUploadImage value={value} {...item.attr as any} />
-            case 'auto-complete':
-              return <ShowAutoComplete value={value} {...item.attr as any} />
-            case 'mention':
-              return <ShowMention value={value} {...item.attr as any} />
-            case 'mention-async':
-              return <ShowMentionAsync value={value} {...item.attr as any} />
-            default:
-              return (
-                <div class="flex items-center text-gray-7">
-                  {value || '-'}
-                </div>
-              )
-          }
-        })}
+      <div class="flex flex-col text-sm border border-gray-2 dark:border-gray-3 rounded divide-y divide-gray-2 dark:divide-gray-3">
+        {props.schema?.map(item => renderFormItem(item))}
       </div>
     )
   },

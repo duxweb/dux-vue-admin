@@ -10,7 +10,7 @@ export const ShowDynamicTags = defineComponent({
         <NSpace>
           {props.value?.map((tag, index) => (
             <NTag key={index} type="info">{tag}</NTag>
-          )) || <div class="text-gray-7">-</div>}
+          )) || <div class="">-</div>}
         </NSpace>
       </div>
     )

@@ -170,3 +170,34 @@ export function formToJson(schema: JsonFormItemSchema[], layout: FormLayoutType 
     return itemJson
   })?.filter(v => v) || []
 }
+
+export function editorToSchema(data: Record<string, any>[]): JsonFormItemSchema[] {
+  return data?.map?.((item) => {
+    const obj = {
+      type: item?.name,
+      ...item?.options,
+    }
+
+    if (item?.children) {
+      if (Array.isArray(item.children)) {
+        if (Array.isArray(item.children[0])) {
+          obj.child = item.children.flat().map((childItem) => {
+            return {
+              type: childItem?.name,
+              ...childItem?.options,
+              ...(childItem?.children ? { child: editorToSchema(childItem.children) } : {}),
+            }
+          })
+        }
+        else {
+          obj.child = editorToSchema(item.children)
+        }
+      }
+      else if (typeof item.children === 'object') {
+        obj.child = editorToSchema([item.children])
+      }
+    }
+
+    return obj
+  })
+}
