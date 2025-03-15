@@ -82,7 +82,7 @@ export function useClient(props?: useClientProps) {
     return res.config?.apiUrl ? `${res.config?.apiUrl}${res.genUrl(url)}` : res.genUrl(url)
   }
 
-  const Get = <T = any>({ url, timeout = 5000, headers, params, config }: ClientRequestProps<T>): Method => {
+  const Get = <T = any>({ url, timeout = 0, headers, params, config }: ClientRequestProps<T>): Method => {
     return alovaInstance.Get<T>(getUrl(url), {
       headers: {
         ...globalHeaders(),
@@ -95,7 +95,7 @@ export function useClient(props?: useClientProps) {
     })
   }
 
-  const Post = <T = any>({ url, data, headers, params, config, type, timeout = 5000 }: ClientRequestProps<T>): Method => {
+  const Post = <T = any>({ url, data, headers, params, config, type, timeout = 0 }: ClientRequestProps<T>): Method => {
     return alovaInstance.Post<T>(getUrl(url), data, {
       headers: {
         ...globalHeaders(type),
@@ -107,7 +107,7 @@ export function useClient(props?: useClientProps) {
     })
   }
 
-  const Put = <T = any>({ url, data, headers, params, config, type, timeout = 5000 }: ClientRequestProps<T>): Method => {
+  const Put = <T = any>({ url, data, headers, params, config, type, timeout = 0 }: ClientRequestProps<T>): Method => {
     return alovaInstance.Put<T>(getUrl(url), data, {
       headers: {
         ...globalHeaders(type),
@@ -119,7 +119,7 @@ export function useClient(props?: useClientProps) {
     })
   }
 
-  const Patch = <T = any>({ url, data, headers, params, config, type, timeout = 5000 }: ClientRequestProps<T>): Method => {
+  const Patch = <T = any>({ url, data, headers, params, config, type, timeout = 0 }: ClientRequestProps<T>): Method => {
     return alovaInstance.Patch<T>(getUrl(url), data, {
       headers: {
         ...globalHeaders(type),
@@ -131,7 +131,7 @@ export function useClient(props?: useClientProps) {
     })
   }
 
-  const Delete = <T = any>({ url, data, headers, params, config, type, timeout = 5000 }: ClientRequestProps<T>): Method => {
+  const Delete = <T = any>({ url, data, headers, params, config, type, timeout = 0 }: ClientRequestProps<T>): Method => {
     return alovaInstance.Delete<T>(getUrl(url), data, {
       headers: {
         ...globalHeaders(type),
