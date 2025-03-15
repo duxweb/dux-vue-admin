@@ -18,6 +18,7 @@ import 'vfonts/Lato.css'
 import 'animate.css'
 import './style.css'
 import 'aieditor/dist/style.css'
+import 'vue-cropper/dist/index.css'
 
 export function createDux(config: Config) {
   initUnocssRuntime({

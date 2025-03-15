@@ -5,6 +5,7 @@ import { NButton, NForm, NFormItem, NInput, NPopover, useMessage } from 'naive-u
 import { storeToRefs } from 'pinia'
 import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import { useResource } from '../hooks'
 import { useClient } from '../hooks/useClient'
 import { useManageStore } from '../stores/manage'
@@ -33,7 +34,7 @@ export default defineComponent({
     const message = useMessage()
     const resource = useResource()
     const manage = useManageStore()
-    // const router = useRouter()
+    const router = useRouter()
     const client = useClient()
     const { t } = useI18n()
 
@@ -63,9 +64,7 @@ export default defineComponent({
 
     onSuccess(async (res) => {
       await manage.login(res.data?.data)
-      setTimeout(() => {
-        window.location.href = `${window.location.href.split('#')[0]}#${resource.getIndexPath()}`
-      }, 500)
+      router.push({ path: resource.getIndexPath() })
     })
 
     onError((res) => {
@@ -156,7 +155,7 @@ export default defineComponent({
       >
         <div class="relative md:m-4 max-w-180  w-full grid-cols-1 md:grid-cols-2 gap-12 overflow-hidden md:rounded-lg p-8 md:shadow md:bg-gray-1 grid">
           <div
-            class="flex justify-center tex absolute h-30 w-30 rotate-45 cursor-pointer items-end p-3 text-white bg-primary -right-15 -top-15 hover:bg-brand-hover"
+            class="flex justify-center tex absolute h-30 w-30 rotate-45 cursor-pointer items-end p-3 text-white bg-primary -right-20 -top-20 hover:bg-brand-hover"
             onClick={themeStore.toggleDarkMode}
           >
             {modeState.value === 'auto' && <div class="i-tabler:brightness-half h-5 w-5" />}
@@ -172,7 +171,7 @@ export default defineComponent({
                 {resource.config?.logo ? (darkMode.value && resource.config?.darkLogo ? <img class="w-auto h-16" src={resource.config?.darkLogo} /> : <img class="w-auto h-16" src={resource.config?.logo} />) : <div class="h-10"><dux-logo /></div>}
               </div>
               <div class="mt-4 text-lg">
-                {resource.manageConfig?.title || 'Dux Admin Manage'}
+                {resource.manageConfig?.value?.title || 'Dux Admin Manage'}
               </div>
             </div>
             <div class="my-6">

@@ -11,7 +11,7 @@ export function createManage(manage: string, routers: DuxRoute[]) {
   routers.push({
     path: `403`,
     component: () => import('../pages/notPermission'),
-    name: '403',
+    name: `${manage}.403`,
     label: '403',
     hidden: true,
   })
@@ -19,7 +19,7 @@ export function createManage(manage: string, routers: DuxRoute[]) {
   routers.push({
     path: `404`,
     component: () => import('../pages/notFound'),
-    name: '404',
+    name: `${manage}.404`,
     label: '404',
     hidden: true,
   })
@@ -55,10 +55,10 @@ export function createManage(manage: string, routers: DuxRoute[]) {
         component: () => import('../pages/main.vue'),
         children: [
           ...children,
-          { path: ':path(.*)*', component: () => import('../pages/notFound'), name: 'notFound', meta: { title: (i18n?.global as any)?.t('pages.404.title') } },
+          { path: ':path(.*)*', component: () => import('../pages/notFound'), name: `${manage}.404`, meta: { title: (i18n?.global as any)?.t('pages.404.title') } },
         ],
       },
-      { path: 'login', component: () => import('../pages/login'), name: 'login' },
+      { path: 'login', component: () => import('../pages/login'), name: `${manage}.login` },
     ],
   })
 }
@@ -83,7 +83,7 @@ export async function initAsyncRouter() {
     data?.data?.forEach((item: DuxRoute) => {
       list.push({
         ...item,
-        path: item.path ? `/${res.manage}/${item.path}` : undefined,
+        path: item.path ? `/${res.manage.value}/${item.path}` : undefined,
       })
 
       if (!item.path) {
@@ -108,7 +108,7 @@ export async function initAsyncRouter() {
 
     // 路由注册
     const manageRoute = router.getRoutes().find((v) => {
-      if (v.name === `${res.manage}.manage`) {
+      if (v.name === `${res.manage.value}.manage`) {
         return true
       }
       return false
@@ -124,7 +124,7 @@ export async function initAsyncRouter() {
     ]
 
     children?.forEach((item) => {
-      router.addRoute(`${res.manage}.manage`, item)
+      router.addRoute(`${res.manage.value}.manage`, item)
     })
   }).catch((err) => {
     throw err

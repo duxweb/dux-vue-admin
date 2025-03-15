@@ -51,29 +51,6 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
     }
   }
 
-  const send = () => {
-    validation.reset()
-    request().then((res) => {
-      message.success(res.data?.message || t('message.requestSuccess'))
-      success?.(res)
-
-      client.invalidate(getUrl())
-
-      if (invalidate) {
-        client.invalidate(invalidate)
-      }
-    }).catch((res) => {
-      if (res?.data) {
-        Object.entries(res?.data).forEach(([key, value]) => {
-          validation.set(key, value as string[], value?.[0] as string)
-        })
-      }
-      message.error(res?.message || t('message.requestError'))
-    }).finally(() => {
-      formLoading.value = false
-    })
-  }
-
   const getData = () => {
     formLoading.value = true
     client.get({
@@ -86,6 +63,31 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
       formModel.value = res?.data
     }).catch((res) => {
       message.success(res.data?.message || t('message.requestError'))
+    }).finally(() => {
+      formLoading.value = false
+    })
+  }
+
+  const send = () => {
+    validation.reset()
+    request().then((res) => {
+      message.success(res.data?.message || t('message.requestSuccess'))
+      success?.(res)
+
+      client.invalidate(getUrl())
+
+      if (invalidate) {
+        client.invalidate(invalidate)
+      }
+
+      getData()
+    }).catch((res) => {
+      if (res?.data) {
+        Object.entries(res?.data).forEach(([key, value]) => {
+          validation.set(key, value as string[], value?.[0] as string)
+        })
+      }
+      message.error(res?.message || t('message.requestError'))
     }).finally(() => {
       formLoading.value = false
     })

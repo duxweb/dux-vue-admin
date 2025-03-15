@@ -41,8 +41,6 @@ export const DuxAvatarCrop = defineComponent({
               },
             },
           }).then((file) => {
-            const formData = new FormData()
-            formData.append('file', file, 'avatar.png')
             file.name = 'avatar.png'
             file.mime = 'image/png'
             upload.send({

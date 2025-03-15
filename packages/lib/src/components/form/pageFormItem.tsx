@@ -10,7 +10,7 @@ export const DuxPageFormItem = defineComponent({
   extends: NFormItem,
   setup(props, { slots }) {
     return () => (
-      <div class="grid grid-cols-1 lg:grid-cols-5 items-start gap-y-2 gap-x-6 py-4">
+      <div class="grid grid-cols-1 lg:grid-cols-5 items-start gap-y-2 gap-x-6 py-3">
         <div class="lg:col-span-1 flex flex-col gap-0">
           <div class="flex items-center gap-1">
             {props.required && (

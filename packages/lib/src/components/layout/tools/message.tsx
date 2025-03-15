@@ -24,32 +24,32 @@ const MessageItem = defineComponent({
     return () => (
       props.data.length > 0
         ? (
-          <NList hoverable clickable>
-            {props.data?.map((item, key) => (
-              <NListItem
-                key={key}
-                class="!px-2"
+            <NList hoverable clickable>
+              {props.data?.map((item, key) => (
+                <NListItem
+                  key={key}
+                  class="!px-2"
 
-              >
-                <div
-                  class="flex items-start gap-2"
-                  onClick={() => {
-                    router.push(`/${resource.manage}/message`)
-                  }}
                 >
-                  <div class={clsx([
-                    'flex-1',
-                    item?.read ? 'font-normal' : 'font-bold',
-                  ])}
+                  <div
+                    class="flex items-start gap-2"
+                    onClick={() => {
+                      router.push(`/${resource.manage.value}/message`)
+                    }}
                   >
-                    {item?.title}
+                    <div class={clsx([
+                      'flex-1',
+                      item?.read ? 'font-normal' : 'font-bold',
+                    ])}
+                    >
+                      {item?.title}
+                    </div>
                   </div>
-                </div>
 
-              </NListItem>
-            ))}
-          </NList>
-        )
+                </NListItem>
+              ))}
+            </NList>
+          )
         : <DuxBlockEmpty text={t('components.message.notFound')} desc={t('components.message.notFoundMore')} />
     )
   },

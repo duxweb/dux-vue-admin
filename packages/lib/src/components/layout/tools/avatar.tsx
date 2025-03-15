@@ -19,17 +19,17 @@ export const Avatar = defineComponent({
     const haddieSelect = (key: string) => {
       if (key === 'logout') {
         logout()
-        router.push('/')
+        router.push(`/${res.manage.value}/login`)
       }
       else {
         router.push(key)
       }
     }
 
-    let options: DropdownMixedOption[] = res.config?.manage?.[res.manage].userMenu?.map((item) => {
+    let options: DropdownMixedOption[] = res.config?.manage?.[res.manage.value].userMenu?.map((item) => {
       return {
         label: item.label,
-        key: `/${res.manage}/${item.path}`,
+        key: `/${res.manage.value}/${item.path}`,
         icon: () => <div class={clsx([item.icon, 'w-4 h-4'])}></div>,
       }
     }) || []

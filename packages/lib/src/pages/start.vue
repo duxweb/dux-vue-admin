@@ -27,22 +27,31 @@ router.beforeEach(async (to, _from, next) => {
   // 解析管理端名
   const name = to.path.split('/')[1]
   const manage = Object.getOwnPropertyNames(config?.manage).find(item => item === name) || firstManage
+
+  const manageChanged = manageRef?.value !== manage
+
   if (manageRef) {
     manageRef.value = manage
   }
 
+  // 管理端切换
+  if (manageChanged) {
+    routeStore.init = false
+    return next({ path: to.path, query: to.query, replace: true })
+  }
+
   // 注册本地路由
   if (!routeStore.init) {
-    for (const key in config?.manage) {
-      createManage(key, config?.manage?.[key]?.routers || [])
-    }
+    routeStore.clearRoutes()
+    tabStore.clearTab()
+    createManage(manage, config?.manage?.[manage]?.routers || [])
     routeStore.init = true
     return next({ path: to.path, query: to.query, replace: true })
   }
 
   // 判断是否登录
   const isLogin = manageStore.isLogin()
-  if (!isLogin && to.name !== `login`) {
+  if (!isLogin && to.name !== `${manage}.login`) {
     routeStore.clearRoutes()
     tabStore.clearTab()
     return next({ path: `/${manage}/login`, replace: true })
@@ -51,6 +60,7 @@ router.beforeEach(async (to, _from, next) => {
   // 加载异步路由
   if (isLogin) {
     const loadStatus = await initAsyncRouter()
+
     if (loadStatus) {
       return next({ path: to.path, replace: true })
     }
@@ -94,7 +104,7 @@ router.afterEach(() => {
 
 <template>
   <DuxLoading v-if="loading" />
-  <RouterView v-slot="{ Component }">
+  <RouterView v-slot="{ Component }" :key="manageRef">
     <component :is="Component" />
   </RouterView>
 </template>

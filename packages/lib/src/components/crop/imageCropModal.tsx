@@ -2,7 +2,6 @@ import { NButton } from 'naive-ui'
 import { defineComponent, onMounted, onUnmounted, ref } from 'vue'
 import { VueCropper } from 'vue-cropper'
 import { DuxModalPage } from '../modal'
-import 'vue-cropper/dist/index.css'
 
 export default defineComponent({
   props: {
@@ -51,6 +50,7 @@ export default defineComponent({
                 canMove={true}
                 fixed={true}
                 outputType="png"
+                mode="contain"
               >
               </VueCropper>
             </div>

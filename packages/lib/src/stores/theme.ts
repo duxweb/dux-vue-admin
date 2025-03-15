@@ -111,7 +111,7 @@ export const useThemeStore = defineStore('theme', () => {
 
   const resource = useResource()
 
-  const layout = ref<ThemeLayout>(resource.manageConfig?.layout as ThemeLayout || resource.manageConfig?.defaultLayout as ThemeLayout || 'app')
+  const layout = ref<ThemeLayout>(resource.manageConfig?.value?.layout as ThemeLayout || resource.manageConfig?.value?.defaultLayout as ThemeLayout || 'app')
 
   const toggleLayout = (value: ThemeLayout) => {
     layout.value = value

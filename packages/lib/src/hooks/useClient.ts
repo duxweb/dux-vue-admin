@@ -47,7 +47,7 @@ export function useClient(props?: useClientProps) {
     onError(error) {
       if (error.status === 401) {
         logout()
-        router.push({ path: `/${res.manage}/login` })
+        router.push({ path: `/${res.manage.value}/login` })
         return
       }
       return Promise.reject(props?.raw ? error : error?.response?.data)

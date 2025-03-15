@@ -12,8 +12,8 @@ declare global {
 const app = createApp(App)
 
 const config: Config = {
-  apiUrl: 'http://0.0.0.0:8900',
-  captcha: true,
+  apiUrl: 'http://zbyun-api.test',
+  captcha: false,
   manage: {
     admin: {
       apiPrefix: 'admin',
@@ -26,8 +26,11 @@ const config: Config = {
         },
       ],
     },
+    merchant: {
+      apiPrefix: 'merchant',
+      title: '商户管理系统',
+    },
   },
-
 }
 
 app.use(createDux(config))

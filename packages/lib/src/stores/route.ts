@@ -54,7 +54,7 @@ export const useRouteStore = defineStore('routes', () => {
 
   const getIndexRoute = () => {
     const topRoutes = routes.value
-      ?.filter(item => !item.parent && item.name !== '404' && item.name !== '403')
+      ?.filter(item => !item.parent && !item.name.includes('404') && !item.name.includes('403'))
       ?.sort((a, b) => (a.sort || 0) - (b.sort || 0))
 
     const findFirstValidRoute = (route: DuxRoute): DuxRoute | undefined => {

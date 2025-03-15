@@ -34,7 +34,7 @@ export const DuxLayout = defineComponent({
     const { layout, darkMode } = storeToRefs(themeStore)
     const resource = useResource()
 
-    watch(() => resource.manageConfig?.layout, (val) => {
+    watch(() => resource.manageConfig?.value?.layout, (val) => {
       if (!val) {
         return
       }
@@ -81,7 +81,7 @@ export const DuxLayout = defineComponent({
                         quaternary
                         onClick={() => {
                           logout()
-                          router.push('/')
+                          router.push(`/${resource?.manage.value}/login`)
                         }}
                       >
                         <div class="h-5 w-5 i-tabler:logout" />
@@ -208,7 +208,7 @@ export const DuxLayout = defineComponent({
                   {!isMobile.value && <Fullscreen />}
                   <Message />
                   {!resource.config?.lang && <Lang />}
-                  {!isMobile.value && !resource.manageConfig?.layout && <Layout />}
+                  {!isMobile.value && !resource.manageConfig?.value?.layout && <Layout />}
                   {!isMobile.value && <Color />}
                   <Theme />
                 </div>
