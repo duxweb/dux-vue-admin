@@ -36,7 +36,7 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
   } = usePagination(
     (page, pageSize) => getList(page, pageSize),
     {
-      watchingStates: [keyword, () => params],
+      watchingStates: [keyword, () => params?.value],
       debounce: 300,
       // immediate: false,
       total: res => res.meta?.total || 0,

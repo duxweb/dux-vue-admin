@@ -158,7 +158,7 @@ export function useClient(props?: useClientProps) {
       action(
         name || '',
         (delegatedActions) => {
-          delegatedActions?.send?.()
+          delegatedActions?.refresh?.()
         },
         true,
       )

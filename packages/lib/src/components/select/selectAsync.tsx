@@ -9,7 +9,7 @@ export const DuxSelectAsync = defineComponent({
   name: 'DuxSelectAsync',
   props: {
     url: String,
-    params: Object as PropType<Record<string, any>>,
+    params: [Object as PropType<Record<string, any>>, Function] as PropType<Record<string, any> | (() => Record<string, any>)>,
     pagination: {
       type: Boolean,
       default: true,
@@ -27,7 +27,12 @@ export const DuxSelectAsync = defineComponent({
   },
   extends: NSelect,
   setup(props, { emit }) {
-    const params = computed(() => props.params || {})
+    const params = computed(() => {
+      if (typeof props.params === 'function') {
+        return props.params()
+      }
+      return props.params || {}
+    })
     const url = computed(() => props.url || '')
 
     const model = useVModel(props, 'value', emit, {

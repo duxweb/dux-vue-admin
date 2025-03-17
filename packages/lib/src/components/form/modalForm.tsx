@@ -49,7 +49,7 @@ export const DuxModalForm = defineComponent({
           default: () => (
             <div class="p-4">
               <DuxForm {...props} layout="top">
-                {slots.default?.()}
+                {slots.default?.(props)}
                 <DuxJsonForm model={model} schema={props.schema} data={props.data} />
               </DuxForm>
             </div>
@@ -65,6 +65,7 @@ export const DuxModalForm = defineComponent({
               >
                 {t('buttons.cancel')}
               </NButton>
+              {slots.action?.(props)}
               <NButton
                 type="primary"
                 loading={loading.value}

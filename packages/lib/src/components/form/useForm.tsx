@@ -80,7 +80,9 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
         client.invalidate(invalidate)
       }
 
-      getData()
+      if (idRef.value) {
+        getData()
+      }
     }).catch((res) => {
       if (res?.data) {
         Object.entries(res?.data).forEach(([key, value]) => {
