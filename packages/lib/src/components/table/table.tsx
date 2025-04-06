@@ -17,6 +17,7 @@ interface DuxTableProps extends NDataTableT {
   form?: Record<string, any>
   refreshTime?: number
   cacheTime?: number
+  actionWidth?: number
 }
 
 export const DuxTable = defineComponent({
@@ -32,6 +33,7 @@ export const DuxTable = defineComponent({
     form: Object as PropType<Record<string, any>>,
     refreshTime: Number,
     cacheTime: Number,
+    actionWidth: Number,
   },
   extends: NDataTable,
   setup(props: DuxTableProps, { expose }) {
@@ -47,6 +49,7 @@ export const DuxTable = defineComponent({
       filter: props.form,
       refreshTime: props.refreshTime,
       cacheTime: props.cacheTime,
+      actionWidth: props.actionWidth,
     })
 
     expose(table)

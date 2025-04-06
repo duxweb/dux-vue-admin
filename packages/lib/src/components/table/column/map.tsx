@@ -1,6 +1,7 @@
 import type { VNodeChild } from 'vue'
 import type { TableColumnRender } from '..'
 import clsx from 'clsx'
+import { get } from 'lodash-es'
 
 export interface ColumnMapTypeValue {
   icon?: string
@@ -32,7 +33,7 @@ export function columnMap({ maps }: ColumnMapProps): TableColumnRender {
               {item.label}
               ：
             </div>
-            <div>{item?.render ? item.render(rowData[item.value]) : rowData[item.value]}</div>
+            <div>{item?.render ? item.render(get(rowData, item.value)) : get(rowData, item.value)}</div>
           </div>
         ))}
       </div>

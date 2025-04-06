@@ -368,7 +368,8 @@
       "drag": "拖动文件、文件夹到此处上传",
       "file": "上传文件",
       "manage": "浏览文件",
-      "image": "上传图片"
+      "image": "上传图片",
+      "max": "最多只能上传 {max} 张图片"
     },
     "uploadManage": {
       "namePlaceholder": "请输入名称",

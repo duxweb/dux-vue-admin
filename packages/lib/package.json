@@ -51,7 +51,7 @@
     "mathjs": "^13.1.1",
     "mime": "^4.0.4",
     "mitt": "^3.0.1",
-    "naive-ui": "^2.40.1",
+    "naive-ui": "^2.41.0",
     "pinia": "^2.2.2",
     "pinia-plugin-persistedstate": "^4.0.1",
     "sass-embedded": "^1.80.3",

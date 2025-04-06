@@ -1,15 +1,13 @@
-import type { UploadFileInfo, UploadInst } from 'naive-ui'
 import type { PropType } from 'vue'
-import type { DuxUploadFile } from './useUpload'
 import { useVModel } from '@vueuse/core'
 import clsx from 'clsx'
-import { NButton, NImage, NProgress, NUpload } from 'naive-ui'
-import { defineComponent, ref, watch } from 'vue'
+import { NButton, NImage, NProgress, useMessage } from 'naive-ui'
+import { computed, defineComponent, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useI18n } from 'vue-i18n'
 import { useImagePreview, useResource } from '../../hooks'
 import { useModal } from '../modal'
-import { useNaiveUpload } from './useUpload'
+import { useUpload } from './useUpload'
 
 export const DuxImageUpload = defineComponent({
   name: 'DuxImageUpload',
@@ -32,78 +30,28 @@ export const DuxImageUpload = defineComponent({
     onUpdateValue: Function as PropType<(value: string | string[]) => void>,
   },
   setup(props, { emit }) {
-    const uploadRef = ref<UploadInst | null>(null)
-
     const model = useVModel(props, 'value', emit, {
       passive: true,
       deep: true,
-      defaultValue: props.defaultValue,
+      defaultValue: [],
     })
 
     const { uploadUrl } = useResource()
-    const { customRequest, onAbort } = useNaiveUpload()
+    const { send } = useUpload()
     const { t } = useI18n()
-
-    const imagesToFileList = (images: string[]): UploadFileInfo[] => {
-      return images.map((url, index) => {
-        const urlArr = url.split('/')
-        const fileName = urlArr[urlArr.length - 1]
-        return {
-          id: String(index),
-          url,
-          status: 'finished',
-          name: fileName,
-        } as UploadFileInfo
-      })
-    }
-
-    const fileToFileList = (list: DuxUploadFile[]): UploadFileInfo[] => {
-      return list.map((item, index) => {
-        return {
-          id: String(index),
-          url: item.url,
-          status: 'finished',
-          name: item.name,
-          type: item.mime,
-          ext: item.ext,
-        } as UploadFileInfo
-      })
-    }
-
-    const files = ref<UploadFileInfo[]>([])
-
-    watch(() => props.value, (val) => {
-      files.value = imagesToFileList(val ? Array.isArray(val) ? val : [val] : [])
-    }, { immediate: true, deep: true })
-
-    watch(files, (val) => {
-      const newValue = props.multiple ? val?.filter(item => !!item.url).map(item => item.url || '') : (val[0]?.url || '')
-      model.value = newValue
-      props.onUpdateValue?.(newValue)
-    }, { immediate: true, deep: true })
-
+    const message = useMessage()
     const image = useImagePreview()
     const modal = useModal()
 
+    const files = computed(() => {
+      return model.value ? (Array.isArray(model.value) ? model.value : [model.value]) : []
+    })
+
+    const percent = ref(0)
+
     return () => (
       <div>
-        <NUpload
-          ref={uploadRef}
-          fileList={files.value}
-          accept="image/*"
-          onUpdateFileList={(fileList) => {
-            files.value = fileList
-          }}
-          headers={props.headers}
-          data={props.data}
-          action={props.url || uploadUrl}
-          multiple={props.multiple}
-          max={props.multiple ? props.max : 1}
-          customRequest={customRequest}
-          showFileList={false}
-          abstract
-        >
-        </NUpload>
+
         <VueDraggable
           modelValue={files.value}
           v-model={files.value}
@@ -111,79 +59,45 @@ export const DuxImageUpload = defineComponent({
           draggable=".draggable"
         >
 
-          {files.value?.map((item, index) => (
+          {files.value?.map((url, index) => (
             <div
               key={index}
               class={clsx([
                 'w-80px h-80px rounded border-1 border-gray-3 relative group draggable flex items-center',
-                item.status === 'error' ? 'border-error text-error' : 'border-gray-3',
               ])}
             >
-              {item.status === 'finished'
-                ? (
-                    <NImage
-                      class="z-0 rounded"
-                      objectFit="scale-down"
-                      width={78}
-                      height={78}
-                      previewDisabled
-                      src={item.url as string}
-                    >
-                      <div class="size-full flex items-center justify-center">
-                        <div class="i-tabler:photo size-8"></div>
-                      </div>
-                    </NImage>
-
-                  )
-                : (
-                    <div class="size-80px flex items-center justify-center rounded">
-                      <div class="i-tabler:photo size-8"></div>
-                      {item.status === 'uploading' && (
-                        <div class="absolute left-2 right-2 bottom-2">
-                          <NProgress
-                            type="line"
-                            percentage={item.percentage || 0}
-                            height={5}
-                            showIndicator={false}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  )}
+              <NImage
+                class="z-0 rounded"
+                objectFit="scale-down"
+                width={78}
+                height={78}
+                previewDisabled
+                src={url}
+              >
+              </NImage>
               <div class="z-1 size-full inset-0 absolute flex items-center justify-center bg-gray-2 bg-opacity-90 transition-all opacity-0 group-hover:opacity-100 rounded">
-                {item.status === 'finished' && (
-                  <NButton
-                    quaternary
-                    circle
-                    size="small"
-                    renderIcon={() => <div class="n-icon i-tabler:eye"></div>}
-                    onClick={() => image.show([
-                      item.url || '',
-                    ], index)}
-                  >
-                  </NButton>
-                )}
-                {item.status === 'error' && (
-                  <NButton
-                    quaternary
-                    circle
-                    size="small"
-                    renderIcon={() => <div class="n-icon i-tabler:reload"></div>}
-                    onClick={() => {
-                      item.status = 'pending'
-                      uploadRef.value?.submit()
-                    }}
-                  >
-                  </NButton>
-                )}
+
+                <NButton
+                  quaternary
+                  circle
+                  size="small"
+                  renderIcon={() => <div class="n-icon i-tabler:eye"></div>}
+                  onClick={() => image.show(files.value, index)}
+                >
+                </NButton>
+
                 <NButton
                   quaternary
                   circle
                   size="small"
                   renderIcon={() => <div class="n-icon i-tabler:trash"></div>}
                   onClick={() => {
-                    onAbort(item.id)
-                    files.value.splice(index, 1)
+                    if (props.multiple) {
+                      model.value = (model.value as string[]).filter((_, i) => i !== index)
+                    }
+                    else {
+                      model.value = undefined
+                    }
                   }}
                 >
                 </NButton>
@@ -191,13 +105,14 @@ export const DuxImageUpload = defineComponent({
             </div>
           ))}
 
-          {(props.multiple || files.value?.length === 0) && (
+          {(files.value.length === 0 || (props.multiple && ((props.max && files.value.length < props.max) || !props.max))) && (
             <div
-              class="w-80px h-80px rounded flex flex-col  border-1 border-dashed border-gray-3 cursor-pointer text-sm  hover:border-primary-7"
+              class="w-80px h-80px rounded flex flex-col  border-1 border-dashed border-gray-3 text-sm  hover:border-primary-7"
               style={{
                 backgroundColor: 'var(--n-action-color)',
               }}
             >
+
               {props.manage && (
                 <div
                   class="flex-none border-b border-gray-4 border-dashed text-center py-1 bg-gray-2 hover:bg-gray-3 flex items-center justify-center gap-1"
@@ -216,10 +131,10 @@ export const DuxImageUpload = defineComponent({
                       },
                     }).then((res) => {
                       if (props.multiple) {
-                        files.value = files.value.concat(fileToFileList(res))
+                        model.value = [...files.value, ...res.map((item: any) => item.url)]
                       }
                       else {
-                        files.value = fileToFileList(res)
+                        model.value = res[0].url
                       }
                     })
                   }}
@@ -227,13 +142,59 @@ export const DuxImageUpload = defineComponent({
                   <div class="i-tabler:folder size-4"></div>
                 </div>
               )}
+
               <div
-                class="flex-1 flex flex-col justify-center items-center gap-1"
-                onClick={() => {
-                  uploadRef.value?.openOpenFileDialog()
-                }}
+                class="flex-1 flex flex-col justify-center items-center gap-1 relative"
               >
-                <div class="i-tabler:plus size-4"></div>
+                {percent.value > 0 && percent.value < 100
+                  ? (
+                      <div class="size-80px flex items-center justify-center rounded">
+                        <div class="i-tabler:photo size-8"></div>
+                        <div class="absolute left-2 right-2 bottom-2">
+                          <NProgress
+                            type="line"
+                            percentage={percent.value}
+                            height={5}
+                            showIndicator={false}
+                          />
+                        </div>
+                      </div>
+                    )
+                  : (
+                      <>
+                        <div class="i-tabler:plus size-4"></div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple={props.multiple}
+                          class="absolute inset-0 opacity-0  cursor-pointer"
+                          onChange={(e: Event) => {
+                            const uploadFiles = (e.target as HTMLInputElement).files || []
+                            if (props.max && files.value.length + uploadFiles.length > props.max) {
+                              message.error(t('components.upload.max', { max: props.max }))
+                              return
+                            }
+                            for (const file of Array.from(uploadFiles)) {
+                              send({
+                                url: props.url || uploadUrl,
+                                file,
+                                onProgress: (n: number) => {
+                                  percent.value = n
+                                },
+                                onSuccess: (res: any) => {
+                                  if (props.multiple) {
+                                    model.value = [...files.value, res.url]
+                                  }
+                                  else {
+                                    model.value = res.url
+                                  }
+                                },
+                              })
+                            }
+                          }}
+                        />
+                      </>
+                    )}
               </div>
             </div>
           )}

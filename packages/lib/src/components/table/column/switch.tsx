@@ -1,4 +1,5 @@
 import type { TableColumnRender } from '../..'
+import { get } from 'lodash-es'
 import { NSwitch } from 'naive-ui'
 
 export interface ColumnSwitchProps {
@@ -10,7 +11,7 @@ export function columnSwitch(props: ColumnSwitchProps, client, message, key?: st
   return (rowData) => {
     const rowKey = props.key || 'status'
 
-    let url = `${tableUrl}/${rowData[key || 'id']}`
+    let url = `${tableUrl}/${get(rowData, key || 'id')}`
     if (props.url) {
       url = typeof props.url === 'function' ? props.url(rowData) : props.url
     }

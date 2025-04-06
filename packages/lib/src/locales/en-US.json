@@ -366,7 +366,8 @@
       "drag": "Drag files here to upload",
       "file": "Upload File",
       "manage": "Browse Files",
-      "image": "Upload Image"
+      "image": "Upload Image",
+      "max": "You can only upload up to {max} images"
     },
     "uploadManage": {
       "namePlaceholder": "Enter name",

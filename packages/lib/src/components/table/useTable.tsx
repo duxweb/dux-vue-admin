@@ -17,7 +17,7 @@ import { columnImages } from './column/images'
 import { columnInput } from './column/input'
 import { columnSwitch } from './column/switch'
 
-export function useTable({ filter, url, batch, columns: tableColumn, columnActions, exportColumns, importColumns, export: exportStatus, import: importStatus, exportCsv: exportCsvStatus, importCsv: importCsvStatus, expanded: expandedStatus, cacheTime, key = 'id', refreshTime = 10 }: UseTableProps): UseTableResult {
+export function useTable({ filter, url, batch, columns: tableColumn, columnActions, exportColumns, importColumns, export: exportStatus, import: importStatus, exportCsv: exportCsvStatus, importCsv: importCsvStatus, expanded: expandedStatus, cacheTime, key = 'id', refreshTime = 10, actionWidth }: UseTableProps): UseTableResult {
   const client = useClient()
   const message = useMessage()
   const excelExport = useExportExcel()
@@ -115,6 +115,7 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
     selected,
     url,
     onSend,
+    width: actionWidth,
   })
 
   const tableColumns = ref<TableColumn[]>([])
@@ -406,7 +407,7 @@ interface UseTableColumnsProps {
   actions?: TableAction[]
   selected?: Ref<never[]>
   onSend?: () => void
-
+  width?: number
 }
 
 export function useTableColumns(props: UseTableColumnsProps) {
@@ -548,7 +549,7 @@ export function useTableColumns(props: UseTableColumnsProps) {
         title: t('components.list.options'),
         fixed: 'right',
         align: 'center',
-        width: columnWidth + 10,
+        width: props.width || (columnWidth + 10),
         render: (rowData, rowIndex) => {
           return <div class="flex gap-2 justify-center">{listRenderAction({ key: props.key, rowData, rowIndex, text: true, actions: props.actions, url: props.url })}</div>
         },

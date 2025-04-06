@@ -1,5 +1,5 @@
 import type { Column } from 'exceljs'
-import type { DataTableInst } from 'naive-ui'
+import type { DataTableInst, TableProps } from 'naive-ui'
 import type { PropType } from 'vue'
 import type { JsonFormItemSchema } from '../form'
 import type { BatchAction, TableAction, TableColumn } from './types'
@@ -61,6 +61,8 @@ export const DuxPageTable = defineComponent({
     },
     refreshTime: Number,
     cacheTime: Number,
+    tableProps: Object as PropType<TableProps>,
+    actionWidth: Number,
   },
   setup(props, { slots, emit, expose }) {
     const { width } = useWindowSize()
@@ -92,6 +94,7 @@ export const DuxPageTable = defineComponent({
       expanded: props.expanded,
       refreshTime: props.refreshTime,
       cacheTime: props.cacheTime,
+      actionWidth: props.actionWidth,
     })
 
     const { data, tableColumns, toolsColumns, toolsBtn, send, loading, tableParams, pagination } = tableHook
@@ -183,6 +186,7 @@ export const DuxPageTable = defineComponent({
                   defaultExpandAll={true}
                   {...tableParams.value}
                   pagination={props.pagination ? pagination.value : false}
+                  {...props.tableProps}
                 />
               </div>
             </div>
