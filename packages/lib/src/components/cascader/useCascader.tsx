@@ -15,6 +15,9 @@ export function useCascader({ url, params, invalidate }: UseCascaderProps) {
     return client.get({
       url: url?.value,
       params: params?.value,
+      config: {
+        cacheFor: 0,
+      },
     })
   }
 

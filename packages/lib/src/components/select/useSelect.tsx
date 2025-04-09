@@ -66,6 +66,9 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
       params: {
         id: Array.isArray(val) ? val.join(',') : val,
       },
+      config: {
+        cacheFor: 0,
+      },
     }).then((res) => {
       onceStatus.value = true
       res?.data?.forEach((item) => {
