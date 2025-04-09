@@ -47,7 +47,7 @@ export const DuxTreeFilter = defineComponent({
     const x = ref(0)
     const y = ref(0)
 
-    const data = ref([])
+    const data = ref<TreeOption[]>([])
     const client = useClient()
 
     watch(() => props.params, (val) => {
@@ -106,40 +106,60 @@ export const DuxTreeFilter = defineComponent({
     }
 
     const handleDrop = ({ node, dragNode, dropPosition }: TreeDropInfo) => {
+      // 找到源节点和目标节点的父节点
       const oldParent = findParentNode(data.value, dragNode.id)
-      const oldIndex = oldParent?.children?.indexOf(dragNode) || 0
+      const isTopLevelDrag = !oldParent
 
+      // 从原位置移除节点
+      if (isTopLevelDrag) {
+        const index = data.value.findIndex(item => item.id === dragNode.id)
+        if (index >= 0)
+          data.value.splice(index, 1)
+      }
+      else {
+        const index = oldParent?.children?.indexOf(dragNode) || 0
+        oldParent?.children?.splice(index, 1)
+      }
+
+      // 确定目标位置信息
       let parent = findParentNode(data.value, node.id)
+      let beforeId: any
+      let targetCollection: TreeOption[] = parent?.children || data.value
+      let insertPosition = 0 // 默认插入到开头
 
-      let beforeId
-      let beforeIndex
-
+      // 根据放置位置确定插入位置
       switch (dropPosition) {
         case 'before':
-          if (parent?.children) {
-            beforeIndex = parent.children.findIndex((item: any) => item.id === node.id) - 1
-            beforeId = beforeIndex >= 0 ? parent.children[beforeIndex]?.id : undefined
-          }
-          else {
-            beforeIndex = data.value.findIndex((item: TreeOption) => item.id === node.id) - 1
-            beforeId = beforeIndex >= 0 && data.value[beforeIndex] ? (data.value[beforeIndex] as any).id : undefined
+          // 计算放在目标节点之前的位置
+          insertPosition = targetCollection.findIndex(item => item.id === node.id)
+          // 如果要放到第一个位置，beforeId应该是undefined
+          if (insertPosition > 0) {
+            beforeId = targetCollection[insertPosition - 1].id
           }
           break
+
         case 'inside':
+          // 放在目标节点内部
           parent = node
-          beforeIndex = parent?.children?.length || 0
-          beforeId = undefined
+          targetCollection = parent.children = parent.children || []
+          // 默认添加到末尾
+          insertPosition = targetCollection.length
           break
+
         case 'after':
+          // 放在目标节点之后
+          insertPosition = targetCollection.findIndex(item => item.id === node.id) + 1
           beforeId = node.id
-          beforeIndex = parent?.children?.indexOf(node) || 0
           break
       }
-      oldParent?.children?.splice(oldIndex, 1)
-      parent?.children?.splice(beforeIndex + 1, 0, dragNode)
 
+      // 在目标位置插入节点
+      targetCollection.splice(insertPosition, 0, dragNode as any)
+
+      // 更新数据引用，触发视图更新
       data.value = [...data.value]
 
+      // 发送排序请求到服务器
       loading.value = true
       client?.post({
         url: props.sortUrl,
