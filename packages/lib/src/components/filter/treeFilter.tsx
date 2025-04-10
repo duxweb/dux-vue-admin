@@ -60,9 +60,9 @@ export const DuxTreeFilter = defineComponent({
       invalidate: props.invalidate,
     })
 
-    watch(options, () => {
+    watch(() => options.value?.data, () => {
       data.value = options.value?.data || []
-    }, { immediate: true })
+    }, { immediate: true, deep: true })
 
     const dropdownShow = ref(false)
     const dropdownOptions = computed<DropdownOption[]>(() => {

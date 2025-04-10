@@ -11,7 +11,7 @@ export const DuxPageEmpty = defineComponent({
   setup(props) {
     const { t } = useI18n()
     return () => (
-      <DuxPageStatus title={props.title || t('pages.empty.title')} desc={props.desc || t('pages.empty.title')}>
+      <DuxPageStatus title={props.title || t('pages.empty.title')} desc={props.desc || t('pages.empty.desc')}>
         <dux-draw-empty-form />
       </DuxPageStatus>
     )

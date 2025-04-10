@@ -34,8 +34,12 @@ export const DuxCardList = defineComponent({
       default: false,
     },
     form: Object as PropType<Ref<Record<string, any>>>,
+    pagination: {
+      type: Boolean,
+      default: true,
+    },
   },
-  setup(props, { slots }) {
+  setup(props, { slots, expose }) {
     const form = props.form || ref<Record<string, any>>({})
     const list = useList({
       form,
@@ -46,27 +50,35 @@ export const DuxCardList = defineComponent({
       import: props.import,
     })
 
+    expose({
+      list,
+    })
+
     return () => (
       <DuxFullPage>
         <div class="h-full flex flex-col gap-2">
           {slots?.header?.(form)}
-          <NCard class="flex-none">
-            <DuxFilter
-              title={props.title}
-              titleLang={props.titleLang}
-              filter={props.filter}
-              tabs={props.tabs}
-              actions={props.actions}
-              v-model:value={form.value}
-              onSubmit={() => {
-                list.onFilter()
-              }}
-            >
-              {{
-                tools: () => list.toolsBtn,
-              }}
-            </DuxFilter>
-          </NCard>
+          {props?.filter && props?.filter?.length > 0
+            ? (
+                <NCard class="flex-none">
+                  <DuxFilter
+                    title={props.title}
+                    titleLang={props.titleLang}
+                    filter={props.filter}
+                    tabs={props.tabs}
+                    actions={props.actions}
+                    v-model:value={form.value}
+                    onSubmit={() => {
+                      list.onFilter()
+                    }}
+                  >
+                    {{
+                      tools: () => list.toolsBtn,
+                    }}
+                  </DuxFilter>
+                </NCard>
+              )
+            : null}
           {list.data.value?.length > 0
             ? (
                 <NScrollbar class="flex-1 h-1">
@@ -101,20 +113,21 @@ export const DuxCardList = defineComponent({
                     </div>
                   )
                 : <DuxPageEmpty />)}
-          <div class="flex justify-center">
-            <NPagination
-              showQuickJumper
-              showSizePicker
-              showQuickJumpDropdown
-              pageSize={list.pageSize.value}
-              page={list.page.value}
-              pageCount={list.pageCount.value}
-              onUpdatePage={list.onPage}
-              onUpdatePageSize={list.onPageSize}
-              pageSizes={[10, 20, 30, 40, 50]}
-
-            />
-          </div>
+          {props.pagination && (
+            <div class="flex justify-center">
+              <NPagination
+                showQuickJumper
+                showSizePicker
+                showQuickJumpDropdown
+                pageSize={list.pageSize.value}
+                page={list.page.value}
+                pageCount={list.pageCount.value}
+                onUpdatePage={list.onPage}
+                onUpdatePageSize={list.onPageSize}
+                pageSizes={[10, 20, 30, 40, 50]}
+              />
+            </div>
+          )}
         </div>
       </DuxFullPage>
     )
