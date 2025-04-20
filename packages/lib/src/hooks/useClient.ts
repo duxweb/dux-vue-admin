@@ -1,24 +1,19 @@
-import { type AlovaGenerics, type AlovaMethodCreateConfig, invalidateCache, type Method, type RequestBody } from 'alova'
-import { accessAction } from 'alova/client'
-import { useRouter } from 'vue-router'
-import { i18n } from '../i18n'
-import { useManageStore } from '../stores'
-import { alovaInstance } from './alova'
+import type { AxiosRequestConfig } from 'axios'
+import { useQueryClient } from '@tanstack/vue-query'
+import { useAxios } from './axios'
 import { useResource } from './useResource'
-
-type Config<T> = AlovaMethodCreateConfig<AlovaGenerics, Record<string, any>, T>
 
 type ClientMaps = Record<string, any>
 
 export type ClientRequestType = 'json' | 'file' | 'form'
 export interface ClientRequestProps<T> {
   url?: string
-  data?: RequestBody
+  data?: any
   params?: ClientMaps
   headers?: ClientMaps
   type?: ClientRequestType
   timeout?: number
-  config?: Config<T>
+  config?: AxiosRequestConfig<T>
 }
 
 export interface useClientProps {
@@ -26,39 +21,13 @@ export interface useClientProps {
 }
 
 export function useClient(props?: useClientProps) {
-  const { getUser, logout } = useManageStore()
   const res = useResource()
-  const user = getUser()
-  const router = useRouter()
+  const axiosInstance = useAxios(props)
 
-  alovaInstance.options.responded = {
-    onSuccess: async (response) => {
-      const json = response.data
-      if (response.status === 204) {
-        return undefined
-      }
-      if (response.status === 200) {
-        return props?.raw ? response : json
-      }
-      else {
-        return Promise.reject(props?.raw ? response : json)
-      }
-    },
-    onError(error) {
-      if (error.status === 401) {
-        logout()
-        router.push({ path: `/${res.manage.value}/login` })
-        return
-      }
-      return Promise.reject(props?.raw ? error : error?.response?.data)
-    },
-  }
+  const queryClient = useQueryClient()
 
   const globalHeaders = (type?: ClientRequestType) => {
     const data = {
-      'Accept': 'application/json',
-      'Authorization': user?.token,
-      'Accept-Language': i18n.global.locale?.value,
     }
 
     switch (type) {
@@ -82,21 +51,20 @@ export function useClient(props?: useClientProps) {
     return res.config?.apiUrl ? `${res.config?.apiUrl}${res.genUrl(url)}` : res.genUrl(url)
   }
 
-  const Get = <T = any>({ url, timeout = 0, headers, params, config }: ClientRequestProps<T>): Method => {
-    return alovaInstance.Get<T>(getUrl(url), {
+  const Get = <T = any>({ url, timeout = 0, headers, params, config }: ClientRequestProps<T>) => {
+    return axiosInstance.get<T>(getUrl(url), {
       headers: {
         ...globalHeaders(),
         ...headers,
       },
-      name: url,
       params,
       timeout,
       ...config,
     })
   }
 
-  const Post = <T = any>({ url, data, headers, params, config, type, timeout = 0 }: ClientRequestProps<T>): Method => {
-    return alovaInstance.Post<T>(getUrl(url), data, {
+  const Post = <T = any>({ url, data, headers, params, config, type, timeout = 0 }: ClientRequestProps<T>) => {
+    return axiosInstance.post<T>(getUrl(url), data, {
       headers: {
         ...globalHeaders(type),
         ...headers,
@@ -107,8 +75,8 @@ export function useClient(props?: useClientProps) {
     })
   }
 
-  const Put = <T = any>({ url, data, headers, params, config, type, timeout = 0 }: ClientRequestProps<T>): Method => {
-    return alovaInstance.Put<T>(getUrl(url), data, {
+  const Put = <T = any>({ url, data, headers, params, config, type, timeout = 0 }: ClientRequestProps<T>) => {
+    return axiosInstance.put<T>(getUrl(url), data, {
       headers: {
         ...globalHeaders(type),
         ...headers,
@@ -119,8 +87,8 @@ export function useClient(props?: useClientProps) {
     })
   }
 
-  const Patch = <T = any>({ url, data, headers, params, config, type, timeout = 0 }: ClientRequestProps<T>): Method => {
-    return alovaInstance.Patch<T>(getUrl(url), data, {
+  const Patch = <T = any>({ url, data, headers, params, config, type, timeout = 0 }: ClientRequestProps<T>) => {
+    return axiosInstance.patch<T>(getUrl(url), data, {
       headers: {
         ...globalHeaders(type),
         ...headers,
@@ -131,38 +99,29 @@ export function useClient(props?: useClientProps) {
     })
   }
 
-  const Delete = <T = any>({ url, data, headers, params, config, type, timeout = 0 }: ClientRequestProps<T>): Method => {
-    return alovaInstance.Delete<T>(getUrl(url), data, {
+  const Delete = <T = any>({ url, data, headers, params, config, type, timeout = 0 }: ClientRequestProps<T>) => {
+    return axiosInstance.delete<T>(getUrl(url), {
       headers: {
         ...globalHeaders(type),
         ...headers,
       },
+      data,
       params,
       timeout,
       ...config,
     })
   }
 
-  type InvalidateType = string | RegExp | string[] | RegExp[]
+  type InvalidateType = string | string[]
   const invalidate = (name?: InvalidateType) => {
     let marks: any = name
     if (!Array.isArray(name)) {
       marks = [name]
     }
 
-    for (const name of marks) {
-      const matchedMethods = alovaInstance.snapshots.match(`${name}`)
-      invalidateCache(matchedMethods)
-
-      const action = accessAction as any
-      action(
-        name || '',
-        (delegatedActions) => {
-          delegatedActions?.refresh?.()
-        },
-        true,
-      )
-    }
+    queryClient.invalidateQueries({
+      queryKey: marks,
+    })
   }
 
   return {

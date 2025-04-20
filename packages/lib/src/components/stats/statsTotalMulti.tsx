@@ -17,7 +17,7 @@ export const DuxStatsTotalMulti = defineComponent({
     return () => (
       <NCard title={props.title} headerClass="!text-base">
         <div class={clsx([
-          'grid grid-cols-2 gap-2',
+          'grid grid-cols-4 gap-2',
           `md:grid-cols-${ceil(props.col / 2)}`,
           `xl:grid-cols-${props.col}`,
         ])}
@@ -37,7 +37,7 @@ export const DuxStatsTotalMultiItem = defineComponent({
     value: [Number, String] as PropType<number | string>,
     rate: [Number, String] as PropType<number | string>,
     type: {
-      type: String as PropType<'up' | 'down'>,
+      type: [String, Boolean] as PropType<'up' | 'down' | false>,
       default: 'up',
     },
   },
@@ -52,7 +52,7 @@ export const DuxStatsTotalMultiItem = defineComponent({
         </div>
         <div class={clsx([
           'flex gap-1 items-center text-sm ',
-          props.type === 'up' ? 'text-primary' : 'text-warning',
+          props.type === 'up' ? 'text-primary' : props.type === 'down' ? 'text-warning' : 'text-gray-7',
         ])}
         >
           <div class="text-gray-7">
@@ -61,11 +61,13 @@ export const DuxStatsTotalMultiItem = defineComponent({
           <div>
             {props.rate}
           </div>
-          <div class={clsx([
-            ' w-3 h-3',
-            props.type === 'up' ? 'i-tabler:caret-up-filled' : 'i-tabler:caret-down-filled',
-          ])}
-          />
+          {props.type && (
+            <div class={clsx([
+              ' w-3 h-3',
+              props.type === 'up' ? 'i-tabler:caret-up-filled' : 'i-tabler:caret-down-filled',
+            ])}
+            />
+          )}
         </div>
       </div>
     )

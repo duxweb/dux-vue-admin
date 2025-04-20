@@ -1,11 +1,11 @@
 import type { Column } from 'exceljs'
+import { keepPreviousData, useQuery } from '@tanstack/vue-query'
 import { useFileDialog } from '@vueuse/core'
-import { usePagination, useRequest } from 'alova/client'
 import { format } from 'date-fns'
 import ExcelJS from 'exceljs'
 import FileSaver from 'file-saver'
 import { useMessage } from 'naive-ui'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useClient } from '.'
 
@@ -27,51 +27,53 @@ export function useExportExcel() {
     const messageRef = message.loading(t('hooks.excel.exporting'), { duration: 0 })
     loading.value = true
 
+    const page = ref(1)
+    const pageSize = ref(50)
+    const pageCount = ref(0)
+
+    const queryParams = computed(() => {
+      return {
+        page: page.value,
+        pageSize: pageSize.value,
+        ...params,
+      }
+    })
+
+    const dataStatus = ref(false)
+
     try {
-      const pagination = usePagination(
-        (page, pageSize) => {
-          return client.get({
-            url,
-            params: {
-              page,
-              pageSize,
-              ...params,
-            },
-            config: {
-              cacheFor: 0,
-            },
-          })
-        },
-        {
-          initialData: {
-            total: 0,
-            data: [],
-          },
-          initialPage: 1,
-          initialPageSize: 50,
-          total: res => res.meta?.total || 0,
-          append: true,
-          watchingStates: [() => params],
-          debounce: 0,
-          preloadPreviousPage: false,
-          preloadNextPage: false,
-          immediate: true,
-        },
-      )
+      const getList = () => {
+        return client.get({
+          url,
+          params: queryParams.value,
+        })
+      }
 
-      const dataStatus = ref(false)
+      const data = ref<Record<string, any>[]>([])
 
-      pagination.onComplete(() => {
-        if (pagination.isLastPage.value) {
+      const req = useQuery({
+        queryKey: [url, queryParams],
+        queryFn: getList,
+        placeholderData: keepPreviousData,
+      })
+
+      watch(req.data, (res) => {
+        data.value = [...data.value, ...res?.data]
+
+        const meta = res?.meta
+        const total = meta?.total || 0
+        pageCount.value = Math.ceil(total / pageSize.value)
+
+        if (page.value >= pageCount.value) {
           dataStatus.value = true
           return
         }
-        pagination.page.value++
+
+        page.value++
       })
 
-      pagination.onError((error) => {
-        loading.value = false
-        message.error(error.error?.message || 'Error')
+      watch(req.error, (error) => {
+        message.error(error?.message || 'Error')
       })
 
       watch(dataStatus, (status) => {
@@ -84,7 +86,7 @@ export function useExportExcel() {
         const sheet1 = workbook.addWorksheet('sheet1')
         sheet1.columns = columns || []
 
-        pagination.data.value.forEach((row) => {
+        data.value.forEach((row) => {
           sheet1.addRow(row)
         })
 
@@ -173,6 +175,8 @@ export function useImportExcel() {
 
     try {
       workbook.xlsx.load(ev.target.result as ArrayBuffer).then((workbook) => {
+        loading.value = true
+
         const worksheet = workbook.getWorksheet(1)
         const headers = []
         worksheet?.getRow(1).eachCell((cell) => {
@@ -189,26 +193,20 @@ export function useImportExcel() {
           data.push(rowData)
         }
 
-        const req = useRequest(client.post({
+        client.post({
           url: url.value,
           data: {
             data,
             ...params.value,
           },
-        }))
-
-        req.onSuccess((res) => {
-          message.success(res.data?.message || t('hooks.excel.importSuccess'))
+        }).then((res) => {
+          message.success(res?.message || t('hooks.excel.importSuccess'))
           callback.value?.()
+        }).catch((error) => {
+          message.error(`${t('hooks.excel.importError')}: ${error?.message}`)
+        }).finally(() => {
+          loading.value = false
         })
-
-        req.onError((error) => {
-          message.error(`${t('hooks.excel.importError')}: ${error.error?.message}`)
-        })
-
-        watch(req.loading, (v) => {
-          loading.value = v
-        }, { immediate: true, deep: true })
       })
     }
     catch (error) {

@@ -95,6 +95,7 @@ export const DuxPageTable = defineComponent({
       refreshTime: props.refreshTime,
       cacheTime: props.cacheTime,
       actionWidth: props.actionWidth,
+      pagination: !!props.pagination,
     })
 
     const { data, tableColumns, toolsColumns, toolsBtn, send, loading, tableParams, pagination } = tableHook

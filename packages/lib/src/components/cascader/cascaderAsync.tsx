@@ -40,7 +40,6 @@ export const DuxCascaderAsync = defineComponent({
           return newItem
         })
       }
-
       return processOptions(options.value?.data || [])
     })
 

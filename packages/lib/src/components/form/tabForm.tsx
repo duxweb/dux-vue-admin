@@ -57,7 +57,7 @@ export const DuxTabForm = defineComponent({
             class="h-full"
             contentClass="p-0! h-1 flex flex-col"
           >
-            <NTabs type="line" class="flex-1 h-1 flex flex-col" tabClass="p-4!" paneClass="flex-1 h-1 overflow-auto p-4!" defaultValue={props.tab}>
+            <NTabs type="line" class="flex-1 h-1 flex flex-col" tabClass="p-4!" paneClass="flex-1 h-1 overflow-auto p-4! w-auto!" defaultValue={props.tab}>
               {slots.default?.()}
             </NTabs>
             <div class="border-t border-gray-2 p-4 flex justify-end gap-4">

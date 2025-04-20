@@ -1,10 +1,10 @@
+import { keepPreviousData, useQuery } from '@tanstack/vue-query'
 import { useFileDialog } from '@vueuse/core'
-import { usePagination, useRequest } from 'alova/client'
 import { format } from 'date-fns'
 import FileSaver from 'file-saver'
 import { json2csv } from 'json-2-csv'
 import { useMessage } from 'naive-ui'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useClient } from '.'
 
@@ -26,51 +26,53 @@ export function useExportCsv() {
     const messageRef = message.loading(t('hooks.excel.exporting'), { duration: 0 })
     loading.value = true
 
+    const page = ref(1)
+    const pageSize = ref(50)
+    const pageCount = ref(0)
+
+    const queryParams = computed(() => {
+      return {
+        page: page.value,
+        pageSize: pageSize.value,
+        ...params,
+      }
+    })
+
+    const dataStatus = ref(false)
+
     try {
-      const pagination = usePagination(
-        (page, pageSize) => {
-          return client.get({
-            url,
-            params: {
-              page,
-              pageSize,
-              ...params,
-            },
-            config: {
-              cacheFor: 0,
-            },
-          })
-        },
-        {
-          initialData: {
-            total: 0,
-            data: [],
-          },
-          initialPage: 1,
-          initialPageSize: 50,
-          total: res => res.meta?.total || 0,
-          append: true,
-          watchingStates: [() => params],
-          debounce: 0,
-          preloadPreviousPage: false,
-          preloadNextPage: false,
-          immediate: true,
-        },
-      )
+      const getList = () => {
+        return client.get({
+          url,
+          params: queryParams.value,
+        })
+      }
 
-      const dataStatus = ref(false)
+      const data = ref<Record<string, any>[]>([])
 
-      pagination.onComplete(() => {
-        if (pagination.isLastPage.value) {
+      const req = useQuery({
+        queryKey: [url, queryParams],
+        queryFn: getList,
+        placeholderData: keepPreviousData,
+      })
+
+      watch(req.data, (res) => {
+        data.value = [...data.value, ...res?.data]
+
+        const meta = res?.meta
+        const total = meta?.total || 0
+        pageCount.value = Math.ceil(total / pageSize.value)
+
+        if (page.value >= pageCount.value) {
           dataStatus.value = true
           return
         }
-        pagination.page.value++
+
+        page.value++
       })
 
-      pagination.onError((error) => {
-        message.error(error.error?.message || 'Error')
-        loading.value = false
+      watch(req.error, (error) => {
+        message.error(error?.message || 'Error')
       })
 
       watch(dataStatus, async (status) => {
@@ -79,7 +81,7 @@ export function useExportCsv() {
           return
         }
 
-        const csv = await json2csv(pagination.data.value, {
+        const csv = await json2csv(data.value, {
           keys: columns,
           emptyFieldValue: '',
           prependHeader: true,
@@ -174,26 +176,22 @@ export function useImportCsv() {
         })
       }
 
-      const req = useRequest(client.post({
+      loading.value = true
+
+      client.post({
         url: url.value,
         data: {
           data,
           ...params.value,
         },
-      }))
-
-      req.onSuccess((res) => {
-        message.success(res.data?.message || t('hooks.excel.importSuccess'))
+      }).then((res) => {
+        message.success(res?.message || t('hooks.excel.importSuccess'))
         callback.value?.()
+      }).catch((error) => {
+        message.error(`${t('hooks.excel.importError')}: ${error?.message}`)
+      }).finally(() => {
+        loading.value = false
       })
-
-      req.onError((error) => {
-        message.error(`${t('hooks.excel.importError')}: ${error.error?.message}`)
-      })
-
-      watch(req.loading, (v) => {
-        loading.value = v
-      }, { immediate: true, deep: true })
     }
     catch (error) {
       message.error(`${t('hooks.excel.importError')}: ${error}`)

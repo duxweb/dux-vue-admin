@@ -1,7 +1,7 @@
 import type { Column } from 'exceljs'
-import { actionDelegationMiddleware, usePagination } from 'alova/client'
+import { keepPreviousData, useInfiniteQuery, type UseInfiniteQueryReturnType, useQuery } from '@tanstack/vue-query'
 import { NButton, NDropdown } from 'naive-ui'
-import { ref, type Ref } from 'vue'
+import { ref, type Ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useClient, useExportCsv, useExportExcel, useImportCsv, useImportExcel } from '../../hooks'
 
@@ -28,60 +28,94 @@ export function useList({ url, form, cacheTime = Infinity, exportColumns, import
   const { t } = useI18n()
   const meta = ref<Record<string, any>>()
 
-  const {
-    loading,
-    data,
-    page,
-    pageSize,
-    pageCount,
-    total,
-    send,
-    reload,
-    onSuccess,
-  } = usePagination(
-    (page, pageSize) => {
-      return client.get({
-        url,
-        params: {
-          page,
-          pageSize,
-          ...form?.value,
-        },
-        config: {
-          cacheFor: cacheTime,
-        },
-      })
-    },
-    {
-      initialData: {
-        total: 0,
-        data: [],
-      },
-      initialPage: 1,
-      initialPageSize: defaultPageSize,
-      middleware: actionDelegationMiddleware(url || ''),
-      append,
-      total: res => res.meta?.total || 0,
-      data: res => res.data || [],
-    },
-  )
+  const page = ref(1)
+  const pageSize = ref(defaultPageSize)
+  const pageCount = ref(0)
+  const total = ref(0)
 
-  onSuccess((res) => {
-    meta.value = res.data?.meta || {}
-  })
+  const data = ref<Record<string, any>[]>([])
+
+  const getList = (pageParam: number) => {
+    return client.get({
+      url,
+      params: {
+        page: pageParam,
+        pageSize: pageSize.value,
+        ...form?.value,
+      },
+    })
+  }
+
+  let req: UseInfiniteQueryReturnType<any, any>
+  if (append) {
+    req = useInfiniteQuery({
+      queryKey: [url],
+      queryFn: ({ pageParam }) => getList(pageParam),
+      getNextPageParam: (lastPage) => {
+        meta.value = lastPage.meta
+        total.value = lastPage.meta.total
+        pageCount.value = Math.ceil(total.value / pageSize.value)
+        if (lastPage.meta.page >= pageCount.value) {
+          return undefined
+        }
+        return lastPage.meta.page + 1
+      },
+      initialPageParam: 1,
+    })
+
+    watch(req.data, (res) => {
+      const items = res?.pages?.flatMap(page => page.data)
+      data.value = [...items]
+    })
+
+    watch([() => form?.value, () => pageSize.value], () => {
+      data.value = []
+      page.value = 1
+      req.refetch()
+    }, { deep: true, immediate: true })
+  }
+  else {
+    req = useQuery({
+      queryKey: [url],
+      queryFn: () => getList(page.value),
+      gcTime: cacheTime,
+      placeholderData: keepPreviousData,
+    }) as any
+
+    watch(req.data, (res) => {
+      data.value = res?.data
+      meta.value = res?.meta || {}
+      total.value = res?.meta?.total || 0
+      pageCount.value = Math.ceil(total.value / pageSize.value)
+    })
+  }
 
   const onPrevPage = () => {
-    if (page.value <= 1) {
-      return
+    if (!req?.hasPreviousPage && !req?.isFetchingPreviousPage && req?.fetchPreviousPage) {
+      req.fetchPreviousPage()
     }
-    page.value--
+    else {
+      if (page.value <= 1) {
+        return
+      }
+      page.value--
+    }
   }
 
   const onNextPage = () => {
-    if (page.value >= pageCount.value) {
-      return
+    if (append) {
+      if (!req?.hasNextPage.value || req?.isFetchingNextPage.value) {
+        return
+      }
+      page.value++
+      req.fetchNextPage()
     }
-    page.value++
+    else {
+      if (page.value >= pageCount.value) {
+        return
+      }
+      page.value++
+    }
   }
 
   const onPageSize = (v: number) => {
@@ -135,7 +169,7 @@ export function useList({ url, form, cacheTime = Infinity, exportColumns, import
         options={toolsOptions}
         onSelect={(key) => {
           if (key === 'refresh') {
-            reload()
+            req.refetch()
           }
           if (key === 'export') {
             excelExport.send({
@@ -150,7 +184,7 @@ export function useList({ url, form, cacheTime = Infinity, exportColumns, import
               params: form?.value,
               columns: importColumns,
               callback: () => {
-                reload()
+                req.refetch()
               },
             })
           }
@@ -167,7 +201,7 @@ export function useList({ url, form, cacheTime = Infinity, exportColumns, import
               params: form?.value,
               columns: importColumns as string[],
               callback: () => {
-                reload()
+                req.refetch()
               },
             })
           }
@@ -179,15 +213,16 @@ export function useList({ url, form, cacheTime = Infinity, exportColumns, import
   )
 
   const onFilter = () => {
-    send(1, pageSize)
+    page.value = 1
+    req.refetch()
   }
 
   const onReload = () => {
-    reload()
+    req.refetch()
   }
 
   return {
-    loading,
+    loading: req.isLoading,
     data,
     meta,
     page,

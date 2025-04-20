@@ -1,7 +1,7 @@
 import type { Ref } from 'vue'
-import { actionDelegationMiddleware, usePagination } from 'alova/client'
+import { useQuery } from '@tanstack/vue-query'
 import { NPagination } from 'naive-ui'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useClient } from '../../hooks'
 
 type value = Array<string | number> | string | number | null | undefined
@@ -12,48 +12,49 @@ interface UseSelectProps {
   params?: Ref<Record<string, any>>
   valueField?: string
   pagination?: boolean
+  invalidate?: string
 }
-export function useSelect({ url, params, pagination, value, valueField = 'value' }: UseSelectProps) {
+export function useSelect({ url, params, pagination, value, valueField = 'value', invalidate }: UseSelectProps) {
   const client = useClient()
   const keyword = ref()
 
-  const getList = (page: number, pageSize: number) => {
+  const list = ref<Record<string, any>[]>([])
+
+  const page = ref(1)
+  const pageSize = ref(pagination ? 10 : 0)
+  const pageCount = ref(0)
+
+  const queryParams = computed(() => {
+    return {
+      page: page.value,
+      pageSize: pageSize.value,
+      keyword: keyword.value,
+      ...params?.value,
+    }
+  })
+
+  const getList = () => {
     return client.get({
       url: url?.value,
-      params: { page, pageSize, keyword: keyword.value, ...params?.value },
+      params: queryParams.value,
     })
   }
 
-  const list = ref<Record<string, any>[]>([])
-
   const {
-    loading,
     data,
-    page,
-    pageSize,
-    pageCount,
-    refresh,
-  } = usePagination(
-    (page, pageSize) => getList(page, pageSize),
-    {
-      watchingStates: [keyword, () => params?.value],
-      debounce: 300,
-      // immediate: false,
-      total: res => res.meta?.total || 0,
-      data: res => res.data,
-      initialData: {
-        total: 0,
-        data: [],
-      },
-      initialPage: 1,
-      initialPageSize: pagination ? 10 : 0,
-      middleware: actionDelegationMiddleware(url?.value || ''),
-    },
-  )
+    isLoading: loading,
+  } = useQuery({
+    queryKey: [invalidate || url?.value, queryParams],
+    queryFn: () => getList(),
+  })
 
   watch(data, (val) => {
-    list.value = val
-  })
+    list.value = val?.data || []
+
+    const meta = val?.meta || {}
+    const total = meta?.total || 0
+    pageCount.value = Math.ceil(total / pageSize.value)
+  }, { immediate: true })
 
   const onceStatus = ref(false)
 
@@ -65,9 +66,6 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
       url: url?.value,
       params: {
         id: Array.isArray(val) ? val.join(',') : val,
-      },
-      config: {
-        cacheFor: 0,
       },
     }).then((res) => {
       onceStatus.value = true
@@ -82,10 +80,6 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
   const onSearch = (v) => {
     keyword.value = v
   }
-
-  watch(() => url?.value, () => {
-    refresh()
-  }, { immediate: true })
 
   const Pagination = () => (
     pagination

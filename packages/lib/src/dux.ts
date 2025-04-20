@@ -1,4 +1,5 @@
 import type { Config } from './config'
+import { VueQueryPlugin } from '@tanstack/vue-query'
 import initUnocssRuntime from '@unocss/runtime'
 import GoCaptcha from 'go-captcha-vue'
 import naive from 'naive-ui'
@@ -10,8 +11,8 @@ import component from './components/component'
 import { config as unoConfig } from './config/uno.config.js'
 import { router } from './core/router'
 import { permissionDirective } from './directive'
-import { i18n } from './i18n'
 
+import { i18n } from './i18n'
 import '@logicflow/core/lib/style/index.css'
 import 'go-captcha-vue/dist/style.css'
 import 'vfonts/Lato.css'
@@ -43,6 +44,7 @@ export function createDux(config: Config) {
       app.use(naive)
       app.use(component)
       app.use(GoCaptcha)
+      app.use(VueQueryPlugin)
       app.component('DuxApp', DuxApp)
     },
   }

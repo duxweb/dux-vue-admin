@@ -32,6 +32,7 @@ export interface UseTableProps {
   cacheTime?: number
   refreshTime?: number
   actionWidth?: number
+  pagination?: boolean
 }
 
 export type TableColumnRender = (rowData: object, rowIndex: number) => VNodeChild

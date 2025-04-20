@@ -109,19 +109,16 @@ export function useUpload() {
         ...headers,
       },
       config: {
-        snapshots: 0,
-        timeout: 0,
+        onUploadProgress: (event) => {
+          const percent = event.total ? Math.ceil(event.loaded / event.total * 100) : 0
+          onProgress?.(percent)
+        },
       },
     })
 
     if (id) {
       uploadRequest[id] = uploadMethod
     }
-
-    const offUploadEvent = uploadMethod.onUpload((event) => {
-      const percent = Math.ceil(event.loaded / event.total * 100)
-      onProgress?.(percent)
-    })
 
     uploadMethod.then(() => {
       client.put({
@@ -133,9 +130,6 @@ export function useUpload() {
           size: file?.size,
           mime: file?.type,
           ext: file?.name.split('.').pop(),
-        },
-        config: {
-          cache: false,
         },
       }).then((res) => {
         onSuccess?.(res?.data)
@@ -150,7 +144,6 @@ export function useUpload() {
       message.error(error?.message || t('message.requestError'))
       onError?.(error)
     }).finally(() => {
-      offUploadEvent()
       if (id) {
         delete uploadRequest[id]
       }
@@ -166,9 +159,6 @@ export function useUpload() {
         size: props.file?.size,
         mime: props.file?.type,
         ...props.params,
-      },
-      config: {
-        cacheFor: 0,
       },
     }).then((res) => {
       if (!res?.data?.url && !res?.data?.params) {

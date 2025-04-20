@@ -1,8 +1,8 @@
-import type { Method } from 'alova'
 import type { FormInst } from 'naive-ui'
+import { useQueryClient } from '@tanstack/vue-query'
 import { cloneDeep } from 'lodash-es'
 import { useMessage } from 'naive-ui'
-import { type ComputedRef, isRef, type Ref, ref, toRef, watch } from 'vue'
+import { computed, type ComputedRef, isRef, type Ref, ref, toRef, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useClient } from '../../hooks/useClient'
 import { useValidation } from './useValidation'
@@ -20,6 +20,7 @@ export interface UseFormProps {
 
 export function useForm({ formRef, url, id, initData, invalidate, model, edit, success }: UseFormProps) {
   const client = useClient()
+  const queryClient = useQueryClient()
   const message = useMessage()
   const validation = useValidation()
   const { t } = useI18n()
@@ -36,7 +37,7 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
     return isRef(url) ? url.value : url
   }
 
-  const request = (): Method => {
+  const request = () => {
     if (idRef.value) {
       return client.put({
         url: `${getUrl()}/${idRef.value}`,
@@ -51,12 +52,21 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
     }
   }
 
+  const getDataUrl = computed(() => {
+    if (idRef.value) {
+      return `${getUrl()}/${idRef.value}`
+    }
+    return getUrl()
+  })
+
   const getData = () => {
     formLoading.value = true
-    client.get({
-      url: idRef.value ? `${getUrl()}/${idRef.value}` : getUrl(),
-      config: {
-        cacheFor: 0,
+    queryClient.fetchQuery({
+      queryKey: [getDataUrl.value],
+      queryFn: () => {
+        return client.get({
+          url: getDataUrl.value,
+        })
       },
     }).then((res) => {
       initModel.value = res?.data
@@ -74,14 +84,14 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
       message.success(res.data?.message || t('message.requestSuccess'))
       success?.(res)
 
+      if (idRef.value) {
+        client.invalidate(getDataUrl.value)
+      }
+
       client.invalidate(getUrl())
 
       if (invalidate) {
         client.invalidate(invalidate)
-      }
-
-      if (idRef.value) {
-        getData()
       }
     }).catch((res) => {
       if (res?.data) {
@@ -139,5 +149,6 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
     onSubmit,
     onReset,
     onClear,
+    getData,
   }
 }

@@ -40,8 +40,8 @@ export const DuxTreeFilter = defineComponent({
       defaultValue: props.defaultValue,
     })
 
-    const useParams = ref(props.params || {})
-    const useUrl = ref(props.url)
+    const params = computed(() => props.params || {})
+    const url = computed(() => props.url || '')
 
     const dropdownOption = ref<TreeOption>()
     const x = ref(0)
@@ -50,18 +50,14 @@ export const DuxTreeFilter = defineComponent({
     const data = ref<TreeOption[]>([])
     const client = useClient()
 
-    watch(() => props.params, (val) => {
-      useParams.value = val || {}
-    })
-
     const { options, loading, expanded } = useCascader({
-      url: useUrl,
-      params: useParams,
+      url,
+      params,
       invalidate: props.invalidate,
     })
 
-    watch(() => options.value?.data, () => {
-      data.value = options.value?.data || []
+    watch(options, (v) => {
+      data.value = v?.data || []
     }, { immediate: true, deep: true })
 
     const dropdownShow = ref(false)

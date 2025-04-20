@@ -34,7 +34,7 @@ export const DuxStatsTotalSimpleItem = defineComponent({
     value: [Number, String] as PropType<number | string>,
     rate: [Number, String] as PropType<number | string>,
     type: {
-      type: String as PropType<'up' | 'down'>,
+      type: [String, Boolean] as PropType<'up' | 'down' | false>,
       default: 'up',
     },
     icon: String,
@@ -55,14 +55,16 @@ export const DuxStatsTotalSimpleItem = defineComponent({
               </div>
               {props?.title}
             </div>
-            <div class="text-gray-7">
-              <NTooltip>
-                {{
-                  trigger: () => <div class="i-tabler:info-circle"></div>,
-                  default: () => props.desc,
-                }}
-              </NTooltip>
-            </div>
+            {props.desc && (
+              <div class="text-gray-7">
+                <NTooltip>
+                  {{
+                    trigger: () => <div class="i-tabler:info-circle"></div>,
+                    default: () => props.desc,
+                  }}
+                </NTooltip>
+              </div>
+            )}
           </div>
         )}
         headerClass="!pb-3 !text-base"
@@ -72,19 +74,21 @@ export const DuxStatsTotalSimpleItem = defineComponent({
             <div class="font-bold text-2xl">
               {props.value}
             </div>
-            <div class={clsx([
-              'flex gap-1 items-center text-sm px-1.5 rounded',
-              props.type === 'up' ? 'text-primary' : 'text-warning',
-              props.type === 'up' ? 'bg-primary/10' : 'bg-warning/10 ',
-            ])}
-            >
-              {props.rate}
+            {props.type && (
               <div class={clsx([
-                ' w-3 h-3',
-                props.type === 'up' ? 'i-tabler:arrow-up-right' : 'i-tabler:arrow-down-left',
+                'flex gap-1 items-center text-sm px-1.5 rounded',
+                props.type === 'up' ? 'text-primary' : 'text-warning',
+                props.type === 'up' ? 'bg-primary/10' : 'bg-warning/10 ',
               ])}
-              />
-            </div>
+              >
+                {props.rate}
+                <div class={clsx([
+                  ' w-3 h-3',
+                  props.type === 'up' ? 'i-tabler:arrow-up-right' : 'i-tabler:arrow-down-left',
+                ])}
+                />
+              </div>
+            )}
           </div>
         </div>
       </NCard>

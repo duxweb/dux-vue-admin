@@ -22,25 +22,25 @@ export function useRegion({ url, value }: UseRegionProps) {
 
   const getProvinces = () => {
     getList({ type: 'province' }).then((res) => {
-      provinces.value = res.data
+      provinces.value = res?.data || []
     })
   }
 
   const getCitys = (province) => {
     getList({ name: province, type: 'city' }).then((res) => {
-      citys.value = res.data
+      citys.value = res?.data || []
     })
   }
 
   const getDistricts = (city) => {
     getList({ name: city, type: 'district' }).then((res) => {
-      districts.value = res.data
+      districts.value = res?.data || []
     })
   }
 
   const getStreets = (district) => {
     getList({ name: district, type: 'street' }).then((res) => {
-      streets.value = res.data
+      streets.value = res?.data || []
     })
   }
 

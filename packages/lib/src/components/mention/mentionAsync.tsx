@@ -36,9 +36,6 @@ export const DuxMentionAsync = defineComponent({
           keyword: pattern,
           limit: 10,
         },
-        config: {
-          debounce: 300,
-        },
       }).then((res) => {
         options.value = res?.data?.map(row => ({
           label: row[props.labelField],

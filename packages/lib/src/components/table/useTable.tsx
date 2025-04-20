@@ -1,14 +1,13 @@
 import type { DataTableColumns, DataTableFilterState, DataTableRowKey, DataTableSortState } from 'naive-ui'
 import type { Ref } from 'vue'
 import type { BatchAction, TableAction, TableColumn, UseTableProps, UseTableResult } from './types'
+import { keepPreviousData, useQuery } from '@tanstack/vue-query'
 import { useIntervalFn, useWindowSize } from '@vueuse/core'
-import { actionDelegationMiddleware, usePagination } from 'alova/client'
 import { NButton, NCheckbox, NDropdown, NPopover, NTooltip, useMessage } from 'naive-ui'
 import { computed, h, reactive, ref, toRef, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useI18n } from 'vue-i18n'
-import { treeToArr, useExportCsv, useExportExcel, useImportCsv, useImportExcel } from '../../hooks'
-import { useClient } from '../../hooks/useClient'
+import { treeToArr, useClient, useExportCsv, useExportExcel, useImportCsv, useImportExcel } from '../../hooks'
 import { useDialog } from '../dialog'
 import { listRenderAction } from '../filter'
 import { columnMap, columnMedia, columnStatus, columnTags, columnText, columnType } from './column'
@@ -17,7 +16,7 @@ import { columnImages } from './column/images'
 import { columnInput } from './column/input'
 import { columnSwitch } from './column/switch'
 
-export function useTable({ filter, url, batch, columns: tableColumn, columnActions, exportColumns, importColumns, export: exportStatus, import: importStatus, exportCsv: exportCsvStatus, importCsv: importCsvStatus, expanded: expandedStatus, cacheTime, key = 'id', refreshTime = 10, actionWidth }: UseTableProps): UseTableResult {
+export function useTable({ filter, url, batch, columns: tableColumn, columnActions, exportColumns, importColumns, export: exportStatus, import: importStatus, exportCsv: exportCsvStatus, importCsv: importCsvStatus, expanded: expandedStatus, cacheTime, key = 'id', refreshTime = 10, actionWidth, pagination = true }: UseTableProps): UseTableResult {
   const client = useClient()
   const message = useMessage()
   const excelExport = useExportExcel()
@@ -36,65 +35,62 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
   const filters = reactive<Record<string, any>>({})
   const meta = ref<Record<string, any>>({})
 
-  const {
-    page,
-    pageSize,
-    pageCount,
-    data: tableData,
-    loading,
-    send,
-    onError,
-    onSuccess,
-    refresh,
-  } = usePagination(
-    (page, pageSize) => {
-      return client.get({
-        url,
-        params: {
-          page,
-          pageSize,
-          ...sorter,
-          ...filters,
-          ...filter,
-        },
-        config: {
-          name: url,
-          cacheFor: cacheTime || 60 * 10 * 1000,
-        },
-      })
-    },
-    {
-      initialData: {
-        total: 0,
-        data: [],
-      },
-      initialPage: 1,
-      initialPageSize: 20,
-      total: res => res.meta?.total || 0,
-      middleware: actionDelegationMiddleware(url || ''),
-    },
-  )
+  const page = ref(1)
+  const pageSize = ref(20)
+  const pageCount = ref(0)
+  const total = ref(0)
 
-  onSuccess((res) => {
-    selected.value = []
-    meta.value = res.data?.meta || {}
+  const queryParams = computed(() => {
+    return {
+      ...(pagination
+        ? {
+            page: page.value,
+            pageSize: pageSize.value,
+          }
+        : {}),
+      ...sorter,
+      ...filters,
+      ...filter,
+    }
   })
 
-  onError((res) => {
-    message.error(res?.error?.message || t('components.list.getError'))
+  const getList = () => {
+    return client.get({
+      url,
+      params: queryParams.value,
+    })
+  }
+
+  const req = useQuery({
+    queryKey: [url, queryParams],
+    queryFn: () => getList(),
+    gcTime: cacheTime,
+    placeholderData: keepPreviousData,
+  })
+
+  watch(req.data, (res) => {
+    if (expandedStatus) {
+      expanded.value = treeToArr(res?.data || [], key, 'children')
+    }
+
+    meta.value = res?.meta || {}
+    total.value = res?.meta?.total || 0
+    pageCount.value = Math.ceil(total.value / pageSize.value)
+  })
+
+  const data = computed(() => {
+    return req.data?.value?.data
+  })
+
+  watch(req.error, (error) => {
+    message.error(error?.message || t('components.list.getError'))
   })
 
   // 筛选提交
   const onSend = () => {
-    send(1, pageSize.value)
+    page.value = 1
+    req.refetch()
   }
-
-  // 自动展开
-  watch(tableData, (val) => {
-    if (expandedStatus) {
-      expanded.value = treeToArr(val, key, 'children')
-    }
-  })
 
   const onUpdateExpandedRowKeys = (val) => {
     expanded.value = val
@@ -188,7 +184,7 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
 
   // 自动刷新
   const { pause, resume } = useIntervalFn(() => {
-    refresh()
+    req.refetch()
   }, (refreshTime || 30) * 1000, { immediate: false })
 
   watch(autoRefresh, (val) => {
@@ -248,7 +244,7 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
         options={toolsOptions}
         onSelect={(key) => {
           if (key === 'refresh') {
-            refresh()
+            req.refetch()
           }
           if (key === 'autoRefresh') {
             autoRefresh.value = !autoRefresh.value
@@ -292,7 +288,7 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
               },
               columns: importColumns,
               callback: () => {
-                refresh()
+                req.refetch()
               },
             })
           }
@@ -305,7 +301,7 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
               },
               columns: importColumns as string[],
               callback: () => {
-                refresh()
+                req.refetch()
               },
             })
           }
@@ -370,7 +366,7 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
     page.value = v
   }
 
-  const pagination = computed(() => {
+  const tablePagination = computed(() => {
     return {
       page: page.value,
       pageSize: pageSize.value,
@@ -391,10 +387,10 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
     toolsColumns,
     toolsBtn,
     send: onSend,
-    loading,
-    data: tableData,
+    loading: req.isLoading,
+    data,
     tableParams,
-    pagination,
+    pagination: tablePagination,
     selected,
     expanded,
   }

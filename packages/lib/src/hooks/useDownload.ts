@@ -1,8 +1,7 @@
-import { useRequest } from 'alova/client'
 import { format } from 'date-fns'
 import mime from 'mime'
 import { useMessage } from 'naive-ui'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useClient } from './useClient'
 
 export function useDownload() {
@@ -56,28 +55,15 @@ export function useDownload() {
   }
 
   const file = (url: string, params?: string, contentType?: string, filename?: string) => {
-    // 请求后端接口下载
-    const req = client.post({
+    loading.value = true
+
+    client.post({
       url,
       data: params,
       config: {
         responseType: 'blob',
       },
-    })
-
-    const {
-      loading: reqLoading,
-      send,
-      onSuccess,
-    } = useRequest(req, {
-      immediate: false,
-    })
-
-    watch(reqLoading, (val) => {
-      loading.value = val
-    }, { immediate: true })
-
-    onSuccess((e) => {
+    }).then((e) => {
       const type = contentType || e.data.headers['content-type']
       const contentDisposition = e.data.headers['content-disposition']
 
@@ -88,7 +74,6 @@ export function useDownload() {
         }
       }
 
-      // 根据header头获取文件名
       if (contentDisposition) {
         const matches = /filename=["']?([^"']+)/.exec(contentDisposition)
         if (matches && matches?.length > 1) {
@@ -97,9 +82,11 @@ export function useDownload() {
       }
 
       blob(e.data?.data, filename)
+    }).catch((e) => {
+      message.error(e.error || '下载失败')
+    }).finally(() => {
+      loading.value = false
     })
-
-    send(true)
   }
 
   return {

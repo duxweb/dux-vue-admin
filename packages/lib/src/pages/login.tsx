@@ -1,5 +1,4 @@
 import type { FormInst } from 'naive-ui'
-import { useForm } from 'alova/client'
 import clsx from 'clsx'
 import { NButton, NForm, NFormItem, NInput, NPopover, useMessage } from 'naive-ui'
 import { storeToRefs } from 'pinia'
@@ -38,43 +37,31 @@ export default defineComponent({
     const client = useClient()
     const { t } = useI18n()
 
-    const {
-      loading: submitLoading,
-      form,
-      send,
-      onSuccess,
-      onError,
-    } = useForm(
-      (formData) => {
-        const data = formData as Record<string, any>
-        data.dots = captchaData.dots
-        data.code = String(captchaData.code)
-        return client.post({
-          url: resource.loginUrl,
-          data,
-        })
-      },
-      {
-        initialForm: {
-          username: '',
-          password: '',
-        },
-      },
-    )
-
-    onSuccess(async (res) => {
-      await manage.login(res.data?.data)
-      router.push({ path: resource.getIndexPath() })
+    const form = reactive({
+      username: '',
+      password: '',
+      dots: '',
+      code: '',
     })
 
-    onError((res) => {
-      getCaptcha()
-      captchaTheme.value = 'default'
-      message.error(res?.error?.message || t('message.requestError'))
-    })
-
-    function handleSubmit() {
-      send()
+    const submitLoading = ref(false)
+    const submit = () => {
+      submitLoading.value = true
+      form.dots = captchaData.dots
+      form.code = String(captchaData.code)
+      client.post({
+        url: resource.loginUrl,
+        data: form,
+      }).then((res) => {
+        manage.login(res.data)
+        router.push({ path: resource.getIndexPath() })
+      }).catch((res) => {
+        getCaptcha()
+        captchaTheme.value = 'default'
+        message.error(res?.message || t('message.requestError'))
+      }).finally(() => {
+        submitLoading.value = false
+      })
     }
 
     function getCaptcha() {
@@ -84,9 +71,6 @@ export default defineComponent({
       captchaLoading.value = true
       client.get<Record<string, any>>({
         url: resource.captchaUrl,
-        config: {
-          cacheFor: 0,
-        },
       }).then((res) => {
         captchaData.image = res?.data?.image
         captchaData.thumb = res?.data?.thumb
@@ -177,14 +161,14 @@ export default defineComponent({
             <div class="my-6">
               <NForm ref={formRef} model={form} class="flex flex-col gap-4">
                 <NFormItem showLabel={false} path="username" showFeedback={false}>
-                  <NInput value={form.value.username} onUpdateValue={v => form.value.username = v} type="text" placeholder={t('pages.login.placeholder.username')} size="large">
+                  <NInput value={form.username} onUpdateValue={v => form.username = v} type="text" placeholder={t('pages.login.placeholder.username')} size="large">
                     {{
                       default: () => <div class="text-lg i-tabler:user" />,
                     }}
                   </NInput>
                 </NFormItem>
                 <NFormItem showLabel={false} path="password" showFeedback={false}>
-                  <NInput value={form.value.password} onUpdateValue={v => form.value.password = v} type="password" showPasswordOn="mousedown" placeholder={t('pages.login.placeholder.password')} size="large" inputProps={{ autocomplete: 'new-password' }}>
+                  <NInput value={form.password} onUpdateValue={v => form.password = v} type="password" showPasswordOn="mousedown" placeholder={t('pages.login.placeholder.password')} size="large" inputProps={{ autocomplete: 'new-password' }}>
                     {{
                       default: () => <div class="text-lg i-tabler:lock" />,
                     }}
@@ -229,7 +213,7 @@ export default defineComponent({
                 )}
 
                 <div class="mb-2 mt-4">
-                  <NButton type="primary" size="large" block loading={submitLoading.value} onClick={handleSubmit}>
+                  <NButton type="primary" size="large" block loading={submitLoading.value} onClick={submit}>
                     {t('pages.login.buttons.login')}
                   </NButton>
                 </div>

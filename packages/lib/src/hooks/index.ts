@@ -1,4 +1,3 @@
-export * from './alova'
 export * from './useAudio'
 export * from './useClient'
 export * from './useCsv'

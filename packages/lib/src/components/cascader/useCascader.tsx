@@ -1,42 +1,40 @@
-import { actionDelegationMiddleware, useWatcher } from 'alova/client'
-import { ref, type Ref } from 'vue'
+import { useQuery } from '@tanstack/vue-query'
+import { ref, type Ref, toRef, watch } from 'vue'
 import { treeToArr, useClient } from '../../hooks'
 
 interface UseCascaderProps {
-  url?: Ref<string | undefined>
-  params?: Ref<Record<string, any>>
+  url?: Ref<string | undefined> | string
+  params?: Ref<Record<string, any>> | Record<string, any>
   invalidate?: string
 }
 export function useCascader({ url, params, invalidate }: UseCascaderProps) {
   const client = useClient()
   const expanded = ref<(string | number)[]>([])
 
+  const urlRef = toRef(url || '')
+  const paramsRef = toRef(params || {})
+
   const getList = () => {
     return client.get({
-      url: url?.value,
-      params: params?.value,
-      config: {
-        cacheFor: 0,
-      },
+      url: urlRef.value as string,
+      params: paramsRef.value as Record<string, any>,
     })
   }
 
-  const { loading, data, onSuccess } = useWatcher(
-    () => getList(),
-    [url, params],
-    {
-      middleware: actionDelegationMiddleware(invalidate || url?.value || ''),
-      immediate: true,
-    },
-  )
+  const req = useQuery({
+    queryKey: [`${invalidate || (urlRef.value as string)}`, paramsRef],
+    queryFn: getList,
+  })
 
-  onSuccess((v) => {
-    expanded.value = treeToArr(v.data?.data || [], 'id', 'children')
+  watch(req.data, (v) => {
+    expanded.value = treeToArr(v?.data || [], 'id', 'children')
+  }, {
+    immediate: true,
   })
 
   return {
-    options: data,
-    loading,
+    options: req.data,
+    loading: req.isLoading,
     expanded,
   }
 }

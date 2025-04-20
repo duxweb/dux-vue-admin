@@ -1,7 +1,7 @@
 import type { PropType } from 'vue'
 import { useVModel } from '@vueuse/core'
 import { NTreeSelect } from 'naive-ui'
-import { defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import { useCascader } from '../cascader'
 
 export const DuxTreeSelectAsync = defineComponent({
@@ -34,11 +34,15 @@ export const DuxTreeSelectAsync = defineComponent({
       params: useParams,
     })
 
+    const treeOptions = computed(() => {
+      return options.value?.data || []
+    })
+
     return () => (
       <NTreeSelect
         {...props}
         loading={loading.value}
-        options={options.value?.data || []}
+        options={treeOptions.value}
         v-model:value={model.value}
       >
       </NTreeSelect>

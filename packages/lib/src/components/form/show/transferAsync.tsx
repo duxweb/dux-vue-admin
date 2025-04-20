@@ -1,7 +1,7 @@
 import type { TransferOption } from 'naive-ui'
-import { useWatcher } from 'alova/client'
+import { useQuery } from '@tanstack/vue-query'
 import { NSpace, NSpin, NTag } from 'naive-ui'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { DuxTransferAsync } from '../../../components/transfer'
 import { useClient } from '../../../hooks'
 
@@ -19,14 +19,14 @@ export const ShowTransferAsync = defineComponent({
       })
     }
 
-    const { loading } = useWatcher(
-      () => getList(),
-      [() => props.url, () => props.params],
-      {
-        immediate: true,
-      },
-    ).onSuccess((res) => {
-      options.value = res?.data?.data?.map((row) => {
+    const req = useQuery({
+      queryKey: [props.url, props.params],
+      queryFn: getList,
+      enabled: !!props.url,
+    })
+
+    watch(req.data, (res) => {
+      options.value = res?.data?.map((row) => {
         const item: Record<string, any> = {
           label: row[props.labelField],
           value: row[props.valueField],
@@ -44,7 +44,7 @@ export const ShowTransferAsync = defineComponent({
     return () => (
       <div class="flex items-center">
         <NSpace>
-          <NSpin show={loading}>
+          <NSpin show={req.isLoading.value}>
             {props.value?.map(v => (
               <NTag key={v} type="info">
                 {getOptionLabel(v)}

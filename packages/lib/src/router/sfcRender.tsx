@@ -1,7 +1,6 @@
 import type { Options, Resource } from 'vue3-sfc-loader'
+import * as vueQuery from '@tanstack/vue-query'
 import * as vueUse from '@vueuse/core'
-import * as alova from 'alova'
-import * as alovaClient from 'alova/client'
 import axios from 'axios'
 import crypto from 'crypto-js'
 import dayjs from 'dayjs'
@@ -35,8 +34,7 @@ export function sfcRender(path: string) {
       'naive-ui': NaiveUI,
       '@vueuse/core': vueUse,
       'echarts': echarts,
-      'alova': alova,
-      'alova/client': alovaClient,
+      '@tanstack/vue-query': vueQuery,
       'axios': axios,
       'crypto': crypto,
       'mime': mime,
@@ -88,9 +86,6 @@ export function sfcRender(path: string) {
         url: `/static`,
         data: {
           name: url,
-        },
-        config: {
-          cacheFor: 0,
         },
       }).then((res) => {
         return res?.data

@@ -66,7 +66,7 @@ export const DuxFileManageItem = defineComponent({
                     e.stopPropagation()
                   }}
                 >
-                  <NImage width="100%" height="100%" src={props.url} />
+                  <NImage src={props.url} width={48} height={48} />
                 </div>
               )}
               {props.mime?.includes(mimeMap.video) && (
@@ -103,7 +103,7 @@ export const DuxFileManageItem = defineComponent({
                 }}
                 >
                   <div>
-                    <img src={audioSvg} class="size-12" />
+                    <img src={audioSvg} class="size-12 " />
                   </div>
                 </div>
               )}
@@ -127,10 +127,10 @@ export const DuxFileManageItem = defineComponent({
             </>
           )}
         </div>
-        <div class="truncate">
+        <div class="truncate w-full text-center">
           {props.name}
         </div>
-        <div class="text-xs text-gray-6">
+        <div class="text-xs text-gray-6  w-full">
           {props.time}
         </div>
 

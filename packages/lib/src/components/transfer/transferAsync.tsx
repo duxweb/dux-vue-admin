@@ -1,8 +1,8 @@
 import type { TransferOption } from 'naive-ui'
+import { useQuery } from '@tanstack/vue-query'
 import { useVModel } from '@vueuse/core'
-import { useWatcher } from 'alova/client'
 import { NAvatar, NSpin, NTransfer } from 'naive-ui'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { useClient } from '../../hooks'
 
 export const DuxTransferAsync = defineComponent({
@@ -26,6 +26,9 @@ export const DuxTransferAsync = defineComponent({
     descField: {
       type: String,
     },
+    invalidate: {
+      type: String,
+    },
   },
   extends: NTransfer,
   setup(props, { emit }) {
@@ -44,14 +47,13 @@ export const DuxTransferAsync = defineComponent({
       })
     }
 
-    const { loading } = useWatcher(
-      () => getList(),
-      [() => props.url, () => props.params],
-      {
-        immediate: true,
-      },
-    ).onSuccess((res) => {
-      options.value = res?.data?.data?.map((row) => {
+    const req = useQuery({
+      queryKey: [props.invalidate || props.url, props.params],
+      queryFn: getList,
+    })
+
+    watch(req.data, (res) => {
+      options.value = res?.data?.map((row) => {
         const item: Record<string, any> = {
           label: row[props.labelField],
           value: row[props.valueField],
@@ -63,7 +65,7 @@ export const DuxTransferAsync = defineComponent({
 
     return () => (
       <div class="w-full">
-        <NSpin show={loading.value}>
+        <NSpin show={req.isLoading.value}>
           <NTransfer
             {...props}
             v-model:value={model.value}
