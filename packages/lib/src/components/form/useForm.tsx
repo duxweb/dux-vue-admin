@@ -87,6 +87,10 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
     formModel.value = { ...cloneDeep(initModel.value || {}) }
   }
 
+  const onClear = () => {
+    formModel.value = cloneDeep(initData || {})
+  }
+
   const request = () => {
     if (idRef.value) {
       return client.put({
@@ -179,6 +183,7 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
     loading: formLoading,
     onSubmit,
     onReset,
+    onClear,
     getData,
   }
 }
