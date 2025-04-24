@@ -69,6 +69,8 @@ export function useExportCsv() {
         }
 
         page.value++
+      }, {
+        immediate: true,
       })
 
       watch(req.error, (error) => {
@@ -102,7 +104,7 @@ export function useExportCsv() {
       if (!v) {
         messageRef?.destroy()
       }
-    }, { immediate: true, deep: true })
+    }, { immediate: true })
   }
 
   return {
@@ -203,7 +205,7 @@ export function useImportCsv() {
     if (!v) {
       messageRef?.destroy()
     }
-  }, { immediate: true, deep: true })
+  }, { immediate: true })
 
   const onSend = (props: ImportCsvProps) => {
     url.value = props.url

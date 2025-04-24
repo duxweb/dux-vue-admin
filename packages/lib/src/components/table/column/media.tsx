@@ -37,7 +37,7 @@ export function columnMedia({ imageWidth = 36, imageHeight = 36, ...props }: Col
           </NAvatar>
         )}
         {props.image && <div><NImage src={image || placeholder} fallbackSrc={placeholder} objectFit="cover" width={imageWidth} height={imageHeight} /></div>}
-        <div class="flex-1 w-1 flex flex-col gap-1">
+        <div class="flex-1 min-w-0 flex flex-col gap-1">
           {props.title && <div class="truncate" title={title}>{title}</div>}
           {props.desc && <div class="text-gray-6 truncate" title={desc}>{desc}</div>}
           {props.descs && props.descs.map(desc => <div class="text-gray-4 truncate" title={rowData[desc]}>{rowData[desc]}</div>)}

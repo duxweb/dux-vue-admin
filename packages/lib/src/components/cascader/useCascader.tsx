@@ -22,7 +22,7 @@ export function useCascader({ url, params, invalidate }: UseCascaderProps) {
   }
 
   const req = useQuery({
-    queryKey: [`${invalidate || (urlRef.value as string)}`, paramsRef],
+    queryKey: [invalidate || urlRef, paramsRef],
     queryFn: getList,
   })
 
@@ -34,7 +34,7 @@ export function useCascader({ url, params, invalidate }: UseCascaderProps) {
 
   return {
     options: req.data,
-    loading: req.isLoading,
+    loading: req.isFetching,
     expanded,
   }
 }

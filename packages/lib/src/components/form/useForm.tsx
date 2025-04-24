@@ -1,5 +1,5 @@
 import type { FormInst } from 'naive-ui'
-import { useQueryClient } from '@tanstack/vue-query'
+import { useQuery } from '@tanstack/vue-query'
 import { cloneDeep } from 'lodash-es'
 import { useMessage } from 'naive-ui'
 import { computed, type ComputedRef, isRef, type Ref, ref, toRef, watch } from 'vue'
@@ -16,11 +16,11 @@ export interface UseFormProps {
   success?: (data: Record<string, any>) => void
   model?: Ref<Record<string, any>> | Record<string, any>
   edit?: boolean
+  refetch?: boolean
 }
 
-export function useForm({ formRef, url, id, initData, invalidate, model, edit, success }: UseFormProps) {
+export function useForm({ formRef, url, id, initData, invalidate, model, edit, success, refetch }: UseFormProps) {
   const client = useClient()
-  const queryClient = useQueryClient()
   const message = useMessage()
   const validation = useValidation()
   const { t } = useI18n()
@@ -30,11 +30,61 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
   const initModel = ref(initData)
   const idRef = toRef(id)
 
+  const isEdit = computed(() => {
+    return idRef.value || edit
+  })
+
   const getUrl = () => {
     if (!url) {
       return ''
     }
     return isRef(url) ? url.value : url
+  }
+
+  const getDataUrl = computed(() => {
+    if (idRef.value) {
+      return `${getUrl()}/${idRef.value}`
+    }
+    return getUrl()
+  })
+
+  const enabled = ref(false)
+
+  const { data, error, isFetching, refetch: refetchData } = useQuery({
+    queryKey: [getDataUrl.value, {
+      id: idRef,
+    }],
+    queryFn: () => {
+      return client.get({
+        url: getDataUrl.value,
+      })
+    },
+    enabled,
+  })
+
+  watch(data, (v) => {
+    const newData = cloneDeep(v?.data || {})
+    initModel.value = { ...newData }
+    formModel.value = { ...newData }
+  }, {
+    immediate: true,
+  })
+
+  watch(error, (v) => {
+    message.error(v?.message || t('message.requestError'))
+  })
+
+  watch(isFetching, (v) => {
+    formLoading.value = v
+  })
+
+  const getData = () => {
+    refetchData()
+  }
+
+  const onReset = () => {
+    validation.reset()
+    formModel.value = { ...cloneDeep(initModel.value || {}) }
   }
 
   const request = () => {
@@ -52,46 +102,37 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
     }
   }
 
-  const getDataUrl = computed(() => {
-    if (idRef.value) {
-      return `${getUrl()}/${idRef.value}`
-    }
-    return getUrl()
-  })
-
-  const getData = () => {
-    formLoading.value = true
-    queryClient.fetchQuery({
-      queryKey: [getDataUrl.value],
-      queryFn: () => {
-        return client.get({
-          url: getDataUrl.value,
-        })
-      },
-    }).then((res) => {
-      initModel.value = res?.data
-      formModel.value = res?.data
-    }).catch((res) => {
-      message.success(res.data?.message || t('message.requestError'))
-    }).finally(() => {
-      formLoading.value = false
-    })
-  }
-
   const send = () => {
+    formLoading.value = true
     validation.reset()
+
     request().then((res) => {
       message.success(res.data?.message || t('message.requestSuccess'))
       success?.(res)
 
-      if (idRef.value) {
+      const routeUrl = getUrl()
+
+      const history: (string | undefined)[] = []
+
+      if (isEdit.value && refetch) {
         client.invalidate(getDataUrl.value)
+        history.push(getDataUrl.value)
       }
 
-      client.invalidate(getUrl())
+      if (!history.includes(routeUrl)) {
+        client.invalidate(routeUrl)
+        history.push(routeUrl)
+      }
 
-      if (invalidate) {
-        client.invalidate(invalidate)
+      const invalidates = Array.isArray(invalidate) ? invalidate : [invalidate]
+      invalidates.forEach((v) => {
+        if (!history.includes(v)) {
+          client.invalidate(v)
+        }
+      })
+
+      if (!isEdit.value) {
+        onReset()
       }
     }).catch((res) => {
       if (res?.data) {
@@ -106,10 +147,13 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
   }
 
   const onSubmit = () => {
+    // 如果 formRef 不存在，则直接发送请求
     if (!formRef) {
       send()
       return
     }
+
+    // 如果 formRef 存在，则先验证表单
     formRef?.value?.validate((errors) => {
       if (errors) {
         errors?.forEach((items) => {
@@ -124,31 +168,17 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
     })
   }
 
-  const onReset = () => {
-    validation.reset()
-    formModel.value = cloneDeep(initModel.value || {})
-  }
-
-  const onClear = () => {
-    formModel.value = cloneDeep(initData || {})
-  }
-
-  watch(idRef, () => {
-    if (idRef.value || edit) {
-      getData()
+  watch(isEdit, (v) => {
+    if (v) {
+      enabled.value = true
     }
-    else if (initData) {
-      initModel.value = initData
-      onReset()
-    }
-  }, { immediate: true, deep: true })
+  }, { immediate: true })
 
   return {
     model: formModel,
     loading: formLoading,
     onSubmit,
     onReset,
-    onClear,
     getData,
   }
 }

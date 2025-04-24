@@ -220,7 +220,7 @@ const DuxFileManage = defineComponent({
                 </div>
               </div>
 
-              <div class="flex-1 h-1">
+              <div class="flex-1 min-h-1">
                 <NInfiniteScroll distance={10} onLoad={onNextPage}>
                   {loading.value && <NSpin class="h-full absolute w-full bg-gray-1/50" />}
                   {data.value?.length > 0

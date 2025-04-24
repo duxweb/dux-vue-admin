@@ -81,7 +81,7 @@ export const DuxCardList = defineComponent({
             : null}
           {list.data.value?.length > 0
             ? (
-                <NScrollbar class="flex-1 h-1">
+                <NScrollbar class="flex-1 min-h-1">
                   <div class="grid grid-cols-1 lg:grid-cols-2 3xl:grid-cols-3 4xl:grid-cols-4 gap-4">
 
                     {list.data?.value?.map?.((item, index) => {

@@ -34,6 +34,8 @@ export const ShowTransferAsync = defineComponent({
         }
         return item
       }) || []
+    }, {
+      immediate: true,
     })
 
     const getOptionLabel = (value: string | number) => {
@@ -44,7 +46,7 @@ export const ShowTransferAsync = defineComponent({
     return () => (
       <div class="flex items-center">
         <NSpace>
-          <NSpin show={req.isLoading.value}>
+          <NSpin show={req.isFetching.value}>
             {props.value?.map(v => (
               <NTag key={v} type="info">
                 {getOptionLabel(v)}

@@ -13,7 +13,7 @@ export const DuxTabPageItem = defineComponent({
     return () => (
       <>
         <div
-          class="flex-1 h-1 overflow-auto py-4"
+          class="flex-1 min-h-1 overflow-auto py-4"
           style={{
             display: props.value !== value?.value ? 'none' : 'block',
           }}

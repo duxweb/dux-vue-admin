@@ -60,6 +60,19 @@ export const useManageStore = defineStore('manage', () => {
     }
   }
 
+  const updateToken = (token: string) => {
+    if (!manage?.value) {
+      throw new Error('dux.manage is not defined')
+    }
+    data.value = {
+      ...data.value,
+      [manage.value]: {
+        ...data.value[manage.value],
+        token,
+      },
+    }
+  }
+
   const logout = () => {
     if (!manage?.value) {
       throw new Error('dux.manage is not defined')
@@ -76,6 +89,7 @@ export const useManageStore = defineStore('manage', () => {
     isLogin,
     logout,
     update,
+    updateToken,
   }
 }, {
   persist: {

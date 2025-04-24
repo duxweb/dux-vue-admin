@@ -1,7 +1,8 @@
 import type { Column } from 'exceljs'
 import { keepPreviousData, useInfiniteQuery, type UseInfiniteQueryReturnType, useQuery } from '@tanstack/vue-query'
+import { cloneDeep } from 'lodash-es'
 import { NButton, NDropdown } from 'naive-ui'
-import { ref, type Ref, watch } from 'vue'
+import { computed, ref, type Ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useClient, useExportCsv, useExportExcel, useImportCsv, useImportExcel } from '../../hooks'
 
@@ -65,14 +66,20 @@ export function useList({ url, form, cacheTime = Infinity, exportColumns, import
 
     watch(req.data, (res) => {
       const items = res?.pages?.flatMap(page => page.data)
+      if (!items) {
+        return
+      }
+
       data.value = [...items]
+    }, {
+      immediate: true,
     })
 
     watch([() => form?.value, () => pageSize.value], () => {
       data.value = []
       page.value = 1
       req.refetch()
-    }, { deep: true, immediate: true })
+    }, { deep: true })
   }
   else {
     req = useQuery({
@@ -83,15 +90,25 @@ export function useList({ url, form, cacheTime = Infinity, exportColumns, import
     }) as any
 
     watch(req.data, (res) => {
-      data.value = res?.data
+      if (!res) {
+        return
+      }
+
+      data.value = [...cloneDeep(res?.data || [])]
       meta.value = res?.meta || {}
       total.value = res?.meta?.total || 0
       pageCount.value = Math.ceil(total.value / pageSize.value)
+    }, {
+      immediate: true,
     })
   }
 
   const onPrevPage = () => {
-    if (!req?.hasPreviousPage && !req?.isFetchingPreviousPage && req?.fetchPreviousPage) {
+    if (append) {
+      if (!req?.hasPreviousPage.value || req?.isFetchingPreviousPage.value) {
+        return
+      }
+      page.value++
       req.fetchPreviousPage()
     }
     else {
@@ -221,8 +238,15 @@ export function useList({ url, form, cacheTime = Infinity, exportColumns, import
     req.refetch()
   }
 
+  const loading = computed(() => {
+    if (req.isFetched.value) {
+      return false
+    }
+    return req.isFetching.value
+  })
+
   return {
-    loading: req.isLoading,
+    loading,
     data,
     meta,
     page,

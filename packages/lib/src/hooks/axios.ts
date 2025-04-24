@@ -41,7 +41,7 @@ export function useAxios(props?: useAxiosProps) {
     return instancesMap.get(key)!
   }
 
-  const { getUser, logout } = useManageStore()
+  const { getUser, logout, updateToken } = useManageStore()
   const res = useResource()
   const router = useRouter()
 
@@ -80,8 +80,11 @@ export function useAxios(props?: useAxiosProps) {
         return undefined
       }
       if (response.status === 200) {
-        // 确保返回符合 ApiResponse 类型
-        return props?.raw ? response : response.data as ApiResponse
+        const auth = response?.headers?.Authorization
+        if (auth) {
+          updateToken(auth)
+        }
+        return Promise.resolve(props?.raw ? response : response.data as ApiResponse)
       }
       return Promise.reject(props?.raw ? response : response.data)
     },

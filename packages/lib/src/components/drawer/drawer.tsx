@@ -47,7 +47,7 @@ export default defineComponent({
               default: () => <Page {...params} onSuccess={resolve} onClose={reject} />,
               fallback: () => (
                 <NSpin show>
-                  <div class="flex-1 h-1"></div>
+                  <div class="flex-1 min-h-1"></div>
                 </NSpin>
               ),
             }}

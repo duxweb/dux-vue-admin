@@ -367,7 +367,9 @@
       "file": "Upload File",
       "manage": "Browse Files",
       "image": "Upload Image",
-      "max": "You can only upload up to {max} images"
+      "max": "You can only upload up to {max} images",
+      "uploading": "Uploading, {current}/{total} files",
+      "cancel": "Cancel"
     },
     "uploadManage": {
       "namePlaceholder": "Enter name",

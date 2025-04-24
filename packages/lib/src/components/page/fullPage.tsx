@@ -13,7 +13,7 @@ export const DuxFullPage = defineComponent({
     return () => (
       <div
         class={clsx([
-          'flex-1 h-1',
+          'flex-1 min-h-1',
           'p-2',
           tab.tabs.length > 1 ? 'pt-0' : '',
           props.class,

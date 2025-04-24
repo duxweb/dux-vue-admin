@@ -35,7 +35,7 @@ export const DuxModal = defineComponent({
         role="dialog"
         aria-modal="true"
         size="huge"
-        class="p-4 shadow-none! size-screen flex justify-center items-center"
+        class=" shadow-none! size-screen flex justify-center items-center"
       >
         <div>
           <div

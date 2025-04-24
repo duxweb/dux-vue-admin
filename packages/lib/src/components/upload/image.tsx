@@ -2,7 +2,7 @@ import type { PropType } from 'vue'
 import { useVModel } from '@vueuse/core'
 import clsx from 'clsx'
 import { NButton, NImage, NProgress, useMessage } from 'naive-ui'
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useI18n } from 'vue-i18n'
 import { useImagePreview, useResource } from '../../hooks'
@@ -27,13 +27,17 @@ export const DuxImageUpload = defineComponent({
     },
     headers: Object as PropType<Record<string, any>>,
     data: Object as PropType<Record<string, any>>,
-    onUpdateValue: Function as PropType<(value: string | string[]) => void>,
+    onUpdateValue: Function as PropType<(value?: string | string[]) => void>,
   },
   setup(props, { emit }) {
     const model = useVModel(props, 'value', emit, {
       passive: true,
       deep: true,
       defaultValue: [],
+    })
+
+    watch(model, (v) => {
+      props.onUpdateValue?.(v)
     })
 
     const { uploadUrl } = useResource()

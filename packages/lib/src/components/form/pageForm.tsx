@@ -23,6 +23,7 @@ export const DuxPageForm = defineComponent({
     id: [String, Number],
     invalidate: [String, Array] as PropType<string | string[]>,
     divider: Boolean,
+    edit: Boolean,
   },
   extends: DuxForm,
   setup(props, { slots, emit }) {
@@ -38,12 +39,10 @@ export const DuxPageForm = defineComponent({
       id: props.id,
       invalidate: props.invalidate,
       model: modelData,
+      edit: props.edit,
       success: () => {
-        if (!props.id && tab.current) {
+        if (!props.id && tab.current && !props.edit) {
           tab.delTab(tab.current, v => router.push(v.url || ''))
-        }
-        else {
-          onReset()
         }
       },
     })
@@ -52,7 +51,7 @@ export const DuxPageForm = defineComponent({
 
     return () => (
       <DuxFullPage>
-        <NCard title={props.title} segmented contentClass="p-0! flex-1 h-1" class="h-full flex flex-col" headerClass="px-6! py-4!">
+        <NCard title={props.title} segmented contentClass="p-0! flex-1 min-h-1" class="h-full flex flex-col" headerClass="px-6! py-4!">
           {{
             default: () => (
               <div class="h-full">

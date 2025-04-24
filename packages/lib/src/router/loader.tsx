@@ -6,7 +6,7 @@ export default defineComponent({
   name: 'DuxLoader',
   setup(_props) {
     return () => (
-      <div class="flex-1 h-1 flex flex-col">
+      <div class="flex-1 min-h-1 flex flex-col">
         <DuxException>
           <DuxRender />
         </DuxException>

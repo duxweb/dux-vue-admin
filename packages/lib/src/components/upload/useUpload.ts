@@ -101,6 +101,12 @@ export function useUpload() {
     formData.append('Content-Type', file.type)
     formData.append('file', file)
 
+    const controller = new AbortController()
+    const signal = controller.signal
+    if (id) {
+      uploadRequest[id] = controller
+    }
+
     const uploadMethod = client.post({
       url,
       type: 'file',
@@ -109,16 +115,13 @@ export function useUpload() {
         ...headers,
       },
       config: {
+        signal,
         onUploadProgress: (event) => {
           const percent = event.total ? Math.ceil(event.loaded / event.total * 100) : 0
           onProgress?.(percent)
         },
       },
     })
-
-    if (id) {
-      uploadRequest[id] = uploadMethod
-    }
 
     uploadMethod.then(() => {
       client.put({

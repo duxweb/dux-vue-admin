@@ -9,7 +9,7 @@ export const DuxPage = defineComponent({
     const tab = useTabStore()
 
     return () => (
-      <div class="flex-1 h-1">
+      <div class="flex-1 min-h-1">
         <NScrollbar contentClass={clsx([
           'p-2',
           tab.tabs.length > 1 ? 'pt-0' : '',

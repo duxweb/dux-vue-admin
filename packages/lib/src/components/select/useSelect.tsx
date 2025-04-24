@@ -1,7 +1,7 @@
 import type { Ref } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import { NPagination } from 'naive-ui'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, toRef, watch } from 'vue'
 import { useClient } from '../../hooks'
 
 type value = Array<string | number> | string | number | null | undefined
@@ -40,11 +40,13 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
     })
   }
 
+  const urlRef = toRef(url || '')
+
   const {
     data,
-    isLoading: loading,
+    isLoading,
   } = useQuery({
-    queryKey: [invalidate || url?.value, queryParams],
+    queryKey: [invalidate || urlRef, queryParams],
     queryFn: () => getList(),
   })
 
@@ -98,6 +100,13 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
         )
       : null
   )
+
+  const loading = computed(() => {
+    if (data.value) {
+      return false
+    }
+    return isLoading.value
+  })
 
   return {
     onSearch,

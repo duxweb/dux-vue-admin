@@ -22,6 +22,12 @@ import { useClient } from '../hooks/useClient'
 import * as index from '../index'
 import { useResource } from '../index'
 
+const styleCache = new Map<string, boolean>()
+
+function hashString(str: string): string {
+  return crypto.MD5(str).toString().substring(0, 10)
+}
+
 export function sfcRender(path: string) {
   const client = useClient()
   const { mergeLocaleMessage } = vueI18n.useI18n()
@@ -123,13 +129,27 @@ export function sfcRender(path: string) {
         },
       }
     },
-    addStyle: () => { },
+    addStyle(textContent) {
+      const hash = hashString(textContent)
+
+      if (styleCache.has(hash)) {
+        return
+      }
+
+      styleCache.set(hash, true)
+
+      const style = document.createElement('style')
+      style.textContent = textContent
+      style.setAttribute('data-hash', hash)
+
+      document.head.appendChild(style)
+    },
   }
 
   return () => loadModule(`${path}`, { ...options })
 }
 
 function removeSuffix(url: string, suffix: string) {
-  const regex = new RegExp(`${suffix}$`) // 创建一个正则表达式，匹配后缀名
+  const regex = new RegExp(`${suffix}$`)
   return url.replace(regex, '')
 }

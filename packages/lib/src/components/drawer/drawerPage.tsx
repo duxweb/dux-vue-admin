@@ -7,8 +7,8 @@ export const DuxDrawerPage = defineComponent({
   },
   setup(_props, { slots }) {
     return () => (
-      <div class="flex-1 h-1 flex flex-col">
-        <div class="flex-1 h-1">
+      <div class="flex-1 min-h-1 flex flex-col">
+        <div class="flex-1 min-h-1">
           <NScrollbar>
             {slots.default?.()}
           </NScrollbar>

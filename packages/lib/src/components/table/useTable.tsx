@@ -3,8 +3,9 @@ import type { Ref } from 'vue'
 import type { BatchAction, TableAction, TableColumn, UseTableProps, UseTableResult } from './types'
 import { keepPreviousData, useQuery } from '@tanstack/vue-query'
 import { useIntervalFn, useWindowSize } from '@vueuse/core'
+import { cloneDeep } from 'lodash-es'
 import { NButton, NCheckbox, NDropdown, NPopover, NTooltip, useMessage } from 'naive-ui'
-import { computed, h, reactive, ref, toRef, watch } from 'vue'
+import { computed, h, ref, toRef, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useI18n } from 'vue-i18n'
 import { treeToArr, useClient, useExportCsv, useExportExcel, useImportCsv, useImportExcel } from '../../hooks'
@@ -16,7 +17,7 @@ import { columnImages } from './column/images'
 import { columnInput } from './column/input'
 import { columnSwitch } from './column/switch'
 
-export function useTable({ filter, url, batch, columns: tableColumn, columnActions, exportColumns, importColumns, export: exportStatus, import: importStatus, exportCsv: exportCsvStatus, importCsv: importCsvStatus, expanded: expandedStatus, cacheTime, key = 'id', refreshTime = 10, actionWidth, pagination = true }: UseTableProps): UseTableResult {
+export function useTable({ filter: filterForm, url, batch, columns: tableColumn, columnActions, exportColumns, importColumns, export: exportStatus, import: importStatus, exportCsv: exportCsvStatus, importCsv: importCsvStatus, expanded: expandedStatus, cacheTime, key = 'id', refreshTime = 10, actionWidth, pagination = true }: UseTableProps): UseTableResult {
   const client = useClient()
   const message = useMessage()
   const excelExport = useExportExcel()
@@ -29,16 +30,20 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
   const { width } = useWindowSize()
 
   const columns = toRef(tableColumn)
+  const formFilter = toRef(filterForm)
 
   // 表格数据
-  const sorter = reactive<Record<string, any>>({})
-  const filters = reactive<Record<string, any>>({})
+  const filter = ref<Record<string, any>>(cloneDeep(formFilter.value || {}))
+  const sorter = ref<Record<string, any>>({})
+  const tableFilter = ref<Record<string, any>>({})
   const meta = ref<Record<string, any>>({})
 
   const page = ref(1)
   const pageSize = ref(20)
   const pageCount = ref(0)
   const total = ref(0)
+
+  const loading = ref(false)
 
   const queryParams = computed(() => {
     return {
@@ -48,9 +53,9 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
             pageSize: pageSize.value,
           }
         : {}),
-      ...sorter,
-      ...filters,
-      ...filter,
+      ...sorter.value,
+      ...tableFilter.value,
+      ...filter.value,
     }
   })
 
@@ -61,6 +66,8 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
     })
   }
 
+  const data = ref<Record<string, any>[]>([])
+
   const req = useQuery({
     queryKey: [url, queryParams],
     queryFn: () => getList(),
@@ -68,28 +75,38 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
     placeholderData: keepPreviousData,
   })
 
+  watch(req.isFetching, (val) => {
+    if (req.isFetched.value) {
+      loading.value = false
+    }
+    else {
+      loading.value = val
+    }
+  }, { immediate: true })
+
   watch(req.data, (res) => {
     if (expandedStatus) {
       expanded.value = treeToArr(res?.data || [], key, 'children')
     }
 
+    data.value = [...cloneDeep(res?.data || [])]
+
     meta.value = res?.meta || {}
     total.value = res?.meta?.total || 0
     pageCount.value = Math.ceil(total.value / pageSize.value)
-  })
-
-  const data = computed(() => {
-    return req.data?.value?.data
+  }, {
+    immediate: true,
   })
 
   watch(req.error, (error) => {
     message.error(error?.message || t('components.list.getError'))
   })
 
-  // 筛选提交
+  // 筛选
   const onSend = () => {
+    loading.value = true
     page.value = 1
-    req.refetch()
+    filter.value = { ...cloneDeep(formFilter.value || {}) }
   }
 
   const onUpdateExpandedRowKeys = (val) => {
@@ -194,7 +211,7 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
     else {
       pause()
     }
-  }, { immediate: true, deep: true })
+  }, { immediate: true })
 
   const toolsOptions = [
     {
@@ -253,9 +270,9 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
             excelExport.send({
               url,
               params: {
-                ...filters,
-                ...filter,
-                ...sorter,
+                ...tableFilter.value,
+                ...filter.value,
+                ...sorter.value,
               },
               columns: exportColumns || tableColumns.value.map((item: Record<string, any>) => {
                 return {
@@ -270,9 +287,9 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
             csvExport.send({
               url,
               params: {
-                ...filters,
-                ...filter,
-                ...sorter,
+                ...tableFilter.value,
+                ...filter.value,
+                ...sorter.value,
               },
               columns: exportColumns || tableColumns.value.map((item: Record<string, any>) => {
                 return item.key
@@ -283,8 +300,8 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
             excelImport.send({
               url: `${url}/import`,
               params: {
-                ...filter,
-                ...filters,
+                ...filter.value,
+                ...tableFilter.value,
               },
               columns: importColumns,
               callback: () => {
@@ -296,8 +313,8 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
             csvImport.send({
               url: `${url}/import`,
               params: {
-                ...filter,
-                ...filters,
+                ...filter.value,
+                ...tableFilter.value,
               },
               columns: importColumns as string[],
               callback: () => {
@@ -316,25 +333,32 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
   // 排序处理
   const onUpdateSorter = (v: DataTableSortState | DataTableSortState[] | null) => {
     const list = Array.isArray(v) ? v : [v]
+
+    const newSorter = { ...sorter.value }
     list?.forEach((item) => {
       if (!item?.columnKey) {
         return
       }
       if (item.order) {
-        sorter[`${item.columnKey}_sort`] = item.order === 'ascend' ? 'asc' : 'desc'
+        newSorter[`${item.columnKey}_sort`] = item.order === 'ascend' ? 'asc' : 'desc'
       }
       else {
-        delete sorter[`${item.columnKey}_sort`]
+        delete newSorter[`${item.columnKey}_sort`]
       }
     })
-    onSend()
+
+    sorter.value = newSorter
   }
 
   // 筛选处理
   const onUpdateFilters = (v: DataTableFilterState) => {
+    const newTablefilter = { ...tableFilter.value }
+
     Object.entries(v).forEach(([key, value]) => {
-      filters[key] = value
+      newTablefilter[key] = value
     })
+
+    tableFilter.value = newTablefilter
     onSend()
   }
 
@@ -387,7 +411,7 @@ export function useTable({ filter, url, batch, columns: tableColumn, columnActio
     toolsColumns,
     toolsBtn,
     send: onSend,
-    loading: req.isLoading,
+    loading,
     data,
     tableParams,
     pagination: tablePagination,

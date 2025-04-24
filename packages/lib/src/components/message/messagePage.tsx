@@ -140,11 +140,11 @@ export const DuxMessagePage = defineComponent({
                 </NScrollbar>
               </div>
             </div>
-            <div class="lg:flex-none flex-1 h-1 lg:h-full border-r border-gray-2 lg:w-60 flex flex-col">
+            <div class="lg:flex-none flex-1 min-h-1 lg:h-full border-r border-gray-2 lg:w-60 flex flex-col">
               <div class="flex-none p-4 font-bold text-base hidden lg:flex border-b border-gray-2  gap-2 items-center">
                 <div>{t('components.message.list')}</div>
               </div>
-              <div class="flex-1 h-1 relative">
+              <div class="flex-1 min-h-1 relative">
                 <NInfiniteScroll distance={10} onLoad={handleLoad}>
                   {loading.value && <NSpin class="h-full absolute w-full bg-gray-1/50" />}
 
@@ -243,7 +243,7 @@ export const DuxMessagePage = defineComponent({
                         </NButton>
                       </div>
                     </div>
-                    <div class="flex-1 h-1">
+                    <div class="flex-1 min-h-1">
                       <NScrollbar>
                         <div class="p-4 prose prose-truegray">
                           <div innerHTML={currentMessage.value[props.contentField]} />

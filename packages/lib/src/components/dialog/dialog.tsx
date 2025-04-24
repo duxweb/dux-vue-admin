@@ -64,7 +64,7 @@ export const DuxDialog = defineComponent({
         role="dialog"
         aria-modal="true"
         size="huge"
-        class="p-4 shadow-none! size-screen flex justify-center items-center"
+        class="shadow-none! size-screen flex justify-center items-center"
       >
         <div>
           <div class="bg-white dark:bg-gray-2 min-w-400px max-w-full rounded shadow-md">

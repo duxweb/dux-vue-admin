@@ -25,7 +25,7 @@ export const DuxPageFormItem = defineComponent({
             {props.desc}
           </div>
         </div>
-        <div class="lg:col-span-4 xl:col-span-3 pt-0 lg:pt-1.5">
+        <div class="lg:col-span-4 xl:col-span-3 ">
           <NFormItem {...props} showLabel={false} showFeedback={false}>
             {slots.default?.()}
           </NFormItem>

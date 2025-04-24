@@ -83,7 +83,7 @@ export const DuxPageTable = defineComponent({
       name: route.name,
       columns: columns || [],
       columnActions: props.columnActions || [],
-      filter: form?.value,
+      filter: form,
       exportColumns: props.exportColumns,
       importColumns: props.importColumns,
       export: props.export,
@@ -149,29 +149,31 @@ export const DuxPageTable = defineComponent({
         {slots?.side && <div class="hidden lg:block lg:w-50 flex-none">{slots?.side?.(form)}</div>}
         <div class="flex-1 lg:w-1 flex flex-col gap-2">
           {slots?.header?.(form)}
-          <NCard class="flex-1 h-1">
+          <NCard class="flex-1 min-h-1">
             <div class="flex flex-col h-full gap-4">
-              <DuxFilter
-                filter={props.filter}
-                tabs={props.tabs}
-                actions={props.actions}
-                title={props.title}
-                titleLang={props.titleLang}
-                v-model:value={form.value}
-                onSubmit={() => {
-                  send()
-                }}
-              >
-                {{
-                  tools: () => (
-                    <>
-                      {toolsColumns}
-                      {toolsBtn}
-                    </>
-                  ),
-                  filter: slots?.filter,
-                }}
-              </DuxFilter>
+              {slots?.filter?.() || (
+                <DuxFilter
+                  filter={props.filter}
+                  tabs={props.tabs}
+                  actions={props.actions}
+                  title={props.title}
+                  titleLang={props.titleLang}
+                  v-model:value={form.value}
+                  onSubmit={() => {
+                    send()
+                  }}
+                >
+                  {{
+                    tools: () => (
+                      <>
+                        {toolsColumns}
+                        {toolsBtn}
+                      </>
+                    ),
+                    filter: slots?.filter,
+                  }}
+                </DuxFilter>
+              )}
               {slots?.top?.()}
               <div class="flex-1">
                 <NDataTable
@@ -184,7 +186,7 @@ export const DuxPageTable = defineComponent({
                   data={data.value}
                   rowKey={row => row[props.tableKey]}
                   columns={tableColumns.value}
-                  defaultExpandAll={true}
+                  defaultExpandAll={props.expanded}
                   {...tableParams.value}
                   pagination={props.pagination ? pagination.value : false}
                   {...props.tableProps}

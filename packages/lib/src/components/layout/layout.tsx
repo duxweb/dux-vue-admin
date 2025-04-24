@@ -64,7 +64,7 @@ export const DuxLayout = defineComponent({
                         </div>
                       </div>
                     </div>
-                    <div class="flex-1 h-1 ">
+                    <div class="flex-1 min-h-1 ">
                       <NScrollbar>
                         <NMenu
                           collapsed={appCollapsed.value}
@@ -91,7 +91,7 @@ export const DuxLayout = defineComponent({
 
                   <div class="flex-1 flex flex-col border-gray-2 border-l h-full">
                     <SearchInput />
-                    <div class="flex-1 h-1">
+                    <div class="flex-1 min-h-1">
                       <NScrollbar>
                         <NMenu
                           rootIndent={20}
@@ -115,7 +115,7 @@ export const DuxLayout = defineComponent({
                     {resource.config?.logo ? resource.config?.darkLogo ? <img class="h-40px" src={resource.config?.darkLogo} /> : <img class="h-40px" src={resource.config?.logo} /> : <div class="h-20px"><dux-logo /></div>}
 
                   </div>
-                  <div class="flex-1 h-1">
+                  <div class="flex-1 min-h-1">
                     <NScrollbar>
                       <NMenu
                         collapsedWidth={64}
@@ -156,11 +156,11 @@ export const DuxLayout = defineComponent({
               )}
 
               {!isMobile.value && layout.value === 'separate' && (
-                <div class="flex gap-2 flex-1 w-1">
+                <div class="flex gap-2 flex-1 min-w-0">
                   <div class=" flex items-center">
                     {resource.config?.logo ? (darkMode.value && resource.config?.darkLogo ? <img class="h-40px" src={resource.config?.darkLogo} /> : <img class="h-40px" src={resource.config?.logo} />) : <div class="h-20px"><dux-logo /></div>}
                   </div>
-                  <div class="flex-1 w-1">
+                  <div class="flex-1 min-w-0">
                     <NMenu
                       mode="horizontal"
                       responsive
@@ -226,7 +226,7 @@ export const DuxLayout = defineComponent({
                   <NLayoutSider width={180} collapsedWidth={64} bordered nativeScrollbar={false}>
                     <div class="flex flex-col h-full">
                       <SearchInput />
-                      <div class="flex-1 h-1">
+                      <div class="flex-1 min-h-1">
                         <NScrollbar>
                           <NMenu
                             rootIndent={15}
@@ -238,7 +238,7 @@ export const DuxLayout = defineComponent({
                       </div>
                     </div>
                   </NLayoutSider>
-                  <div class="flex-1 w-1 flex flex-col">
+                  <div class="flex-1 min-w-0 flex flex-col">
                     <DuxTabs />
                     {slots.default?.()}
                   </div>

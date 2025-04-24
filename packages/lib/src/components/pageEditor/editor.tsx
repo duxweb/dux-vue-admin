@@ -87,7 +87,7 @@ export const DuxPageEditor = defineComponent({
     }, { deep: true, immediate: true })
 
     return () => (
-      <div class="flex-1 h-1 px-2 flex flex-row pb-2 text-sm">
+      <div class="flex-1 min-h-1 px-2 flex flex-row pb-2 text-sm">
         <div class="flex-none flex flex-col gap-2 bg-gray-1/50 rounded-sm p-2 shadow-sm">
           <MainMenuItem
             title={t('components.pageEditor.group.all')}

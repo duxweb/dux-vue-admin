@@ -6,7 +6,7 @@ export const DuxModalPage = defineComponent({
   },
   setup(_props, { slots }) {
     return () => (
-      <div class="flex flex-col flex-1 h-1">
+      <div class="flex flex-col flex-1 min-h-1">
         <div class="flex-1 overflow-auto">
           {slots.default?.()}
         </div>

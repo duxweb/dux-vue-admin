@@ -4,7 +4,7 @@ import type { DuxAiEditor, DuxCascaderAsync, DuxFileUpload, DuxImageUpload, DuxM
 import type { JSONSchema } from '../render/jsonRender'
 import type { CheckboxGroupAdaptor, GridProps } from './adaptor'
 import type { RadioGroupAdaptor } from './adaptor/radioGroup'
-import { autoComplete, cascader, cascaderAsync, checkbox, checkboxGroup, color, date, dynamicInput, dynamicTags, editor, grid, input, mention, mentionAsync, number, radio, radioGroup, rate, region, select, selectAsync, slider, space, switchAdaptor, time, transfer, transferAsync, treeSelect, treeSelectAsync, uploadFile, uploadImage } from './adaptor'
+import { autoComplete, cascader, cascaderAsync, checkbox, checkboxGroup, color, date, dynamicInput, dynamicTags, editor, grid, input, mention, mentionAsync, number, radio, radioGroup, rate, region, render, select, selectAsync, slider, space, switchAdaptor, time, transfer, transferAsync, treeSelect, treeSelectAsync, uploadFile, uploadImage } from './adaptor'
 
 export interface JsonFormToAttrMap {
   'editor': typeof DuxAiEditor
@@ -38,13 +38,14 @@ export interface JsonFormToAttrMap {
   'region': InstanceType<typeof DuxRegion>['$props']
   'tree-select-async': InstanceType<typeof DuxTreeSelectAsync>['$props']
   'transfer-async': InstanceType<typeof DuxTransferAsync>['$props']
+  'render': Record<string, any>
 }
 
 export type JsonFormItemAdaptor<T extends keyof JsonFormToAttrMap> = JsonFormToAttrMap[T] | Record<string, any>
 
 export type JsonFormType = 'editor' | 'auto-complete' | 'cascader' | 'checkbox' | 'checkbox-group' | 'color' | 'date' | 'dynamic-input' |
   'dynamic-tags' | 'grid' | 'input' | 'mention' | 'number' | 'radio' | 'radio-group' | 'rate' | 'select' | 'slider' | 'space' | 'switch' | 'time' | 'transfer' | 'tree-select' |
-  'file-upload' | 'image-upload' | 'cascader-async' | 'select-async' | 'region' | 'tree-select-async' | 'transfer-async' | 'mention-async'
+  'file-upload' | 'image-upload' | 'cascader-async' | 'select-async' | 'region' | 'tree-select-async' | 'transfer-async' | 'mention-async' | 'render'
 
 export type FormLayoutType = 'page' | 'form'
 
@@ -162,6 +163,9 @@ export function formToJson(schema: JsonFormItemSchema[], layout: FormLayoutType 
     }
     if (item.type === 'region') {
       itemJson = region(item)
+    }
+    if (item.type === 'render') {
+      itemJson = render(item)
     }
     if (item.child && !itemJson.child) {
       const child = Array.isArray(item.child) ? item.child : [item.child]

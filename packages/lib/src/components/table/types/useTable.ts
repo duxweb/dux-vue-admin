@@ -16,7 +16,7 @@ export type TableAction = FilterAction
 export interface UseTableProps {
   columns: TableColumn[] | Ref<TableColumn[] | undefined>
   columnActions?: TableAction[]
-  filter?: Record<string, any>
+  filter?: Record<string, any> | Ref<Record<string, any>>
   importColumns?: Column[] | string[]
   exportColumns?: Column[] | string[]
   batch?: BatchAction[]

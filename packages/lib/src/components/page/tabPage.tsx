@@ -26,7 +26,7 @@ export const DuxTabPage = defineComponent({
           <div class="h-full flex">
             <div class="flex-none bg-gray-2/30 w-30 lg:w-50 border-r border-gray-2 py-2 transition-all flex flex-col">
               {slots?.header?.()}
-              <div class="flex-1 h-1">
+              <div class="flex-1 min-h-1">
                 <NScrollbar>
                   <div class="flex flex-col gap-1 p-2">
                     { slots?.default?.()?.map((item, key) => (
@@ -48,7 +48,7 @@ export const DuxTabPage = defineComponent({
                 </NScrollbar>
               </div>
             </div>
-            <div class="flex-1 w-1 flex flex-col mx-4">
+            <div class="flex-1 min-w-0 flex flex-col mx-4">
               <div class="text-lg font-bold border-b border-gray-2 p-4 flex-none">{slots?.default?.()?.find(v => v.props?.value === value.value)?.props?.label}</div>
               {slots.default?.()}
             </div>

@@ -80,7 +80,7 @@ export const DuxStepForm = defineComponent({
 
     return () => (
       <DuxFullPage>
-        <NCard segmented contentClass="p-0! flex-1 h-1" class="h-full flex flex-col" headerClass="px-6! py-4!">
+        <NCard segmented contentClass="p-0! flex-1 min-h-1" class="h-full flex flex-col" headerClass="px-6! py-4!">
           {{
             header: () => (
               <DuxStep current={step.value} options={props.steps} />

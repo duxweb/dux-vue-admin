@@ -2,7 +2,7 @@ import type { TransferOption } from 'naive-ui'
 import { useQuery } from '@tanstack/vue-query'
 import { useVModel } from '@vueuse/core'
 import { NAvatar, NSpin, NTransfer } from 'naive-ui'
-import { defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import { useClient } from '../../hooks'
 
 export const DuxTransferAsync = defineComponent({
@@ -61,11 +61,20 @@ export const DuxTransferAsync = defineComponent({
         }
         return item
       }) || []
+    }, {
+      immediate: true,
+    })
+
+    const loading = computed(() => {
+      if (req.isFetched.value) {
+        return false
+      }
+      return req.isFetching.value
     })
 
     return () => (
       <div class="w-full">
-        <NSpin show={req.isLoading.value}>
+        <NSpin show={loading.value}>
           <NTransfer
             {...props}
             v-model:value={model.value}
