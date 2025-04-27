@@ -104,7 +104,6 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
 
   // 筛选
   const onSend = () => {
-    loading.value = true
     page.value = 1
     filter.value = { ...cloneDeep(formFilter.value || {}) }
   }
