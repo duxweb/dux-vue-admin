@@ -12,6 +12,7 @@ import { treeToArr, useClient, useExportCsv, useExportExcel, useImportCsv, useIm
 import { useDialog } from '../dialog'
 import { listRenderAction } from '../filter'
 import { columnMap, columnMedia, columnStatus, columnTags, columnText, columnType } from './column'
+import { columnCopy } from './column/copy'
 import { columnImage } from './column/image'
 import { columnImages } from './column/images'
 import { columnInput } from './column/input'
@@ -497,6 +498,12 @@ export function useTableColumns(props: UseTableColumnsProps) {
         return {
           ...itemProps,
           render: columnSwitch(params, client, message, props.key, props.url),
+        }
+      }
+      if (item.renderType === 'copy') {
+        return {
+          ...itemProps,
+          render: columnCopy(params),
         }
       }
       if (item.renderType === 'input') {
