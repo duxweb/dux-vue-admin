@@ -146,7 +146,7 @@ export function useImportExcel() {
   const url = ref<string>()
   const params = ref<Record<string, any>>()
   const columns = ref<Partial<Column>[]>()
-  const callback = ref<() => void>()
+  const callback = ref<(res: any) => void>()
   const { t } = useI18n()
   let messageRef: any = null
 
@@ -203,7 +203,7 @@ export function useImportExcel() {
           },
         }).then((res) => {
           message.success(res?.message || t('hooks.excel.importSuccess'))
-          callback.value?.()
+          callback.value?.(res)
         }).catch((error) => {
           message.error(`${t('hooks.excel.importError')}: ${error?.message}`)
         }).finally(() => {
