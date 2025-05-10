@@ -9,10 +9,10 @@ export function useDownload() {
   const loading = ref(false)
   const message = useMessage()
 
-  const blob = (blob: Blob, filename?: string) => {
+  const blob = (blobData: Blob, filename?: string) => {
     // blob 下载
     const url = window.URL || window.webkitURL
-    const href = url.createObjectURL(blob)
+    const href = url.createObjectURL(blobData)
     const a = document.createElement('a')
     a.href = href
     a.download = filename || ''
@@ -81,7 +81,8 @@ export function useDownload() {
         }
       }
 
-      blob(e.data?.data, filename)
+      const blobData = e.data?.data instanceof Blob ? e.data?.data : new Blob([e.data?.data], { type: type || 'application/octet-stream' })
+      blob(blobData, filename)
     }).catch((e) => {
       message.error(e.error || '下载失败')
     }).finally(() => {

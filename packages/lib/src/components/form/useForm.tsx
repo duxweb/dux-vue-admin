@@ -64,8 +64,18 @@ export function useForm({ formRef, url, id, initData, invalidate, model, edit, s
 
   watch(data, (v) => {
     const newData = cloneDeep(v?.data || {})
-    initModel.value = { ...newData }
     formModel.value = { ...newData }
+
+    if (isEdit.value) {
+      initModel.value = { ...newData }
+    }
+  })
+
+  watch(initModel, (v) => {
+    if (isEdit.value || v === undefined) {
+      return
+    }
+    formModel.value = { ...v }
   }, {
     immediate: true,
   })
