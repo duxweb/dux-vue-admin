@@ -1,6 +1,9 @@
 <h1 align="center">
   Dux Vue Admin
 </h1>
+<p align="center">
+目前该项目准备与 DVHA合并中，请勿用于正式使用
+</p>
 
 <p align="center">
   <strong>适用于全栈开发的异步中后台前端解决方案</strong>
@@ -8,7 +11,9 @@
 
 <p align="center">
   <em>免编译、免打包、免依赖、开箱即用</em>
+
 </p>
+
 
 ## 🌟 特性
 
