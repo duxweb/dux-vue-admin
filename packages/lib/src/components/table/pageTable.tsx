@@ -5,7 +5,7 @@ import type { JsonFormItemSchema } from '../form'
 import type { BatchAction, TableAction, TableColumn } from './types'
 import type { TableTab } from './types/table'
 import { useVModel, useWindowSize } from '@vueuse/core'
-import { NCard, NDataTable } from 'naive-ui'
+import { NCard, NDataTable, NPagination } from 'naive-ui'
 import { defineComponent, onMounted, onUnmounted, provide, ref, toRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { DuxFilter } from '../filter'
@@ -98,7 +98,7 @@ export const DuxPageTable = defineComponent({
       pagination: !!props.pagination,
     })
 
-    const { data, tableColumns, toolsColumns, toolsBtn, send, loading, tableParams, pagination } = tableHook
+    const { data, meta, tableColumns, toolsColumns, toolsBtn, send, loading, tableParams, pagination } = tableHook
 
     const filterShow = ref(true)
     const filterMore = ref(false)
@@ -188,9 +188,30 @@ export const DuxPageTable = defineComponent({
                   columns={tableColumns.value}
                   defaultExpandAll={props.expanded}
                   {...tableParams.value}
-                  pagination={props.pagination ? pagination.value : false}
                   {...props.tableProps}
                 />
+              </div>
+              <div class="flex justify-between">
+                <div>
+                  {slots?.bottom?.(data.value, meta.value)}
+                </div>
+                <div>
+                  {props.pagination && (
+                    <NPagination
+                      {...pagination.value}
+                      show-quick-jumper
+                      show-size-picker
+                    >
+                      {{
+                        prefix: () => (
+                          <div>
+                            {`共 ${meta.value.total || 0} 条`}
+                          </div>
+                        ),
+                      }}
+                    </NPagination>
+                  )}
+                </div>
               </div>
             </div>
           </NCard>

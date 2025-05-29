@@ -155,9 +155,8 @@ export const DuxAiEditor = defineComponent({
                 }
               },
               protocol: 'sse',
-            } as Record<string, any>,
+            },
           },
-
         },
       })
     })
