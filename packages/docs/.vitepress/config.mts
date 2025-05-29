@@ -29,6 +29,7 @@ const guideSidebar = [
 export default defineConfig({
   title: "Dux Vue Admin",
   description: "适用于全栈开发的异步中后台前端解决方案",
+  base: '/dux-vue-admin/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
