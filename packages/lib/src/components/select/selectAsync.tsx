@@ -43,7 +43,7 @@ export const DuxSelectAsync = defineComponent({
     const { onSearch, loading, Pagination, options } = useSelect({
       url,
       params,
-      value: model.value,
+      value: model,
       pagination: props.pagination,
       valueField: props.valueField || 'id',
     })

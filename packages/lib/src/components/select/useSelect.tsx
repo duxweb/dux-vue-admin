@@ -7,18 +7,22 @@ import { useClient } from '../../hooks'
 type value = Array<string | number> | string | number | null | undefined
 
 interface UseSelectProps {
-  value: value
+  value: value | Ref<value>
   url?: Ref<string | undefined>
   params?: Ref<Record<string, any>>
   valueField?: string
   pagination?: boolean
   invalidate?: string
 }
-export function useSelect({ url, params, pagination, value, valueField = 'value', invalidate }: UseSelectProps) {
+export function useSelect(props: UseSelectProps) {
+  const { url, params, pagination, valueField = 'value', invalidate } = props
   const client = useClient()
   const keyword = ref()
 
+  const valueRef = toRef(props, 'value')
+
   const list = ref<Record<string, any>[]>([])
+  const singleList = ref<Record<string, any>[]>([])
 
   const page = ref(1)
   const pageSize = ref(pagination ? 10 : 0)
@@ -58,24 +62,22 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
     pageCount.value = Math.ceil(total / pageSize.value)
   }, { immediate: true })
 
-  const onceStatus = ref(false)
+  const hasLoadedValue = ref(false)
 
-  watch(() => value, (val) => {
-    if (onceStatus.value || !val) {
+  watch(valueRef, (val) => {
+    if (!val || !url?.value || hasLoadedValue.value) {
       return
     }
+
+    hasLoadedValue.value = true
+
     client.get({
-      url: url?.value,
+      url: url.value,
       params: {
         id: Array.isArray(val) ? val.join(',') : val,
       },
     }).then((res) => {
-      onceStatus.value = true
-      res?.data?.forEach((item) => {
-        if (list.value?.findIndex(v => v[valueField] === item[valueField]) === -1) {
-          list.value?.splice(0, 0, item)
-        }
-      })
+      singleList.value = res?.data || []
     })
   }, { immediate: true })
 
@@ -108,9 +110,25 @@ export function useSelect({ url, params, pagination, value, valueField = 'value'
     return isLoading.value
   })
 
+  const options = computed(() => {
+    const seen = new Set()
+    // 合并单个数据列表和主列表（单个数据优先）
+    const allItems = [...(singleList.value || []), ...(list.value || [])]
+
+    // 去重处理
+    return allItems.filter((item) => {
+      const key = String(item[valueField])
+      if (seen.has(key)) {
+        return false
+      }
+      seen.add(key)
+      return true
+    })
+  })
+
   return {
     onSearch,
-    options: list,
+    options,
     Pagination,
     loading,
   }
