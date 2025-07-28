@@ -9,6 +9,7 @@ interface UserMenu {
 export interface ConfigManage {
   title: string
   default?: boolean
+  loginCode?: boolean
   register?: boolean
   forgotPassword?: boolean
   updatePassword?: boolean

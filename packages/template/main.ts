@@ -29,6 +29,7 @@ const config: Config = {
     merchant: {
       apiPrefix: 'merchant',
       title: '商户管理系统',
+      loginCode: true,
     },
   },
 }

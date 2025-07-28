@@ -1,10 +1,12 @@
 import type { FormInst } from 'naive-ui'
+import { useIntervalFn } from '@vueuse/core'
 import clsx from 'clsx'
-import { NButton, NForm, NFormItem, NInput, NPopover, useMessage } from 'naive-ui'
+import { NButton, NForm, NFormItem, NInput, NInputGroup, NPopover, NTab, NTabs, useMessage } from 'naive-ui'
 import { storeToRefs } from 'pinia'
-import { defineComponent, onMounted, reactive, ref } from 'vue'
+import { computed, defineComponent, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { DuxSelectAsync } from '../components'
 import { useResource } from '../hooks'
 import { useClient } from '../hooks/useClient'
 import { useManageStore } from '../stores/manage'
@@ -37,27 +39,89 @@ export default defineComponent({
     const client = useClient()
     const { t } = useI18n()
 
+    const loginType = ref<'password' | 'code'>('password')
     const form = reactive({
       username: '',
       password: '',
       dots: '',
       code: '',
+      tel_code: '+86',
     })
+
+    const countdown = ref(0)
+    const sendingCode = ref(false)
+
+    const { pause, resume } = useIntervalFn(() => {
+      countdown.value--
+      if (countdown.value <= 0) {
+        pause()
+      }
+    }, 1000, { immediate: false })
+
+    const countdownText = computed(() => {
+      return countdown.value > 0 ? `${countdown.value}s` : '获取验证码'
+    })
+
+    const canSendCode = computed(() => {
+      return countdown.value === 0 && form.username && !sendingCode.value
+    })
+
+    const sendVerifyCode = () => {
+      if (!canSendCode.value)
+        return
+
+      if (!form.username) {
+        message.error('请输入账号')
+        return
+      }
+
+      sendingCode.value = true
+      client.get({
+        url: '/code',
+        params: {
+          tel: form.username,
+          tel_code: form.tel_code,
+        },
+      }).then(() => {
+        resume()
+        message.success('验证码已发送')
+        countdown.value = 60
+      }).catch((res) => {
+        message.error(res?.message || '验证码发送失败')
+      }).finally(() => {
+        sendingCode.value = false
+      })
+    }
 
     const submitLoading = ref(false)
     const submit = () => {
       submitLoading.value = true
-      form.dots = captchaData.dots
-      form.code = String(captchaData.code)
+      const requestData: any = {
+        username: form.username,
+        tel_code: form.tel_code,
+        login_type: loginType.value,
+      }
+
+      if (loginType.value === 'password') {
+        requestData.password = form.password
+        requestData.dots = captchaData.dots
+        requestData.code = String(captchaData.code)
+      }
+      else {
+        requestData.code = form.code
+      }
+
       client.post({
         url: resource.loginUrl,
-        data: form,
+        data: requestData,
       }).then((res) => {
         manage.login(res.data)
         router.push({ path: resource.getIndexPath() })
       }).catch((res) => {
-        getCaptcha()
-        captchaTheme.value = 'default'
+        if (loginType.value === 'password') {
+          getCaptcha()
+          captchaTheme.value = 'default'
+        }
         message.error(res?.message || t('message.requestError'))
       }).finally(() => {
         submitLoading.value = false
@@ -159,65 +223,163 @@ export default defineComponent({
               </div>
             </div>
             <div class="my-6">
-              <NForm ref={formRef} model={form} class="flex flex-col gap-4">
-                <NFormItem showLabel={false} path="username" showFeedback={false}>
-                  <NInput value={form.username} onUpdateValue={v => form.username = v} type="text" placeholder={t('pages.login.placeholder.username')} size="large">
-                    {{
-                      default: () => <div class="text-lg i-tabler:user" />,
-                    }}
-                  </NInput>
-                </NFormItem>
-                <NFormItem showLabel={false} path="password" showFeedback={false}>
-                  <NInput value={form.password} onUpdateValue={v => form.password = v} type="password" showPasswordOn="mousedown" placeholder={t('pages.login.placeholder.password')} size="large" inputProps={{ autocomplete: 'new-password' }}>
-                    {{
-                      default: () => <div class="text-lg i-tabler:lock" />,
-                    }}
-                  </NInput>
-                </NFormItem>
+              {resource.manageConfig?.value?.loginCode
+                ? (
+                    <>
+                      <NTabs value={loginType.value} type="segment" animated default-value="password" onUpdateValue={v => loginType.value = v as 'password' | 'code'}>
+                        <NTab tab="密码登录" name="password" />
+                        <NTab tab="验证码登录" name="code" />
+                      </NTabs>
+                      <NForm ref={formRef} model={form} class="flex flex-col gap-4 mt-4">
+                        <NFormItem showLabel={false} path="username" showFeedback={false}>
+                          <NInputGroup>
+                            <DuxSelectAsync url="/areaCode" value={form.tel_code} onUpdateValue={v => form.tel_code = v} labelField="code" valueField="code" size="large" style={{ width: '120px' }} />
+                            <NInput value={form.username} onUpdateValue={v => form.username = v} type="text" placeholder={t('pages.login.placeholder.username')} size="large">
+                              {{
+                                default: () => <div class="text-lg i-tabler:user" />,
+                              }}
+                            </NInput>
+                          </NInputGroup>
+                        </NFormItem>
+                        {loginType.value === 'password'
+                          ? (
+                              <>
+                                <NFormItem showLabel={false} path="password" showFeedback={false}>
+                                  <NInput value={form.password} onUpdateValue={v => form.password = v} type="password" showPasswordOn="mousedown" placeholder={t('pages.login.placeholder.password')} size="large" inputProps={{ autocomplete: 'new-password' }}>
+                                    {{
+                                      default: () => <div class="text-lg i-tabler:lock" />,
+                                    }}
+                                  </NInput>
+                                </NFormItem>
+                                {resource.config?.captcha && (
+                                  <div>
+                                    <NPopover trigger="click" show={captchaShow.value} contentClass="p-0" raw={true} showArrow={false} onUpdateShow={(v: boolean) => captchaShow.value = v}>
+                                      {{
+                                        default: () => (
+                                          <gocaptcha-click
+                                            config={{
+                                              title: t('pages.login.placeholder.captcha'),
+                                            }}
+                                            data={captchaData}
+                                            events={clickEvents}
+                                          />
+                                        ),
+                                        trigger: () => (
+                                          <NButton size="large" secondary type={captchaTheme.value} block loading={captchaLoading.value} class="relative text-left">
+                                            {{
+                                              default: () => (
+                                                <div>
+                                                  {captchaTheme.value === 'default' ? t('pages.login.captcha.default') : ''}
+                                                  {captchaTheme.value === 'success' ? t('pages.login.captcha.success') : ''}
+                                                  {captchaTheme.value === 'error' ? t('pages.login.captcha.error') : ''}
+                                                </div>
+                                              ),
+                                              icon: () => (
+                                                <>
+                                                  <span class="absolute i-tabler:shield-lock animate-ping inline-flex opacity-75 size-4" />
+                                                  <div class="i-tabler:shield-lock size-4" />
+                                                </>
+                                              ),
+                                            }}
+                                          </NButton>
+                                        ),
+                                      }}
+                                    </NPopover>
+                                  </div>
+                                )}
+                              </>
+                            )
+                          : (
+                              <NFormItem showLabel={false} path="verifyCode" showFeedback={false}>
 
-                {resource.config?.captcha && (
-                  <div>
-                    <NPopover trigger="click" show={captchaShow.value} contentClass="p-0" raw={true} showArrow={false} onUpdateShow={(v: boolean) => captchaShow.value = v}>
-                      {{
-                        default: () => (
-                          <gocaptcha-click
-                            config={{
-                              title: t('pages.login.placeholder.captcha'),
-                            }}
-                            data={captchaData}
-                            events={clickEvents}
-                          />
-                        ),
-                        trigger: () => (
-                          <NButton size="large" secondary type={captchaTheme.value} block loading={captchaLoading.value} class="relative text-left">
+                                <NInput
+                                  value={form.code}
+                                  onUpdateValue={v => form.code = v}
+                                  type="text"
+                                  placeholder="请输入验证码"
+                                  size="large"
+                                >
+                                  {{
+                                    default: () => <div class="text-lg i-tabler:message" />,
+                                    suffix: () => (
+                                      <NButton
+                                        type="primary"
+                                        size="small"
+                                        disabled={!canSendCode.value}
+                                        loading={sendingCode.value}
+                                        onClick={sendVerifyCode}
+                                      >
+                                        {countdownText.value}
+                                      </NButton>
+                                    ),
+                                  }}
+                                </NInput>
+                              </NFormItem>
+                            )}
+                      </NForm>
+                    </>
+                  )
+                : (
+                    <NForm ref={formRef} model={form} class="flex flex-col gap-4">
+                      <NFormItem showLabel={false} path="username" showFeedback={false}>
+                        <NInput value={form.username} onUpdateValue={v => form.username = v} type="text" placeholder={t('pages.login.placeholder.username')} size="large">
+                          {{
+                            default: () => <div class="text-lg i-tabler:user" />,
+                          }}
+                        </NInput>
+                      </NFormItem>
+                      <NFormItem showLabel={false} path="password" showFeedback={false}>
+                        <NInput value={form.password} onUpdateValue={v => form.password = v} type="password" showPasswordOn="mousedown" placeholder={t('pages.login.placeholder.password')} size="large" inputProps={{ autocomplete: 'new-password' }}>
+                          {{
+                            default: () => <div class="text-lg i-tabler:lock" />,
+                          }}
+                        </NInput>
+                      </NFormItem>
+
+                      {resource.config?.captcha && (
+                        <div>
+                          <NPopover trigger="click" show={captchaShow.value} contentClass="p-0" raw={true} showArrow={false} onUpdateShow={(v: boolean) => captchaShow.value = v}>
                             {{
                               default: () => (
-                                <div>
-                                  {captchaTheme.value === 'default' ? t('pages.login.captcha.default') : ''}
-                                  {captchaTheme.value === 'success' ? t('pages.login.captcha.success') : ''}
-                                  {captchaTheme.value === 'error' ? t('pages.login.captcha.error') : ''}
-                                </div>
+                                <gocaptcha-click
+                                  config={{
+                                    title: t('pages.login.placeholder.captcha'),
+                                  }}
+                                  data={captchaData}
+                                  events={clickEvents}
+                                />
                               ),
-                              icon: () => (
-                                <>
-                                  <span class="absolute i-tabler:shield-lock animate-ping inline-flex opacity-75 size-4" />
-                                  <div class="i-tabler:shield-lock size-4" />
-                                </>
+                              trigger: () => (
+                                <NButton size="large" secondary type={captchaTheme.value} block loading={captchaLoading.value} class="relative text-left">
+                                  {{
+                                    default: () => (
+                                      <div>
+                                        {captchaTheme.value === 'default' ? t('pages.login.captcha.default') : ''}
+                                        {captchaTheme.value === 'success' ? t('pages.login.captcha.success') : ''}
+                                        {captchaTheme.value === 'error' ? t('pages.login.captcha.error') : ''}
+                                      </div>
+                                    ),
+                                    icon: () => (
+                                      <>
+                                        <span class="absolute i-tabler:shield-lock animate-ping inline-flex opacity-75 size-4" />
+                                        <div class="i-tabler:shield-lock size-4" />
+                                      </>
+                                    ),
+                                  }}
+                                </NButton>
                               ),
                             }}
-                          </NButton>
-                        ),
-                      }}
-                    </NPopover>
-                  </div>
-                )}
+                          </NPopover>
+                        </div>
+                      )}
+                    </NForm>
+                  )}
 
-                <div class="mb-2 mt-4">
-                  <NButton type="primary" size="large" block loading={submitLoading.value} onClick={submit}>
-                    {t('pages.login.buttons.login')}
-                  </NButton>
-                </div>
-              </NForm>
+              <div class="mb-2 mt-4">
+                <NButton type="primary" size="large" block loading={submitLoading.value} onClick={submit}>
+                  {t('pages.login.buttons.login')}
+                </NButton>
+              </div>
             </div>
             <div class="text-center text-sm text-gray-5">
               {resource.config?.copyright || 'All rights reserved © duxweb 2024'}

@@ -140,8 +140,9 @@ export const DuxStatsChartArea = defineComponent({
                 <VChart
                   class="h-full w-full"
                   autoresize
-                  theme="default"
+                  
                   option={option.value}
+                  theme="default"
                   initOptions={{
                     renderer: 'svg',
                   }}
