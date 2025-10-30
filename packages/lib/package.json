@@ -1,7 +1,7 @@
 {
   "name": "@duxweb/dux-vue-admin",
   "type": "module",
-  "version": "0.0.13-beta",
+  "version": "0.0.14-beta",
   "author": "DuxWeb",
   "license": "LGPL-3.0",
   "main": "src/index.ts",

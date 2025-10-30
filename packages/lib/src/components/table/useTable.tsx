@@ -531,6 +531,7 @@ export function useTableColumns(props: UseTableColumnsProps) {
         options: props.selected && props.selected.value?.length > 0
           ? props.batch?.map((item) => {
             return {
+              key: item.name,
               label: item.labelLang ? t(item.labelLang) : item.label,
               icon: item?.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined,
               onSelect: () => {
