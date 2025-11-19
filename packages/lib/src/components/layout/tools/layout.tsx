@@ -51,6 +51,20 @@ export const Layout = defineComponent({
               <div
                 class={clsx([
                   'flex flex-col gap-2 border rounded border-gray-3  p-2 hover:border-primary cursor-pointer  transition-all',
+                  layout.value === 'menu' ? 'border-primary border-solid bg-primary/5' : ' border-dashed',
+                ])}
+                onClick={() => themeStore.toggleLayout('menu')}
+              >
+                <div class="flex gap-1 h-15">
+                  <div class="rounded bg-primary w-8"></div>
+                  <div class="flex-1 rounded bg-primary/20"></div>
+                </div>
+                <div class="text-center">{t('common.layout.menu')}</div>
+              </div>
+
+              <div
+                class={clsx([
+                  'flex flex-col gap-2 border rounded border-gray-3  p-2 hover:border-primary cursor-pointer  transition-all',
                   layout.value === 'separate' ? 'border-primary border-solid bg-primary/5' : ' border-dashed',
                 ])}
                 onClick={() => themeStore.toggleLayout('separate')}

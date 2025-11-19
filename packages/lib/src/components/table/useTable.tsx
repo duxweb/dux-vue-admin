@@ -18,7 +18,7 @@ import { columnImages } from './column/images'
 import { columnInput } from './column/input'
 import { columnSwitch } from './column/switch'
 
-export function useTable({ filter: filterForm, url, batch, columns: tableColumn, columnActions, exportColumns, importColumns, export: exportStatus, import: importStatus, exportCsv: exportCsvStatus, importCsv: importCsvStatus, expanded: expandedStatus, cacheTime, key = 'id', refreshTime = 10, actionWidth, pagination = true }: UseTableProps): UseTableResult {
+export function useTable({ filter: filterForm, url, batch, columns: tableColumn, columnActions, exportColumns, importColumns, export: exportStatus, import: importStatus, exportCsv: exportCsvStatus, importCsv: importCsvStatus, expanded: expandedStatus, cacheTime, key = 'id', refreshTime = 10, actionWidth, selectionWidth, pagination = true }: UseTableProps): UseTableResult {
   const client = useClient()
   const message = useMessage()
   const excelExport = useExportExcel()
@@ -26,6 +26,7 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
   const csvExport = useExportCsv()
   const csvImport = useImportCsv()
   const { t } = useI18n()
+  const dialog = useDialog()
   const selected = ref<never[]>([])
   const expanded = ref<never[]>([])
   const { width } = useWindowSize()
@@ -129,6 +130,7 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
     url,
     onSend,
     width: actionWidth,
+    selectionWidth,
   })
 
   const tableColumns = ref<TableColumn[]>([])
@@ -330,6 +332,57 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
     </div>
   )
 
+  // 批量操作按钮（响应 selected）
+  const batchBtn = computed(() => {
+    if (!batch?.length) {
+      return null
+    }
+
+    return (
+      <div class="flex items-center gap-2 mr-2">
+        {batch.map(item => (
+          <NButton
+            key={item.name}
+            size="small"
+            secondary
+            disabled={!selected.value?.length}
+            renderIcon={item.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined}
+            onClick={() => {
+              if (!selected.value?.length) {
+                return
+              }
+
+              if (item?.callback) {
+                item.callback(selected.value as any)
+                return
+              }
+
+              dialog.confirm({
+                title: t('dialog.confirm.title'),
+                content: t('dialog.confirm.content'),
+              }).then(() => {
+                client.post({
+                  url: item?.url || `${url}/batch`,
+                  data: {
+                    data: selected.value,
+                    type: item?.name,
+                  },
+                }).then((res) => {
+                  message.success(res?.message || t('message.requestSuccess'))
+                  client.invalidate(url)
+                }).catch(() => {
+                  message.error(t('message.requestError'))
+                })
+              })
+            }}
+          >
+            {item.labelLang ? t(item.labelLang) : item.label}
+          </NButton>
+        ))}
+      </div>
+    )
+  })
+
   // 排序处理
   const onUpdateSorter = (v: DataTableSortState | DataTableSortState[] | null) => {
     const list = Array.isArray(v) ? v : [v]
@@ -410,6 +463,7 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
     tableColumns: resultColumns as Ref<DataTableColumns>,
     toolsColumns,
     toolsBtn,
+    batchBtn,
     send: onSend,
     loading,
     data,
@@ -428,10 +482,10 @@ interface UseTableColumnsProps {
   selected?: Ref<never[]>
   onSend?: () => void
   width?: number
+  selectionWidth?: number
 }
 
 export function useTableColumns(props: UseTableColumnsProps) {
-  const dialog = useDialog()
   const { t } = useI18n()
   const client = useClient()
   const message = useMessage()
@@ -522,47 +576,13 @@ export function useTableColumns(props: UseTableColumnsProps) {
       return item
     }) || []
 
-    // 多选操作
+    // 多选
     if (props.batch) {
       restColumns.unshift({
-        width: 80,
+        width: props.selectionWidth || 80,
         multiple: true,
         type: 'selection',
-        options: props.selected && props.selected.value?.length > 0
-          ? props.batch?.map((item) => {
-            return {
-              key: item.name,
-              label: item.labelLang ? t(item.labelLang) : item.label,
-              icon: item?.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined,
-              onSelect: () => {
-                if (item?.callback) {
-                  item.callback()
-                  return
-                }
-
-                dialog.confirm({
-                  title: t('dialog.confirm.title'),
-                  content: t('dialog.confirm.content'),
-                }).then(() => {
-                  client.post({
-                    url: item?.url || `${props.url}/batch`,
-                    data: {
-                      data: props.selected?.value,
-                      type: item?.name,
-                    },
-                  }).then((res) => {
-                    message.success(res?.message || t('message.requestSuccess'))
-                    client.invalidate(props.url)
-                  }).catch(() => {
-                    message.error(t('message.requestError'))
-                  })
-                })
-              },
-            }
-          })
-          : undefined,
-      } as any,
-      )
+      } as any)
     }
 
     // 行操作渲染

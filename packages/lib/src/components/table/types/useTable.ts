@@ -32,6 +32,7 @@ export interface UseTableProps {
   cacheTime?: number
   refreshTime?: number
   actionWidth?: number
+  selectionWidth?: number
   pagination?: boolean
 }
 
@@ -44,6 +45,7 @@ export interface UseTableResult {
   tableColumns: Ref<DataTableColumns>
   toolsColumns: VNodeChild
   toolsBtn: VNodeChild
+  batchBtn: Ref<VNodeChild | null>
   loading: Ref<boolean>
   tableParams: Ref<DataTableProps>
   send: () => void

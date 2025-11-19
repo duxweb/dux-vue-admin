@@ -55,6 +55,10 @@ export const DuxPageTable = defineComponent({
     },
     form: Object as PropType<Record<string, any>>,
     batch: Array<BatchAction>,
+    batchPosition: {
+      type: String as PropType<'top' | 'bottom'>,
+      default: 'bottom',
+    },
     pagination: {
       type: Boolean,
       default: true,
@@ -63,6 +67,7 @@ export const DuxPageTable = defineComponent({
     cacheTime: Number,
     tableProps: Object as PropType<TableProps>,
     actionWidth: Number,
+    selectionWidth: Number,
   },
   setup(props, { slots, emit, expose }) {
     const { width } = useWindowSize()
@@ -95,10 +100,11 @@ export const DuxPageTable = defineComponent({
       refreshTime: props.refreshTime,
       cacheTime: props.cacheTime,
       actionWidth: props.actionWidth,
+      selectionWidth: props.selectionWidth,
       pagination: !!props.pagination,
     })
 
-    const { data, meta, tableColumns, toolsColumns, toolsBtn, send, loading, tableParams, pagination } = tableHook
+    const { data, meta, tableColumns, toolsColumns, toolsBtn, batchBtn, send, loading, tableParams, pagination } = tableHook
 
     const filterShow = ref(true)
     const filterMore = ref(false)
@@ -165,10 +171,11 @@ export const DuxPageTable = defineComponent({
                 >
                   {{
                     tools: () => (
-                      <>
+                      <div class="flex items-center gap-2">
+                        {props.batchPosition === 'top' && batchBtn.value}
                         {toolsColumns}
                         {toolsBtn}
-                      </>
+                      </div>
                     ),
                     filter: slots?.filter,
                   }}
@@ -192,7 +199,8 @@ export const DuxPageTable = defineComponent({
                 />
               </div>
               <div class="flex justify-between">
-                <div>
+                <div class="flex items-center gap-2">
+                  {props.batchPosition === 'bottom' && batchBtn.value}
                   {slots?.bottom?.(data.value, meta.value)}
                 </div>
                 <div>

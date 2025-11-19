@@ -53,7 +53,16 @@ export const DuxLayout = defineComponent({
         {!isMobile.value && (
           <>
             {layout.value === 'app' && (
-              <NLayoutSider collapsed={collapsed.value} showTrigger={showCollapsed.value} collapseMode="width" width={220} collapsedWidth={64} bordered nativeScrollbar={false} onUpdateCollapsed={(v: boolean) => sideCollapsed.value = v}>
+              <NLayoutSider
+                collapsed={collapsed.value}
+                showTrigger={showCollapsed.value}
+                collapseMode="width"
+                width={220}
+                collapsedWidth={64}
+                bordered
+                nativeScrollbar={false}
+                onUpdateCollapsed={(v: boolean) => sideCollapsed.value = v}
+              >
                 <div class="flex  h-screen">
 
                   <div class="flex h-full flex-col flex-none w-64px">
@@ -108,12 +117,24 @@ export const DuxLayout = defineComponent({
             )}
 
             {layout.value === 'collapse' && (
-              <NLayoutSider inverted showTrigger={showCollapsed.value} collapseMode="width" width={200} collapsedWidth={64} bordered nativeScrollbar={false} onUpdateCollapsed={(v: boolean) => sideCollapsed.value = v}>
+              <NLayoutSider
+                inverted
+                collapsed={collapsed.value}
+                showTrigger={showCollapsed.value}
+                collapseMode="width"
+                width={200}
+                collapsedWidth={64}
+                bordered
+                nativeScrollbar={false}
+                onUpdateCollapsed={(v: boolean) => sideCollapsed.value = v}
+              >
                 <div class="flex flex-col h-screen">
                   <div class="flex-none px-4 py-2 border-gray-10 dark:border-gray-2 border-b w-full h-57px flex justify-start items-center">
-
-                    {resource.config?.logo ? resource.config?.darkLogo ? <img class="h-40px" src={resource.config?.darkLogo} /> : <img class="h-40px" src={resource.config?.logo} /> : <div class="h-20px"><dux-logo /></div>}
-
+                    {resource.config?.logo
+                      ? (resource.config?.darkLogo
+                          ? <img class={collapsed.value ? 'h-32px' : 'h-40px'} src={resource.config?.darkLogo} />
+                          : <img class={collapsed.value ? 'h-32px' : 'h-40px'} src={resource.config?.logo} />)
+                      : <div class="h-20px"><dux-logo /></div>}
                   </div>
                   <div class="flex-1 min-h-1">
                     <NScrollbar>
@@ -131,94 +152,144 @@ export const DuxLayout = defineComponent({
                 </div>
               </NLayoutSider>
             )}
-          </>
-        )}
-        <NLayout contentClass="flex flex-col">
-          <NLayoutHeader bordered class="flex-none">
-            <div class="flex items-center px-4 h-56px">
-              {isMobile.value && (
-                <div class="flex-1">
-                  <div onClick={() => mobileMenuShow.value = true}>
-                    {resource.config?.logo ? (darkMode.value && resource.config?.darkLogo ? <img class="h-40px" src={resource.config?.darkLogo} /> : <img class="h-40px" src={resource.config?.logo} />) : <div class="h-20px"><dux-logo /></div>}
+
+            {layout.value === 'menu' && (
+              <NLayoutSider
+                inverted
+                collapsed
+                showTrigger={false}
+                collapseMode="width"
+                width={200}
+                collapsedWidth={64}
+                bordered
+                nativeScrollbar={false}
+              >
+                <div class="flex flex-col h-screen">
+                  <div class="flex-none px-2 py-2 border-gray-10 dark:border-gray-2 border-b h-40px flex justify-center items-center">
+                    {resource.config?.logo
+                      ? (resource.config?.darkLogo
+                          ? <img class="h-32px" src={resource.config?.darkLogo} />
+                          : <img class="h-32px" src={resource.config?.logo} />)
+                      : <div class="h-12px"><dux-logo /></div>}
                   </div>
-                  <NDrawer show={mobileMenuShow.value} onUpdateShow={v => mobileMenuShow.value = v} width={250} placement="left">
-                    <NDrawerContent title={t('common.menu')} closable bodyContentStyle={{ padding: '5px' }}>
+                  <div class="flex-1 min-h-1">
+                    <NScrollbar>
                       <NMenu
-                        rootIndent={20}
-                        indent={15}
+                        collapsedWidth={64}
+                        collapsedIconSize={22}
+                        rootIndent={15}
+                        inverted
                         options={allMenu.value}
                         value={allKey.value as string}
                         onUpdateValue={(key: string) => allKey.value = key}
                       />
-                    </NDrawerContent>
-                  </NDrawer>
-                </div>
-              )}
-
-              {!isMobile.value && layout.value === 'separate' && (
-                <div class="flex gap-2 flex-1 min-w-0">
-                  <div class=" flex items-center">
-                    {resource.config?.logo ? (darkMode.value && resource.config?.darkLogo ? <img class="h-40px" src={resource.config?.darkLogo} /> : <img class="h-40px" src={resource.config?.logo} />) : <div class="h-20px"><dux-logo /></div>}
+                    </NScrollbar>
                   </div>
-                  <div class="flex-1 min-w-0">
-                    <NMenu
-                      mode="horizontal"
-                      responsive
-                      options={appMenu.value}
-                      value={appKey.value as string}
-                      onUpdateValue={(key: string) => appKey.value = key}
-                    />
+                  <div class="flex-none border-gray-10 dark:border-gray-2 border-t p-2">
+                    <div class="flex flex-col items-center gap-3">
+                      <div class="flex flex-col items-center gap-2">
+                        <Message />
+                        {!resource.config?.lang && <Lang />}
+                        <Theme />
+                      </div>
+                      <div class="flex items-center">
+                        <Avatar mini={true} />
+                      </div>
+                    </div>
                   </div>
                 </div>
-              )}
+              </NLayoutSider>
+            )}
+          </>
+        )}
+        <NLayout contentClass="flex flex-col">
+          {layout.value !== 'menu' && (
+            <NLayoutHeader bordered class="flex-none">
+              <div class="flex items-center px-4 h-56px">
+                {isMobile.value && (
+                  <div class="flex-1">
+                    <div onClick={() => mobileMenuShow.value = true}>
+                      {resource.config?.logo ? (darkMode.value && resource.config?.darkLogo ? <img class="h-40px" src={resource.config?.darkLogo} /> : <img class="h-40px" src={resource.config?.logo} />) : <div class="h-20px"><dux-logo /></div>}
+                    </div>
+                    <NDrawer show={mobileMenuShow.value} onUpdateShow={v => mobileMenuShow.value = v} width={250} placement="left">
+                      <NDrawerContent title={t('common.menu')} closable bodyContentStyle={{ padding: '5px' }}>
+                        <NMenu
+                          rootIndent={20}
+                          indent={15}
+                          options={allMenu.value}
+                          value={allKey.value as string}
+                          onUpdateValue={(key: string) => allKey.value = key}
+                        />
+                      </NDrawerContent>
+                    </NDrawer>
+                  </div>
+                )}
 
-              {!isMobile.value && layout.value !== 'separate' && (
-                <div class="flex-1">
-                  <NBreadcrumb>
-                    {crumbs.value && crumbs.value.length > 0
-                      ? crumbs.value?.map(item => (
-                        <NBreadcrumbItem key={item}>
-                          {item.iconName && (
-                            <NIcon>
-                              <div class={item.iconName} />
-                            </NIcon>
-                          )}
-                          {' '}
-                          {item.labelName}
-                        </NBreadcrumbItem>
-                      ))
-                      : (
-                          <div class="flex gap-2 text-sm">
-                            {route.meta.icon && (
+                {!isMobile.value && layout.value === 'separate' && (
+                  <div class="flex gap-2 flex-1 min-w-0">
+                    <div class=" flex items-center">
+                      {resource.config?.logo ? (darkMode.value && resource.config?.darkLogo ? <img class="h-40px" src={resource.config?.darkLogo} /> : <img class="h-40px" src={resource.config?.logo} />) : <div class="h-20px"><dux-logo /></div>}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <NMenu
+                        mode="horizontal"
+                        responsive
+                        options={appMenu.value}
+                        value={appKey.value as string}
+                        onUpdateValue={(key: string) => appKey.value = key}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {!isMobile.value && layout.value !== 'separate' && (
+                  <div class="flex-1">
+                    <NBreadcrumb>
+                      {crumbs.value && crumbs.value.length > 0
+                        ? crumbs.value?.map(item => (
+                          <NBreadcrumbItem key={item}>
+                            {item.iconName && (
                               <NIcon>
-                                <div class={route.meta.icon} />
+                                <div class={item.iconName} />
                               </NIcon>
                             )}
-                            {route.meta?.title}
-                          </div>
-                        )}
+                            {' '}
+                            {item.labelName}
+                          </NBreadcrumbItem>
+                        ))
+                        : (
+                            <div class="flex gap-2 text-sm">
+                              {route.meta.icon && (
+                                <NIcon>
+                                  <div class={route.meta.icon} />
+                                </NIcon>
+                              )}
+                              {route.meta?.title}
+                            </div>
+                          )}
 
-                  </NBreadcrumb>
-                </div>
-              )}
+                    </NBreadcrumb>
+                  </div>
+                )}
 
-              <div class="flex flex-row gap-4 flex-none">
-                <div class="flex flex-row gap-2">
-                  {!isMobile.value && <Search />}
-                  {!isMobile.value && <Fullscreen />}
-                  <Message />
-                  {!resource.config?.lang && <Lang />}
-                  {!isMobile.value && !resource.manageConfig?.value?.layout && <Layout />}
-                  {!isMobile.value && <Color />}
-                  <Theme />
-                </div>
+                <div class="flex flex-row gap-4 flex-none">
+                  <div class="flex flex-row gap-2">
+                    {!isMobile.value && <Search />}
+                    {!isMobile.value && <Fullscreen />}
+                    <Message />
+                    {!resource.config?.lang && <Lang />}
+                    {!isMobile.value && !resource.manageConfig?.value?.layout && <Layout />}
+                    {!isMobile.value && <Color />}
+                    <Theme />
+                  </div>
 
-                <div class="flex items-center">
-                  <Avatar />
+                  <div class="flex items-center">
+                    <Avatar />
+                  </div>
                 </div>
               </div>
-            </div>
-          </NLayoutHeader>
+            </NLayoutHeader>
+          )}
 
           {layout.value === 'separate' && subMenu.value && subMenu.value.length > 0
             ? (

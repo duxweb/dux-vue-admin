@@ -9,7 +9,7 @@ import { useResource } from '../hooks/useResource'
 import { getTheme } from '../theme/echart'
 import { getGenerateColors, getThemeOverrides } from '../theme/helper'
 
-export type ThemeLayout = 'app' | 'collapse' | 'separate'
+export type ThemeLayout = 'app' | 'collapse' | 'separate' | 'menu'
 
 export const useThemeStore = defineStore('theme', () => {
   const defaultMode = ref<BasicColorSchema>('auto')

@@ -18,6 +18,7 @@ interface DuxTableProps extends NDataTableT {
   refreshTime?: number
   cacheTime?: number
   actionWidth?: number
+  selectionWidth?: number
 }
 
 export const DuxTable = defineComponent({
@@ -34,6 +35,7 @@ export const DuxTable = defineComponent({
     refreshTime: Number,
     cacheTime: Number,
     actionWidth: Number,
+    selectionWidth: Number,
   },
   extends: NDataTable,
   setup(props: DuxTableProps, { expose }) {
@@ -50,6 +52,7 @@ export const DuxTable = defineComponent({
       refreshTime: props.refreshTime,
       cacheTime: props.cacheTime,
       actionWidth: props.actionWidth,
+      selectionWidth: props.selectionWidth,
     })
 
     expose(table)
