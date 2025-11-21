@@ -3,7 +3,7 @@ import type { Ref } from 'vue'
 import type { BatchAction, TableAction, TableColumn, UseTableProps, UseTableResult } from './types'
 import { keepPreviousData, useQuery } from '@tanstack/vue-query'
 import { useIntervalFn, useWindowSize } from '@vueuse/core'
-import { cloneDeep } from 'lodash-es'
+import { cloneDeep, get } from 'lodash-es'
 import { NButton, NCheckbox, NDropdown, NPopover, NTooltip, useMessage } from 'naive-ui'
 import { computed, h, ref, toRef, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
@@ -26,7 +26,6 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
   const csvExport = useExportCsv()
   const csvImport = useImportCsv()
   const { t } = useI18n()
-  const dialog = useDialog()
   const selected = ref<never[]>([])
   const expanded = ref<never[]>([])
   const { width } = useWindowSize()
@@ -332,6 +331,8 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
     </div>
   )
 
+  const dialog = useDialog()
+
   // 批量操作按钮（响应 selected）
   const batchBtn = computed(() => {
     if (!batch?.length) {
@@ -489,6 +490,7 @@ export function useTableColumns(props: UseTableColumnsProps) {
   const { t } = useI18n()
   const client = useClient()
   const message = useMessage()
+  const dialog = useDialog()
 
   const render = (columns?: TableColumn[]) => {
     const restColumns = columns?.filter((item) => {
@@ -501,9 +503,77 @@ export function useTableColumns(props: UseTableColumnsProps) {
 
       // 处理渲染类型
       if (!item.renderType || item.renderType === 'text') {
+        const baseRender = columnText(params)
+
+        // 双击弹窗编辑
+        const editableRender = item.editable
+          ? (rowData, rowIndex) => {
+              const rowKey = (params.key || '') as string
+
+              return (
+                <div
+                  class="inline-flex cursor-pointer border-b border-dashed border-transparent hover:border-primary hover:text-primary"
+                  onClick={async () => {
+                    if (!rowKey) {
+                      return
+                    }
+                    const oldValue = get(rowData, rowKey)
+
+                    try {
+                      const form = await dialog.prompt({
+                        title: itemProps.titleLang ? t(itemProps.titleLang) : (itemProps.title as string),
+                        defaultValue: { value: oldValue },
+                        formSchema: [
+                          {
+                            type: 'input',
+                            name: 'value',
+                          },
+                        ],
+                      })
+
+                      const newValue = form?.value
+                      if (newValue === undefined || newValue === oldValue) {
+                        return
+                      }
+
+                      const url = `${props.url}/${get(rowData, props.key || 'id')}`
+                      if (!props.url) {
+                        message.error(t('components.list.getError'))
+                        return
+                      }
+
+                      // 乐观更新
+                      rowData[rowKey] = newValue
+                      await client.patch({
+                        url,
+                        data: {
+                          [rowKey]: newValue,
+                        },
+                      })
+                      if (item.editableRefresh !== false && props.url) {
+                        client.invalidate(props.url)
+                      }
+                    }
+                    catch (e: any) {
+                      if (e) {
+                        message.error(e.message || t('message.requestError'))
+                      }
+                      // 回滚
+                      if (rowKey) {
+                        rowData[rowKey] = oldValue
+                      }
+                    }
+                  }}
+                >
+                  {baseRender(rowData, rowIndex)}
+                </div>
+              )
+            }
+          : baseRender
+
         return {
           ...itemProps,
-          render: columnText(params),
+          render: editableRender,
         }
       }
       if (item.renderType === 'media') {

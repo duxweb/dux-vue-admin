@@ -83,6 +83,14 @@ export interface TableColumnExtend {
   show?: boolean
   key?: any
   titleLang?: string
+  /**
+   * 是否开启可编辑弹窗
+   */
+  editable?: boolean
+  /**
+   * 可编辑保存后是否刷新列表（默认刷新）
+   */
+  editableRefresh?: boolean
 }
 
 export type TableColumn = DataTableColumn & TableColumnExtend
