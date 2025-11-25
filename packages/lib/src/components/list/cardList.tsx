@@ -2,8 +2,9 @@ import type { Column } from 'exceljs'
 import type { PropType, Ref } from 'vue'
 import type { JsonFormItemSchema } from '../form'
 import type { TableTab } from '../table'
+import { useVModel } from '@vueuse/core'
 import { NCard, NPagination, NScrollbar, NSkeleton } from 'naive-ui'
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { DuxFilter, type FilterAction } from '../filter'
 import { DuxFullPage } from '../page'
 import { DuxPageEmpty } from '../status/pageEmpty'
@@ -33,14 +34,45 @@ export const DuxCardList = defineComponent({
       type: Boolean,
       default: false,
     },
-    form: Object as PropType<Ref<Record<string, any>>>,
+    form: Object as PropType<Record<string, any>>,
     pagination: {
       type: Boolean,
       default: true,
     },
+    columns: {
+      type: Number,
+      default: 4,
+    },
+    cardMinWidth: {
+      type: Number,
+      default: 260,
+    },
+    cardMaxWidth: Number,
   },
-  setup(props, { slots, expose }) {
-    const form = props.form || ref<Record<string, any>>({})
+  setup(props, { slots, expose, emit }) {
+    const form = useVModel(props, 'form', emit, {
+      passive: true,
+      defaultValue: {},
+      deep: true,
+    }) as Ref<Record<string, any>>
+    const columnCount = computed(() => {
+      const count = Number(props.columns) || 1
+      return count < 1 ? 1 : count
+    })
+    const gridVars = computed(() => {
+      const minWidth = Math.max(Number(props.cardMinWidth) || 1, 1)
+      const vars: Record<string, string> = {
+        '--dux-card-min-width': `${minWidth}px`,
+      }
+      if (props.cardMaxWidth && props.cardMaxWidth > 0) {
+        vars['--dux-card-max-width'] = `${props.cardMaxWidth}px`
+      }
+      else {
+        vars['--dux-card-max-width'] = `calc((100% - ${(columnCount.value - 1)} * 1rem) / ${columnCount.value})`
+      }
+      return vars
+    })
+    const gridClass = 'grid gap-4 grid-cols-[repeat(auto-fit,_minmax(var(--dux-card-min-width),_var(--dux-card-max-width)))]'
     const list = useList({
       form,
       url: props.url,
@@ -82,8 +114,7 @@ export const DuxCardList = defineComponent({
           {list.data.value?.length > 0
             ? (
                 <NScrollbar class="flex-1 min-h-1">
-                  <div class="grid grid-cols-1 lg:grid-cols-2 3xl:grid-cols-3 4xl:grid-cols-4 gap-4">
-
+                  <div class={gridClass} style={gridVars.value}>
                     {list.data?.value?.map?.((item, index) => {
                       return (
                         <NCard
@@ -102,13 +133,12 @@ export const DuxCardList = defineComponent({
                         </NCard>
                       )
                     })}
-
                   </div>
                 </NScrollbar>
               )
             : (list.loading.value
                 ? (
-                    <div class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 4xl:grid-cols-4 gap-4">
+                    <div class={gridClass} style={gridVars.value}>
                       <NSkeleton height={100} />
                     </div>
                   )
