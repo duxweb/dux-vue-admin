@@ -5,7 +5,7 @@ import type { JsonFormItemSchema } from '../form'
 import type { BatchAction, TableAction, TableColumn } from './types'
 import type { TableTab } from './types/table'
 import { useVModel, useWindowSize } from '@vueuse/core'
-import { NCard, NDataTable, NPagination } from 'naive-ui'
+import { NButton, NCard, NDataTable, NPagination } from 'naive-ui'
 import { computed, defineComponent, h, onMounted, onUnmounted, provide, ref, toRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { DuxFilter } from '../filter'
@@ -78,6 +78,10 @@ export const DuxPageTable = defineComponent({
     tableProps: Object as PropType<Partial<DataTableProps>>,
     actionWidth: Number,
     selectionWidth: Number,
+    size: {
+      type: String as PropType<'small' | 'medium' | 'large'>,
+      default: 'medium',
+    },
   },
   setup(props, { slots, emit, expose }) {
     const { width } = useWindowSize()
@@ -387,6 +391,9 @@ export const DuxPageTable = defineComponent({
       if (targetIndex === -1) {
         return columns
       }
+      const buttonPlaceholder = (rowIndex: number) => (
+        <span class="inline-flex items-center justify-center w-4 h-4" data-row-expand-placeholder data-index={rowIndex}></span>
+      )
       return columns.map((column, index) => {
         if (index !== targetIndex) {
           return column
@@ -399,34 +406,43 @@ export const DuxPageTable = defineComponent({
               const key = targetColumn.key
               return key ? origin[key as keyof typeof origin] : null
             }
+        const titleRenderer = () => (
+          <div class="flex items-center gap-2">
+            <span class="inline-block w-4"></span>
+            <div class="flex-1 min-w-0">
+              {targetColumn.title}
+            </div>
+          </div>
+        )
         return {
           ...targetColumn,
+          title: titleRenderer,
           render: (rowData, rowIndex) => {
             const origin = getOriginRow(rowData) || rowData
             const key = getRowKey(origin)
-            const level = key !== undefined && key !== null ? (rowLevelMap.value.get(key) || 0) : 0
             const hasChildren = Array.isArray(origin?.children) && origin.children.length > 0
             const expandedChild = key !== undefined && key !== null ? expandedChildrenKeys.value.has(key) : false
             return (
               <div class="flex items-center gap-2">
-                <span style={{ width: `${level * 16}px` }} class="inline-block"></span>
                 {hasChildren
                   ? (
-                      <button
-                        type="button"
-                        class="w-4 h-4 flex items-center justify-center border border-gray-300 rounded text-xs"
+                      <NButton
+                        size="tiny"
+                        type="primary"
+                        secondary
                         data-row-expand-ignore
+                        class="size-4! p-0!"
                         onClick={(event) => {
                           event.stopPropagation()
                           toggleChildren(origin)
                         }}
                       >
-                        {expandedChild ? '-' : '+'}
-                      </button>
+                        {{
+                          icon: () => <div class={[!expandedChild ? 'i-tabler:plus' : 'i-tabler:minus', 'h-3 w-3']}></div>,
+                        }}
+                      </NButton>
                     )
-                  : (
-                      <span class="inline-block w-4 h-4"></span>
-                    )}
+                  : buttonPlaceholder(rowIndex)}
                 <div class="flex-1 min-w-0">
                   {baseRender ? baseRender(origin, rowIndex) : null}
                 </div>
@@ -523,6 +539,8 @@ export const DuxPageTable = defineComponent({
                     rowKey={row => row[props.tableKey]}
                     columns={treeColumns.value}
                     defaultExpandAll={props.expanded}
+                    size={props.size}
+                    style={props.size === 'small' ? { '--n-th-padding': '5px 2px', '--n-td-padding': '5px 2px', '--n-font-size': '14px' } : ''}
                     {...tableParams.value}
                     {...tableProps}
                     {...(rowPropsHandler ? { rowProps: rowPropsHandler } : {})}
