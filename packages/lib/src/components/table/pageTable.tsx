@@ -320,6 +320,9 @@ export const DuxPageTable = defineComponent({
       if (element.closest('button, a, input, textarea, select, label, [role="button"], [data-row-expand-ignore]')) {
         return true
       }
+      if (element.closest('.n-data-table-td--selection')) {
+        return true
+      }
       if (element.closest('[class*="data-table-expand-trigger"]')) {
         return true
       }
@@ -462,6 +465,7 @@ export const DuxPageTable = defineComponent({
           {...pagination.value}
           show-quick-jumper
           show-size-picker
+          size={props.size}
         >
           {{
             prefix: () => (
@@ -491,7 +495,7 @@ export const DuxPageTable = defineComponent({
           <div class="flex-1 lg:w-1 flex flex-col gap-2">
             {slots?.header?.(form)}
             <NCard class="flex-1 min-h-1">
-              <div class="flex flex-col h-full gap-4">
+              <div class="flex flex-col h-full gap-2">
                 {slots?.filter?.() || (
                   <DuxFilter
                     filter={props.filter}
@@ -540,7 +544,7 @@ export const DuxPageTable = defineComponent({
                     columns={treeColumns.value}
                     defaultExpandAll={props.expanded}
                     size={props.size}
-                    style={props.size === 'small' ? { '--n-th-padding': '5px 2px', '--n-td-padding': '5px 2px', '--n-font-size': '14px' } : ''}
+                    style={props.size === 'small' ? { '--n-th-padding': '5px 2px', '--n-td-padding': '5px 2px', '--n-font-size': '12px' } : ''}
                     {...tableParams.value}
                     {...tableProps}
                     {...(rowPropsHandler ? { rowProps: rowPropsHandler } : {})}

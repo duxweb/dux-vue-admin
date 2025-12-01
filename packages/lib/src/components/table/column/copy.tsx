@@ -6,9 +6,10 @@ import { NButton, useMessage } from 'naive-ui'
 export interface ColumnCopyProps {
   key?: string
   field?: string
+  size?: 'tiny' | 'small' | 'medium' | 'large'
 }
 
-export function columnCopy({ key, field }: ColumnCopyProps): TableColumnRender {
+export function columnCopy({ key, field, size }: ColumnCopyProps): TableColumnRender {
   const message = useMessage()
 
   const copy = (value: string) => {
@@ -25,7 +26,7 @@ export function columnCopy({ key, field }: ColumnCopyProps): TableColumnRender {
     return (
       <div>
         {value && value !== '-'
-          ? <NButton text class="!underline !decoration-dashed" iconPlacement="right" renderIcon={() => <div class="i-tabler:copy size-4" />} onClick={() => copy(field ? fieldValue : value)}>{value}</NButton>
+          ? <NButton size={size} text class="!underline !decoration-dashed" iconPlacement="right" renderIcon={() => <div class="i-tabler:copy size-4" />} onClick={() => copy(field ? fieldValue : value)}>{value}</NButton>
           : '-'}
       </div>
     )
