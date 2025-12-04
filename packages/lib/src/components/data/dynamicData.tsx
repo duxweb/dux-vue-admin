@@ -30,6 +30,10 @@ export const DuxDynamicData = defineComponent({
     columns: Array as PropType<DuxDynamicDataColumn[]>,
     createCallback: Function as PropType<(value: Record<string, any>[]) => void>,
     onCreate: Function,
+    size: {
+      type: String as PropType<'small' | 'medium' | 'large'>,
+      default: 'medium',
+    },
     value: {
       type: Array as PropType<Record<string, any>[]>,
       default: [],
@@ -76,7 +80,15 @@ export const DuxDynamicData = defineComponent({
         animation={150}
       >
         <div class="overflow-auto w-full">
-          <NTable class="table-fixed w-full">
+          <NTable
+            class="table-fixed w-full"
+            size={props.size}
+            style={props.size === 'small'
+              ? {
+                  '--n-font-size': '12px',
+                }
+              : {}}
+          >
             <thead>
               <tr>
                 <th style={{
@@ -116,25 +128,25 @@ export const DuxDynamicData = defineComponent({
                     class="w-15"
                   >
                     {props.createAction
-                      && (
-                        <NButton
-                          tertiary
-                          type="primary"
-                          circle
-                          renderIcon={() => <div class="i-tabler:plus h-4 w-4"></div>}
-                          onClick={() => {
-                            if (props?.onCreate) {
-                              props.onCreate()
+                    && (
+                      <NButton
+                        tertiary
+                        type="primary"
+                        circle
+                        renderIcon={() => <div class="i-tabler:plus h-4 w-4"></div>}
+                        onClick={() => {
+                          if (props?.onCreate) {
+                            props.onCreate()
+                          }
+                          else {
+                            if (!model.value) {
+                              model.value = []
                             }
-                            else {
-                              if (!model.value) {
-                                model.value = []
-                              }
-                              model.value?.push(props?.createCallback?.(model.value) || {})
-                            }
-                          }}
-                        />
-                      )}
+                            model.value?.push(props?.createCallback?.(model.value) || {})
+                          }
+                        }}
+                      />
+                    )}
                   </th>
                 )}
               </tr>
@@ -142,39 +154,39 @@ export const DuxDynamicData = defineComponent({
             <tbody class="sort-target">
               {(model.value && model.value?.length > 0)
                 ? model.value.map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    <td>
-                      <div class="sort-handle i-tabler:grid-dots size-4 cursor-move"></div>
-                    </td>
-                    {props.columns?.map((column, columnIndex) => (
-                      <td key={columnIndex}>
-                        {column.render?.(row, rowIndex)}
+                    <tr key={rowIndex}>
+                      <td>
+                        <div class="sort-handle i-tabler:grid-dots size-4 cursor-move"></div>
                       </td>
-                    ))}
-                    {(props.createAction || props.deleteAction) && (
-                      <td class="w-15">
-                        {props.deleteAction && (
-                          <NButton
-                            tertiary
-                            type="error"
-                            circle
-                            renderIcon={() => <div class="i-tabler:trash h-4 w-4"></div>}
-                            onClick={() => {
-                              model.value.splice(rowIndex, 1)
-                            }}
-                          />
-                        )}
-                      </td>
-                    )}
-                  </tr>
-                ))
+                      {props.columns?.map((column, columnIndex) => (
+                        <td key={columnIndex}>
+                          {column.render?.(row, rowIndex)}
+                        </td>
+                      ))}
+                      {(props.createAction || props.deleteAction) && (
+                        <td class="w-15">
+                          {props.deleteAction && (
+                            <NButton
+                              tertiary
+                              type="error"
+                              circle
+                              renderIcon={() => <div class="i-tabler:trash h-4 w-4"></div>}
+                              onClick={() => {
+                                model.value.splice(rowIndex, 1)
+                              }}
+                            />
+                          )}
+                        </td>
+                      )}
+                    </tr>
+                  ))
                 : (
-                  <tr>
-                    <td colspan={colNum.value}>
-                      <DuxBlockEmpty />
-                    </td>
-                  </tr>
-                )}
+                    <tr>
+                      <td colspan={colNum.value}>
+                        <DuxBlockEmpty />
+                      </td>
+                    </tr>
+                  )}
             </tbody>
           </NTable>
         </div>

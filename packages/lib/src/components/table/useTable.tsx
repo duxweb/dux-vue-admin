@@ -18,7 +18,7 @@ import { columnImages } from './column/images'
 import { columnInput } from './column/input'
 import { columnSwitch } from './column/switch'
 
-export function useTable({ filter: filterForm, url, batch, columns: tableColumn, columnActions, exportColumns, importColumns, export: exportStatus, import: importStatus, exportCsv: exportCsvStatus, importCsv: importCsvStatus, expanded: expandedStatus, cacheTime, key = 'id', refreshTime = 10, actionWidth, selectionWidth, pagination = true }: UseTableProps): UseTableResult {
+export function useTable({ filter: filterForm, url, batch, columns: tableColumn, columnActions, exportColumns, importColumns, export: exportStatus, import: importStatus, exportCsv: exportCsvStatus, importCsv: importCsvStatus, expanded: expandedStatus, cacheTime, key = 'id', refreshTime = 10, actionWidth, selectionWidth, pagination = true, size, pageSize: defaultPageSize = 20, pageSizes = [10, 20, 30, 40, 50] }: UseTableProps): UseTableResult {
   const client = useClient()
   const message = useMessage()
   const excelExport = useExportExcel()
@@ -40,7 +40,7 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
   const meta = ref<Record<string, any>>({})
 
   const page = ref(1)
-  const pageSize = ref(20)
+  const pageSize = ref(defaultPageSize)
   const pageCount = ref(0)
   const total = ref(0)
 
@@ -344,7 +344,7 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
         {batch.map(item => (
           <NButton
             key={item.name}
-            size="small"
+            size={size === 'small' ? 'tiny' : 'small'}
             secondary
             disabled={!selected.value?.length}
             renderIcon={item.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined}
@@ -449,7 +449,7 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
       page: page.value,
       pageSize: pageSize.value,
       pageCount: pageCount.value,
-      pageSizes: [10, 20, 30, 40, 50],
+      pageSizes,
       pageSlot: 5,
       simple: width.value < 768,
       onUpdatePageSize,

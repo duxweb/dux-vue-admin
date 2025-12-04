@@ -74,6 +74,9 @@ export function sfcRender(path: string) {
         const contentData = await getContentData()
         return () => <div><JsonRender data={contentData?.data || {}} nodes={contentData?.nodes || []} /></div>
       }
+      if (type === '.mjs') {
+        return undefined
+      }
       return getContentData()
     },
     customBlockHandler(block) {

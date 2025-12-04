@@ -73,6 +73,14 @@ export const DuxPageTable = defineComponent({
       type: Boolean,
       default: false,
     },
+    pageSize: {
+      type: Number,
+      default: 20,
+    },
+    pageSizes: {
+      type: Array as PropType<number[]>,
+      default: () => [10, 20, 30, 40, 50],
+    },
     refreshTime: Number,
     cacheTime: Number,
     tableProps: Object as PropType<Partial<DataTableProps>>,
@@ -116,6 +124,9 @@ export const DuxPageTable = defineComponent({
       actionWidth: props.actionWidth,
       selectionWidth: props.selectionWidth,
       pagination: !!props.pagination,
+      pageSize: props.pageSize,
+      pageSizes: props.pageSizes,
+      size: props.size,
     })
 
     const { data, meta, tableColumns, toolsColumns, toolsBtn, batchBtn, send, loading, tableParams, pagination, expanded } = tableHook
@@ -525,6 +536,7 @@ export const DuxPageTable = defineComponent({
                   <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
                       {props.batchPosition === 'top' && batchBtn.value}
+                      {slots?.batchTopExtra?.()}
                     </div>
                     <div>
                       {renderPagination()}
@@ -553,6 +565,7 @@ export const DuxPageTable = defineComponent({
                 <div class="flex justify-between">
                   <div class="flex items-center gap-2">
                     {props.batchPosition === 'bottom' && batchBtn.value}
+                    {slots?.batchBottomExtra?.()}
                     {slots?.bottom?.(data.value, meta.value)}
                   </div>
                   <div>

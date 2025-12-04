@@ -34,6 +34,9 @@ export interface UseTableProps {
   actionWidth?: number
   selectionWidth?: number
   pagination?: boolean
+  size?: 'small' | 'medium' | 'large'
+  pageSize?: number
+  pageSizes?: number[]
 }
 
 export type TableColumnRender = (rowData: object, rowIndex: number) => VNodeChild
