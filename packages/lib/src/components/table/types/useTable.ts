@@ -113,4 +113,5 @@ export interface BatchAction {
   url?: string
   icon?: string
   callback?: (selected?: (string | number)[]) => void
+  children?: BatchAction[]
 }

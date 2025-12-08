@@ -23,6 +23,7 @@ export interface FilterAction {
   titleLang?: string
   content?: string
   color?: ButtonProps['type']
+  size?: ButtonProps['size']
   icon?: string
   url?: string | ((id?: string | number, itemData?: object) => string)
   path?: string | ((id?: string | number, itemData?: object) => string)
@@ -237,6 +238,7 @@ export function listRenderAction({ key, text, rowData, rowIndex, actions, url }:
             key={index}
             text={text}
             type={item.color}
+            size={item.size}
             onClick={() => {
               trigger({
                 item,

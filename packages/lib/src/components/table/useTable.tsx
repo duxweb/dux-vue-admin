@@ -332,6 +332,63 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
   )
 
   const dialog = useDialog()
+  const getBatchLabel = (item: BatchAction) => {
+    if (item.labelLang) {
+      return t(item.labelLang)
+    }
+    if (item.label) {
+      return item.label
+    }
+    if (item.name) {
+      return item.name
+    }
+    return t('buttons.batch')
+  }
+
+  const handleBatchAction = (item: BatchAction) => {
+    if (!selected.value?.length) {
+      return
+    }
+
+    if (item?.callback) {
+      item.callback(selected.value as any)
+      return
+    }
+
+    dialog.confirm({
+      title: t('dialog.confirm.title'),
+      content: t('dialog.confirm.content'),
+    }).then(() => {
+      client.post({
+        url: item?.url || `${url}/batch`,
+        data: {
+          data: selected.value,
+          type: item?.name,
+        },
+      }).then((res) => {
+        message.success(res?.message || t('message.requestSuccess'))
+        client.invalidate(url)
+      }).catch(() => {
+        message.error(t('message.requestError'))
+      })
+    })
+  }
+
+  const buildDropdownOptions = (actions: BatchAction[], prefix: string, map: Map<string | number, BatchAction>) => {
+    return actions.map((action, index) => {
+      const actionKey = action.name !== undefined ? action.name : `${prefix}-${index}`
+      map.set(actionKey, action)
+      const option: Record<string, any> = {
+        key: actionKey,
+        label: getBatchLabel(action),
+        icon: action.icon ? () => <div class={`n-icon ${action.icon}`}></div> : undefined,
+      }
+      if (action.children?.length) {
+        option.children = buildDropdownOptions(action.children, `${actionKey}`, map)
+      }
+      return option
+    })
+  }
 
   // 批量操作按钮（响应 selected）
   const batchBtn = computed(() => {
@@ -341,45 +398,61 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
 
     return (
       <div class="flex items-center gap-2 mr-2">
-        {batch.map(item => (
-          <NButton
-            key={item.name}
-            size={size === 'small' ? 'tiny' : 'small'}
-            secondary
-            disabled={!selected.value?.length}
-            renderIcon={item.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined}
-            onClick={() => {
-              if (!selected.value?.length) {
-                return
-              }
+        {batch.map((item, index) => {
+          const key = item.name ?? `batch-${index}`
+          const buttonContent = item.children?.length
+            ? (
+                <div class="flex items-center gap-1">
+                  <span>{getBatchLabel(item)}</span>
+                  <div class="i-tabler:chevron-down text-xs"></div>
+                </div>
+              )
+            : getBatchLabel(item)
 
-              if (item?.callback) {
-                item.callback(selected.value as any)
-                return
-              }
+          if (item.children?.length) {
+            const keyMap = new Map<string | number, BatchAction>()
+            const options = buildDropdownOptions(item.children, `${key}-child`, keyMap)
 
-              dialog.confirm({
-                title: t('dialog.confirm.title'),
-                content: t('dialog.confirm.content'),
-              }).then(() => {
-                client.post({
-                  url: item?.url || `${url}/batch`,
-                  data: {
-                    data: selected.value,
-                    type: item?.name,
-                  },
-                }).then((res) => {
-                  message.success(res?.message || t('message.requestSuccess'))
-                  client.invalidate(url)
-                }).catch(() => {
-                  message.error(t('message.requestError'))
-                })
-              })
-            }}
-          >
-            {item.labelLang ? t(item.labelLang) : item.label}
-          </NButton>
-        ))}
+            return (
+              <NDropdown
+                key={key}
+                trigger="click"
+                disabled={!selected.value?.length}
+                options={options}
+                onSelect={(dropdownKey) => {
+                  const action = keyMap.get(dropdownKey as string | number)
+                  if (action) {
+                    handleBatchAction(action)
+                  }
+                }}
+              >
+                <NButton
+                  size={size === 'small' ? 'tiny' : 'small'}
+                  secondary
+                  disabled={!selected.value?.length}
+                  renderIcon={item.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined}
+                >
+                  {buttonContent}
+                </NButton>
+              </NDropdown>
+            )
+          }
+
+          return (
+            <NButton
+              key={key}
+              size={size === 'small' ? 'tiny' : 'small'}
+              secondary
+              disabled={!selected.value?.length}
+              renderIcon={item.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined}
+              onClick={() => {
+                handleBatchAction(item)
+              }}
+            >
+              {buttonContent}
+            </NButton>
+          )
+        })}
       </div>
     )
   })

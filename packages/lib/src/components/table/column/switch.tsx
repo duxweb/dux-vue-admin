@@ -5,6 +5,7 @@ import { NSwitch } from 'naive-ui'
 export interface ColumnSwitchProps {
   key?: string
   url?: string | ((rowData: object) => string)
+  size?: 'small' | 'medium' | 'large'
 }
 
 export function columnSwitch(props: ColumnSwitchProps, client, message, key?: string | number, tableUrl?: string): TableColumnRender {
@@ -18,6 +19,7 @@ export function columnSwitch(props: ColumnSwitchProps, client, message, key?: st
 
     return (
       <NSwitch
+        size={props.size}
         value={!!rowData[rowKey]}
         onUpdateValue={(v) => {
           rowData[rowKey] = v
