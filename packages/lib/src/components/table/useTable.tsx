@@ -35,6 +35,7 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
 
   // 表格数据
   const filter = ref<Record<string, any>>(cloneDeep(formFilter.value || {}))
+  const filterTrigger = ref(0)
   const sorter = ref<Record<string, any>>({})
   const tableFilter = ref<Record<string, any>>({})
   const meta = ref<Record<string, any>>({})
@@ -46,19 +47,17 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
 
   const loading = ref(false)
 
-  const queryParams = computed(() => {
-    return {
-      ...(pagination
-        ? {
-            page: page.value,
-            pageSize: pageSize.value,
-          }
-        : {}),
-      ...sorter.value,
-      ...tableFilter.value,
-      ...filter.value,
-    }
-  })
+  const queryParams = computed(() => ({
+    ...filter.value,
+    ...(pagination
+      ? {
+          page: page.value,
+          pageSize: pageSize.value,
+        }
+      : {}),
+    ...sorter.value,
+    ...tableFilter.value,
+  }))
 
   const getList = () => {
     return client.get({
@@ -70,7 +69,7 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
   const data = ref<Record<string, any>[]>([])
 
   const req = useQuery({
-    queryKey: [url, queryParams],
+    queryKey: [url, queryParams, filterTrigger],
     queryFn: () => getList(),
     gcTime: cacheTime,
     placeholderData: keepPreviousData,
@@ -107,6 +106,7 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
   const onSend = () => {
     page.value = 1
     filter.value = { ...cloneDeep(formFilter.value || {}) }
+    filterTrigger.value++
   }
 
   const onUpdateExpandedRowKeys = (val) => {
@@ -459,22 +459,19 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
 
   // 排序处理
   const onUpdateSorter = (v: DataTableSortState | DataTableSortState[] | null) => {
-    const list = Array.isArray(v) ? v : [v]
+    const list = Array.isArray(v)
+      ? v.filter(item => item && item.columnKey)
+      : (v && v.columnKey ? [v] : [])
 
-    const newSorter = { ...sorter.value }
-    list?.forEach((item) => {
-      if (!item?.columnKey) {
+    const nextSorter: Record<string, any> = {}
+    list.forEach((item) => {
+      if (!item?.columnKey || !item.order) {
         return
       }
-      if (item.order) {
-        newSorter[`${item.columnKey}_sort`] = item.order === 'ascend' ? 'asc' : 'desc'
-      }
-      else {
-        delete newSorter[`${item.columnKey}_sort`]
-      }
+      nextSorter[`${item.columnKey}_sort`] = item.order === 'ascend' ? 'asc' : 'desc'
     })
 
-    sorter.value = newSorter
+    sorter.value = nextSorter
   }
 
   // 筛选处理
