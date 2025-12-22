@@ -1,3 +1,4 @@
+import type { RouteRecordRaw } from 'vue-router'
 import type { DuxRoute } from '../stores'
 
 interface UserMenu {
@@ -19,6 +20,9 @@ export interface ConfigManage {
   userMenu?: UserMenu[]
   defaultLayout?: string
   layout?: string
+  loginComponent?: RouteRecordRaw['component']
+  registerComponent?: RouteRecordRaw['component']
+  updatePasswordComponent?: RouteRecordRaw['component']
 }
 
 export type ConfigLang = 'en-US' | 'zh-CN'

@@ -44,14 +44,14 @@ router.beforeEach(async (to, _from, next) => {
   if (!routeStore.init) {
     routeStore.clearRoutes()
     tabStore.clearTab()
-    createManage(manage, config?.manage?.[manage]?.routers || [])
+    createManage(manage, config?.manage?.[manage])
     routeStore.init = true
     return next({ path: to.path, query: to.query, replace: true })
   }
 
   // 判断是否登录
   const isLogin = manageStore.isLogin()
-  if (!isLogin && to.name !== `${manage}.login`) {
+  if (!isLogin && to.name !== `${manage}.login` && to.name !== `${manage}.register` && to.name !== `${manage}.forgotPassword`) {
     routeStore.clearRoutes()
     tabStore.clearTab()
     return next({ path: `/${manage}/login`, replace: true })

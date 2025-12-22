@@ -1,12 +1,14 @@
 import type { RouteRecordRaw } from 'vue-router'
+import type { ConfigManage } from '../config'
 import type { DuxRoute } from '../stores'
 import { useClient, useResource } from '../hooks'
 import { i18n } from '../i18n'
 import { useRouteStore } from '../stores'
 import { router } from './router'
 
-export function createManage(manage: string, routers: DuxRoute[]) {
+export function createManage(manage: string, manageConfig?: ConfigManage) {
   const routeStore = useRouteStore()
+  const routers = [...(manageConfig?.routers || [])]
 
   routers.push({
     path: `403`,
@@ -46,20 +48,43 @@ export function createManage(manage: string, routers: DuxRoute[]) {
     children.push(itemRoute)
   })
 
+  const rootChildren: RouteRecordRaw[] = [
+    {
+      path: '',
+      name: `${manage}.manage`,
+      component: () => import('../pages/main.vue'),
+      children: [
+        ...children,
+        { path: ':path(.*)*', component: () => import('../pages/notFound'), name: `${manage}.404`, meta: { title: (i18n?.global as any)?.t('pages.404.title') } },
+      ],
+    },
+  ]
+
+  rootChildren.push({
+    path: 'login',
+    component: manageConfig?.loginComponent || (() => import('../pages/login')),
+    name: `${manage}.login`,
+  })
+
+  if (manageConfig?.registerComponent) {
+    rootChildren.push({
+      path: 'register',
+      component: manageConfig.registerComponent,
+      name: `${manage}.register`,
+    })
+  }
+
+  if (manageConfig?.updatePasswordComponent) {
+    rootChildren.push({
+      path: 'updatePassword',
+      component: manageConfig.updatePasswordComponent,
+      name: `${manage}.updatePassword`,
+    })
+  }
+
   router.addRoute({
     path: `/${manage}`,
-    children: [
-      {
-        path: '',
-        name: `${manage}.manage`,
-        component: () => import('../pages/main.vue'),
-        children: [
-          ...children,
-          { path: ':path(.*)*', component: () => import('../pages/notFound'), name: `${manage}.404`, meta: { title: (i18n?.global as any)?.t('pages.404.title') } },
-        ],
-      },
-      { path: 'login', component: () => import('../pages/login'), name: `${manage}.login` },
-    ],
+    children: rootChildren,
   })
 }
 
