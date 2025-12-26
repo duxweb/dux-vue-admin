@@ -296,6 +296,7 @@ export const DuxPageTable = defineComponent({
         currentKeys.delete(key)
       }
       else {
+        currentKeys.clear()
         currentKeys.add(key)
       }
       expanded.value = Array.from(currentKeys) as never[]

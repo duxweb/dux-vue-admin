@@ -102,6 +102,7 @@ export async function initAsyncRouter() {
   }).then((data) => {
     const list: DuxRoute[] = []
     const children: RouteRecordRaw[] = []
+    const asyncRouteNames: string[] = []
     data?.data?.forEach((item: DuxRoute) => {
       list.push({
         ...item,
@@ -125,8 +126,10 @@ export async function initAsyncRouter() {
       }
 
       children.push(routeItem)
+      asyncRouteNames.push(routeItem.name as string)
     })
     routeStore.appendRoutes(list)
+    routeStore.setAsyncRouteNames(asyncRouteNames)
 
     // 路由注册
     const manageRoute = router.getRoutes().find((v) => {

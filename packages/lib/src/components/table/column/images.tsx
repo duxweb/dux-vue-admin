@@ -15,7 +15,14 @@ export function columnImages({ imageWidth = 36, imageHeight = 36, ...props }: Co
     return (
       <div class="flex flex-wrap gap-2">
         {value.map((item, index) => (
-          <NImage key={index} src={item} width={imageWidth} height={imageHeight} fallbackSrc={placeholder} objectFit="cover" />
+          <NImage
+            key={index}
+            src={item}
+            width={imageWidth}
+            height={imageHeight}
+            fallbackSrc={placeholder}
+            objectFit="cover"
+          />
         ))}
       </div>
     )

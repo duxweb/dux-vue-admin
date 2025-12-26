@@ -1,6 +1,8 @@
 import type { Ref } from 'vue'
 import { defineStore } from 'pinia'
 import { inject, ref } from 'vue'
+import { useRouteStore } from './route'
+import { useTabStore } from './tab'
 
 export interface UserState {
   raw?: Record<string, any>
@@ -13,6 +15,8 @@ export interface UserState {
 export const useManageStore = defineStore('manage', () => {
   const data = ref<Record<string, UserState | undefined>>({})
   const manage = inject<Ref<string>>('dux.manage')
+  const routeStore = useRouteStore()
+  const tabStore = useTabStore()
 
   const isLogin = (): boolean => {
     if (!manage?.value) {
@@ -77,6 +81,9 @@ export const useManageStore = defineStore('manage', () => {
     if (!manage?.value) {
       throw new Error('dux.manage is not defined')
     }
+    routeStore.clearRoutes()
+    routeStore.init = false
+    tabStore.clearTab()
     const newData = { ...data.value }
     delete newData[manage.value]
     data.value = newData

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { router } from '../core/router'
 
 export interface DuxRoute {
   label?: string
@@ -18,6 +19,7 @@ export const useRouteStore = defineStore('routes', () => {
   const routes = ref<DuxRoute[]>([])
   const init = ref<boolean>(false)
   const asyncInit = ref<boolean>(false)
+  const asyncRouteNames = ref<string[]>([])
 
   const searchRoute = (path: string) => {
     return routes.value?.find((item) => {
@@ -48,8 +50,18 @@ export const useRouteStore = defineStore('routes', () => {
   }
 
   const clearRoutes = () => {
+    asyncRouteNames.value.forEach((name) => {
+      if (name && router.hasRoute(name)) {
+        router.removeRoute(name)
+      }
+    })
+    asyncRouteNames.value = []
     routes.value = []
     asyncInit.value = false
+  }
+
+  const setAsyncRouteNames = (names: (string | undefined)[]) => {
+    asyncRouteNames.value = names.filter((name): name is string => !!name)
   }
 
   const getIndexRoute = () => {
@@ -97,6 +109,7 @@ export const useRouteStore = defineStore('routes', () => {
     setRoutes,
     getRoutes,
     clearRoutes,
+    setAsyncRouteNames,
     getIndexRoute,
   }
 })

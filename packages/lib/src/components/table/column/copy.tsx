@@ -26,7 +26,19 @@ export function columnCopy({ key, field, size }: ColumnCopyProps): TableColumnRe
     return (
       <div>
         {value && value !== '-'
-          ? <NButton size={size} text class="!underline !decoration-dashed" iconPlacement="right" renderIcon={() => <div class="i-tabler:copy size-4" />} onClick={() => copy(field ? fieldValue : value)}>{value}</NButton>
+          ? <NButton
+              size={size}
+              text
+              class="!underline !decoration-dashed"
+              iconPlacement="right"
+              renderIcon={() => <div class="i-tabler:copy size-4" />}
+              onClick={(event) => {
+                event?.stopPropagation?.()
+                copy(field ? fieldValue : value)
+              }}
+            >
+              {value}
+            </NButton>
           : '-'}
       </div>
     )

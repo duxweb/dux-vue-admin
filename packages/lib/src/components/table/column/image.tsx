@@ -14,7 +14,13 @@ export function columnImage({ imageWidth = 36, imageHeight = 36, ...props }: Col
     const value = get(rowData, props.key || '')
 
     return (
-      <NImage src={value || placeholder} width={imageWidth} height={imageHeight} fallbackSrc={placeholder} objectFit="cover">
+      <NImage
+        src={value || placeholder}
+        width={imageWidth}
+        height={imageHeight}
+        fallbackSrc={placeholder}
+        objectFit="cover"
+      >
         {{
           error: () => <NImage src={placeholder} width={imageWidth} height={imageHeight} objectFit="cover" />,
         }}
