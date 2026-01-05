@@ -114,4 +114,8 @@ export interface BatchAction {
   icon?: string
   callback?: (selected?: (string | number)[]) => void
   children?: BatchAction[]
+  /**
+   * Allow triggering without any selected rows
+   */
+  force?: boolean
 }

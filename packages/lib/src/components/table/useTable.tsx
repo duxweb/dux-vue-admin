@@ -346,7 +346,8 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
   }
 
   const handleBatchAction = (item: BatchAction) => {
-    if (!selected.value?.length) {
+    const hasSelection = !!selected.value?.length
+    if (!hasSelection && !item.force) {
       return
     }
 
@@ -374,7 +375,17 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
     })
   }
 
-  const buildDropdownOptions = (actions: BatchAction[], prefix: string, map: Map<string | number, BatchAction>) => {
+  const canTriggerWithoutSelection = (action: BatchAction): boolean => {
+    if (action.force) {
+      return true
+    }
+    if (!Array.isArray(action.children) || !action.children.length) {
+      return false
+    }
+    return action.children.some(child => canTriggerWithoutSelection(child))
+  }
+
+  const buildDropdownOptions = (actions: BatchAction[], prefix: string, map: Map<string | number, BatchAction>, hasSelection: boolean) => {
     return actions.map((action, index) => {
       const actionKey = action.name !== undefined ? action.name : `${prefix}-${index}`
       map.set(actionKey, action)
@@ -382,9 +393,10 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
         key: actionKey,
         label: getBatchLabel(action),
         icon: action.icon ? () => <div class={`n-icon ${action.icon}`}></div> : undefined,
+        disabled: !(hasSelection || canTriggerWithoutSelection(action)),
       }
       if (action.children?.length) {
-        option.children = buildDropdownOptions(action.children, `${actionKey}`, map)
+        option.children = buildDropdownOptions(action.children, `${actionKey}`, map, hasSelection)
       }
       return option
     })
@@ -396,10 +408,12 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
       return null
     }
 
+    const hasSelection = !!selected.value?.length
     return (
       <div class="flex items-center gap-2 mr-2">
         {batch.map((item, index) => {
           const key = item.name ?? `batch-${index}`
+          const isDisabled = !(hasSelection || canTriggerWithoutSelection(item))
           const buttonContent = item.children?.length
             ? (
                 <div class="flex items-center gap-1">
@@ -411,13 +425,13 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
 
           if (item.children?.length) {
             const keyMap = new Map<string | number, BatchAction>()
-            const options = buildDropdownOptions(item.children, `${key}-child`, keyMap)
+            const options = buildDropdownOptions(item.children, `${key}-child`, keyMap, hasSelection)
 
             return (
               <NDropdown
                 key={key}
                 trigger="click"
-                disabled={!selected.value?.length}
+                disabled={isDisabled}
                 options={options}
                 onSelect={(dropdownKey) => {
                   const action = keyMap.get(dropdownKey as string | number)
@@ -429,7 +443,7 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
                 <NButton
                   size={size === 'small' ? 'tiny' : 'small'}
                   secondary
-                  disabled={!selected.value?.length}
+                  disabled={isDisabled}
                   renderIcon={item.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined}
                 >
                   {buttonContent}
@@ -443,7 +457,7 @@ export function useTable({ filter: filterForm, url, batch, columns: tableColumn,
               key={key}
               size={size === 'small' ? 'tiny' : 'small'}
               secondary
-              disabled={!selected.value?.length}
+              disabled={isDisabled}
               renderIcon={item.icon ? () => <div class={`n-icon ${item.icon}`}></div> : undefined}
               onClick={() => {
                 handleBatchAction(item)
