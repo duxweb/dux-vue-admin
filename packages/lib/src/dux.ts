@@ -12,7 +12,7 @@ import { config as unoConfig } from './config/uno.config.js'
 import { router } from './core/router'
 import { permissionDirective } from './directive'
 
-import { i18n } from './i18n'
+import { applyLanguage, getLanguage, i18n } from './i18n'
 import '@logicflow/core/lib/style/index.css'
 import 'go-captcha-vue/dist/style.css'
 import 'vfonts/Lato.css'
@@ -26,9 +26,7 @@ export function createDux(config: Config) {
     defaults: unoConfig,
   })
 
-  if (config.lang) {
-    i18n.global.locale = config.lang
-  }
+  applyLanguage(getLanguage(config.lang || 'en-US'))
 
   return {
     install(app: App) {

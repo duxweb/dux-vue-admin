@@ -1,4 +1,5 @@
 import { computed, defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export const DuxLocale = defineComponent({
   name: 'DuxLocale',
@@ -17,6 +18,7 @@ export const DuxLocale = defineComponent({
     },
   },
   setup(props, { emit, slots }) {
+    const { t } = useI18n()
     const translations = computed({
       get() {
         const value = { ...props.value }
@@ -48,7 +50,7 @@ export const DuxLocale = defineComponent({
       <n-table>
         <thead>
           <tr>
-            <th>默认</th>
+            <th>{t('components.locale.default')}</th>
             {props.langs.map((lang: any) => (
               <th key={lang.name}>{lang.name}</th>
             ))}

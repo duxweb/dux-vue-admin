@@ -41,7 +41,7 @@ export const DuxException = defineComponent({
             <DuxPageStatus title={data.value?.title} desc={data.value?.desc}>
               {{
                 default: () => <dux-draw-error />,
-                action: () => <NButton onClick={refreshRoute} renderIcon={() => <div class="n-icon i-tabler:refresh" />}>刷新</NButton>,
+                action: () => <NButton onClick={refreshRoute} renderIcon={() => <div class="n-icon i-tabler:refresh" />}>{t('buttons.refresh')}</NButton>,
               }}
             </DuxPageStatus>
           </DuxFullPage>

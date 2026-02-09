@@ -15,8 +15,12 @@ export const Lang = defineComponent({
     })
 
     function handleLangSelect(key: string) {
+      if (lang.value === key) {
+        return
+      }
       lang.value = key
       setLanguage(key)
+      window.location.reload()
     }
 
     return () => (

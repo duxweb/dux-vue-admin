@@ -230,7 +230,7 @@ const DuxFileManage = defineComponent({
                             <DuxFileManageItem
                               key={`parent-${meta.value?.folder}`}
                               type="folder"
-                              name="上一级"
+                              name={t('components.uploadManage.back')}
                               onSelect={() => {
                                 selectValues.value = []
                                 form.value.folder = meta?.value?.folder

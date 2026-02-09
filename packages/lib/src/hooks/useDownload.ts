@@ -2,6 +2,7 @@ import { format } from 'date-fns'
 import mime from 'mime'
 import { useMessage } from 'naive-ui'
 import { ref } from 'vue'
+import { i18n } from '../i18n'
 import { useClient } from './useClient'
 
 export function useDownload() {
@@ -37,7 +38,7 @@ export function useDownload() {
         blob(e)
       })
     }).catch((e) => {
-      message.error(e.error || '下载失败')
+      message.error(e.error || (i18n.global.t as any)('hooks.download.error'))
     })
   }
 
@@ -84,7 +85,7 @@ export function useDownload() {
       const blobData = e.data?.data instanceof Blob ? e.data?.data : new Blob([e.data?.data], { type: type || 'application/octet-stream' })
       blob(blobData, filename)
     }).catch((e) => {
-      message.error(e.error || '下载失败')
+      message.error(e.error || (i18n.global.t as any)('hooks.download.error'))
     }).finally(() => {
       loading.value = false
     })

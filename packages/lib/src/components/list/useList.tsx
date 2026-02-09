@@ -35,14 +35,16 @@ export function useList({ url, form, cacheTime = Infinity, exportColumns, import
   const total = ref(0)
 
   const data = ref<Record<string, any>[]>([])
+  const filter = ref<Record<string, any>>(cloneDeep(form?.value || {}))
+  const filterTrigger = ref(0)
 
   const getList = (pageParam: number) => {
     return client.get({
       url,
       params: {
+        ...form?.value,
         page: pageParam,
         pageSize: pageSize.value,
-        ...form?.value,
       },
     })
   }
@@ -82,9 +84,18 @@ export function useList({ url, form, cacheTime = Infinity, exportColumns, import
     }, { deep: true })
   }
   else {
+    const queryParams = computed(() => ({
+      ...filter.value,
+      page: page.value,
+      pageSize: pageSize.value,
+    }))
+
     req = useQuery({
-      queryKey: [url],
-      queryFn: () => getList(page.value),
+      queryKey: [url, queryParams, filterTrigger],
+      queryFn: () => client.get({
+        url,
+        params: queryParams.value,
+      }),
       gcTime: cacheTime,
       placeholderData: keepPreviousData,
     }) as any
@@ -231,7 +242,8 @@ export function useList({ url, form, cacheTime = Infinity, exportColumns, import
 
   const onFilter = () => {
     page.value = 1
-    req.refetch()
+    filter.value = cloneDeep(form?.value || {})
+    filterTrigger.value++
   }
 
   const onReload = () => {

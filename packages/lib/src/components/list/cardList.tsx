@@ -265,7 +265,7 @@ export const DuxCardList = defineComponent({
         >
           {{
             prefix: () => (
-              <div>{`共 ${list.total.value || 0} 条`}</div>
+              <div>{t('components.pagination.total', { total: list.total.value || 0 })}</div>
             ),
           }}
         </NPagination>

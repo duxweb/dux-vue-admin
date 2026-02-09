@@ -57,6 +57,11 @@ export function useAxios(props?: useAxiosProps) {
     (config) => {
       const user = getUser()
 
+      const locale = i18n.mode === 'legacy' ? i18n.global.locale : i18n.global.locale?.value
+      if (config.headers) {
+        config.headers['Accept-Language'] = locale
+      }
+
       if (user?.token) {
         config.headers.Authorization = user?.token
       }

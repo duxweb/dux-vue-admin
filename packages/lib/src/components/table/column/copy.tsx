@@ -2,6 +2,7 @@ import type { TableColumnRender } from '..'
 import * as clipboard from 'clipboard-polyfill'
 import { get } from 'lodash-es'
 import { NButton, useMessage } from 'naive-ui'
+import { i18n } from '../../../i18n'
 
 export interface ColumnCopyProps {
   key?: string
@@ -14,8 +15,8 @@ export function columnCopy({ key, field, size }: ColumnCopyProps): TableColumnRe
 
   const copy = (value: string) => {
     clipboard.writeText(value).then(
-      () => { message.success('复制成功') },
-      () => { message.error('复制失败') },
+      () => { message.success((i18n.global.t as any)('components.copy.success')) },
+      () => { message.error((i18n.global.t as any)('components.copy.error')) },
     )
   }
 

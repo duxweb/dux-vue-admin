@@ -7,6 +7,7 @@ import type { TableTab } from './types/table'
 import { useVModel, useWindowSize } from '@vueuse/core'
 import { NButton, NCard, NDataTable, NPagination } from 'naive-ui'
 import { computed, defineComponent, h, onMounted, onUnmounted, provide, ref, toRef, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { DuxFilter } from '../filter'
 import { DuxFullPage } from '../page'
@@ -94,6 +95,7 @@ export const DuxPageTable = defineComponent({
   setup(props, { slots, emit, expose }) {
     const { width } = useWindowSize()
     const route = useRoute()
+    const { t } = useI18n()
     const tableRef = ref<DataTableInst>()
 
     const form = useVModel(props, 'form', emit, {
@@ -482,7 +484,7 @@ export const DuxPageTable = defineComponent({
           {{
             prefix: () => (
               <div>
-                {`共 ${meta.value.total || 0} 条`}
+                {t('components.pagination.total', { total: meta.value.total || 0 })}
               </div>
             ),
           }}

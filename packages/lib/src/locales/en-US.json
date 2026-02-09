@@ -11,14 +11,17 @@
       "app": "Two Columns",
       "collapse": "Single Column",
       "separate": "Top Bottom"
-    }
+    },
+    "yes": "Yes",
+    "no": "No"
   },
   "pages": {
     "login": {
       "placeholder": {
         "username": "Enter username",
         "password": "Enter password",
-        "captcha": "Click captcha image"
+        "captcha": "Click captcha image",
+        "verifyCode": "Enter verification code"
       },
       "fields": {
         "username": "Username",
@@ -30,7 +33,17 @@
         "error": "Failed"
       },
       "buttons": {
-        "login": "Login"
+        "login": "Login",
+        "getCode": "Get Code"
+      },
+      "tabs": {
+        "password": "Password Login",
+        "code": "Code Login"
+      },
+      "message": {
+        "usernameRequired": "Please enter account",
+        "codeSent": "Code sent",
+        "codeSendFailed": "Failed to send code"
       }
     },
     "loading": {
@@ -399,6 +412,19 @@
       "zoomOut": "Zoom Out",
       "edit": "Edit",
       "delete": "Delete"
+    },
+    "crop": {
+      "avatarTitle": "Edit Avatar"
+    },
+    "copy": {
+      "success": "Copied",
+      "error": "Copy failed"
+    },
+    "pagination": {
+      "total": "Total {total}"
+    },
+    "locale": {
+      "default": "Default"
     }
   },
   "hooks": {
@@ -410,6 +436,9 @@
     },
     "pdf": {
       "title": "Preview"
+    },
+    "download": {
+      "error": "Download failed"
     }
   },
   "command": {

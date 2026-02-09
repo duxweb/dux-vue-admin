@@ -1,6 +1,7 @@
 import { useVModel } from '@vueuse/core'
 import { NAvatar } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useResource } from '../../hooks'
 import placeholder from '../../static/images/avatar.png'
 import { useModal } from '../modal'
@@ -27,12 +28,13 @@ export const DuxAvatarCrop = defineComponent({
     const modal = useModal()
     const upload = useUpload()
     const res = useResource()
+    const { t } = useI18n()
     return () => (
       <div
         class="rounded-full relative size-80px overflow-hidden group"
         onClick={() => {
           modal.show({
-            title: '头像编辑',
+            title: t('components.crop.avatarTitle'),
             component: () => import('./imageCropModal'),
             componentProps: {
               value: data.value,

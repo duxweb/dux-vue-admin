@@ -1,5 +1,6 @@
 import { NButton } from 'naive-ui'
 import { defineComponent, onMounted, onUnmounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { VueCropper } from 'vue-cropper'
 import { DuxModalPage } from '../modal'
 
@@ -9,6 +10,7 @@ export default defineComponent({
     onConfirm: Function,
   },
   setup(props) {
+    const { t } = useI18n()
     const cropper = ref<any>()
 
     const value = ref(props.value || '')
@@ -65,7 +67,7 @@ export default defineComponent({
                     onSelect()
                   }}
                 >
-                  选择
+                  {t('buttons.select')}
                 </NButton>
 
                 <NButton
@@ -113,7 +115,7 @@ export default defineComponent({
                   })
                 }}
               >
-                确认
+                {t('buttons.confirm')}
               </NButton>
             </div>
           ),

@@ -5,6 +5,7 @@ import { useLoadingBar } from 'naive-ui'
 import { inject, ref } from 'vue'
 
 import { createManage, initAsyncRouter } from '../core/manage'
+import { applyLanguage, getLanguage } from '../i18n'
 import { router, useManageStore, usePermission, useRouteStore, useTabStore } from '../index'
 import DuxLoading from './loading.vue'
 
@@ -29,6 +30,9 @@ router.beforeEach(async (to, _from, next) => {
   const manage = Object.getOwnPropertyNames(config?.manage).find(item => item === name) || firstManage
 
   const manageChanged = manageRef?.value !== manage
+
+  const fixedLang = config?.manage?.[manage]?.lang
+  applyLanguage(fixedLang || getLanguage(config?.lang || 'en-US'))
 
   if (manageRef) {
     manageRef.value = manage

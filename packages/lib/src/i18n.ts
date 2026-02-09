@@ -7,17 +7,16 @@ export const languageMaps = {
   'zh-CN': '简体中文',
 }
 
-export function getLanguage() {
-  let storedLang = localStorage.getItem('i18nextLng')
-  const userLanguage = navigator.language
-  if (!storedLang) {
-    if (!languageMaps[userLanguage]) {
-      storedLang = 'en-US'
-    }
-    localStorage.setItem('i18nextLng', userLanguage)
-    storedLang = userLanguage
+export function getLanguage(defaultLang: keyof typeof languageMaps = 'en-US') {
+  const storedLang = localStorage.getItem('i18nextLng')
+  if (storedLang && languageMaps[storedLang]) {
+    return storedLang
   }
-  return storedLang
+
+  const userLanguage = navigator.language
+  const finalLang = languageMaps[userLanguage] ? userLanguage : defaultLang
+  localStorage.setItem('i18nextLng', finalLang)
+  return finalLang
 }
 
 export function importI18ns(i18n, files: Record<string, unknown>) {
@@ -83,13 +82,20 @@ export function setupI18n(options) {
 
 export const i18n = setupI18n({})
 
-export function setLanguage(locale) {
+export function applyLanguage(locale?: string) {
+  if (!locale) {
+    return
+  }
+
   if (i18n.mode === 'legacy') {
     i18n.global.locale = locale
   }
   else {
     i18n.global.locale.value = locale
   }
+}
 
+export function setLanguage(locale) {
+  applyLanguage(locale)
   localStorage.setItem('i18nextLng', locale)
 }

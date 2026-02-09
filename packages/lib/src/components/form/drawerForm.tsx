@@ -2,6 +2,7 @@ import type { PropType, Ref } from 'vue'
 import type { JsonFormItemSchema } from './handler'
 import { NButton, NForm } from 'naive-ui'
 import { defineComponent, toRef } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { DuxDrawerPage } from '../drawer'
 import { DuxJsonForm } from './jsonForm'
 import { useForm } from './useForm'
@@ -20,6 +21,7 @@ export const DuxDrawerForm = defineComponent({
   },
   setup(props) {
     const modelData = toRef(props, 'model')
+    const { t } = useI18n()
     const { loading, model, onSubmit, onReset } = useForm({
       url: props.url,
       id: props.id,
@@ -52,7 +54,7 @@ export const DuxDrawerForm = defineComponent({
                 }}
                 loading={loading.value}
               >
-                取消
+                {t('buttons.cancel')}
               </NButton>
               <NButton
                 type="primary"
@@ -61,7 +63,7 @@ export const DuxDrawerForm = defineComponent({
                 }}
                 loading={loading.value}
               >
-                确定
+                {t('buttons.confirm')}
               </NButton>
             </>
           ),

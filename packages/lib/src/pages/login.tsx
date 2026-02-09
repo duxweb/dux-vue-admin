@@ -59,7 +59,7 @@ export default defineComponent({
     }, 1000, { immediate: false })
 
     const countdownText = computed(() => {
-      return countdown.value > 0 ? `${countdown.value}s` : '获取验证码'
+      return countdown.value > 0 ? `${countdown.value}s` : t('pages.login.buttons.getCode')
     })
 
     const canSendCode = computed(() => {
@@ -71,7 +71,7 @@ export default defineComponent({
         return
 
       if (!form.username) {
-        message.error('请输入账号')
+        message.error(t('pages.login.message.usernameRequired'))
         return
       }
 
@@ -84,10 +84,10 @@ export default defineComponent({
         },
       }).then(() => {
         resume()
-        message.success('验证码已发送')
+        message.success(t('pages.login.message.codeSent'))
         countdown.value = 60
       }).catch((res) => {
-        message.error(res?.message || '验证码发送失败')
+        message.error(res?.message || t('pages.login.message.codeSendFailed'))
       }).finally(() => {
         sendingCode.value = false
       })
@@ -227,8 +227,8 @@ export default defineComponent({
                 ? (
                     <>
                       <NTabs value={loginType.value} type="segment" animated default-value="password" onUpdateValue={v => loginType.value = v as 'password' | 'code'}>
-                        <NTab tab="密码登录" name="password" />
-                        <NTab tab="验证码登录" name="code" />
+                        <NTab tab={t('pages.login.tabs.password')} name="password" />
+                        <NTab tab={t('pages.login.tabs.code')} name="code" />
                       </NTabs>
                       <NForm ref={formRef} model={form} class="flex flex-col gap-4 mt-4">
                         <NFormItem showLabel={false} path="username" showFeedback={false}>
@@ -296,7 +296,7 @@ export default defineComponent({
                                   value={form.code}
                                   onUpdateValue={v => form.code = v}
                                   type="text"
-                                  placeholder="请输入验证码"
+                                  placeholder={t('pages.login.placeholder.verifyCode')}
                                   size="large"
                                 >
                                   {{

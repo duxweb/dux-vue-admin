@@ -7,8 +7,11 @@ interface UserMenu {
   icon?: string
 }
 
+export type ConfigLang = 'en-US' | 'zh-CN'
+
 export interface ConfigManage {
   title: string
+  lang?: ConfigLang
   default?: boolean
   loginCode?: boolean
   register?: boolean
@@ -24,8 +27,6 @@ export interface ConfigManage {
   registerComponent?: RouteRecordRaw['component']
   updatePasswordComponent?: RouteRecordRaw['component']
 }
-
-export type ConfigLang = 'en-US' | 'zh-CN'
 
 export interface ConfigApiConfig {
   login: string

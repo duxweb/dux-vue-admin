@@ -11,14 +11,17 @@
       "app": "双栏布局",
       "collapse": "单栏布局",
       "separate": "上下布局"
-    }
+    },
+    "yes": "是",
+    "no": "否"
   },
   "pages": {
     "login": {
       "placeholder": {
         "username": "请输入账号",
         "password": "请输入密码",
-        "captcha": "请点击图像验证码"
+        "captcha": "请点击图像验证码",
+        "verifyCode": "请输入验证码"
       },
       "fields": {
         "username": "用户名",
@@ -30,7 +33,17 @@
         "error": "验证失败"
       },
       "buttons": {
-        "login": "登录"
+        "login": "登录",
+        "getCode": "获取验证码"
+      },
+      "tabs": {
+        "password": "密码登录",
+        "code": "验证码登录"
+      },
+      "message": {
+        "usernameRequired": "请输入账号",
+        "codeSent": "验证码已发送",
+        "codeSendFailed": "验证码发送失败"
       }
     },
     "loading": {
@@ -401,6 +414,19 @@
       "zoomOut": "缩小",
       "edit": "编辑",
       "delete": "删除"
+    },
+    "crop": {
+      "avatarTitle": "头像编辑"
+    },
+    "copy": {
+      "success": "复制成功",
+      "error": "复制失败"
+    },
+    "pagination": {
+      "total": "共 {total} 条"
+    },
+    "locale": {
+      "default": "默认"
     }
   },
   "hooks": {
@@ -412,6 +438,9 @@
     },
     "pdf": {
       "title": "文档预览"
+    },
+    "download": {
+      "error": "下载失败"
     }
   },
   "command": {

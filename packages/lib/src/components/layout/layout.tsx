@@ -189,7 +189,7 @@ export const DuxLayout = defineComponent({
                     <div class="flex flex-col items-center gap-3">
                       <div class="flex flex-col items-center gap-2">
                         <Message />
-                        {!resource.config?.lang && <Lang />}
+                        {!resource.manageConfig?.value?.lang && <Lang />}
                         <Theme />
                       </div>
                       <div class="flex items-center">
@@ -277,7 +277,7 @@ export const DuxLayout = defineComponent({
                     {!isMobile.value && <Search />}
                     {!isMobile.value && <Fullscreen />}
                     <Message />
-                    {!resource.config?.lang && <Lang />}
+                    {!resource.manageConfig?.value?.lang && <Lang />}
                     {!isMobile.value && !resource.manageConfig?.value?.layout && <Layout />}
                     {!isMobile.value && <Color />}
                     <Theme />
