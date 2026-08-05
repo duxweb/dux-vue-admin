@@ -27,6 +27,7 @@ export const DuxAiEditor = defineComponent({
   setup(props, { emit }) {
     const divRef = ref()
     let aiEditor: AiEditor | null = null
+    let applyingValue = false
 
     const themeStore = useThemeStore()
     const { darkMode } = storeToRefs(themeStore)
@@ -44,18 +45,37 @@ export const DuxAiEditor = defineComponent({
       if (!aiEditor) {
         return
       }
-      aiEditor.setContent(value || '')
-      props.onUpdateValue?.(model.value || '')
-    }, { immediate: true })
+
+      const content = value || ''
+      if (content !== aiEditor.getHtml()) {
+        applyingValue = true
+        try {
+          aiEditor.setContent(content, false)
+        }
+        finally {
+          applyingValue = false
+        }
+      }
+    })
 
     onMounted(() => {
       aiEditor = new AiEditor({
         theme: darkMode.value ? 'dark' : 'light',
         element: divRef.value as Element,
         placeholder: t('components.editor.placeholder'),
-        content: props.defaultValue || '',
-        onBlur: (aiEditor) => {
-          model.value = aiEditor.getHtml()
+        content: model.value ?? props.defaultValue ?? '',
+        onChange: (aiEditor) => {
+          if (applyingValue) {
+            return
+          }
+
+          const content = aiEditor.getHtml()
+          if (content === model.value) {
+            return
+          }
+
+          model.value = content
+          props.onUpdateValue?.(content)
         },
         image: {
           uploadUrl: props.uploadUrl || uploadUrl,
